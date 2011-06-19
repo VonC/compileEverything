@@ -2,3 +2,4 @@ dep*
 *~
 *.*~
 log
+logs/
