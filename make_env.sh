@@ -28,7 +28,8 @@ if [[ ! -e dep ]]; then
   echolog "#### DEPS ####"
   echolog "download deps from SunFreeware"
   loge "wget http://sunfreeware.com/programlistsparc10.html -O deps$(Ymd)" "wget_deps_sunfreeware"
-  log "ln -s deps$(Ymd) deps" ln_deps
+  log "ln -fs deps$(Ymd) deps" ln_deps
 fi
 trap - EXIT
+echo -e "\e[00;32mAll Done.\e[00m"
 exit 0
