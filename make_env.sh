@@ -57,23 +57,32 @@ function get_tar() {
   if [[ $atarname == "" ]] ; then echolog "Unable to find a GNU tar or gtar" ; tar2 ; fi
   eval $_tarname="'$atarname'";
 }
+function untar() {
+  local namever=$1
+  if [[ ! -e src/$namever ]]; then
+    get_tar tarname
+    loge "$tarname xpvf src/_pkgs/$namever.tar.gz -C src" "tar_xpvf_$namever.tar.gz"
+  fi
+}
 function build_app() {
   local name="$1"
   echolog "##### Building APP $name ####"
   get_sources $name namever
-  echo namever $namever
   if [[ -e usr/local/apps/$namever ]]; then
     echolog "$namever already installed"
   else
-    if [[ ! -e src/$namever ]]; then
-      get_tar tarname
-      loge "$tarname xpvf src/_pkgs/$namever.tar.gz -C src" "tar_xpvf_$namever.tar.gz"
-    fi
+    untar $namever
   fi
 }
 function build_lib() {
   local name="$1"
-  echo Building LIB $name
+  echolog "#### Building LIB $name ####"
+  get_sources $name namever
+  if [[ -e usr/local/libs/$namever ]]; then
+    echolog "lib $namever already installed"
+  else
+    untar $namever
+  fi
 }
 function build_line() {
   local line="$1"
