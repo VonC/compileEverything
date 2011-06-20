@@ -5,7 +5,8 @@ DIR="$( basename `pwd` )"
 echo $DIR
 #d=`date +"%Y%m%d"`
 #echo $d
-#mkdir -p logs
+mkdir -p logs
+mkdir -p src/_pkgs
 
 set -o errexit
 set -o nounset
@@ -19,7 +20,7 @@ function echolog() { _echolog "~ " "$1" log ""; }
 function _echologcmd() { _echolog "~~~ $1" "$2" "logs/$3" "~~~~~~~~~~~~~~~~~~~"; }
 function _log() { f=$2; rm -f logs/l; ln -s $f logs/l; _echologcmd "" "$1" $f ; $( $1 >> logs/$f 2>&1 ) ; }
 function log() { f=$(_fdate).$2 ; _log "$1" $f ; }
-function loge() { f=$(_fdate).$2 ; echo "(see logs/$f)" >> log; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; true ; }
+function loge() { f=$(_fdate).$2 ; echolog "(see logs/$f or simply tail -f logs/l)"; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; true ; }
 function mrf() { ls -t1 $1 | head -n1 ; }
 
 trap "echo -e "\\\\e\\\[00\\\;31m!!!!\nFAIL\n!!!!\\\\e\\\[00m" | tee -a log; tail -3 log ; tail -5 logs/l" EXIT ;
@@ -30,9 +31,23 @@ if [[ ! -e deps ]]; then
   loge "wget http://sunfreeware.com/programlistsparc10.html -O deps$(Ymd)" "wget_deps_sunfreeware"
   log "ln -fs deps$(Ymd) deps" ln_deps
 fi
+function get_sources() {
+  local name=$1
+  local line=$(grep " $name-" deps|grep "Source Code")
+  local IFS="\"" ; set -- $line ; local IFS=" "
+  local source=$2
+  local IFS="/" ; set -- $source ; local IFS=" "
+  local targz=$7
+  echo sources for $name: $targz from $source from $line
+  if [[ ! -e src/_pkgs/$targz ]]; then
+    echolog "get sources for $name in src/_pkgs/$targz"
+    loge "wget $source -O src/_pkgs/$targz" "wget_sources_$targz"
+  fi
+}
 function build_app() {
   local name="$1"
-  echo Building APP $name
+  echolog "##### Building APP $name ####"
+  get_sources $name
 }
 function build_lib() {
   local name="$1"
