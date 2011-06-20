@@ -1,12 +1,13 @@
 #!/bin/bash
-myhome=`pwd`
-echo $myhome
+scriptPath=`pwd`
+echo $scriptPath
 DIR="$( basename `pwd` )"
 echo $DIR
 #d=`date +"%Y%m%d"`
 #echo $d
 mkdir -p logs
 mkdir -p src/_pkgs
+#scriptPath=${0%/*}
 
 set -o errexit
 set -o nounset
@@ -64,6 +65,38 @@ function untar() {
     loge "$tarname xpvf src/_pkgs/$namever.tar.gz -C src" "tar_xpvf_$namever.tar.gz"
   fi
 }
+function get_param() {
+  local name=$1
+  local _param=$2
+  echo path $scriptPath/_cpl/params/$name
+  echo a param name $_param
+  local aparam=$(grep $_param $scriptPath/_cpl/params/$name)
+  aparam=${aparam##$_param=}
+  if [[ $aparam != "" ]]; then eval $_param="'$aparam'"; fi
+}  
+function get_gnu_ld() {
+  local _gnuld=$1
+  if [[ $(which ld) == "" ]] ; then echolog "Unable to find a ld" ; tar2 ; fi
+  local h=$(ld --version|grep GNU)
+  if [[ $h == "" ]]; then agnuld=" --without-gnu-ld"; else agnuld=""; fi
+  echo gnuld $agnuld;
+  eval $_gnuld="'$agnuld'"
+}
+function configure() {
+  local name=$1
+  local namever=$2
+  cd src/$namever
+  echo $(pwd)
+  get_param $name makefile
+  if [[ ! -e $makefile ]]; then
+    get_param $name configcmd
+    get_gnu_ld gnuld
+    configcmd=$(echo $configcmd$gnuld)
+    echo configcmd $configcmd
+    xxx
+    loge "$configcmd" "configure_$namever"
+  fi
+}
 function build_app() {
   local name="$1"
   echolog "##### Building APP $name ####"
@@ -82,6 +115,8 @@ function build_lib() {
     echolog "lib $namever already installed"
   else
     untar $namever
+    configure $name $namever
+    xxx # for breaking here
   fi
 }
 function build_line() {

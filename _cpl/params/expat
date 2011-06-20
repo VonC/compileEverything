@@ -1,0 +1,2 @@
+makefile=Makefile
+configcmd=./configure --prefix=$H/usr/local/libs/$namever --enable-shared --enable-static
