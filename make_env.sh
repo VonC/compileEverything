@@ -1,5 +1,6 @@
 #!/bin/bash
 scriptPath=`pwd`
+sp="$scriptPath"
 echo $scriptPath
 DIR="$( basename `pwd` )"
 echo $DIR
@@ -17,14 +18,14 @@ function _ldate() { date +"%Y/%M/%d-%H:%M:%S"; }
 function _fdate() { date +"%Y%m%d.%H%M%S"; }
 function _echod() { echo "$(_ldate) $1$2" ; }
 function _echolog() { _echod "$1" "$2" | tee -a "$3"; if [[ $4 != "" ]]; then echo $4 >> "$3"; fi; }
-function echolog() { _echolog "~ " "$1" log ""; }
-function _echologcmd() { _echolog "~~~ $1" "$2" "logs/$3" "~~~~~~~~~~~~~~~~~~~"; }
-function _log() { f=$2; rm -f logs/l; ln -s $f logs/l; _echologcmd "" "$1" $f ; $( $1 >> logs/$f 2>&1 ) ; }
+function echolog() { _echolog "~ " "$1" "$sp/log" ""; }
+function _echologcmd() { _echolog "~~~ $1" "$2" "$sp/logs/$3" "~~~~~~~~~~~~~~~~~~~"; }
+function _log() { f=$2; rm -f "$sp"/logs/l; ln -s $f "$sp"/logs/l; _echologcmd "" "$1" $f ; $( $1 >> "$sp"/logs/$f 2>&1 ) ; }
 function log() { f=$(_fdate).$2 ; _log "$1" $f ; }
-function loge() { f=$(_fdate).$2 ; echolog "(see logs/$f or simply tail -f logs/l)"; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; true ; }
+function loge() { f=$(_fdate).$2.log ; echolog "(see logs/$f or simply tail -f logs/l)"; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; true ; }
 function mrf() { ls -t1 $1 | head -n1 ; }
 
-trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | tee -a log; tail -3 log ; tail -5 logs/l" EXIT ;
+trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | tee -a "$sp"/log; tail -3 "$sp"/log ; if [[ -e "$sp"/logs/l ]]; then tail -5 "$sp"/logs/l; rm "$sp"/logs/l; fi" EXIT ;
 
 function sc() {
   source "$scriptPath/.bashrc" -force
@@ -103,8 +104,8 @@ function configure() {
     get_param $name configcmd
     get_gnu_ld gnuld
     configcmd=$(echo $configcmd$gnuld)
+    configcmd=${configcmd/@@NAMEVER@@/${namever}}
     echo configcmd $configcmd
-    xxx
     loge "$configcmd" "configure_$namever"
   fi
 }
@@ -123,13 +124,16 @@ function build_lib() {
   local name="$1"
   echolog "#### Building LIB $name ####"
   get_sources $name namever
-  if [[ -e usr/local/libs/$namever ]]; then
+  if [[ -e "$sp/src/$namever/._linked" ]]; then
     echolog "lib $namever already installed"
   else
     sc
     untar $namever
     configure $name $namever
-    xxx # for breaking here
+    if [[ ! -e ._build ]] ; then loge "make" "make_$namever"; echo done > ._build ; fi
+    if [[ ! -e ._installed ]] ; then loge "make install" "make_install_$namever"; echo done > ._installed ; fi
+    if [[ ! -e ._linked ]] ; then echolog "checking links of $namever"; links $namever ; echo done > ._linked ; fi
+    xxx_done_building_app # for breaking here
   fi
 }
 function build_line() {
