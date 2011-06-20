@@ -4,3 +4,4 @@ dep*
 log
 logs/
 src/
+.bashrc

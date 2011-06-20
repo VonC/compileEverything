@@ -24,8 +24,22 @@ function log() { f=$(_fdate).$2 ; _log "$1" $f ; }
 function loge() { f=$(_fdate).$2 ; echolog "(see logs/$f or simply tail -f logs/l)"; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; true ; }
 function mrf() { ls -t1 $1 | head -n1 ; }
 
-trap "echo -e "\\\\e\\\[00\\\;31m!!!!\nFAIL\n!!!!\\\\e\\\[00m" | tee -a log; tail -3 log ; tail -5 logs/l" EXIT ;
+trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | tee -a log; tail -3 log ; tail -5 logs/l" EXIT ;
 
+function sc() {
+  source "$scriptPath/.bashrc" -force
+}
+function build_bashrc() {
+  local title="$1"
+  cp _cpl/.bashrc.tpl .bashrc
+  sed -i "s/@@TITLE@@/${title}/g" .bashrc
+  local longbit=$(getconf LONG_BIT)
+  if [[ $longbit == "32" ]]; then sed -i 's/ @@M64@@//g' .bashrc ;
+  elif [[ $longbit == "64" ]]; then sed -i 's/@@M64@@/-m64/g' .bashrc ;
+  else echolog "Unable to get LONG_BIT conf (32 or 64bits)" ; getconf2 ; fi
+}
+if [[ ! -e .bashrc ]]; then build_bashrc "$1"; fi
+sc
 if [[ ! -e deps ]]; then
   echolog "#### DEPS ####"
   echolog "download deps from SunFreeware"
@@ -68,8 +82,6 @@ function untar() {
 function get_param() {
   local name=$1
   local _param=$2
-  echo path $scriptPath/_cpl/params/$name
-  echo a param name $_param
   local aparam=$(grep $_param $scriptPath/_cpl/params/$name)
   aparam=${aparam##$_param=}
   if [[ $aparam != "" ]]; then eval $_param="'$aparam'"; fi
@@ -79,13 +91,12 @@ function get_gnu_ld() {
   if [[ $(which ld) == "" ]] ; then echolog "Unable to find a ld" ; tar2 ; fi
   local h=$(ld --version|grep GNU)
   if [[ $h == "" ]]; then agnuld=" --without-gnu-ld"; else agnuld=""; fi
-  echo gnuld $agnuld;
   eval $_gnuld="'$agnuld'"
 }
 function configure() {
   local name=$1
   local namever=$2
-  cd src/$namever
+  cd "$H"/src/$namever
   echo $(pwd)
   get_param $name makefile
   if [[ ! -e $makefile ]]; then
@@ -104,6 +115,7 @@ function build_app() {
   if [[ -e usr/local/apps/$namever ]]; then
     echolog "$namever already installed"
   else
+    sc
     untar $namever
   fi
 }
@@ -114,6 +126,7 @@ function build_lib() {
   if [[ -e usr/local/libs/$namever ]]; then
     echolog "lib $namever already installed"
   else
+    sc
     untar $namever
     configure $name $namever
     xxx # for breaking here
