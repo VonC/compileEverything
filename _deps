@@ -1,0 +1,5 @@
+app gcc make
+app make expat,gettext
+lib expat none
+lib gettext libiconv,expat
+lib libiconv none
