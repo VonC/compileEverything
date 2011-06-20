@@ -33,21 +33,43 @@ if [[ ! -e deps ]]; then
 fi
 function get_sources() {
   local name=$1
+  local _namever=$2
   local line=$(grep " $name-" deps|grep "Source Code")
   local IFS="\"" ; set -- $line ; local IFS=" "
   local source=$2
   local IFS="/" ; set -- $source ; local IFS=" "
   local targz=$7
-  echo sources for $name: $targz from $source from $line
+  #echo sources for $name: $targz from $source from $line
   if [[ ! -e src/_pkgs/$targz ]]; then
     echolog "get sources for $name in src/_pkgs/$targz"
     loge "wget $source -O src/_pkgs/$targz" "wget_sources_$targz"
   fi
+  eval $_namever="'${targz%.tar.gz}'"
+}
+function get_tar() {
+  local _tarname=$1
+  local atarname=""
+  if [[ $(which gtar) != "" ]] ; then $atarname="gtar"; 
+  elif [[ $(which tar) != "" ]]; then 
+    local h=$(tar --help|grep GNU)
+    if [[ "$h" != "" ]]; then atarname="tar"; fi;
+  fi
+  if [[ $atarname == "" ]] ; then echolog "Unable to find a GNU tar or gtar" ; tar2 ; fi
+  eval $_tarname="'$atarname'";
 }
 function build_app() {
   local name="$1"
   echolog "##### Building APP $name ####"
-  get_sources $name
+  get_sources $name namever
+  echo namever $namever
+  if [[ -e usr/local/apps/$namever ]]; then
+    echolog "$namever already installed"
+  else
+    if [[ ! -e src/$namever ]]; then
+      get_tar tarname
+      loge "$tarname xpvf src/_pkgs/$namever.tar.gz -C src" "tar_xpvf_$namever.tar.gz"
+    fi
+  fi
 }
 function build_lib() {
   local name="$1"
