@@ -11,6 +11,7 @@ mkdir -p logs
 mkdir -p src/_pkgs
 mkdir -p usr/local/._linked
 #scriptPath=${0%/*}
+donelist=""
 
 set -o errexit
 set -o nounset
@@ -179,12 +180,23 @@ function post() {
      echo done > ._post
   fi 
 }
+function isItDone() {
+  local name="$1"
+  local _isdone="$2"
+  local aisdone="false"
+  #echo '${donelist}' "${donelist}"
+  if [[ "${donelist%@${name}@*}" != "${donelist}" ]] ; then aisdone="true" ; fi
+  eval $_isdone="'$aisdone'"
+}
 function build_app() {
   local name="$1"
-  echolog "##### Building APP $name ####"
+  #echo 'APP ${donelist}' "$name : ${donelist}"
+  local isdone="false" ; isItDone "$name" isdone
+  if [[ "$isdone" == "false" ]] ; then echolog "##### Building APP $name ####" ; fi
   get_sources $name namever
   if [[ -e $HULA/$namever && -e $HULA/$name ]]; then
-    echolog "APP $namever already installed"
+    if [[ "$isdone" == "false" ]] ; then echolog "APP $namever already installed" ; 
+    donelist="${donelist}@${name}@" ; fi
   else
     sc
     untar $namever
@@ -193,15 +205,20 @@ function build_app() {
     if [[ ! -e ._installed ]] ; then loge "make install" "make_install_$namever"; echo done > ._installed ; fi
     post $name $namever
     if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of APP $namever"; _links "$H/bin" "$HULA/$namever/bin" ; echo done > $HUL/._linked/$namever ; fi
+    ln -fs "${namever}" "${HULA}/${name}"
+    donelist="${donelist}@${name}@"
     xxx_done_building_app
   fi
 }
 function build_lib() {
   local name="$1"
-  echolog "#### Building LIB $name ####"
+  #echo 'LIB ${donelist}' "$name : ${donelist}"
+  local isdone="false" ; isItDone "$name" isdone
+  if [[ "$isdone" == "false" ]] ; then echolog "#### Building LIB $name ####"; fi
   get_sources $name namever
   if [[ -e "$HUL/._linked/$namever" ]]; then
-    echolog "LIB $namever already installed"
+    if [[ "$isdone" == "false" ]] ; then echolog "LIB $namever already installed" ; 
+    donelist="${donelist}@${name}@" ; fi
   else
     sc
     untar $namever
@@ -210,6 +227,7 @@ function build_lib() {
     if [[ ! -e ._installed ]] ; then loge "make install" "make_install_$namever"; echo done > ._installed ; fi
     post $name $namever
     if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of LIB $namever"; links $namever ; echo done > $HUL/._linked/$namever ; fi
+    donelist="${donelist}@${name}@"
     xxx_done_building_lib # for breaking here
   fi
 }
