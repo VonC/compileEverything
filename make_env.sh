@@ -8,7 +8,7 @@ echo $DIR
 #echo $d
 mkdir -p logs
 mkdir -p src/_pkgs
-mkdir -p usr/local/.links
+mkdir -p usr/local/._linked
 #scriptPath=${0%/*}
 
 set -o errexit
@@ -82,15 +82,19 @@ function untar() {
   fi
 }
 function get_param() {
-  local name=$1
-  local _param=$2
-  local aparam=$(grep $_param $scriptPath/_cpl/params/$name)
+  local name="$1"
+  local _param="$2"
+  local default="$3"
+  local aparam=$(grep "$_param=" "$scriptPath/_cpl/params/$name")
   aparam=${aparam##$_param=}
-  if [[ $aparam != "" ]]; then eval $_param="'$aparam'"; fi
+  if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
+  if [[ "$aparam" == "##mandatory##" ]]; then echolog "unable to find $_param for $name" ; find2 ; fi
+  eval $_param="'$aparam'" 
 }  
 function get_gnu_ld() {
   local _gnuld=$1
   if [[ $(which ld) == "" ]] ; then echolog "Unable to find a ld" ; tar2 ; fi
+  # TODO check what happens when ld --version fails on Solaris
   local h=$(ld --version|grep GNU)
   if [[ $h == "" ]]; then agnuld=" --without-gnu-ld"; else agnuld=""; fi
   eval $_gnuld="'$agnuld'"
@@ -100,9 +104,10 @@ function configure() {
   local namever=$2
   cd "$H"/src/$namever
   echo $(pwd)
-  get_param $name makefile
+  get_param $name makefile Mafefile
   if [[ ! -e $makefile ]]; then
-    get_param $name configcmd
+    rm ._*
+    get_param $name configcmd "##mandatory##"
     get_gnu_ld gnuld
     configcmd=$(echo $configcmd$gnuld)
     configcmd=${configcmd/@@NAMEVER@@/${namever}}
@@ -147,6 +152,21 @@ function links() {
   local namever=$1
   _links "$HUL" "$HUL/libs/$namever"
 }
+function post() {
+  local name=$1
+  local namever=$2
+  if [[ ! -e ._post ]]; then
+     get_param $name post
+     if [[ $post != "" ]]; then
+       local postcmd=$post
+       while [[ "${postcmd%@@NAMEVER@@*}" != "${postcmd}" ]]; do
+         postcmd=${postcmd/@@NAMEVER@@/${namever}}
+       done
+       loge "eval $postcmd" "post_$namever"
+     fi
+     echo done > ._post
+  fi 
+}
 function build_app() {
   local name="$1"
   echolog "##### Building APP $name ####"
@@ -156,13 +176,14 @@ function build_app() {
   else
     sc
     untar $namever
+    xxx_done_building_app
   fi
 }
 function build_lib() {
   local name="$1"
   echolog "#### Building LIB $name ####"
   get_sources $name namever
-  if [[ -e "$sp/src/$namever/._linked" ]]; then
+  if [[ -e "$HUL/._linked/$namever" ]]; then
     echolog "lib $namever already installed"
   else
     sc
@@ -170,8 +191,9 @@ function build_lib() {
     configure $name $namever
     if [[ ! -e ._build ]] ; then loge "make" "make_$namever"; echo done > ._build ; fi
     if [[ ! -e ._installed ]] ; then loge "make install" "make_install_$namever"; echo done > ._installed ; fi
-    if [[ ! -e $HUL/.links/$namever ]] ; then echolog "checking links of $namever"; links $namever ; echo done > $HUL/.links/$namever ; fi
-    xxx_done_building_app # for breaking here
+    post $name $namever
+    if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of $namever"; links $namever ; echo done > $HUL/._linked/$namever ; fi
+    xxx_done_building_lib # for breaking here
   fi
 }
 function build_line() {

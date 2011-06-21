@@ -1,0 +1,4 @@
+makefile=Makefile
+configcmd=./configure --prefix=$H/usr/local/libs/@@NAMEVER@@ --enable-shared --enable-static
+# needed by gettext
+post=cp $H/src/@@NAMEVER@@/srclib/unistd.h $HUL/libs/@@NAMEVER@@/include

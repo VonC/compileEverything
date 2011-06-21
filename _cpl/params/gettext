@@ -1,0 +1,2 @@
+makefile=Makefile
+configcmd=./configure --prefix=${HUL}/libs/@@NAMEVER@@ --enable-shared --enable-static --with-libiconv-prefix=${HUL} --with-libexpat-prefix=${HUL}
