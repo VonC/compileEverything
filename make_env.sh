@@ -116,18 +116,29 @@ function configure() {
     loge "$configcmd" "configure_$namever"
   fi
 }
+function cleanPath() {
+  local path="$1"
+  local _path="$2"
+  while [[ "${path%/.}" != "${path}" ]] ; do path="${path%/.}"; done
+  while [[ "${path#./}" != "${path}" ]] ; do path="${path#./}"; done
+  #echo '${path%/./*}' ${path%/./*}
+  while [[ "${path%/./*}" != "${path}" ]] ; do path="${path/\/.\///}"; done
+  eval $_path="'$path'"
+}
 function relpath() {
-  local source=$1
-  local target=$2
-  local _relp=$3
-  local common_part=$source
+  local source="$1"; cleanPath "$source" source
+  local target="$2"; cleanPath "$target" target
+  local _relp="$3"
+  local common_part="$source"
   local back=
   #echo target $target common_part $common_part
-  while [ "${target#$common_part/}" = "${target}" ]; do
+  #echo '${target#$common_part/}' ${target#$common_part/}
+  while [ "${target#$common_part/}" == "${target}" ]; do
     if [[ -d $common_part ]] ; then back="../${back}" ; fi
     common_part=${common_part%/*}
     #echo common_part $common_part back $back
   done
+  #echo '${back}${target#$common_part/}' ${back}${target#$common_part/}
   eval $_relp="'${back}${target#$common_part/}'";
 }
 function _links() {
@@ -173,7 +184,7 @@ function build_app() {
   echolog "##### Building APP $name ####"
   get_sources $name namever
   if [[ -e $HULA/$namever && -e $HULA/$name ]]; then
-    echolog "$namever already installed"
+    echolog "APP $namever already installed"
   else
     sc
     untar $namever
@@ -181,6 +192,7 @@ function build_app() {
     if [[ ! -e ._build ]] ; then loge "make" "make_$namever"; echo done > ._build ; fi
     if [[ ! -e ._installed ]] ; then loge "make install" "make_install_$namever"; echo done > ._installed ; fi
     post $name $namever
+    if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of APP $namever"; _links "$H/bin" "$HULA/$namever/bin" ; echo done > $HUL/._linked/$namever ; fi
     xxx_done_building_app
   fi
 }
@@ -189,7 +201,7 @@ function build_lib() {
   echolog "#### Building LIB $name ####"
   get_sources $name namever
   if [[ -e "$HUL/._linked/$namever" ]]; then
-    echolog "lib $namever already installed"
+    echolog "LIB $namever already installed"
   else
     sc
     untar $namever
@@ -197,7 +209,7 @@ function build_lib() {
     if [[ ! -e ._build ]] ; then loge "make" "make_$namever"; echo done > ._build ; fi
     if [[ ! -e ._installed ]] ; then loge "make install" "make_install_$namever"; echo done > ._installed ; fi
     post $name $namever
-    if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of $namever"; links $namever ; echo done > $HUL/._linked/$namever ; fi
+    if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of LIB $namever"; links $namever ; echo done > $HUL/._linked/$namever ; fi
     xxx_done_building_lib # for breaking here
   fi
 }
