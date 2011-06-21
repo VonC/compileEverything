@@ -110,23 +110,42 @@ function configure() {
     loge "$configcmd" "configure_$namever"
   fi
 }
+function relpath() {
+  local source=$1
+  local target=$2
+  local _relp=$3
+  local common_part=$source
+  local back=
+  #echo target $target common_part $common_part
+  while [ "${target#$common_part/}" = "${target}" ]; do
+    if [[ -d $common_part ]] ; then back="../${back}" ; fi
+    common_part=${common_part%/*}
+    #echo common_part $common_part back $back
+  done
+  eval $_relp="'${back}${target#$common_part/}'";
+}
 function _links() {
   local dest="$1"
   local src="$2"
   cd "$src"
   find . -type f -print | while read line; do
-    echo check $line
-    local apath=${line%/*}
+    #echo check $line
+    local apath=${line%/*}; apath=${apath#*/}
     local afile=${line##*/}
-    echo check $apath $afile
+    #echo check $apath $afile
     mkdir -p "$dest/$apath"
-    
+    #ln -fs "$src/$apath/$afile" "$dest/$apath/$afile"   
+    #echo src "$src/$apath/$afile" dest "$dest/$apath/$afile"   
+    #relpath "$src/$apath/$afile" "$dest/$apath/$afile" relp
+    relpath "$dest/$apath/$afile" "$src/$apath/$afile" relp
+    #echo relp $relp
+    #echo ln -fs "$relp" "$dest/$apath/$afile"
+    ln -fs "$relp" "$dest/$apath/$afile"
   done 
 }
 function links() {
   local namever=$1
   _links "$HUL" "$HUL/libs/$namever"
-  xxx_done_links
 }
 function build_app() {
   local name="$1"
