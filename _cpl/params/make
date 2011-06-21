@@ -1,1 +1,1 @@
-configcmd=./configure --prefix=${HUL}/apps/@@NAMEVER@@ --enable-shared --enable-static --with-libiconv-prefix=${HUL} --with-libexpat-prefix=${HUL}
+configcmd=./configure --prefix=${HUL}/apps/@@NAMEVER@@ --with-libiconv-prefix=${HUL} --with-libintl-prefix=${HUL}

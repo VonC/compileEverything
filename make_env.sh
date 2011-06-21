@@ -6,6 +6,7 @@ DIR="$( basename `pwd` )"
 echo $DIR
 #d=`date +"%Y%m%d"`
 #echo $d
+mkdir -p bin
 mkdir -p logs
 mkdir -p src/_pkgs
 mkdir -p usr/local/._linked
@@ -104,9 +105,9 @@ function configure() {
   local namever=$2
   cd "$H"/src/$namever
   echo $(pwd)
-  get_param $name makefile Mafefile
+  get_param $name makefile Makefile
   if [[ ! -e $makefile ]]; then
-    rm ._*
+    rm -f ._*
     get_param $name configcmd "##mandatory##"
     get_gnu_ld gnuld
     configcmd=$(echo $configcmd$gnuld)
@@ -156,7 +157,7 @@ function post() {
   local name=$1
   local namever=$2
   if [[ ! -e ._post ]]; then
-     get_param $name post
+     get_param $name post ""
      if [[ $post != "" ]]; then
        local postcmd=$post
        while [[ "${postcmd%@@NAMEVER@@*}" != "${postcmd}" ]]; do
@@ -171,11 +172,15 @@ function build_app() {
   local name="$1"
   echolog "##### Building APP $name ####"
   get_sources $name namever
-  if [[ -e usr/local/apps/$namever ]]; then
+  if [[ -e $HULA/$namever && -e $HULA/$name ]]; then
     echolog "$namever already installed"
   else
     sc
     untar $namever
+    configure $name $namever
+    if [[ ! -e ._build ]] ; then loge "make" "make_$namever"; echo done > ._build ; fi
+    if [[ ! -e ._installed ]] ; then loge "make install" "make_install_$namever"; echo done > ._installed ; fi
+    post $name $namever
     xxx_done_building_app
   fi
 }
