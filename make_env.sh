@@ -8,6 +8,7 @@ echo $DIR
 #echo $d
 mkdir -p logs
 mkdir -p src/_pkgs
+mkdir -p usr/local/.links
 #scriptPath=${0%/*}
 
 set -o errexit
@@ -109,6 +110,24 @@ function configure() {
     loge "$configcmd" "configure_$namever"
   fi
 }
+function _links() {
+  local dest="$1"
+  local src="$2"
+  cd "$src"
+  find . -type f -print | while read line; do
+    echo check $line
+    local apath=${line%/*}
+    local afile=${line##*/}
+    echo check $apath $afile
+    mkdir -p "$dest/$apath"
+    
+  done 
+}
+function links() {
+  local namever=$1
+  _links "$HUL" "$HUL/libs/$namever"
+  xxx_done_links
+}
 function build_app() {
   local name="$1"
   echolog "##### Building APP $name ####"
@@ -132,7 +151,7 @@ function build_lib() {
     configure $name $namever
     if [[ ! -e ._build ]] ; then loge "make" "make_$namever"; echo done > ._build ; fi
     if [[ ! -e ._installed ]] ; then loge "make install" "make_install_$namever"; echo done > ._installed ; fi
-    if [[ ! -e ._linked ]] ; then echolog "checking links of $namever"; links $namever ; echo done > ._linked ; fi
+    if [[ ! -e $HUL/.links/$namever ]] ; then echolog "checking links of $namever"; links $namever ; echo done > $HUL/.links/$namever ; fi
     xxx_done_building_app # for breaking here
   fi
 }
