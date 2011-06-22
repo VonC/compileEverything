@@ -1,0 +1,1 @@
+configcmd=./configure --prefix=${HULB}/@@NAMEVER@@ --with-libsigsegv=${HUL} @@WITH_GNU_LD@@
