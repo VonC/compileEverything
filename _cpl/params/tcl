@@ -1,0 +1,2 @@
+cdpath=${H}/src/@@NAMEVER@@/unix
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared @@ENABLE_64BIT@@

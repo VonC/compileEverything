@@ -1,1 +1,1 @@
-configcmd=./configure --prefix=${HULB}/@@NAMEVER@@ --with-libsigsegv=${HUL} @@WITH_GNU_LD@@
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --with-libsigsegv=${HUL} @@WITH_GNU_LD@@

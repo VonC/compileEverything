@@ -1,1 +1,1 @@
-configcmd=./configure --prefix=${HULB}/@@NAMEVER@@ --enable-shared
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared

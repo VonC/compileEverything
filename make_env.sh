@@ -55,6 +55,9 @@ function get_sources() {
   local name=$1
   local _namever=$2
   local line=$(grep " $name-" "$sp/deps"|grep "Source Code")
+  get_param $name verexclude ""
+  if [[ "${verexclude}" != "" ]]; then line=$(echo $line | grep -Ev "${verexclude}") ; fi 
+  #if [[ $name == "db" ]] ; then echo line source! $line ; fffg ; fi 
   local IFS="\"" ; set -- $line ; local IFS=" "
   local source=$2
   local IFS="/" ; set -- $source ; local IFS=" "
@@ -79,7 +82,7 @@ function get_tar() {
 }
 function untar() {
   local namever=$1
-  if [[ ! -e src/$namever ]]; then
+  if [[ ! -e "$sp/src/$namever" ]]; then
     get_tar tarname
     loge "$tarname xpvf $sp/src/_pkgs/$namever.tar.gz -C $sp/src" "tar_xpvf_$namever.tar.gz"
     local lastlog=$(mrf $H/logs)
@@ -97,6 +100,10 @@ function get_param() {
   else aparam="" ; fi
   if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
   if [[ "$aparam" == "##mandatory##" ]]; then echolog "unable to find $_param for $name" ; find2 ; fi
+  while [[ "${aparam%@@NAMEVER@@*}" != "${aparam}" ]]; do
+    aparam=${aparam/@@NAMEVER@@/${namever}}
+  done
+  #echo $name $_param xx${aparam}xx
   eval $_param="'$aparam'" 
 }  
 function get_gnu_cmd() {
@@ -120,7 +127,6 @@ function configure() {
   if [[ ! -e $makefile || ! -e config.status ]]; then
     rm -f "$H"/src/${namever}/._*
     get_param $name configcmd "##mandatory##"
-    configcmd=${configcmd/@@NAMEVER@@/${namever}}
     get_gnu_cmd ld path_ld without_gnu_ld with_gnu_ld
     configcmd=${configcmd/@@PATH_LD@@/${path_ld}}
     configcmd=${configcmd/@@WITHOUT_GNU_LD@@/${without_gnu_ld}}
@@ -129,7 +135,11 @@ function configure() {
     configcmd=${configcmd/@@PATH_AS@@/${path_as}}
     configcmd=${configcmd/@@WITHOUT_GNU_AS@@/${without_gnu_as}}
     configcmd=${configcmd/@@WITH_GNU_AS@@/${with_gnu_as}}
+    local longbit=$(getconf LONG_BIT)
+    if [[ $longbit == "64" ]] ; then configcmd=${configcmd/@@ENABLE_64BIT@@/--enable-64bit} ;
+    else configcmd=${configcmd/@@ENABLE_64BIT@@/} ; fi 
     echo configcmd $configcmd
+    #echo ${HULL} ; dir ${HULL} ; lll
     loge "$configcmd" "configure_$namever"
   fi
 }
@@ -187,10 +197,8 @@ function pre() {
   if [[ ! -e $H/src/$namever/._pre ]]; then
      get_param $name pre ""
      if [[ $pre != "" ]]; then
+       #echo pre $pre ; jjjj
        local precmd=$pre
-       while [[ "${precmd%@@NAMEVER@@*}" != "${precmd}" ]]; do
-         precmd=${precmd/@@NAMEVER@@/${namever}}
-       done
        loge "eval $precmd" "pre_$namever"
      fi
      echo done > $H/src/$namever/._pre
@@ -203,9 +211,6 @@ function post() {
      get_param $name post ""
      if [[ $post != "" ]]; then
        local postcmd=$post
-       while [[ "${postcmd%@@NAMEVER@@*}" != "${postcmd}" ]]; do
-         postcmd=${postcmd/@@NAMEVER@@/${namever}}
-       done
        loge "eval $postcmd" "post_$namever"
      fi
      echo done > $H/src/$namever/._post
@@ -223,9 +228,6 @@ function gocd() {
   local name=$1
   local namever=$2
   get_param $name cdpath "$H/src/$namever"
-  while [[ "${cdpath%@@NAMEVER@@*}" != "${cdpath}" ]]; do
-    cdpath=${cdpath/@@NAMEVER@@/${namever}}
-  done
   cdpath=$(eval echo "${cdpath}")
   echolog "cd $cdpath"
   cd "${cdpath}"
