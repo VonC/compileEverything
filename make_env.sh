@@ -1,6 +1,7 @@
 #!/bin/bash
 scriptPath=`pwd`
 sp="$scriptPath"
+_deps="${sp}/_deps"
 echo $scriptPath
 DIR="$( basename `pwd` )"
 echo $DIR
@@ -53,15 +54,15 @@ fi
 function get_sources() {
   local name=$1
   local _namever=$2
-  local line=$(grep " $name-" deps|grep "Source Code")
+  local line=$(grep " $name-" "$sp/deps"|grep "Source Code")
   local IFS="\"" ; set -- $line ; local IFS=" "
   local source=$2
   local IFS="/" ; set -- $source ; local IFS=" "
   local targz=$7
   #echo sources for $name: $targz from $source from $line
-  if [[ ! -e src/_pkgs/$targz ]]; then
+  if [[ ! -e "$sp/src/_pkgs/$targz" ]]; then
     echolog "get sources for $name in src/_pkgs/$targz"
-    loge "wget $source -O src/_pkgs/$targz" "wget_sources_$targz"
+    loge "wget $source -O $sp/src/_pkgs/$targz" "wget_sources_$targz"
   fi
   eval $_namever="'${targz%.tar.gz}'"
 }
@@ -81,12 +82,16 @@ function untar() {
   if [[ ! -e src/$namever ]]; then
     get_tar tarname
     loge "$tarname xpvf src/_pkgs/$namever.tar.gz -C src" "tar_xpvf_$namever.tar.gz"
+    local lastlog=$(mrf $H/logs)
+    local actualname=$(head -3 "$H/logs/$lastlog"|tail -1) ; actualname=${actualname%%/*}
+    if [[ "$namever" != "$actualname" ]] ; then ln -s "$actualname" "$H/src/$namever" ; fi
   fi
 }
 function get_param() {
   local name="$1"
   local _param="$2"
   local default="$3"
+  if [[ ! -e "$scriptPath/_cpl/params/$name" ]] ; then echolog "unable to find param for $name" ; no_param ; fi
   local aparam=$(grep "$_param=" "$scriptPath/_cpl/params/$name")
   if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then aparam=${aparam##$_param=} ; 
   else aparam="" ; fi
@@ -112,7 +117,7 @@ function configure() {
   local name=$1
   local namever=$2
   get_param $name makefile Makefile
-  if [[ ! -e $makefile ]]; then
+  if [[ ! -e $makefile || ! -e config.status ]]; then
     rm -f "$H"/src/${namever}/._*
     get_param $name configcmd "##mandatory##"
     configcmd=${configcmd/@@NAMEVER@@/${namever}}
@@ -247,7 +252,6 @@ function build_app() {
     if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of APP $namever"; _links "$H/bin" "$HULA/$namever/bin" ; echo done > $HUL/._linked/$namever ; fi
     ln -fs "${namever}" "${HULA}/${name}"
     donelist="${donelist}@${name}@"
-    xxx_done_building_app
   fi
 }
 function build_lib() {
@@ -271,7 +275,6 @@ function build_lib() {
     post $name $namever
     if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of LIB $namever"; links $namever ; echo done > $HUL/._linked/$namever ; fi
     donelist="${donelist}@${name}@"
-    xxx_done_building_lib # for breaking here
   fi
 }
 function build_line() {
@@ -284,8 +287,10 @@ function build_line() {
   for adep in "${Array[@]}"; do
     #echo adep $adep for $name with $type
     if [[ "$adep" != "none" ]]; then
-      adepline=$(grep -E "(app|lib) $adep" _deps)
-      #echo dep line: $adepline
+      adepline=$(grep -E "((app|lib) $adep)|__no_deps__" "${_deps}")
+      #echo dep line: "xx${adepline}xx"
+      if [[ "$adepline" == "__no_deps__" ]] ; then echolog "unable to find dependencies of $adep"; nodepfound ; fi
+      adepline=$(echo "${adepline}" | grep -E "${adep}")
       build_line "$adepline"
     fi
   done
@@ -294,7 +299,7 @@ function build_line() {
   elif [[ $type == "lib" ]] ; then build_lib "$name" ; 
   else echo "unknow type" ; exit 1 ; fi
 }
-cat _deps | while read line; do
+cat "${_deps}" | while read line; do
   #echo $line
   build_line "$line"
 done

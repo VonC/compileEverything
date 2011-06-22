@@ -3,3 +3,14 @@ app make expat,gettext
 lib expat none
 lib gettext libiconv,expat
 lib libiconv none
+app git gcc,openssl,libssh2,curl,libiconv,expat,libidn,zlib,perl,apache,python,subversion,openssh
+lib openssl zlib,perl
+lib zlib none
+app perl db,gdbm
+lib db tcl
+lib tcl autoconf
+lib autoconf pkgconfig,m4
+lib pkgconfig libiconv
+lib m4 pkgconfig,libsigsegv
+lib libsigsegv none
+__no_deps__
