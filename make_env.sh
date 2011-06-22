@@ -88,31 +88,42 @@ function get_param() {
   local _param="$2"
   local default="$3"
   local aparam=$(grep "$_param=" "$scriptPath/_cpl/params/$name")
-  aparam=${aparam##$_param=}
+  if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then aparam=${aparam##$_param=} ; 
+  else aparam="" ; fi
   if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
   if [[ "$aparam" == "##mandatory##" ]]; then echolog "unable to find $_param for $name" ; find2 ; fi
   eval $_param="'$aparam'" 
 }  
-function get_gnu_ld() {
-  local _gnuld=$1
-  if [[ $(which ld) == "" ]] ; then echolog "Unable to find a ld" ; tar2 ; fi
-  # TODO check what happens when ld --version fails on Solaris
-  local h=$(ld --version|grep GNU)
-  if [[ $h == "" ]]; then agnuld=" --without-gnu-ld"; else agnuld=""; fi
-  eval $_gnuld="'$agnuld'"
+function get_gnu_cmd() {
+  local acmd=$1
+  local _path=$2
+  local _without_gnu_cmd=$3
+  local _with_gnu_cmd=$4
+  local apath=$(which ${acmd})
+  apath=${apath/\/\///}
+  if [[ "$apath" == "" ]] ; then echolog "Unable to find a ${acmd}" ; cmd_not_found ; fi
+  eval $_path="'$apath'"
+  local without_gnu_cmd="" ; local with_gnu_cmd=""
+  if [[ ${apath#/usr/css*} != "${apath}" ]]; then without_gnu_cmd="--without-gnu-${acmd}"; else with_gnu_cmd="--with-gnu_${acmd}"; fi
+  eval $_without_gnu_cmd="'$without_gnu_cmd'"
+  eval $_with_gnu_cmd="'$with_gnu_cmd'"
 }
 function configure() {
   local name=$1
   local namever=$2
-  cd "$H"/src/$namever
-  echo $(pwd)
   get_param $name makefile Makefile
   if [[ ! -e $makefile ]]; then
-    rm -f ._*
+    rm -f "$H"/src/${namever}/._*
     get_param $name configcmd "##mandatory##"
-    get_gnu_ld gnuld
-    configcmd=$(echo $configcmd$gnuld)
     configcmd=${configcmd/@@NAMEVER@@/${namever}}
+    get_gnu_cmd ld path_ld without_gnu_ld with_gnu_ld
+    configcmd=${configcmd/@@PATH_LD@@/${path_ld}}
+    configcmd=${configcmd/@@WITHOUT_GNU_LD@@/${without_gnu_ld}}
+    configcmd=${configcmd/@@WITH_GNU_LD@@/${with_gnu_ld}}
+    get_gnu_cmd as path_as without_gnu_as with_gnu_as
+    configcmd=${configcmd/@@PATH_AS@@/${path_as}}
+    configcmd=${configcmd/@@WITHOUT_GNU_AS@@/${without_gnu_as}}
+    configcmd=${configcmd/@@WITH_GNU_AS@@/${with_gnu_as}}
     echo configcmd $configcmd
     loge "$configcmd" "configure_$namever"
   fi
@@ -165,10 +176,25 @@ function links() {
   local namever=$1
   _links "$HUL" "$HUL/libs/$namever"
 }
+function pre() {
+  local name=$1
+  local namever=$2
+  if [[ ! -e $H/src/$namever/._pre ]]; then
+     get_param $name pre ""
+     if [[ $pre != "" ]]; then
+       local precmd=$pre
+       while [[ "${precmd%@@NAMEVER@@*}" != "${precmd}" ]]; do
+         precmd=${precmd/@@NAMEVER@@/${namever}}
+       done
+       loge "eval $precmd" "pre_$namever"
+     fi
+     echo done > $H/src/$namever/._pre
+  fi 
+}
 function post() {
   local name=$1
   local namever=$2
-  if [[ ! -e ._post ]]; then
+  if [[ ! -e $H/src/$namever/._post ]]; then
      get_param $name post ""
      if [[ $post != "" ]]; then
        local postcmd=$post
@@ -177,7 +203,7 @@ function post() {
        done
        loge "eval $postcmd" "post_$namever"
      fi
-     echo done > ._post
+     echo done > $H/src/$namever/._post
   fi 
 }
 function isItDone() {
@@ -187,6 +213,17 @@ function isItDone() {
   #echo '${donelist}' "${donelist}"
   if [[ "${donelist%@${name}@*}" != "${donelist}" ]] ; then aisdone="true" ; fi
   eval $_isdone="'$aisdone'"
+}
+function gocd() {
+  local name=$1
+  local namever=$2
+  get_param $name cdpath "$H/src/$namever"
+  while [[ "${cdpath%@@NAMEVER@@*}" != "${cdpath}" ]]; do
+    cdpath=${cdpath/@@NAMEVER@@/${namever}}
+  done
+  cdpath=$(eval echo "${cdpath}")
+  echolog "cd $cdpath"
+  cd "${cdpath}"
 }
 function build_app() {
   local name="$1"
@@ -198,11 +235,14 @@ function build_app() {
     if [[ "$isdone" == "false" ]] ; then echolog "APP $namever already installed" ; 
     donelist="${donelist}@${name}@" ; fi
   else
+    local asrc="${H}/src/${namever}"
     sc
     untar $namever
-    configure $name $namever
-    if [[ ! -e ._build ]] ; then loge "make" "make_$namever"; echo done > ._build ; fi
-    if [[ ! -e ._installed ]] ; then loge "make install" "make_install_$namever"; echo done > ._installed ; fi
+    pre $name $namever
+    gocd $name $namever
+    configure $name $namever 
+    if [[ ! -e "${asrc}"/._build ]] ; then loge "make" "make_$namever"; echo done > "${asrc}"/._build ; fi
+    if [[ ! -e "${asrc}"/._installed ]] ; then loge "make install" "make_install_$namever"; echo done > "${asrc}"/._installed ; fi
     post $name $namever
     if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of APP $namever"; _links "$H/bin" "$HULA/$namever/bin" ; echo done > $HUL/._linked/$namever ; fi
     ln -fs "${namever}" "${HULA}/${name}"
@@ -220,11 +260,14 @@ function build_lib() {
     if [[ "$isdone" == "false" ]] ; then echolog "LIB $namever already installed" ; 
     donelist="${donelist}@${name}@" ; fi
   else
+    local asrc="${H}/src/${namever}"
     sc
     untar $namever
+    pre $name $namever
+    gocd $name $namever
     configure $name $namever
-    if [[ ! -e ._build ]] ; then loge "make" "make_$namever"; echo done > ._build ; fi
-    if [[ ! -e ._installed ]] ; then loge "make install" "make_install_$namever"; echo done > ._installed ; fi
+    if [[ ! -e "${asrc}"/._build ]] ; then loge "make" "make_$namever"; echo done > "${asrc}"/._build ; fi
+    if [[ ! -e "${asrc}"/._installed ]] ; then loge "make install" "make_install_$namever"; echo done > "${asrc}"/._installed ; fi
     post $name $namever
     if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of LIB $namever"; links $namever ; echo done > $HUL/._linked/$namever ; fi
     donelist="${donelist}@${name}@"
@@ -257,4 +300,5 @@ cat _deps | while read line; do
 done
 trap - EXIT
 echo -e "\e[00;32mAll Done.\e[00m"
+#sc ; which gcc ; gcc --version
 exit 0

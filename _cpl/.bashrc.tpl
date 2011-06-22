@@ -29,6 +29,6 @@ export PATH="$H/bin:$HULB:$HUL/sbin:$HUL/ssl/bin"
 export PATH=$PATH:/bin:/usr/bin/:/usr/sbin:/usr/css/bin:/usr/sfw/bin
 
 export LDFLAGS="-L$HULL -L$HUL/ssl/lib -R$HUL/ssl/lib -R$HULL/sasl2"
-export CFLAGS="-I$HULI -I$HUL/ssl/include -fPIC -O"
+export CFLAGS="-I$HULI -I$HUL/ssl/include -fPIC -O -U_FORTIFY_SOURCE"
 export CPPFLAGS="$CFLAGS"
 export LD_LIBRARY_PATH="$HULL:$HUL/ssl/lib:$HUL/apps/svn/lib"

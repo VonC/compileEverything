@@ -1,0 +1,3 @@
+pre=mkdir -p ${H}/src/@@NAMEVER@@/objdir 
+cdpath=${H}/src/@@NAMEVER@@/objdir
+configcmd=../configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --disable-multilib --enable-languages=c,c++ --with-as=@@PATH_AS@@ --with-ld=@@PATH_LD@@

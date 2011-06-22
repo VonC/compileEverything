@@ -1,1 +1,1 @@
-configcmd=./configure --prefix=${HUL}/apps/@@NAMEVER@@ --with-libiconv-prefix=${HUL} --with-libintl-prefix=${HUL}
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-libiconv-prefix=${HUL} --with-libintl-prefix=${HUL} @@WITHOUT_GNU_LD@@
