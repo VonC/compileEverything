@@ -13,5 +13,7 @@ lib autoconf pkgconfig,m4
 lib pkgconfig libiconv
 lib m4 pkgconfig,libsigsegv
 lib libsigsegv none
-lib gdbm none
+lib gdbm texinfo
+lib texinfo libiconv,ncurses
+lib ncurses none
 __no_deps__

@@ -1,0 +1,1 @@
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --with-shared --with-devel=yes --without-ada --enable-overwrite --with-develop @@WITHOUT_GNU_LD@@

@@ -1,17 +1,35 @@
 #!/bin/bash
-scriptPath=`pwd`
-sp="$scriptPath"
-_deps="${sp}/_deps"
-echo $scriptPath
-DIR="$( basename `pwd` )"
-echo $DIR
-#d=`date +"%Y%m%d"`
-#echo $d
-mkdir -p bin
-mkdir -p logs
-mkdir -p src/_pkgs
-mkdir -p usr/local/._linked
-#scriptPath=${0%/*}
+
+function scriptpath() {
+  local _sp=$1
+  local ascript="$0"
+  local asp="$(dirname $0)"
+  if [[ "$asp" == "." ]] ; then asp=$(pwd) ;
+  else
+    echo "asp '$asp', ascript '$ascript'"
+    if [[ "${ascript#/}" != "$ascript" ]]; then asp=$asp ;
+    elif [[ "${ascript#../}" != "$ascript" ]]; then
+      asp=$(pwd)
+      while [[ "${ascript#../}" != "$ascript" ]]; do
+        asp=${asp%/*}
+        ascript=${ascript#../}
+      done
+    elif [[ "${ascript#*/}" != "$ascript" ]];  then
+      asp="$(pwd)/${asp}"
+    fi
+  fi
+  eval $_sp="'$asp'"
+}
+scriptpath H
+export H="${H}"
+echo "make_env: define local home '${H}'."
+
+_deps="${H}/_deps"
+echo $H
+mkdir -p "$H"/bin
+mkdir -p "$H"/logs
+mkdir -p "$H"/src/_pkgs
+mkdir -p "$H"/usr/local/._linked
 donelist=""
 
 set -o errexit
@@ -22,39 +40,39 @@ function _ldate() { date +"%Y/%M/%d-%H:%M:%S"; }
 function _fdate() { date +"%Y%m%d.%H%M%S"; }
 function _echod() { echo "$(_ldate) $1$2" ; }
 function _echolog() { _echod "$1" "$2" | tee -a "$3"; if [[ $4 != "" ]]; then echo $4 >> "$3"; fi; }
-function echolog() { _echolog "~ " "$1" "$sp/log" ""; }
-function _echologcmd() { _echolog "~~~ $1" "$2" "$sp/logs/$3" "~~~~~~~~~~~~~~~~~~~"; }
-function _log() { f=$2; rm -f "$sp"/logs/l; ln -s $f "$sp"/logs/l; _echologcmd "" "$1" $f ; $( $1 >> "$sp"/logs/$f 2>&1 ) ; }
+function echolog() { _echolog "~ " "$1" "$H/log" ""; }
+function _echologcmd() { _echolog "~~~ $1" "$2" "$H/logs/$3" "~~~~~~~~~~~~~~~~~~~"; }
+function _log() { f=$2; rm -f "$H"/logs/l; ln -s $f "$H"/logs/l; _echologcmd "" "$1" $f ; $( $1 >> "$H"/logs/$f 2>&1 ) ; }
 function log() { f=$(_fdate).$2 ; _log "$1" $f ; }
 function loge() { f=$(_fdate).$2.log ; echolog "(see logs/$f or simply tail -f logs/l)"; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; true ; }
 function mrf() { ls -t1 $1 | head -n1 ; }
 
-trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | tee -a "$sp"/log; tail -3 "$sp"/log ; if [[ -e "$sp"/logs/l ]]; then tail -5 "$sp"/logs/l; rm "$sp"/logs/l; fi" EXIT ;
+trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | tee -a "$H"/log; tail -3 "$H"/log ; if [[ -e "$H"/logs/l ]]; then tail -5 "$H"/logs/l; rm "$H"/logs/l; fi" EXIT ;
 
 function sc() {
-  source "$scriptPath/.bashrc" -force
+  source "$H/.bashrc" -force
 }
 function build_bashrc() {
   local title="$1"
-  cp _cpl/.bashrc.tpl .bashrc
-  sed -i "s/@@TITLE@@/${title}/g" .bashrc
+  cp "$H/_cpl/.bashrc.tpl" "$H/.bashrc"
+  sed -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
   local longbit=$(getconf LONG_BIT)
-  if [[ $longbit == "32" ]]; then sed -i 's/ @@M64@@//g' .bashrc ;
-  elif [[ $longbit == "64" ]]; then sed -i 's/@@M64@@/-m64/g' .bashrc ;
+  if [[ $longbit == "32" ]]; then sed -i 's/ @@M64@@//g' "$H/.bashrc" ;
+  elif [[ $longbit == "64" ]]; then sed -i 's/@@M64@@/-m64/g' "$H/.bashrc" ;
   else echolog "Unable to get LONG_BIT conf (32 or 64bits)" ; getconf2 ; fi
 }
-if [[ ! -e .bashrc ]]; then build_bashrc "$1"; fi
+if [[ ! -e "$H/.bashrc" ]]; then build_bashrc "$1"; fi
 sc
-if [[ ! -e deps ]]; then
+if [[ ! -e "$H"/deps ]]; then
   echolog "#### DEPS ####"
   echolog "download deps from SunFreeware"
-  loge "wget http://sunfreeware.com/programlistsparc10.html -O deps$(Ymd)" "wget_deps_sunfreeware"
-  log "ln -fs deps$(Ymd) deps" ln_deps
+  loge "wget http://sunfreeware.com/programlistsparc10.html -O $H/deps$(Ymd)" "wget_deps_sunfreeware"
+  log "ln -fs $H/deps$(Ymd) $H/deps" ln_deps
 fi
 function get_sources() {
   local name=$1
   local _namever=$2
-  local line=$(grep " $name-" "$sp/deps"|grep "Source Code")
+  local line=$(grep " $name-" "$H/deps"|grep "Source Code")
   get_param $name verexclude ""
   if [[ "${verexclude}" != "" ]]; then line=$(echo $line | grep -Ev "${verexclude}") ; fi 
   #if [[ $name == "db" ]] ; then echo line source! $line ; fffg ; fi 
@@ -63,9 +81,9 @@ function get_sources() {
   local IFS="/" ; set -- $source ; local IFS=" "
   local targz=$7
   #echo sources for $name: $targz from $source from $line
-  if [[ ! -e "$sp/src/_pkgs/$targz" ]]; then
+  if [[ ! -e "$H/src/_pkgs/$targz" ]]; then
     echolog "get sources for $name in src/_pkgs/$targz"
-    loge "wget $source -O $sp/src/_pkgs/$targz" "wget_sources_$targz"
+    loge "wget $source -O $H/src/_pkgs/$targz" "wget_sources_$targz"
   fi
   eval $_namever="'${targz%.tar.gz}'"
 }
@@ -82,20 +100,30 @@ function get_tar() {
 }
 function untar() {
   local namever=$1
-  if [[ ! -e "$sp/src/$namever" ]]; then
+  if [[ ! -e "$H/src/$namever" ]]; then
     get_tar tarname
-    loge "$tarname xpvf $sp/src/_pkgs/$namever.tar.gz -C $sp/src" "tar_xpvf_$namever.tar.gz"
+    loge "$tarname xpvf $H/src/_pkgs/$namever.tar.gz -C $H/src" "tar_xpvf_$namever.tar.gz"
     local lastlog=$(mrf $H/logs)
     local actualname=$(head -3 "$H/logs/$lastlog"|tail -1) ; actualname=${actualname%%/*}
     if [[ "$namever" != "$actualname" ]] ; then ln -s "$actualname" "$H/src/$namever" ; fi
   fi
 }
+function getusername() {
+  local _username=$1
+  local _ausername=$(id) ; _ausername=${_ausername%%)*} ; _ausername=${_ausername##*(}
+  eval $_username="'$_ausername'"
+}
+function getusergroup() {
+  local _usergroup=$1
+  local _ausergroup=$(id) ; _ausergroup=${_ausergroup#*(} ; _ausergroup=${_ausergroup#*(} ; _ausergroup=${_ausergroup%%)*}
+  eval $_usergroup="'$_ausergroup'"
+}
 function get_param() {
   local name="$1"
   local _param="$2"
   local default="$3"
-  if [[ ! -e "$scriptPath/_cpl/params/$name" ]] ; then echolog "unable to find param for $name" ; no_param ; fi
-  local aparam=$(grep "$_param=" "$scriptPath/_cpl/params/$name")
+  if [[ ! -e "$H/_cpl/params/$name" ]] ; then echolog "unable to find param for $name" ; no_param ; fi
+  local aparam=$(grep "$_param=" "$H/_cpl/params/$name")
   if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then aparam=${aparam##$_param=} ; 
   else aparam="" ; fi
   if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
@@ -103,6 +131,16 @@ function get_param() {
   while [[ "${aparam%@@NAMEVER@@*}" != "${aparam}" ]]; do
     aparam=${aparam/@@NAMEVER@@/${namever}}
   done
+  if [[ "${aparam%@@USERNAME@@*}" != "${aparam}" ]] ; then getusername ausername
+    while [[ "${aparam%@@USERNAME@@*}" != "${aparam}" ]]; do
+      aparam=${aparam/@@USERNAME@@/${ausername}}
+    done
+  fi;
+  if [[ "${aparam%@@USERGROUP@@*}" != "${aparam}" ]] ; then getusergroup ausergroup; 
+    while [[ "${aparam%@@USERGROUP@@*}" != "${aparam}" ]]; do
+      aparam=${aparam/@@USERGROUP@@/${ausergroup}}
+    done
+  fi;
   #echo $name $_param xx${aparam}xx
   eval $_param="'$aparam'" 
 }  
@@ -168,52 +206,49 @@ function relpath() {
   #echo '${back}${target#$common_part/}' ${back}${target#$common_part/}
   eval $_relp="'${back}${target#$common_part/}'";
 }
-function _links() {
+function onelink() {
+  local dest="$1"
+  local src="$2"
+  local line="$3"
+  local apath=${line%/*}; apath=${apath#*/}
+  local afile=${line##*/}
+  #echo check $apath $afile
+  mkdir -p "$dest/$apath"
+  #ln -fs "$src/$apath/$afile" "$dest/$apath/$afile"   
+  #echo src "$src/$apath/$afile" dest "$dest/$apath/$afile"   
+  #relpath "$src/$apath/$afile" "$dest/$apath/$afile" relp
+  relpath "$dest/$apath/$afile" "$src/$apath/$afile" relp
+  #echo relp $relp
+  #echo ln -fs "$relp" "$dest/$apath/$afile"
+  ln -fs "$relp" "$dest/$apath/$afile"
+}
+function links() {
   local dest="$1"
   local src="$2"
   cd "$src"
   find . -type f -print | while read line; do
     #echo check $line
-    local apath=${line%/*}; apath=${apath#*/}
-    local afile=${line##*/}
-    #echo check $apath $afile
-    mkdir -p "$dest/$apath"
-    #ln -fs "$src/$apath/$afile" "$dest/$apath/$afile"   
-    #echo src "$src/$apath/$afile" dest "$dest/$apath/$afile"   
-    #relpath "$src/$apath/$afile" "$dest/$apath/$afile" relp
-    relpath "$dest/$apath/$afile" "$src/$apath/$afile" relp
-    #echo relp $relp
-    #echo ln -fs "$relp" "$dest/$apath/$afile"
-    ln -fs "$relp" "$dest/$apath/$afile"
+    onelink "$dest" "$src" "$line"
+  done 
+  find . -type l -print | while read line; do
+    #echo check $line
+    onelink "$dest" "$src" "$line"
   done 
 }
-function links() {
-  local namever=$1
-  _links "$HUL" "$HUL/libs/$namever"
-}
-function pre() {
+function action() {
   local name=$1
   local namever=$2
-  if [[ ! -e $H/src/$namever/._pre ]]; then
-     get_param $name pre ""
-     if [[ $pre != "" ]]; then
-       #echo pre $pre ; jjjj
-       local precmd=$pre
-       loge "eval $precmd" "pre_$namever"
+  local actionname=$3
+  local actionpath=$4
+  if [[ ! -e "${actionpath}/._${actionname}" ]]; then
+     get_param $name ${actionname} ""
+     local actioncmd=${!actionname}
+     #echo actioname ${actionname} gives actioncmd ${actioncmd}; eee
+     if [[ $actioncmd != "" ]]; then
+       #echo pre $pre ; jj
+       loge "eval ${actioncmd}" "${actionname}_${namever}"
      fi
-     echo done > $H/src/$namever/._pre
-  fi 
-}
-function post() {
-  local name=$1
-  local namever=$2
-  if [[ ! -e $H/src/$namever/._post ]]; then
-     get_param $name post ""
-     if [[ $post != "" ]]; then
-       local postcmd=$post
-       loge "eval $postcmd" "post_$namever"
-     fi
-     echo done > $H/src/$namever/._post
+     echo done > "${actionpath}/._${actionname}"
   fi 
 }
 function isItDone() {
@@ -245,13 +280,14 @@ function build_app() {
     local asrc="${H}/src/${namever}"
     sc
     untar $namever
-    pre $name $namever
+    action $name $namever pre "$H/src/$namever"
     gocd $name $namever
-    configure $name $namever 
+    configure $name $namever
+    action $name $namever premake "$H/src/$namever"
     if [[ ! -e "${asrc}"/._build ]] ; then loge "make" "make_$namever"; echo done > "${asrc}"/._build ; fi
     if [[ ! -e "${asrc}"/._installed ]] ; then loge "make install" "make_install_$namever"; echo done > "${asrc}"/._installed ; fi
-    post $name $namever
-    if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of APP $namever"; _links "$H/bin" "$HULA/$namever/bin" ; echo done > $HUL/._linked/$namever ; fi
+    action $name $namever post "$H/src/$namever"
+    if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of APP $namever"; links "$H/bin" "$HULA/$namever/bin" ; echo done > $HUL/._linked/$namever ; fi
     ln -fs "${namever}" "${HULA}/${name}"
     donelist="${donelist}@${name}@"
   fi
@@ -269,13 +305,14 @@ function build_lib() {
     local asrc="${H}/src/${namever}"
     sc
     untar $namever
-    pre $name $namever
+    action $name $namever pre "$H/src/$namever"
     gocd $name $namever
     configure $name $namever
+    action $name $namever premake "$H/src/$namever"
     if [[ ! -e "${asrc}"/._build ]] ; then loge "make" "make_$namever"; echo done > "${asrc}"/._build ; fi
     if [[ ! -e "${asrc}"/._installed ]] ; then loge "make install" "make_install_$namever"; echo done > "${asrc}"/._installed ; fi
-    post $name $namever
-    if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of LIB $namever"; links $namever ; echo done > $HUL/._linked/$namever ; fi
+    action $name $namever post "$H/src/$namever"
+    if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of LIB $namever"; links "$HUL" "$HUL/libs/$namever" ; echo done > $HUL/._linked/$namever ; fi
     donelist="${donelist}@${name}@"
   fi
 }

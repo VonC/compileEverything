@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 if [[ "$1" != "-force" ]]; then
   echo $0 not executed for @@TITLE@@ unles called with -force
   return 0
@@ -7,7 +7,34 @@ echo $0 executed for @@TITLE@@
 
 set history=2000
 
-export H=${scriptPath:-`pwd`}
+function bashscriptpath() {
+  local _sp=$1
+  local ascript="$0"
+  local asp="$(dirname $0)"
+  if [[ "$asp" == "." ]] ; then asp=$(pwd) ;
+  else
+    if [[ "$ascript" == "bash" ]] ; then
+      ascript=${BASH_SOURCE[0]}
+      asp="$(dirname $ascript)"
+    fi  
+    echo "asp '$asp', ascript '$ascript'"
+    if [[ "${ascript#/}" != "$ascript" ]]; then asp=$asp ;
+    elif [[ "${ascript#../}" != "$ascript" ]]; then
+      asp=$(pwd)
+      while [[ "${ascript#../}" != "$ascript" ]]; do
+        asp=${asp%/*}
+        ascript=${ascript#../}
+      done
+    elif [[ "${ascript#*/}" != "$ascript" ]];  then
+      asp="$(pwd)/${asp}"
+    fi  
+  fi  
+  eval $_sp="'$asp'"
+}
+
+bashscriptpath H
+export H=${H}
+echo "bashrc set local home to '${H}'"
 export HB="$H"/bin
 export HU="$H"/usr
 export HUL="${HU}"/local

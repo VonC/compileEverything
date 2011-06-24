@@ -1,0 +1,25 @@
+tic: symbol lookup error: tic: undefined symbol: _nc_check_termtype2
+userapp@ubvonc:~/apps/test/usr/local/lib$ nm -Ap *.so*|grep nc_check_termtype2
+libncurses.so.5.7:0003f32c D _nc_check_termtype2
+userapp@ubvonc:~/apps/test/usr/local/lib$ env|grep LD
+LDFLAGS=-L/home/userapp/apps/test/usr/local/lib -L/home/userapp/apps/test/usr/local/ssl/lib -R/home/userapp/apps/test/usr/local/ssl/lib -R/home/userapp/apps/test/usr/local/lib/sasl2
+OLDPWD=/home/userapp/apps/test/usr/local
+LD_LIBRARY_PATH=/home/userapp/apps/test/usr/local/lib:/home/userapp/apps/test/usr/local/ssl/lib:/home/userapp/apps/test/usr/local/apps/svn/lib
+userapp@ubvonc:~/apps/test/usr/local/lib$ cd ../libs/ncurses-5.7/lib/
+userapp@ubvonc:~/apps/test/usr/local/libs/ncurses-5.7/lib$ nm -Ap *.so*|grep nc_check_termtype2
+libcurses.so:0003f32c D _nc_check_termtype2
+libncurses.so:0003f32c D _nc_check_termtype2
+libncurses.so.5:0003f32c D _nc_check_termtype2
+libncurses.so.5.7:0003f32c D _nc_check_termtype2
+
+userapp@ubvonc:~/apps/test/usr/local/libs/ncurses-5.7/bin$ ldd tic
+	linux-gate.so.1 =>  (0x006d8000)
+	libncurses.so.5 => /lib/libncurses.so.5 (0x00a64000)
+	libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0x0050f000)
+	libdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0x002eb000)
+	/lib/ld-linux.so.2 (0x00373000)
+
+http://invisible-island.net/ncurses/ncurses.faq.html#big_terminfo: (not needed)
+tic -s -1 -I -e 'ansi, ansi-m, color_xterm, ecma+color, klone+acs, klone+color, klone+sgr, klone+sgr-dumb, linux, pcansi-m, rxvt, vt52, vt100, vt102, vt220, xterm' terminfo.src > t
+
+userapp@ubvonc:~/apps/test/usr/local/share/terminfo already there after compilation/installation of ncurses
