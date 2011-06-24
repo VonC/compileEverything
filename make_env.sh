@@ -141,7 +141,7 @@ function get_param() {
       aparam=${aparam/@@USERGROUP@@/${ausergroup}}
     done
   fi;
-  #echo $name $_param xx${aparam}xx
+  #if [[ "$_param" == "pre" && "$name" == "perl" ]] ; then echo $name $_param xx${aparam}xx ; fi
   eval $_param="'$aparam'" 
 }  
 function get_gnu_cmd() {
@@ -164,6 +164,7 @@ function configure() {
   get_param $name makefile Makefile
   if [[ ! -e $makefile || ! -e config.status ]]; then
     rm -f "$H"/src/${namever}/._*
+    echo "done" > "$H"/src/${namever}/._pre
     get_param $name configcmd "##mandatory##"
     get_gnu_cmd ld path_ld without_gnu_ld with_gnu_ld
     configcmd=${configcmd/@@PATH_LD@@/${path_ld}}
@@ -243,12 +244,14 @@ function action() {
   if [[ ! -e "${actionpath}/._${actionname}" ]]; then
      get_param $name ${actionname} ""
      local actioncmd=${!actionname}
+     #if [[ "$name" == "perl" && "$actionname" == "pre" ]] ; then echo eval xx ${actioncmd} xx ; fi
      #echo actioname ${actionname} gives actioncmd ${actioncmd}; eee
      if [[ $actioncmd != "" ]]; then
        #echo pre $pre ; jj
        loge "eval ${actioncmd}" "${actionname}_${namever}"
      fi
      echo done > "${actionpath}/._${actionname}"
+     #if [[ "$name" == "perl" && "$actionname" == "pre" ]] ; then echo "---- done" ; eee ; fi
   fi 
 }
 function isItDone() {
@@ -280,8 +283,8 @@ function build_app() {
     local asrc="${H}/src/${namever}"
     sc
     untar $namever
-    action $name $namever pre "$H/src/$namever"
     gocd $name $namever
+    action $name $namever pre "$H/src/$namever"
     configure $name $namever
     action $name $namever premake "$H/src/$namever"
     if [[ ! -e "${asrc}"/._build ]] ; then loge "make" "make_$namever"; echo done > "${asrc}"/._build ; fi
@@ -305,8 +308,8 @@ function build_lib() {
     local asrc="${H}/src/${namever}"
     sc
     untar $namever
-    action $name $namever pre "$H/src/$namever"
     gocd $name $namever
+    action $name $namever pre "$H/src/$namever"
     configure $name $namever
     action $name $namever premake "$H/src/$namever"
     if [[ ! -e "${asrc}"/._build ]] ; then loge "make" "make_$namever"; echo done > "${asrc}"/._build ; fi
