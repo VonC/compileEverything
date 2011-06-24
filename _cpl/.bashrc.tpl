@@ -11,13 +11,15 @@ function bashscriptpath() {
   local _sp=$1
   local ascript="$0"
   local asp="$(dirname $0)"
-  if [[ "$asp" == "." ]] ; then asp=$(pwd) ;
+  #echo "b1 asp '$asp', b1 ascript '$ascript'"
+  if [[ "$asp" == "." && "$ascript" != "bash" && "$ascript" != "./.bashrc" ]] ; then asp="${BASH_SOURCE[0]%/*}"
+  elif [[ "$asp" == "." && "$ascript" == "./.bashrc" ]] ; then asp=$(pwd)
   else
     if [[ "$ascript" == "bash" ]] ; then
       ascript=${BASH_SOURCE[0]}
       asp="$(dirname $ascript)"
     fi  
-    echo "asp '$asp', ascript '$ascript'"
+    #echo "b2 asp '$asp', b2 ascript '$ascript'"
     if [[ "${ascript#/}" != "$ascript" ]]; then asp=$asp ;
     elif [[ "${ascript#../}" != "$ascript" ]]; then
       asp=$(pwd)
@@ -26,7 +28,7 @@ function bashscriptpath() {
         ascript=${ascript#../}
       done
     elif [[ "${ascript#*/}" != "$ascript" ]];  then
-      asp="$(pwd)/${asp}"
+      if [[ "$asp" == "." ]] ; then asp=$(pwd) ; else asp="$(pwd)/${asp}"; fi
     fi  
   fi  
   eval $_sp="'$asp'"
