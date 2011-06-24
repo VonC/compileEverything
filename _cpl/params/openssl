@@ -1,0 +1,2 @@
+configcmd=./config --openssldir=${HULS}/@@NAMEVER@@
+linkdst=${HUL}/ssl

@@ -31,6 +31,7 @@ mkdir -p "$H"/logs
 mkdir -p "$H"/src/_pkgs
 mkdir -p "$H"/usr/local/._linked
 donelist=""
+namever=""
 
 set -o errexit
 set -o nounset
@@ -42,9 +43,9 @@ function _echod() { echo "$(_ldate) $1$2" ; }
 function _echolog() { _echod "$1" "$2" | tee -a "$3"; if [[ $4 != "" ]]; then echo $4 >> "$3"; fi; }
 function echolog() { _echolog "~ " "$1" "$H/log" ""; }
 function _echologcmd() { _echolog "~~~ $1" "$2" "$H/logs/$3" "~~~~~~~~~~~~~~~~~~~"; }
-function _log() { f=$2; rm -f "$H"/logs/l; ln -s $f "$H"/logs/l; _echologcmd "" "$1" $f ; $( $1 >> "$H"/logs/$f 2>&1 ) ; }
+function _log() { f=$2; rm -f "$H"/logs/l; ln -s $f "$H"/logs/l; _echologcmd "" "$1" $f ; echolog "(see logs/$f or simply tail -f logs/l)"; $( $1 >> "$H"/logs/$f 2>&1 ) ; }
 function log() { f=$(_fdate).$2 ; _log "$1" $f ; }
-function loge() { f=$(_fdate).$2.log ; echolog "(see logs/$f or simply tail -f logs/l)"; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; true ; }
+function loge() { f=$(_fdate).$2.log ; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; true ; }
 function mrf() { ls -t1 $1 | head -n1 ; }
 
 trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | tee -a "$H"/log; tail -3 "$H"/log ; if [[ -e "$H"/logs/l ]]; then tail -5 "$H"/logs/l; rm "$H"/logs/l; fi" EXIT ;
@@ -122,25 +123,32 @@ function get_param() {
   local name="$1"
   local _param="$2"
   local default="$3"
+  #echo "name $name, _param $_param, default $default"
   if [[ ! -e "$H/_cpl/params/$name" ]] ; then echolog "unable to find param for $name" ; no_param ; fi
   local aparam=$(grep "$_param=" "$H/_cpl/params/$name")
   if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then aparam=${aparam##$_param=} ; 
   else aparam="" ; fi
   if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
   if [[ "$aparam" == "##mandatory##" ]]; then echolog "unable to find $_param for $name" ; find2 ; fi
-  while [[ "${aparam%@@NAMEVER@@*}" != "${aparam}" ]]; do
-    aparam=${aparam/@@NAMEVER@@/${namever}}
-  done
-  if [[ "${aparam%@@USERNAME@@*}" != "${aparam}" ]] ; then getusername ausername
-    while [[ "${aparam%@@USERNAME@@*}" != "${aparam}" ]]; do
-      aparam=${aparam/@@USERNAME@@/${ausername}}
-    done
+  aparam=${aparam//@@NAMEVER@@/${namever}}
+  if [[ "${aparam%@@USERNAME@@*}" != "${aparam}" ]] ; then 
+    getusername ausername
+    aparam=${aparam//@@USERNAME@@/${ausername}}
+  fi
+  if [[ "${aparam%@@USERGROUP@@*}" != "${aparam}" ]] ; then 
+    getusergroup ausergroup; 
+    aparam=${aparam/@@USERGROUP@@/${ausergroup}}
   fi;
-  if [[ "${aparam%@@USERGROUP@@*}" != "${aparam}" ]] ; then getusergroup ausergroup; 
-    while [[ "${aparam%@@USERGROUP@@*}" != "${aparam}" ]]; do
-      aparam=${aparam/@@USERGROUP@@/${ausergroup}}
-    done
-  fi;
+  aparam=${aparam//\$H\//${H}/}
+  aparam=${aparam//\$\{H\}/${H}}
+  aparam=${aparam//\$\{HB\}/${HB}}
+  aparam=${aparam//\$\{HU\}/${HU}}
+  aparam=${aparam//\$\{HUL\}/${HUL}}
+  aparam=${aparam//\$\{HULL\}/${HULL}}
+  aparam=${aparam//\$\{HULI\}/${HULI}}
+  aparam=${aparam//\$\{HULB\}/${HULB}}
+  aparam=${aparam//\$\{HULA\}/${HULA}}
+  aparam=${aparam//\$\{HULS\}/${HULS}}
   #if [[ "$_param" == "pre" && "$name" == "perl" ]] ; then echo $name $_param xx${aparam}xx ; fi
   eval $_param="'$aparam'" 
 }  
@@ -162,8 +170,10 @@ function configure() {
   local name=$1
   local namever=$2
   get_param $name makefile Makefile
-  if [[ ! -e $makefile || ! -e config.status ]]; then
+  if [[ ! -e $makefile || ! -e ._config ]]; then
+    local haspre="false"; if [[ -e "$H/src/${namever}/._pre" ]] ; then haspre=true ; fi
     rm -f "$H"/src/${namever}/._*
+    if [[ "$haspre" == "true" ]] ; then echo "done" > "$H/src/${namever}/._pre" ; fi
     echo "done" > "$H"/src/${namever}/._pre
     get_param $name configcmd "##mandatory##"
     get_gnu_cmd ld path_ld without_gnu_ld with_gnu_ld
@@ -176,10 +186,10 @@ function configure() {
     configcmd=${configcmd/@@WITH_GNU_AS@@/${with_gnu_as}}
     local longbit=$(getconf LONG_BIT)
     if [[ $longbit == "64" ]] ; then configcmd=${configcmd/@@ENABLE_64BIT@@/--enable-64bit} ;
-    else configcmd=${configcmd/@@ENABLE_64BIT@@/} ; fi 
+    else configcmd=${configcmd/@@ENABLE_64BIT@@/} ; fi
     echo configcmd $configcmd
-    #echo ${HULL} ; dir ${HULL} ; lll
     loge "$configcmd" "configure_$namever"
+    echo "done" > ._config
   fi
 }
 function cleanPath() {
@@ -228,11 +238,11 @@ function links() {
   local src="$2"
   cd "$src"
   find . -type f -print | while read line; do
-    #echo check $line
+    # echo check $line
     onelink "$dest" "$src" "$line"
   done 
   find . -type l -print | while read line; do
-    #echo check $line
+    # echo check $line
     onelink "$dest" "$src" "$line"
   done 
 }
@@ -270,40 +280,20 @@ function gocd() {
   echolog "cd $cdpath"
   cd "${cdpath}"
 }
-function build_app() {
+
+function build_item() {
   local name="$1"
-  #echo 'APP ${donelist}' "$name : ${donelist}"
+  local type="$2"
+  #echo '$type ${donelist}' "$name : ${donelist}"
   local isdone="false" ; isItDone "$name" isdone
-  if [[ "$isdone" == "false" ]] ; then echolog "##### Building APP $name ####" ; fi
-  get_sources $name namever
-  if [[ -e $HULA/$namever && -e $HULA/$name ]]; then
-    if [[ "$isdone" == "false" ]] ; then echolog "APP $namever already installed" ; 
-    donelist="${donelist}@${name}@" ; fi
-  else
-    local asrc="${H}/src/${namever}"
-    sc
-    untar $namever
-    gocd $name $namever
-    action $name $namever pre "$H/src/$namever"
-    configure $name $namever
-    action $name $namever premake "$H/src/$namever"
-    if [[ ! -e "${asrc}"/._build ]] ; then loge "make" "make_$namever"; echo done > "${asrc}"/._build ; fi
-    if [[ ! -e "${asrc}"/._installed ]] ; then loge "make install" "make_install_$namever"; echo done > "${asrc}"/._installed ; fi
-    action $name $namever post "$H/src/$namever"
-    if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of APP $namever"; links "$H/bin" "$HULA/$namever/bin" ; echo done > $HUL/._linked/$namever ; fi
-    ln -fs "${namever}" "${HULA}/${name}"
-    donelist="${donelist}@${name}@"
-  fi
-}
-function build_lib() {
-  local name="$1"
-  #echo 'LIB ${donelist}' "$name : ${donelist}"
-  local isdone="false" ; isItDone "$name" isdone
-  if [[ "$isdone" == "false" ]] ; then echolog "#### Building LIB $name ####"; fi
+  if [[ "$isdone" == "false" ]] ; then echolog "##### Building $type $name ####" ; fi
   get_sources $name namever
   if [[ -e "$HUL/._linked/$namever" ]]; then
-    if [[ "$isdone" == "false" ]] ; then echolog "LIB $namever already installed" ; 
-    donelist="${donelist}@${name}@" ; fi
+    if [[ "$isdone" == "false" ]] ; then
+      echolog "$type $namever already installed" ; 
+      donelist="${donelist}@${name}@" ; 
+    fi
+    if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
   else
     local asrc="${H}/src/${namever}"
     sc
@@ -315,7 +305,12 @@ function build_lib() {
     if [[ ! -e "${asrc}"/._build ]] ; then loge "make" "make_$namever"; echo done > "${asrc}"/._build ; fi
     if [[ ! -e "${asrc}"/._installed ]] ; then loge "make install" "make_install_$namever"; echo done > "${asrc}"/._installed ; fi
     action $name $namever post "$H/src/$namever"
-    if [[ ! -e $HUL/._linked/$namever ]] ; then echolog "checking links of LIB $namever"; links "$HUL" "$HUL/libs/$namever" ; echo done > $HUL/._linked/$namever ; fi
+    if [[ "$type" == "APP" ]] ; then linksrcdef="$HULA/$namever/bin" ; linkdstdef="$H/bin" ; fi
+    if [[ "$type" == "LIB" ]] ; then linksrcdef="$HULS/$namever" ; linkdstdef="$HUL" ; fi
+    get_param $name linksrc $linksrcdef; linksrc=$(echo "${linksrc}") ; echo "linksrc ${linksrc}"
+    get_param $name linkdst $linkdstdef; linkdst=$(echo "${linkdst}") ; echo "linkdst ${linkdst}"
+    if [[ ! -e "${HUL}"/._linked/$namever ]] ; then echolog "checking links of $type $namever"; links "$linkdst" "$linksrc" ; echo done > "${HUL}"/._linked/$namever ; fi
+    if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
     donelist="${donelist}@${name}@"
   fi
 }
@@ -337,8 +332,8 @@ function build_line() {
     fi
   done
   #echo done deps from $name with $type
-  if [[ $type == "app" ]]; then build_app "$name" ;
-  elif [[ $type == "lib" ]] ; then build_lib "$name" ; 
+  if [[ $type == "app" ]]; then build_item "$name" "APP" ;
+  elif [[ $type == "lib" ]] ; then build_item  "$name" "LIB" ; 
   else echo "unknow type" ; exit 1 ; fi
 }
 cat "${_deps}" | while read line; do
