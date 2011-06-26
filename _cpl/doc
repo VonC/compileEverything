@@ -23,3 +23,30 @@ http://invisible-island.net/ncurses/ncurses.faq.html#big_terminfo: (not needed)
 tic -s -1 -I -e 'ansi, ansi-m, color_xterm, ecma+color, klone+acs, klone+color, klone+sgr, klone+sgr-dumb, linux, pcansi-m, rxvt, vt52, vt100, vt102, vt220, xterm' terminfo.src > t
 
 userapp@ubvonc:~/apps/test/usr/local/share/terminfo already there after compilation/installation of ncurses
+
+------
+cyrus-sasl
+
+creating libsasl2.la
+(cd .libs && rm -f libsasl2.la && ln -s ../libsasl2.la libsasl2.la)
+ln -s ../plugins/sasldb.c  ../plugins/cram.c ../plugins/plain.c ../plugins/anonymous.c .
+adding static plugins and dependencies
+ar cru .libs/libsasl2.a sasldb.o db_gdbm.o allockey.o cram.o plain.o anonymous.o
+ar: sasldb.o: No such file or directory
+make[2]: *** [libsasl2.a] Error 1
+make[2]: Leaving directory `/home/userapp/apps/test/src/cyrus-sasl-2.1.21/lib'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/home/userapp/apps/test/src/cyrus-sasl-2.1.21'
+make: *** [all] Error 2
+
+Must copy plugins/*.o and sasldb/*.o in lib for compil to progress
+ 822  ln -s . include
+  823  l
+  824  h
+userapp@ubvonc:~/apps/test/usr/local/ssl/include/openssl$ 
+
+=> compile ok
+-----------
+
+
+

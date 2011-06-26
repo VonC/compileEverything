@@ -16,4 +16,6 @@ lib libsigsegv none
 lib gdbm texinfo
 lib texinfo libiconv,ncurses
 lib ncurses none
+lib libssh2 openssl,zlib,cyrus-sasl
+lib cyrus-sasl db,openssl
 __no_deps__

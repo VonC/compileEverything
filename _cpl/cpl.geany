@@ -1,0 +1,21 @@
+
+[indentation]
+indent_width=2
+indent_type=0
+indent_hard_tab_width=8
+detect_indent=false
+indent_mode=2
+
+[project]
+name=cpl
+base_path=/home/userapp/apps/test/_cpl
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=2
+FILE_NAME_0=3011;Sh;0;16;1;1;0;/home/userapp/apps/test/make_env.sh;0;4
+FILE_NAME_1=36;None;0;16;0;1;0;/home/userapp/apps/test/_cpl/params/libssh2;0;2
+FILE_NAME_2=0;None;0;16;0;1;0;/home/userapp/apps/test/_cpl/doc;0;2

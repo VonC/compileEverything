@@ -76,11 +76,17 @@ function get_sources() {
   local line=$(grep " $name-" "$H/deps"|grep "Source Code")
   get_param $name verexclude ""
   if [[ "${verexclude}" != "" ]]; then line=$(echo $line | grep -Ev "${verexclude}") ; fi 
-  #if [[ $name == "db" ]] ; then echo line source! $line ; fffg ; fi 
+  #if [[ $name == "cyrus-sasl" ]] ; then echo line source! $line ; fffg ; fi 
   local IFS="\"" ; set -- $line ; local IFS=" "
   local source=$2
-  local IFS="/" ; set -- $source ; local IFS=" "
-  local targz=$7
+  get_param $name url ""
+  if [[ "$url" != "" ]] ; then
+    local targz=${source##*/}
+    source="${url}${targz}"
+  else
+    local IFS="/" ; set -- $source ; local IFS=" "
+    local targz=$7
+  fi
   #echo sources for $name: $targz from $source from $line
   if [[ ! -e "$H/src/_pkgs/$targz" ]]; then
     echolog "get sources for $name in src/_pkgs/$targz"
@@ -116,7 +122,7 @@ function getusername() {
 }
 function getusergroup() {
   local _usergroup=$1
-  local _ausergroup=$(id) ; _ausergroup=${_ausergroup#*(} ; _ausergroup=${_ausergroup#*(} ; _ausergroup=${_ausergroup%%)*}
+  local _auserglibssh2roup=$(id) ; _ausergroup=${_ausergroup#*(} ; _ausergroup=${_ausergroup#*(} ; _ausergroup=${_ausergroup%%)*}
   eval $_usergroup="'$_ausergroup'"
 }
 function get_param() {
@@ -162,7 +168,7 @@ function get_gnu_cmd() {
   if [[ "$apath" == "" ]] ; then echolog "Unable to find a ${acmd}" ; cmd_not_found ; fi
   eval $_path="'$apath'"
   local without_gnu_cmd="" ; local with_gnu_cmd=""
-  if [[ ${apath#/usr/css*} != "${apath}" ]]; then without_gnu_cmd="--without-gnu-${acmd}"; else with_gnu_cmd="--with-gnu_${acmd}"; fi
+  if [[ ${apath#/usr/css*} != "${apath}" ]]; then without_gnu_cmd="--without-gnu-${acmd}"; else with_gnu_cmd="--with-gnu-${acmd}"; fi
   eval $_without_gnu_cmd="'$without_gnu_cmd'"
   eval $_with_gnu_cmd="'$with_gnu_cmd'"
 }
@@ -197,7 +203,7 @@ function cleanPath() {
   local _path="$2"
   while [[ "${path%/.}" != "${path}" ]] ; do path="${path%/.}"; done
   while [[ "${path#./}" != "${path}" ]] ; do path="${path#./}"; done
-  #echo '${path%/./*}' ${path%/./*}
+  #echo '${palibssh2th%/./*}' ${path%/./*}
   while [[ "${path%/./*}" != "${path}" ]] ; do path="${path/\/.\///}"; done
   eval $_path="'$path'"
 }
