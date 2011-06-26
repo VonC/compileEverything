@@ -1,4 +1,4 @@
 verexclude=4.2
 cdpath=${H}/src/@@NAMEVER@@/build_unix
-pre=sed -i '\''s/if test -.\(.*\)tclConfig.sh/with_tclconfig=${HULL} ; if test -e\1tclConfig.sh/g'\'' $H/src/@@NAMEVER@@/dist/configure
+pre=sed -i "s/if test -.\(.*\)tclConfig.sh/with_tclconfig=${EHULL} ; if test -e\1tclConfig.sh/g" $H/src/@@NAMEVER@@/dist/configure
 configcmd=../dist/configure --prefix=${HULS}/@@NAMEVER@@ --enable-test --enable-tcl --with-tcl=$H/usr/local/lib --enable-shared --enable-static @@WITHOUT_GNU_LD@@

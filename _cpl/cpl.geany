@@ -8,14 +8,19 @@ indent_mode=2
 
 [project]
 name=cpl
-base_path=/home/userapp/apps/test/_cpl
+base_path=/home/userapp/apps/tests/_cpl
+description=
 
 [long line marker]
 long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=2
-FILE_NAME_0=3011;Sh;0;16;1;1;0;/home/userapp/apps/test/make_env.sh;0;4
-FILE_NAME_1=36;None;0;16;0;1;0;/home/userapp/apps/test/_cpl/params/libssh2;0;2
-FILE_NAME_2=0;None;0;16;0;1;0;/home/userapp/apps/test/_cpl/doc;0;2
+current_page=6
+FILE_NAME_0=1128;Sh;0;16;1;1;0;/home/userapp/apps/tests/make_env.sh;0;4
+FILE_NAME_1=115;None;0;16;0;1;1;/home/userapp/apps/tests/_cpl/params/db;0;2
+FILE_NAME_2=36;None;0;16;0;1;0;/home/userapp/apps/tests/_cpl/params/libssh2;0;2
+FILE_NAME_3=2776;None;0;16;0;1;0;/home/userapp/apps/tests/_cpl/doc;0;2
+FILE_NAME_4=76;None;0;16;0;1;1;/home/userapp/apps/tests/m~;0;2
+FILE_NAME_5=660;Sh;0;16;0;1;1;/home/userapp/apps/tests/.bashrc;0;2
+FILE_NAME_6=0;Sh;0;16;0;1;1;/home/userapp/apps/tests/_cpl/.bashrc.tpl;0;2

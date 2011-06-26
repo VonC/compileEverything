@@ -36,6 +36,23 @@ namever=""
 set -o errexit
 set -o nounset
 
+function main {
+  if [[ ! -e "$H/.bashrc" ]]; then build_bashrc "$1"; fi
+  sc
+  if [[ ! -e "$H"/deps ]]; then
+    echolog "#### DEPS ####"
+    echolog "download deps from SunFreeware"
+    loge "wget http://sunfreeware.com/programlistsparc10.html -O $H/deps$(Ymd)" "wget_deps_sunfreeware"
+    log "ln -fs $H/deps$(Ymd) $H/deps" ln_deps
+  fi
+  cat "${_deps}" | while read line; do
+  #echo $line
+  build_line "$line"
+  done
+  trap - EXIT
+  echo -e "\e[00;32mAll Done.\e[00m"
+}
+
 function Ymd() { date +"%Y%m%d"; }
 function _ldate() { date +"%Y/%M/%d-%H:%M:%S"; }
 function _fdate() { date +"%Y%m%d.%H%M%S"; }
@@ -62,21 +79,13 @@ function build_bashrc() {
   elif [[ $longbit == "64" ]]; then sed -i 's/@@M64@@/-m64/g' "$H/.bashrc" ;
   else echolog "Unable to get LONG_BIT conf (32 or 64bits)" ; getconf2 ; fi
 }
-if [[ ! -e "$H/.bashrc" ]]; then build_bashrc "$1"; fi
-sc
-if [[ ! -e "$H"/deps ]]; then
-  echolog "#### DEPS ####"
-  echolog "download deps from SunFreeware"
-  loge "wget http://sunfreeware.com/programlistsparc10.html -O $H/deps$(Ymd)" "wget_deps_sunfreeware"
-  log "ln -fs $H/deps$(Ymd) $H/deps" ln_deps
-fi
 function get_sources() {
   local name=$1
   local _namever=$2
   local line=$(grep " $name-" "$H/deps"|grep "Source Code")
   get_param $name verexclude ""
-  if [[ "${verexclude}" != "" ]]; then line=$(echo $line | grep -Ev "${verexclude}") ; fi 
-  #if [[ $name == "cyrus-sasl" ]] ; then echo line source! $line ; fffg ; fi 
+  if [[ "${verexclude}" != "" ]]; then line=$(echo $line | grep -Ev "${verexclude}") ; fi
+  #if [[ $name == "cyrus-sasl" ]] ; then echo line source! $line ; fffg ; fi
   local IFS="\"" ; set -- $line ; local IFS=" "
   local source=$2
   get_param $name url ""
@@ -97,8 +106,8 @@ function get_sources() {
 function get_tar() {
   local _tarname=$1
   local atarname=""
-  if [[ $(which gtar) != "" ]] ; then $atarname="gtar"; 
-  elif [[ $(which tar) != "" ]]; then 
+  if [[ $(which gtar) != "" ]] ; then $atarname="gtar";
+  elif [[ $(which tar) != "" ]]; then
     local h=$(tar --help|grep GNU)
     if [[ "$h" != "" ]]; then atarname="tar"; fi;
   fi
@@ -122,7 +131,7 @@ function getusername() {
 }
 function getusergroup() {
   local _usergroup=$1
-  local _auserglibssh2roup=$(id) ; _ausergroup=${_ausergroup#*(} ; _ausergroup=${_ausergroup#*(} ; _ausergroup=${_ausergroup%%)*}
+  local _ausergroup=$(id) ; _ausergroup=${_ausergroup#*(} ; _ausergroup=${_ausergroup#*(} ; _ausergroup=${_ausergroup%%)*}
   eval $_usergroup="'$_ausergroup'"
 }
 function get_param() {
@@ -132,17 +141,17 @@ function get_param() {
   #echo "name $name, _param $_param, default $default"
   if [[ ! -e "$H/_cpl/params/$name" ]] ; then echolog "unable to find param for $name" ; no_param ; fi
   local aparam=$(grep "$_param=" "$H/_cpl/params/$name")
-  if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then aparam=${aparam##$_param=} ; 
+  if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then aparam=${aparam##$_param=} ;
   else aparam="" ; fi
   if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
   if [[ "$aparam" == "##mandatory##" ]]; then echolog "unable to find $_param for $name" ; find2 ; fi
   aparam=${aparam//@@NAMEVER@@/${namever}}
-  if [[ "${aparam%@@USERNAME@@*}" != "${aparam}" ]] ; then 
+  if [[ "${aparam%@@USERNAME@@*}" != "${aparam}" ]] ; then
     getusername ausername
     aparam=${aparam//@@USERNAME@@/${ausername}}
   fi
-  if [[ "${aparam%@@USERGROUP@@*}" != "${aparam}" ]] ; then 
-    getusergroup ausergroup; 
+  if [[ "${aparam%@@USERGROUP@@*}" != "${aparam}" ]] ; then
+    getusergroup ausergroup;
     aparam=${aparam/@@USERGROUP@@/${ausergroup}}
   fi;
   aparam=${aparam//\$H\//${H}/}
@@ -155,9 +164,20 @@ function get_param() {
   aparam=${aparam//\$\{HULB\}/${HULB}}
   aparam=${aparam//\$\{HULA\}/${HULA}}
   aparam=${aparam//\$\{HULS\}/${HULS}}
+
+  aparam=${aparam//\$EH\//${H//\//\\/}/}
+  aparam=${aparam//\$\{EH\}/${H//\//\\/}}
+  aparam=${aparam//\$\{EHB\}/${HB//\//\\/}}
+  aparam=${aparam//\$\{EHU\}/${HU//\//\\/}}
+  aparam=${aparam//\$\{EHUL\}/${HUL//\//\\/}}
+  aparam=${aparam//\$\{EHULL\}/${HULL//\//\\/}}
+  aparam=${aparam//\$\{EHULI\}/${HULI//\//\\/}}
+  aparam=${aparam//\$\{EHULB\}/${HULB//\//\\/}}
+  aparam=${aparam//\$\{EHULA\}/${HULA//\//\\/}}
+  aparam=${aparam//\$\{EHULS\}/${HULS//\//\\/}}
   #if [[ "$_param" == "pre" && "$name" == "perl" ]] ; then echo $name $_param xx${aparam}xx ; fi
-  eval $_param="'$aparam'" 
-}  
+  eval $_param="'$aparam'"
+}
 function get_gnu_cmd() {
   local acmd=$1
   local _path=$2
@@ -231,8 +251,8 @@ function onelink() {
   local afile=${line##*/}
   #echo check $apath $afile
   mkdir -p "$dest/$apath"
-  #ln -fs "$src/$apath/$afile" "$dest/$apath/$afile"   
-  #echo src "$src/$apath/$afile" dest "$dest/$apath/$afile"   
+  #ln -fs "$src/$apath/$afile" "$dest/$apath/$afile"
+  #echo src "$src/$apath/$afile" dest "$dest/$apath/$afile"
   #relpath "$src/$apath/$afile" "$dest/$apath/$afile" relp
   relpath "$dest/$apath/$afile" "$src/$apath/$afile" relp
   #echo relp $relp
@@ -246,11 +266,11 @@ function links() {
   find . -type f -print | while read line; do
     # echo check $line
     onelink "$dest" "$src" "$line"
-  done 
+  done
   find . -type l -print | while read line; do
     # echo check $line
     onelink "$dest" "$src" "$line"
-  done 
+  done
 }
 function action() {
   local name=$1
@@ -268,7 +288,7 @@ function action() {
      fi
      echo done > "${actionpath}/._${actionname}"
      #if [[ "$name" == "perl" && "$actionname" == "pre" ]] ; then echo "---- done" ; eee ; fi
-  fi 
+  fi
 }
 function isItDone() {
   local name="$1"
@@ -296,14 +316,15 @@ function build_item() {
   get_sources $name namever
   if [[ -e "$HUL/._linked/$namever" ]]; then
     if [[ "$isdone" == "false" ]] ; then
-      echolog "$type $namever already installed" ; 
-      donelist="${donelist}@${name}@" ; 
+      echolog "$type $namever already installed" ;
+      donelist="${donelist}@${name}@" ;
     fi
     if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
   else
     local asrc="${H}/src/${namever}"
     sc
     untar $namever
+    action $name $namever precond "$H/src/$namever"
     gocd $name $namever
     action $name $namever pre "$H/src/$namever"
     configure $name $namever
@@ -339,14 +360,9 @@ function build_line() {
   done
   #echo done deps from $name with $type
   if [[ $type == "app" ]]; then build_item "$name" "APP" ;
-  elif [[ $type == "lib" ]] ; then build_item  "$name" "LIB" ; 
+  elif [[ $type == "lib" ]] ; then build_item  "$name" "LIB" ;
   else echo "unknow type" ; exit 1 ; fi
 }
-cat "${_deps}" | while read line; do
-  #echo $line
-  build_line "$line"
-done
-trap - EXIT
-echo -e "\e[00;32mAll Done.\e[00m"
-#sc ; which gcc ; gcc --version
+
+main
 exit 0

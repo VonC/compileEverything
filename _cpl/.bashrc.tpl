@@ -18,7 +18,9 @@ function bashscriptpath() {
     if [[ "$ascript" == "bash" ]] ; then
       ascript=${BASH_SOURCE[0]}
       asp="$(dirname $ascript)"
-    fi  
+      if [[ "$asp" == "." ]] ; then asp=$(pwd) ; fi
+      #echo "bb asp '$asp', b1 ascript '$ascript'"
+    fi
     #echo "b2 asp '$asp', b2 ascript '$ascript'"
     if [[ "${ascript#/}" != "$ascript" ]]; then asp=$asp ;
     elif [[ "${ascript#../}" != "$ascript" ]]; then
@@ -29,8 +31,8 @@ function bashscriptpath() {
       done
     elif [[ "${ascript#*/}" != "$ascript" ]];  then
       if [[ "$asp" == "." ]] ; then asp=$(pwd) ; else asp="$(pwd)/${asp}"; fi
-    fi  
-  fi  
+    fi
+  fi
   eval $_sp="'$asp'"
 }
 

@@ -1,3 +1,5 @@
+Note: to follow the most recent log, multitail --mergeall 2011*
+-----------
 tic: symbol lookup error: tic: undefined symbol: _nc_check_termtype2
 userapp@ubvonc:~/apps/test/usr/local/lib$ nm -Ap *.so*|grep nc_check_termtype2
 libncurses.so.5.7:0003f32c D _nc_check_termtype2
@@ -13,17 +15,32 @@ libncurses.so.5:0003f32c D _nc_check_termtype2
 libncurses.so.5.7:0003f32c D _nc_check_termtype2
 
 userapp@ubvonc:~/apps/test/usr/local/libs/ncurses-5.7/bin$ ldd tic
-	linux-gate.so.1 =>  (0x006d8000)
-	libncurses.so.5 => /lib/libncurses.so.5 (0x00a64000)
-	libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0x0050f000)
-	libdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0x002eb000)
-	/lib/ld-linux.so.2 (0x00373000)
+  linux-gate.so.1 =>  (0x006d8000)
+  libncurses.so.5 => /lib/libncurses.so.5 (0x00a64000)
+  libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0x0050f000)
+  libdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0x002eb000)
+  /lib/ld-linux.so.2 (0x00373000)
 
 http://invisible-island.net/ncurses/ncurses.faq.html#big_terminfo: (not needed)
 tic -s -1 -I -e 'ansi, ansi-m, color_xterm, ecma+color, klone+acs, klone+color, klone+sgr, klone+sgr-dumb, linux, pcansi-m, rxvt, vt52, vt100, vt102, vt220, xterm' terminfo.src > t
 
 userapp@ubvonc:~/apps/test/usr/local/share/terminfo already there after compilation/installation of ncurses
 
+------
+/bin/sh ../../gcc/mkconfig.sh tconfig.h
+/home/userapp/apps/tests/src/gcc-3.4.6/objdir/gcc/xgcc -B/home/userapp/apps/tests/src/gcc-3.4.6/objdir/gcc/ -B/home/userapp/apps/tests/usr/local/apps/gcc-3.4.6/i686-pc-linux-gnu/bin/ -B/home/userapp/apps/tests/usr/local/apps/gcc-3.4.6/i686-pc-linux-gnu/lib/ -isystem /home/userapp/apps/tests/usr/local/apps/gcc-3.4.6/i686-pc-linux-gnu/include -isystem /home/userapp/apps/tests/usr/local/apps/gcc-3.4.6/i686-pc-linux-gnu/sys-include -O2 -DIN_GCC    -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition  -isystem ./include  -I. -I. -I../../gcc -I../../gcc/. -I../../gcc/../include   -g0 -finhibit-size-directive -fno-inline-functions -fno-exceptions -fno-zero-initialized-in-bss -fno-unit-at-a-time -fno-omit-frame-pointer \
+   -c ../../gcc/crtstuff.c -DCRT_BEGIN \
+  -o crtbegin.o
+In file included from /usr/include/bits/errno.h:25,
+                 from /usr/include/errno.h:36,
+                 from ../../gcc/tsystem.h:85,
+                 from ../../gcc/crtstuff.c:62:
+/usr/include/linux/errno.h:4:23: asm/errno.h: No such file or directory
+make[1]: *** [crtbegin.o] Error 1
+make[1]: Leaving directory `/home/userapp/apps/tests/src/gcc-3.4.6/objdir/gcc'
+make: *** [all-gcc] Error 2
+
+=> add linux-api-headers or gcc-multilib
 ------
 cyrus-sasl
 
@@ -43,7 +60,7 @@ Must copy plugins/*.o and sasldb/*.o in lib for compil to progress
  822  ln -s . include
   823  l
   824  h
-userapp@ubvonc:~/apps/test/usr/local/ssl/include/openssl$ 
+userapp@ubvonc:~/apps/test/usr/local/ssl/include/openssl$
 
 => compile ok
 -----------
