@@ -1,2 +1,2 @@
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
-premake=sed -i '\''s/BINOWN = .*/BINOWN = @@USERNAME@@/g'\'' $H/src/@@NAMEVER@@/Makefile ; sed -i '\''s/BINGRP = .*/BINGRP = @@USERGROUP@@/g'\'' $H/src/@@NAMEVER@@/Makefile
+premake=gen/sed -i '\''s/BINOWN = .*/BINOWN = @@USERNAME@@/g'\'' $H/src/@@NAMEVER@@/Makefile ; gen/sed -i '\''s/BINGRP = .*/BINGRP = @@USERGROUP@@/g'\'' $H/src/@@NAMEVER@@/Makefile

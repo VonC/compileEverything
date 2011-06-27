@@ -1,4 +1,7 @@
-Note: to follow the most recent log, multitail --mergeall 2011*
+Notes: 
+* to follow the most recent log, gnu tail -F logs/last 
+* export PS4='+${BASH_SOURCE}:${LINENO}: ' ; bash -x make_env.sh will display line numbers
+ 
 -----------
 tic: symbol lookup error: tic: undefined symbol: _nc_check_termtype2
 userapp@ubvonc:~/apps/test/usr/local/lib$ nm -Ap *.so*|grep nc_check_termtype2

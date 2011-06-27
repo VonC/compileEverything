@@ -1,3 +1,3 @@
-precond=if [[ ! -e /usr/include/asm ]] ; then echo "you need to install gcc-multilib first for gcc to compile" ; precond_failed ; fi
-pre=mkdir -p ${H}/src/@@NAMEVER@@/objdir ; cd objdir
+precond=mkdir -p ${H}/src/@@NAMEVER@@/objdir ; if [[ "$(uname)" == "Ubuntu" && ! -e /usr/include/asm ]] ; then echo "you need to install gcc-multilib first for gcc to compile" ; precond_failed ; fi
+cdpath=${H}/src/@@NAMEVER@@/objdir
 configcmd=../configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --disable-multilib --enable-languages=c,c++ --with-as=@@PATH_AS@@ --with-ld=@@PATH_LD@@

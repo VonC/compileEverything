@@ -57,7 +57,7 @@ export PATH="${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin"
 #export PATH="$PATH:$HULA/perl/bin:$HULA/python/bin"
 #export PATH="$PATH:$HULA/jdk/bin:$HULA/ant/bin"
 # then add the few system paths we actually need
-export PATH="${PATH}":/bin:/usr/bin/:/usr/sbin:/usr/css/bin:/usr/sfw/bin
+export PATH="${PATH}":/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
 
 export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -R${HUL}/ssl/lib -R${HULL}/sasl2"
 export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE"

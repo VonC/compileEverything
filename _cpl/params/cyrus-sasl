@@ -1,2 +1,2 @@
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --enable-digest=no --with-openssl=${HUL}/ssl --with-plugindir=${HULS}/@@NAMEVER@@/lib/sasl2 @@WITH_GNU_LD@@ --with-des=${HUL}/ssl/include/openssl
-#premake sed -i "s/CFLAGS = /CFLAGS = -I${HUL}\/ssl\/include\/openssl/g" $H/src/@@NAMEVER@@/Makefile
+#premake gen/sed -i "s/CFLAGS = /CFLAGS = -I${HUL}\/ssl\/include\/openssl/g" $H/src/@@NAMEVER@@/Makefile

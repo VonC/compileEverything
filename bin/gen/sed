@@ -1,0 +1,12 @@
+#!/bin/bash
+#echo "gensed: $0"
+if [[ "$1" == "-i" && "$(uname)" == "SunOS" ]] ; then
+  #echo "b"
+  ased="$2"
+  afile="$3"
+  /bin/sed "$2" "${afile}" > "${afile}.new"
+  mv "${afile}.new" "${afile}"
+else
+  #echo "c"
+  /bin/sed $*
+fi
