@@ -1,2 +1,3 @@
 configcmd=./config --openssldir=${HULS}/@@NAMEVER@@
 linkdst=${HUL}/ssl
+post=ln -s . ${HULS}/@@NAMEVER@@/include/openssl/include
