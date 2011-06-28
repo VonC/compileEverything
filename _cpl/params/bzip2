@@ -1,0 +1,4 @@
+configcmd=echo "no config necessary"
+premake=gen_sed -i "s/CFLAGS=/CFLAGS=-fPIC /g" "$H/src/@@NAMEVER@@/Makefile"
+makecmd=echo "no make necessary"
+makeinstcmd=make install PREFIX=${HULS}/@@NAMEVER@@

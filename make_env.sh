@@ -350,8 +350,8 @@ function build_item() {
     action $name $namever pre "$H/src/$namever"
     configure $name $namever
     action $name $namever premake "$H/src/$namever"
-    if [[ ! -e "${asrc}"/._build ]] ; then loge "make" "make_$namever"; echo done > "${asrc}"/._build ; fi
-    if [[ ! -e "${asrc}"/._installed ]] ; then loge "make install" "make_install_$namever"; echo done > "${asrc}"/._installed ; fi
+    if [[ ! -e "${asrc}"/._build ]] ; then get_param $name makecmd "make" ; loge "${makecmd}" "make_$namever"; echo done > "${asrc}"/._build ; fi
+    if [[ ! -e "${asrc}"/._installed ]] ; then get_param $name makeinstcmd "make install" ; loge "${makeinstcmd}" "make_install_$namever"; echo done > "${asrc}"/._installed ; fi
     action $name $namever post "$H/src/$namever"
     if [[ "$type" == "APP" ]] ; then linksrcdef="$HULA/$namever/bin" ; linkdstdef="$H/bin" ; fi
     if [[ "$type" == "LIB" ]] ; then linksrcdef="$HULS/$namever" ; linkdstdef="$HUL" ; fi
