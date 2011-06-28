@@ -35,6 +35,6 @@ if [[ "$1" == "-i" && "$(uname)" == "SunOS" ]] ; then
   echo "achmodcmd ${achmodcmd}"
   eval "${achmodcmd}"
 else
-  #echo "c"
-  /bin/sed "$*"
+  #echo "/bin/sed \"$*\""
+  /bin/sed "$1" "$2" "$3"
 fi

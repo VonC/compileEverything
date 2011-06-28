@@ -69,7 +69,7 @@ function echolog() { _echolog "~ " "$1" "$H/log" ""; }
 function _echologcmd() { _echolog "~~~ $1" "$2" "$H/logs/$3" "~~~~~~~~~~~~~~~~~~~"; }
 function _log() { f=$2; rm -f "$H"/logs/l; ln -s $f "$H"/logs/l;rm -f "$H"/logs/last; ln -s $f "$H"/logs/last; _echologcmd "" "$1" $f ; echolog "(see logs/$f or simply tail -f logs/l)"; $( $1 >> "$H"/logs/$f 2>&1 ) ; }
 function log() { f=$(_fdate).$2 ; _log "$1" $f ; }
-function loge() { f=$(_fdate).$2.log ; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; true ; }
+function loge() { echo -ne "\e[1;33m" ; f=$(_fdate).$2.log ; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; echo -ne "\e[m" ; true ;}
 function mrf() { ls -t1 $1 | head -n1 ; }
 
 function sc() {
@@ -314,8 +314,9 @@ function action() {
 function isItDone() {
   local name="$1"
   local _isdone="$2"
+  local aafrom="$3"
   local aisdone="false"
-  #echo '${donelist}' "${donelist}"
+  #echo "name ${name} from ${aafrom}: donelist ${donelist}"
   if [[ "${donelist%@${name}@*}" != "${donelist}" ]] ; then aisdone="true" ; fi
   eval $_isdone="'$aisdone'"
 }
@@ -331,13 +332,14 @@ function gocd() {
 function build_item() {
   local name="$1"
   local type="$2"
+  local afrom="$3"
   #echo '$type ${donelist}' "$name : ${donelist}"
-  local isdone="false" ; isItDone "$name" isdone
-  if [[ "$isdone" == "false" ]] ; then echolog "##### Building $type $name ####" ; fi
+  local isdone="false" ; isItDone "$name" isdone ${afrom}
+  if [[ "$isdone" == "false" ]] ; then echo -ne "\e[1;34m" ; echolog "##### Building $type $name ####" ; echo -ne "\e[m" ; fi
   get_sources $name namever
   if [[ -e "$HUL/._linked/$namever" ]]; then
     if [[ "$isdone" == "false" ]] ; then
-      echolog "$type $namever already installed" ;
+      echo -ne "\e[1;32m" ; echolog "$type $namever already installed" ; echo -ne "\e[m" ;
       donelist="${donelist}@${name}@" ;
     fi
     if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
@@ -364,25 +366,29 @@ function build_item() {
 }
 function build_line() {
   local line="$1"
+  local lineori="$1"
   #echo line $line
   set -- junk $line ; shift
   local type=$1; local name=$2 ; local deps=${3//,/ }
-  #echo deps $deps for $name with $type
-  declare -a Array=($deps)
-  for adep in "${Array[@]}"; do
-    #echo adep $adep for $name with $type
-    if [[ "$adep" != "none" ]]; then
-      adepline=$(egrep -e "((app|lib) $adep)|__no_deps__" "${_deps}")
-      #echo dep line: "xx${adepline}xx"
-      if [[ "$adepline" == "__no_deps__" ]] ; then echolog "unable to find dependencies of $adep"; nodepfound ; fi
-      adepline=$(echo "${adepline}" | egrep -e "${adep}")
-      build_line "$adepline"
-    fi
-  done
-  #echo done deps from $name with $type
-  if [[ $type == "app" ]]; then build_item "$name" "APP" ;
-  elif [[ $type == "lib" ]] ; then build_item  "$name" "LIB" ;
-  else echo "unknow type" ; exit 1 ; fi
+  isItDone "$name" aaisdone "${lineori}"
+  if [[ "$aaisdone" == "false" ]] ; then
+    #echo deps $deps for $name with $type
+    declare -a Array=($deps)
+    for adep in "${Array[@]}"; do
+      #echo adep $adep for $name with $type
+      if [[ "$adep" != "none" ]]; then
+        adepline=$(egrep -e "((app|lib) $adep)|__no_deps__" "${_deps}")
+        #echo dep line: "xx${adepline}xx"
+        if [[ "$adepline" == "__no_deps__" ]] ; then echolog "unable to find dependencies of $adep"; nodepfound ; fi
+        adepline=$(echo "${adepline}" | egrep -e "${adep}")
+        build_line "$adepline"
+      fi
+    done
+    #echo done deps from $name with $type
+    if [[ $type == "app" ]]; then build_item "$name" "APP" "$lineori";
+    elif [[ $type == "lib" ]] ; then build_item  "$name" "LIB" "$lineori";
+    else echo "unknow type" ; exit 1 ; fi
+  fi
 }
 
 main $*
