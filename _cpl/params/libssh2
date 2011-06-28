@@ -1,1 +1,2 @@
 url=http://www.libssh2.org/download/
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-openssl --with-libssl-prefix=${HUL}/ssl --with-libz --with-libz-prefix=${HUL} @@WITHOUT_GNU_LD@@

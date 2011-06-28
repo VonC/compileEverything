@@ -1,0 +1,40 @@
+#!/bin/bash
+#echo "gensed: $0"
+function getACL() {
+  local afile="$1"
+  local _aResACL=$2
+  local aResACL=""
+  local anACL=$(ls -l "$1") ; anACL=${anACL%% *}
+  local ownerACL="${anACL:1:3}" ; local groupACL="${anACL:4:3}" ; local worldACL="${anACL:7:3}"
+  octalACL "${ownerACL}" ownerACLValue ; octalACL "${groupACL}" groupACLValue ; octalACL "${worldACL}" worldACLValue
+  aResACL="${ownerACLValue}${groupACLValue}${worldACLValue}"
+  #echo "ACL0 for ${afile} is ${aResACL}"
+  eval $_aResACL="'$aResACL'"
+}
+function octalACL() {
+  local aSingleACL="$1"
+  local _aSingleACLValue=$2
+  local aSingleACLValue=0
+  if [[ "${aSingleACL:0:1}" != "-" ]] ; then aSingleACLValue=$(($aSingleACLValue+4)) ; fi
+  if [[ "${aSingleACL:1:1}" != "-" ]] ; then aSingleACLValue=$(($aSingleACLValue+2)) ; fi
+  if [[ "${aSingleACL:2:1}" != "-" ]] ; then aSingleACLValue=$(($aSingleACLValue+1)) ; fi
+  echo "aSingleACL ${aSingleACL} => aSingleACLValue ${aSingleACLValue}"
+  eval $_aSingleACLValue="'$aSingleACLValue'"
+}
+
+if [[ "$1" == "-i" && "$(uname)" == "SunOS" ]] ; then
+  #echo "b"
+  ased="$2"
+  afile="$3"
+  getACL "${afile}" anfACL 
+  echo "ACL for ${afile} is ${anfACL}"
+  echo "/bin/sed $2 ${afile} > ${afile}.new"
+  /bin/sed "$2" "${afile}" > "${afile}.new"
+  mv "${afile}.new" "${afile}"
+  achmodcmd="chmod ${anfACL} ${afile}"
+  echo "achmodcmd ${achmodcmd}"
+  eval "${achmodcmd}"
+else
+  #echo "c"
+  /bin/sed "$*"
+fi
