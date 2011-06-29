@@ -222,6 +222,7 @@ function configure() {
     echo "done" > "$H"/src/${namever}/._pre
     pwd
     get_param $name configcmd "##mandatory##"
+    echo "configcmd=${configcmd}"
     get_gnu_cmd ld path_ld without_gnu_ld with_gnu_ld
     configcmd=${configcmd/@@PATH_LD@@/${path_ld}}
     configcmd=${configcmd/@@WITHOUT_GNU_LD@@/${without_gnu_ld}}
@@ -233,9 +234,15 @@ function configure() {
     local longbit=$(getconf LONG_BIT)
     if [[ $longbit == "64" ]] ; then configcmd=${configcmd/@@ENABLE_64BIT@@/--enable-64bit} ;
     else configcmd=${configcmd/@@ENABLE_64BIT@@/} ; fi
-    echo configcmd $configcmd
+    #echo configcmd $configcmd
+    if [[ "${configcmd#@@}" != "${configcmd}" ]] ; then
+      configcmd="${configcmd#@@}"
+      echo "${configcmd}" > ./configurecmd
+      chmod 755 ./configurecmd
+      configcmd="./configurecmd"
+    fi
     pwd
-    loge "$configcmd" "configure_$namever"
+    loge "${configcmd}" "configure_${namever}"
     echo "done" > ._config
   fi
 }

@@ -1,2 +1,3 @@
-pre=gen_sed -i "s/\(['\'']\)\/usr\/local/\1\${EHUL}/g" "${H}/src/@@NAMEVER@@/setup.py" ; cp $H/_cpl/params/@@NAMEVER@@-Setup.dist "${H}/src/@@NAMEVER@@/Modules/Setup.dist" ; gen_sed -i "s/\(['\'' IRL=]\)\/usr\/local/\1\${EHUL}/g" "${H}/src/@@NAMEVER@@/Modules/Setup.dist"
-configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-libs='\''-lexpat -lncurses -lbz2'\''
+pre=gen_sed -i "s/\(['\'']\)\/usr\/local/\1\${EHUL}/g" "${H}/src/@@NAMEVER@@/setup.py" ; changeSetup.dist "${H}/src/@@NAMEVER@@/Modules/Setup.dist" ; gen_sed -i "s/\(['\'' IRL=]\)\/usr\/local/\1\${EHUL}/g" "${H}/src/@@NAMEVER@@/Modules/Setup.dist"
+configcmd=@@./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-libs='\''-lexpat -lncurses -lbz2'\''
+premake=gen_sed -i "s/-ltermcap/-lncurses/g" "${H}/src/@@NAMEVER@@/Makefile"

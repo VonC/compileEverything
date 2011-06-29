@@ -2,7 +2,7 @@
 if [[ "$1" != "-force" ]]; then
   echo $0 not executed for @@TITLE@@ unles called with -force
   return 0
-fi 
+fi
 echo $0 executed for @@TITLE@@
 
 set history=2000
@@ -59,7 +59,7 @@ export PATH="${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin"
 # then add the few system paths we actually need
 export PATH="${PATH}":/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
 
-export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -R${HUL}/ssl/lib -R${HULL}/sasl2"
+export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib"
 export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE"
 export CPPFLAGS="$CFLAGS"
 export LD_LIBRARY_PATH="${HULL}:${HUL}/ssl/lib:${HUL}/apps/svn/lib"
