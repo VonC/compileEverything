@@ -1,0 +1,3 @@
+verexclude=0.25.
+url=http://www.webdav.org/neon/
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-libs=${HUL} --with-ssl=openssl --with-libxml2 --with-expat @@WITHOUT_GNU_LD@@

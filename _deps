@@ -28,4 +28,10 @@ lib bzip2 gcc
 lib readline gcc
 lib sqlite readline,tcl
 app python bzip2,db,openssl,gdbm,ncurses,readline,tcl,libiconv,zlib,expat,sqlite
+lib aprutil gcc,openldap,db,sqlite,expat,libiconv
+lib openldap gcc,libtool,openssl,cyrus-sasl,db
+app subversion gcc,apache,apr,aprutil,neon,sqlite,zlib,python
+lib neon gcc,openssl,expat,libxml2,zlib
+lib libxml2 gcc,zlib,libiconv,readline
+lib openssh gcc,openssl,zlib
 __no_deps__

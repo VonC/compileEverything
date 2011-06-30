@@ -32,7 +32,7 @@ if [[ "$1" == "-i" && "$(uname)" == "SunOS" ]] ; then
   /bin/sed "$2" "${afile}" > "${afile}.new"
   mv "${afile}.new" "${afile}"
   achmodcmd="chmod ${anfACL} ${afile}"
-  echo "achmodcmd ${achmodcmd}"
+  #echo "achmodcmd ${achmodcmd}"
   eval "${achmodcmd}"
 else
   #echo "/bin/sed \"$*\""

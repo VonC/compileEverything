@@ -1,0 +1,2 @@
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-cyrus-sasl @@WITHOUT_GNU_LD@@
+premake=make depend

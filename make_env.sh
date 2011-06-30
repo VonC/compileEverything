@@ -34,6 +34,7 @@ mkdir -p "$H"/src/_pkgs
 mkdir -p "$H"/usr/local/._linked
 donelist=""
 namever=""
+ver=""
 
 set -o errexit
 set -o nounset
@@ -52,7 +53,9 @@ function main {
   fi
   cat "${_deps}" | while read line; do
     #echo $line
-    build_line "$line"
+    if [[ "$line" != "__no_deps__" ]] ; then
+      build_line "$line"
+    fi
   done
 }
 
@@ -79,18 +82,27 @@ function build_bashrc() {
   local title="$1"
   cp "$H/_cpl/.bashrc.tpl" "$H/.bashrc"
   export PATH=$H/bin:$PATH
-  $H/bin/gen/sed -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
+  $H/bin/gen_sed -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
   local longbit=$(getconf LONG_BIT)
-  if [[ $longbit == "32" ]]; then $H/bin/gen/sed -i 's/ @@M64@@//g' "$H/.bashrc" ;
-  elif [[ $longbit == "64" ]]; then $H/bin/gen/sed -i 's/@@M64@@/-m64/g' "$H/.bashrc" ;
+  if [[ $longbit == "32" ]]; then $H/bin/gen_sed -i 's/ @@M64@@//g' "$H/.bashrc" ;
+  elif [[ $longbit == "64" ]]; then $H/bin/gen_sed -i 's/@@M64@@/-m64/g' "$H/.bashrc" ;
   else echolog "Unable to get LONG_BIT conf (32 or 64bits)" ; getconf2 ; fi
 }
 function get_sources() {
   local name=$1
   local _namever=$2
-  local asrcline=$(grep " $name-" "$H/deps"|grep "Source Code")
+  get_param $name nameurl "${name}"
+  get_param $name page "$H/deps"  
+  if [[ -e "${page}" ]] ; then
+    local asrcline=$(grep " ${nameurl}-" "$H/deps"|grep "Source Code")
+  else
+    local asrcline=$(wget -q -O - "${page}"|grep "tar.gz") 
+  fi
   get_param $name verexclude ""
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
+  get_param $name verinclude ""
+  if [[ "${verinclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -e "${verinclude}") ; fi
+  #if [[ "${asrcline}" == "" ]]; then echolog "unable to get source version for ${name} with nameurl ${nameurl}, verinclude ${verinclude}, verexclude ${verexclude}" ; get_sources_failed ; fi
   #if [[ $name == "cyrus-sasl" ]] ; then echo line source! $asrcline ; fffg ; fi
   local IFS="\"" ; set -- $asrcline ; local IFS=" "
   local source=$2
@@ -157,6 +169,7 @@ function get_param() {
   local name="$1"
   local _param="$2"
   local default="$3"
+  if [[ "${ver}" == "" ]] ; then ver=${namever#${name}-} ; fi
   #echo "name $name, _param $_param, default $default"
   if [[ ! -e "$H/_cpl/params/$name" ]] ; then echolog "unable to find param for $name" ; no_param ; fi
   local aparam=$(grep "$_param=" "$H/_cpl/params/$name")
@@ -165,6 +178,7 @@ function get_param() {
   if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
   if [[ "$aparam" == "##mandatory##" ]]; then echolog "unable to find $_param for $name" ; find2 ; fi
   aparam=${aparam//@@NAMEVER@@/${namever}}
+  aparam=${aparam//@@VER@@/${ver}}
   if [[ "${aparam%@@USERNAME@@*}" != "${aparam}" ]] ; then
     getusername ausername
     aparam=${aparam//@@USERNAME@@/${ausername}}

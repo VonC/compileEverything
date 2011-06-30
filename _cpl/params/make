@@ -1,1 +1,2 @@
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-libiconv-prefix=${HUL} --with-libintl-prefix=${HUL} @@WITHOUT_GNU_LD@@
+post=ln -s make ${HULA}/@@NAMEVER@@/bin/gmake

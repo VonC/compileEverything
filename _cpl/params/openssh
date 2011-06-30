@@ -1,0 +1,1 @@
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-zlib=${HUL} --with-ssl-engine=${HUL}/ssl --without-privsep-path --without-privsep-user --with-pid-dir=${HUL}/var/run --with-default-path=$PATH --without-gnu-ld
