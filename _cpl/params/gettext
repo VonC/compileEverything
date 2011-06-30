@@ -1,2 +1,3 @@
 makefile=Makefile
 configcmd=./configure --prefix=${HUL}/libs/@@NAMEVER@@ --enable-shared --enable-static --with-libiconv-prefix=${HUL} --with-libexpat-prefix=${HUL} @@WITHOUT_GNU_LD@@
+premake=gen_sed -i "s/\(pre\|post\)dep_objects=\"\//\1dep_objects=\"\"\n#\1dep_objects=\"\//g" ${H}/src/@@NAMEVER@@/gettext-runtime/libasprintf/libtool

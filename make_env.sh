@@ -151,7 +151,7 @@ function untar() {
     get_tar tarname
     loge "$tarname xpvf $H/src/_pkgs/$namever.tar.gz -C $H/src" "tar_xpvf_$namever.tar.gz"
     local lastlog=$(mrf $H/logs)
-    local actualname=$(head -3 "$H/logs/$lastlog"|tail -1) ; actualname=${actualname%%/*}
+    local actualname=$(head -3 "$H/logs/$lastlog"|tail -1) ; actualname=${actualname##*/}
     if [[ "$namever" != "$actualname" ]] ; then ln -s "$actualname" "$H/src/$namever" ; fi
   fi
 }
