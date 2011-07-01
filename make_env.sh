@@ -73,7 +73,7 @@ function _echologcmd() { _echolog "~~~ $1" "$2" "$H/logs/$3" "~~~~~~~~~~~~~~~~~~
 function _log() { f=$2; rm -f "$H"/logs/l; ln -s $f "$H"/logs/l;rm -f "$H"/logs/last; ln -s $f "$H"/logs/last; _echologcmd "" "$1" $f ; echolog "(see logs/$f or simply tail -f logs/l)"; $( $1 >> "$H"/logs/$f 2>&1 ) ; }
 function log() { f=$(_fdate).$2 ; _log "$1" $f ; }
 function loge() { echo -ne "\e[1;33m" ; f=$(_fdate).$2.log ; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; echo -ne "\e[m" ; true ;}
-function mrf() { ls -t1 $1 | head -n1 ; }
+function mrf() { ls -t1 "$1"/$2 | head -n1 ; }
 
 function sc() {
   source "$H/.bashrc" -force
@@ -84,8 +84,8 @@ function build_bashrc() {
   export PATH=$H/bin:$PATH
   $H/bin/gen_sed -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
   local longbit=$(getconf LONG_BIT)
-  if [[ $longbit == "32" ]]; then $H/bin/gen_sed -i 's/ @@M64@@//g' "$H/.bashrc" ;
-  elif [[ $longbit == "64" ]]; then $H/bin/gen_sed -i 's/@@M64@@/-m64/g' "$H/.bashrc" ;
+  if [[ "$longbit" == "32" ]]; then $H/bin/gen_sed -i 's/ @@M64@@//g' "$H/.bashrc" ;
+  elif [[ "$longbit" == "64" ]]; then $H/bin/gen_sed -i 's/@@M64@@/-m64/g' "$H/.bashrc" ;
   else echolog "Unable to get LONG_BIT conf (32 or 64bits)" ; getconf2 ; fi
 }
 function get_sources() {
@@ -150,9 +150,16 @@ function untar() {
   if [[ ! -e "$H/src/$namever" ]]; then
     get_tar tarname
     loge "$tarname xpvf $H/src/_pkgs/$namever.tar.gz -C $H/src" "tar_xpvf_$namever.tar.gz"
-    local lastlog=$(mrf $H/logs)
-    local actualname=$(head -3 "$H/logs/$lastlog"|tail -1) ; actualname=${actualname##*/}
-    if [[ "$namever" != "$actualname" ]] ; then ln -s "$actualname" "$H/src/$namever" ; fi
+    local lastlog=$(mrf "$H/logs" "*tar_xpvf*")
+    local actualname=$(head -3 "$lastlog"|tail -1)
+    local anactualname=${actualname}
+    #echo "anactualname=${anactualname}";
+    actualname=${actualname%%/*}
+    #echo "namever ${namever} actualver %/* ${anactualname%/*} actualname%%/* ${anactualname%%/*}, actualname#*/ ${anactualname#*/}, actualname##*/ ${anactualname##*/}"
+    if [[ "$namever" != "$actualname" ]] ; then
+      echolog "ln do to: ln -s $actualname $H/src/$namever"
+      ln -s "$actualname" "$H/src/$namever"
+    fi
   fi
 }
 function getusername() {
@@ -255,7 +262,7 @@ function configure() {
       chmod 755 ./configurecmd
       configcmd="./configurecmd"
     fi
-    pwd
+    #pwd
     loge "${configcmd}" "configure_${namever}"
     echo "done" > ._config
   fi

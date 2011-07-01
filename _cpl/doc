@@ -196,4 +196,14 @@ user.name=VonC
 user.email=vonc@laposte.net
 github.user=VonC
 github.token=123myToken456
+------------------
+See http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=627335
+Connection #0 seems to be dead!
+export GIT_CURL_VERBOSE=1
+export GIT_TRACE_PACKET=1
+----------
+certificate gihub
+see ssl certificate
+http://askubuntu.com/questions/23680/problems-with-certificate-with-wget-and-github-lately
+openssl s_client -showcerts -connect github.com:443
 

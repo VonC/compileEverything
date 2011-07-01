@@ -60,6 +60,6 @@ export PATH="${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin"
 export PATH="${PATH}":/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
 
 export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib"
-export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE"
+export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE @@M64@@"
 export CPPFLAGS="$CFLAGS"
-export LD_LIBRARY_PATH="${HULL}:${HUL}/ssl/lib:${HUL}/apps/svn/lib"
+export LD_LIBRARY_PATH="${HULL}:${HUL}/ssl/lib:${HUL}/apps/svn/lib:${HUL}/apps/python/lib"
