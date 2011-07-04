@@ -241,9 +241,9 @@ function configure() {
     rm -f "$H"/src/${namever}/._*
     if [[ "$haspre" == "true" ]] ; then echo "done" > "$H/src/${namever}/._pre" ; fi
     echo "done" > "$H"/src/${namever}/._pre
-    pwd
+    #pwd
     get_param $name configcmd "##mandatory##"
-    echo "configcmd=${configcmd}"
+    #echo "configcmd=${configcmd}"
     get_gnu_cmd ld path_ld without_gnu_ld with_gnu_ld
     configcmd=${configcmd/@@PATH_LD@@/${path_ld}}
     configcmd=${configcmd/@@WITHOUT_GNU_LD@@/${without_gnu_ld}}
@@ -385,8 +385,8 @@ function build_item() {
     action $name $namever post "$H/src/$namever"
     if [[ "$type" == "APP" ]] ; then linksrcdef="$HULA/$namever/bin" ; linkdstdef="$H/bin" ; fi
     if [[ "$type" == "LIB" ]] ; then linksrcdef="$HULS/$namever" ; linkdstdef="$HUL" ; fi
-    get_param $name linksrc $linksrcdef; linksrc=$(echo "${linksrc}") ; echo "linksrc ${linksrc}"
-    get_param $name linkdst $linkdstdef; linkdst=$(echo "${linkdst}") ; echo "linkdst ${linkdst}"
+    get_param $name linksrc $linksrcdef; linksrc=$(echo "${linksrc}") ; # echo "linksrc ${linksrc}"
+    get_param $name linkdst $linkdstdef; linkdst=$(echo "${linkdst}") ; # echo "linkdst ${linkdst}"
     if [[ ! -e "${HUL}"/._linked/$namever ]] ; then echolog "checking links of $type $namever"; links "$linkdst" "$linksrc" ; echo done > "${HUL}"/._linked/$namever ; fi
     if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
     donelist="${donelist}@${name}@"
