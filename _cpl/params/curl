@@ -1,1 +1,3 @@
+page=http://curl.haxx.se/download.html
+url=http://curl.haxx.se/download/
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --with-ssl=${HUL}/ssl --with-zlib=${HUL} --with-libssh2=${HUL} --with-libidn=${HUL} --enable-shared --enable-static @@WITHOUT_GNU_LD@@
