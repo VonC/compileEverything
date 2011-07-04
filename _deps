@@ -27,7 +27,6 @@ app python bzip2,db,openssl,gdbm,ncurses,readline,tcl,libiconv,zlib,expat,sqlite
 lib bzip2 gcc
 lib readline gcc
 lib sqlite readline,tcl
-app python bzip2,db,openssl,gdbm,ncurses,readline,tcl,libiconv,zlib,expat,sqlite
 lib aprutil gcc,openldap,db,sqlite,expat,libiconv
 lib openldap gcc,libtool,openssl,cyrus-sasl,db
 app subversion gcc,apache,apr,aprutil,neon,sqlite,zlib,python

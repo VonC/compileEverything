@@ -1,5 +1,5 @@
 Notes: 
-* to follow the most recent log, gnu tail -F logs/last 
+* to follow the most recent log, tail --follow=name logs/last (with a gnu tail at least) 
 * export PS4='+${BASH_SOURCE}:${LINENO}: ' ; bash -x make_env.sh will display line numbers
  
 -----------
@@ -177,7 +177,7 @@ visible with 'perl -V' (uppercase V, not -v)
 bash-3.00$ git config --system -l
 fatal: unable to read config file '/home/userapp/envs/201107/usr/local/var/gitconfig': No such file or directory
 bash-3.00$ git config --global -l
-alias.lg=log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+alia.lg=log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 alias.st=status
 alias.br=branch
 http.sslcainfo=/myserver/home/userapp/ssl/curl-ca-bundle.crt
@@ -206,4 +206,13 @@ certificate gihub
 see ssl certificate
 http://askubuntu.com/questions/23680/problems-with-certificate-with-wget-and-github-lately
 openssl s_client -showcerts -connect github.com:443
-
+-------------
+ncurses unix
+/home/userapp/envs/201107b/bin/g++  -o demo ../obj_s/demo.o -L../lib -lncurses++ -L../lib -lform -lmenu -lpanel -lncurses    -L/home/userapp/envs/201107b/usr/local/lib -L/home/userapp/envs/201107b/usr/local/ssl/lib -L/home/userapp/envs/201107b/usr/local/apps/python/lib -Wl,-rpath,/home/userapp/envs/201107b/src/ncurses-5.7/lib  -I../c++ -I../include -I. -DHAVE_CONFIG_H -I. -I../include -I/home/userapp/envs/201107b/usr/local/include -I/home/userapp/envs/201107b/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -D_GNU_SOURCE -DNDEBUG -I/home/userapp/envs/201107b/usr/local/libs/ncurses-5.7/include -g -O2  -fPIC
+/myserver/home/userapp/envs/201107b/usr/local/apps/gcc-3.4.6/bin/../lib/gcc/x86_64-unknown-linux-gnu/3.4.6/../../../../lib64/libstdc++.so: undefined reference to `libintl_textdomain'
+/myserver/home/userapp/envs/201107b/usr/local/apps/gcc-3.4.6/bin/../lib/gcc/x86_64-unknown-linux-gnu/3.4.6/../../../../lib64/libstdc++.so: undefined reference to `libintl_bindtextdomain'
+collect2: ld returned 1 exit status
+make[1]: *** [demo] Error 1
+make[1]: Leaving directory `/myserver/home/userapp/envs/201107b/src/ncurses-5.7/c++'
+make: *** [all] Error 2
+=> add -lintl to the Makefile
