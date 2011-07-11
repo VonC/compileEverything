@@ -18,7 +18,7 @@ function octalACL() {
   if [[ "${aSingleACL:0:1}" != "-" ]] ; then aSingleACLValue=$(($aSingleACLValue+4)) ; fi
   if [[ "${aSingleACL:1:1}" != "-" ]] ; then aSingleACLValue=$(($aSingleACLValue+2)) ; fi
   if [[ "${aSingleACL:2:1}" != "-" ]] ; then aSingleACLValue=$(($aSingleACLValue+1)) ; fi
-  echo "aSingleACL ${aSingleACL} => aSingleACLValue ${aSingleACLValue}"
+  #echo "aSingleACL ${aSingleACL} => aSingleACLValue ${aSingleACLValue}"
   eval $_aSingleACLValue="'$aSingleACLValue'"
 }
 
