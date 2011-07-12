@@ -42,6 +42,7 @@ mkdir -p "${_logs}"
 mkdir -p "${_pkgs}"
 mkdir -p "$H"/bin
 mkdir -p "$H"/usr/local/._linked
+if [[ -e "$H/README.md" ]] ; then mv -f "$H/README.md" "$H/.README.md" ; fi
 donelist=""
 namever=""
 ver=""
@@ -80,7 +81,7 @@ function _echod() { echo "$(_ldate) $1$2" ; }
 function _echolog() { _echod "$1" "$2" | tee -a "$3"; if [[ $4 != "" ]]; then echo $4 >> "$3"; fi; }
 function echolog() { _echolog "~ " "$1" "${_log}" ""; }
 function _echologcmd() { _echolog "~~~ $1" "$2" "${_logs}/$3" "~~~~~~~~~~~~~~~~~~~"; }
-function _log() { f=$2; rm -f "${_logs}"/l; ln -s $f "${_logs}"/l;rm -f "${H}"/_lastlog; ln -s "${_hlogs}/$f" "${H}"/_lastlog; _echologcmd "" "$1" $f ; echolog "(see ${_logs}/$f or simply tail -f ${_logs}/l)"; $( $1 >> "${_logs}"/$f 2>&1 ) ; }
+function _log() { f=$2; rm -f "${_logs}"/l; ln -s $f "${_logs}"/l;rm -f "${H}"/.lastlog; ln -s "${_hlogs}/$f" "${H}"/.lastlog; _echologcmd "" "$1" $f ; echolog "(see ${_logs}/$f or simply tail -f ${_logs}/l)"; $( $1 >> "${_logs}"/$f 2>&1 ) ; }
 function log() { f=$(_fdate).$2 ; _log "$1" $f ; }
 function loge() { echo -ne "\e[1;33m" ; f=$(_fdate).$2.log ; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; echo -ne "\e[m" ; true ;}
 function mrf() { ls -t1 "$1"/$2 | head -n1 ; }
