@@ -1,8 +1,8 @@
 dep*
 *~
 *.*~
-log
-logs/
+log*
+.*log
 src/
 .bashrc
 usr/

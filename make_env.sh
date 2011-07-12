@@ -31,6 +31,7 @@ _hcpl=".cpl"
 _deps="${_cpl}/_deps"
 _vers="${_cpl}/_vers"
 _log="${_cpl}/log"
+_hlog="${_hcpl}/log"
 _logs="${_cpl}/logs"
 _hlogs="${_hcpl}/logs"
 _src="${_cpl}/src"
@@ -43,6 +44,7 @@ mkdir -p "${_pkgs}"
 mkdir -p "$H"/bin
 mkdir -p "$H"/usr/local/._linked
 if [[ -e "$H/README.md" ]] ; then mv -f "$H/README.md" "$H/.README.md" ; fi
+ln -fs ${_hlog} "$H/.log"
 donelist=""
 namever=""
 ver=""
@@ -54,7 +56,10 @@ trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | tee -a "${_log}";
 
 function main {
   checkOs
-  if [[ ! -e "$H/.bashrc" ]]; then build_bashrc "$1"; fi
+  if [[ ! -e "$H/.bashrc" ]]; then
+    if [[ $# != 1 ]] ; then echolog "When there is no .bashrc, make_env.sh needs a title for that .bashrc as first parameter. Not needed after that" ; miss_bashrc_title ; fi  
+    build_bashrc "$1"
+  fi
   sc
   if [[ ! -e "${_vers}" ]]; then
     echolog "#### VERS ####"
