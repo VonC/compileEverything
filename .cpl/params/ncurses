@@ -1,2 +1,2 @@
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --with-shared --with-devel=yes --without-ada --enable-overwrite --with-develop @@WITHOUT_GNU_LD@@
-premake=gen_sed -i "s/-lpanel -lncurses/-lpanel -lncurses -lintl/g" ${H}/src/@@NAMEVER@@/c++/Makefile
+premake=gen_sed -i "s/-lpanel -lncurses/-lpanel -lncurses -lintl/g" ${H}/.cpl/src/@@NAMEVER@@/c++/Makefile

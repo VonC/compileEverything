@@ -216,3 +216,8 @@ make[1]: *** [demo] Error 1
 make[1]: Leaving directory `/myserver/home/userapp/envs/201107b/src/ncurses-5.7/c++'
 make: *** [all] Error 2
 => add -lintl to the Makefile
+
+---------------------
+Refactoring:
+bash-3.00$ grep "\${H}/src" *
+gen_sed -i 's/\${H}\/src/\${H}\/.cpl\/src/g' xxx

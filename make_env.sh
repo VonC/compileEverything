@@ -33,10 +33,14 @@ _vers="${_cpl}/_vers"
 _log="${_cpl}/log"
 _logs="${_cpl}/logs"
 _hlogs="${_hcpl}/logs"
+_src="${_cpl}/src"
+_pkgs="${_src}/_pkgs"
+_hsrc="${_hcpl}/src"
+_hpkgs="${_hsrc}/_pkgs"
 echo $H
 mkdir -p "${_logs}"
+mkdir -p "${_pkgs}"
 mkdir -p "$H"/bin
-mkdir -p "$H"/src/_pkgs
 mkdir -p "$H"/usr/local/._linked
 donelist=""
 namever=""
@@ -121,9 +125,9 @@ function get_sources() {
     local targz=$7
   fi
   #echo sources for $name: $targz from $source from $line
-  if [[ ! -e "$H/src/_pkgs/$targz" ]]; then
-    echolog "get sources for $name in src/_pkgs/$targz"
-    loge "wget $source -O $H/src/_pkgs/$targz" "wget_sources_$targz"
+  if [[ ! -e "${_pkgs}/$targz" ]]; then
+    echolog "get sources for $name in ${_hpkgs}/$targz"
+    loge "wget $source -O ${_pkgs}/$targz" "wget_sources_$targz"
   fi
   eval $_namever="'${targz%.tar.gz}'"
 }
@@ -153,9 +157,9 @@ function get_tar() {
 }
 function untar() {
   local namever=$1
-  if [[ ! -e "$H/src/$namever" ]]; then
+  if [[ ! -e "${_src}/$namever" ]]; then
     get_tar tarname
-    loge "$tarname xpvf $H/src/_pkgs/$namever.tar.gz -C $H/src" "tar_xpvf_$namever.tar.gz"
+    loge "$tarname xpvf ${_pkgs}/$namever.tar.gz -C ${_src}" "tar_xpvf_$namever.tar.gz"
     local lastlog=$(mrf "${_logs}" "*tar_xpvf*")
     local actualname=$(head -3 "$lastlog"|tail -1)
     local anactualname=${actualname}
@@ -163,8 +167,8 @@ function untar() {
     actualname=${actualname%%/*}
     #echo "namever ${namever} actualver %/* ${anactualname%/*} actualname%%/* ${anactualname%%/*}, actualname#*/ ${anactualname#*/}, actualname##*/ ${anactualname##*/}"
     if [[ "$namever" != "$actualname" ]] ; then
-      echolog "ln do to: ln -s $actualname $H/src/$namever"
-      ln -s "$actualname" "$H/src/$namever"
+      echolog "ln do to: ln -s $actualname ${_src}/$namever"
+      ln -s "$actualname" "${_src}/$namever"
     fi
   fi
 }
@@ -242,10 +246,10 @@ function configure() {
   local namever=$2
   get_param $name makefile Makefile
   if [[ ! -e $makefile || ! -e ._config ]]; then
-    local haspre="false"; if [[ -e "$H/src/${namever}/._pre" ]] ; then haspre=true ; fi
-    rm -f "$H"/src/${namever}/._*
-    if [[ "$haspre" == "true" ]] ; then echo "done" > "$H/src/${namever}/._pre" ; fi
-    echo "done" > "$H"/src/${namever}/._pre
+    local haspre="false"; if [[ -e "${_src}/${namever}/._pre" ]] ; then haspre=true ; fi
+    rm -f "${_src}/${namever}"/._*
+    if [[ "$haspre" == "true" ]] ; then echo "done" > "${_src}/${namever}/._pre" ; fi
+    echo "done" > "${_src}/${namever}"/._pre
     #pwd
     get_param $name configcmd "##mandatory##"
     #echo "configcmd=${configcmd}"
@@ -356,7 +360,7 @@ function isItDone() {
 function gocd() {
   local name=$1
   local namever=$2
-  get_param $name cdpath "$H/src/$namever"
+  get_param $name cdpath "${_src}/${namever}"
   cdpath=$(eval echo "${cdpath}")
   echolog "cd $cdpath"
   cd "${cdpath}"
@@ -378,17 +382,17 @@ function build_item() {
     fi
     if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
   else
-    local asrc="${H}/src/${namever}"
+    local asrc="${_src}/${namever}"
     sc
     untar $namever
-    action $name $namever precond "$H/src/$namever"
+    action $name $namever precond "${asrc}"
     gocd $name $namever
-    action $name $namever pre "$H/src/$namever"
+    action $name $namever pre "${asrc}"
     configure $name $namever
-    action $name $namever premake "$H/src/$namever"
+    action $name $namever premake "${asrc}"
     if [[ ! -e "${asrc}"/._build ]] ; then get_param $name makecmd "make" ; loge "${makecmd}" "make_$namever"; echo done > "${asrc}"/._build ; fi
     if [[ ! -e "${asrc}"/._installed ]] ; then get_param $name makeinstcmd "make install" ; loge "${makeinstcmd}" "make_install_$namever"; echo done > "${asrc}"/._installed ; fi
-    action $name $namever post "$H/src/$namever"
+    action $name $namever post "${asrc}"
     if [[ "$type" == "APP" ]] ; then linksrcdef="$HULA/$namever/bin" ; linkdstdef="$H/bin" ; fi
     if [[ "$type" == "LIB" ]] ; then linksrcdef="$HULS/$namever" ; linkdstdef="$HUL" ; fi
     get_param $name linksrc $linksrcdef; linksrc=$(echo "${linksrc}") ; # echo "linksrc ${linksrc}"
