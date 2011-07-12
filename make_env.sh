@@ -80,7 +80,7 @@ function sc() {
 }
 function build_bashrc() {
   local title="$1"
-  cp "$H/_cpl/.bashrc.tpl" "$H/.bashrc"
+  cp "$H/.cpl/.bashrc.tpl" "$H/.bashrc"
   export PATH=$H/bin:$PATH
   $H/bin/gen_sed -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
   local longbit=$(getconf LONG_BIT)
@@ -177,8 +177,8 @@ function get_param() {
   local _param="$2"
   local default="$3"
   #echo "name $name, _param $_param, default $default"
-  if [[ ! -e "$H/_cpl/params/$name" ]] ; then echolog "unable to find param for $name" ; no_param ; fi
-  local aparam=$(grep "$_param=" "$H/_cpl/params/$name")
+  if [[ ! -e "$H/.cpl/params/$name" ]] ; then echolog "unable to find param for $name" ; no_param ; fi
+  local aparam=$(grep "$_param=" "$H/.cpl/params/$name")
   if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then aparam=${aparam##$_param=} ;
   else aparam="" ; fi
   if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
