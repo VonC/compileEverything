@@ -26,11 +26,16 @@ echo "make_env: define local home '${H}'."
 isSolaris=""
 alldone=""
 
-_deps="${H}/.cpl/_deps"
-_vers="${H}/.cpl/_vers"
+_cpl="${H}/.cpl"
+_hcpl=".cpl"
+_deps="${_cpl}/_deps"
+_vers="${_cpl}/_vers"
+_log="${_cpl}/log"
+_logs="${_cpl}/logs"
+_hlogs="${_hcpl}/logs"
 echo $H
+mkdir -p "${_logs}"
 mkdir -p "$H"/bin
-mkdir -p "$H"/logs
 mkdir -p "$H"/src/_pkgs
 mkdir -p "$H"/usr/local/._linked
 donelist=""
@@ -40,7 +45,7 @@ ver=""
 set -o errexit
 set -o nounset
 
-trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | tee -a "$H"/log; tail -3 "$H"/log ; if [[ -e "$H"/logs/l ]]; then tail -5 "$H"/logs/l; rm "$H"/logs/l; fi" EXIT ;
+trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | tee -a "${_log}"; tail -3 "${_log}" ; if [[ -e "${_logs}"/l ]]; then tail -5 "${_logs}"/l; rm "${_logs}"/l; fi" EXIT ;
 
 function main {
   checkOs
@@ -69,9 +74,9 @@ function _ldate() { date +"%Y/%m/%d-%H:%M:%S"; }
 function _fdate() { date +"%Y%m%d.%H%M%S"; }
 function _echod() { echo "$(_ldate) $1$2" ; }
 function _echolog() { _echod "$1" "$2" | tee -a "$3"; if [[ $4 != "" ]]; then echo $4 >> "$3"; fi; }
-function echolog() { _echolog "~ " "$1" "$H/log" ""; }
-function _echologcmd() { _echolog "~~~ $1" "$2" "$H/logs/$3" "~~~~~~~~~~~~~~~~~~~"; }
-function _log() { f=$2; rm -f "$H"/logs/l; ln -s $f "$H"/logs/l;rm -f "$H"/logs/last; ln -s $f "$H"/logs/last; _echologcmd "" "$1" $f ; echolog "(see logs/$f or simply tail -f logs/l)"; $( $1 >> "$H"/logs/$f 2>&1 ) ; }
+function echolog() { _echolog "~ " "$1" "${_log}" ""; }
+function _echologcmd() { _echolog "~~~ $1" "$2" "${_logs}/$3" "~~~~~~~~~~~~~~~~~~~"; }
+function _log() { f=$2; rm -f "${_logs}"/l; ln -s $f "${_logs}"/l;rm -f "${H}"/_lastlog; ln -s "${_hlogs}/$f" "${H}"/_lastlog; _echologcmd "" "$1" $f ; echolog "(see ${_logs}/$f or simply tail -f ${_logs}/l)"; $( $1 >> "${_logs}"/$f 2>&1 ) ; }
 function log() { f=$(_fdate).$2 ; _log "$1" $f ; }
 function loge() { echo -ne "\e[1;33m" ; f=$(_fdate).$2.log ; _log "$1" $f ; _echologcmd "DONE ~~~ " "$1" $f; echo -ne "\e[m" ; true ;}
 function mrf() { ls -t1 "$1"/$2 | head -n1 ; }
@@ -151,7 +156,7 @@ function untar() {
   if [[ ! -e "$H/src/$namever" ]]; then
     get_tar tarname
     loge "$tarname xpvf $H/src/_pkgs/$namever.tar.gz -C $H/src" "tar_xpvf_$namever.tar.gz"
-    local lastlog=$(mrf "$H/logs" "*tar_xpvf*")
+    local lastlog=$(mrf "${_logs}" "*tar_xpvf*")
     local actualname=$(head -3 "$lastlog"|tail -1)
     local anactualname=${actualname}
     #echo "anactualname=${anactualname}";
