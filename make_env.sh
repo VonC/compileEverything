@@ -26,7 +26,8 @@ echo "make_env: define local home '${H}'."
 isSolaris=""
 alldone=""
 
-_deps="${H}/_deps"
+_deps="${H}/.cpl/_deps"
+_vers="${H}/.cpl/_vers"
 echo $H
 mkdir -p "$H"/bin
 mkdir -p "$H"/logs
@@ -45,11 +46,11 @@ function main {
   checkOs
   if [[ ! -e "$H/.bashrc" ]]; then build_bashrc "$1"; fi
   sc
-  if [[ ! -e "$H"/deps ]]; then
-    echolog "#### DEPS ####"
-    echolog "download deps from SunFreeware"
-    loge "wget http://sunfreeware.com/programlistsparc10.html -O $H/deps$(Ymd)" "wget_deps_sunfreeware"
-    log "ln -fs $H/deps$(Ymd) $H/deps" ln_deps
+  if [[ ! -e "${_vers}" ]]; then
+    echolog "#### VERS ####"
+    echolog "download compatible versions from SunFreeware"
+    loge "wget http://sunfreeware.com/programlistsparc10.html -O ${_vers}$(Ymd)" "wget_vers_sunfreeware"
+    log "ln -fs ${_vers}$(Ymd) ${_vers}" ln_vers
   fi
   cat "${_deps}" | while read line; do
     #echo $line
@@ -92,9 +93,9 @@ function get_sources() {
   local name=$1
   local _namever=$2
   get_param $name nameurl "${name}"
-  get_param $name page "$H/deps"  
+  get_param $name page "${_vers}"  
   if [[ -e "${page}" ]] ; then
-    local asrcline=$(grep " ${nameurl}-" "$H/deps"|grep "Source Code")
+    local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
   else
     local asrcline=$(wget -q -O - "${page}"|grep "tar.gz") 
   fi

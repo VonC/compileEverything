@@ -8,3 +8,5 @@ src/
 usr/
 bin/
 /git
+/.m
+/.cpl/_*
