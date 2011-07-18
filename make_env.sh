@@ -192,7 +192,7 @@ function get_param() {
   local name="$1"
   local _param="$2"
   local default="$3"
-  #echo "name $name, _param $_param, default $default"
+  #echo "name $name, _param $_param, default $default, namever='${namever}', ver='${ver}'"
   if [[ ! -e "$H/.cpl/params/$name" ]] ; then echolog "unable to find param for $name" ; no_param ; fi
   local aparam=$(grep "$_param=" "$H/.cpl/params/$name")
   if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then aparam=${aparam##$_param=} ;
@@ -380,7 +380,7 @@ function build_item() {
   local isdone="false" ; isItDone "$name" isdone ${afrom}
   if [[ "$isdone" == "false" ]] ; then echo -ne "\e[1;34m" ; echolog "##### Building $type $name ####" ; echo -ne "\e[m" ; fi
   get_sources $name namever
-  ver=${nameverr#${name}-}
+  ver=${namever#${name}-}
   if [[ -e "$HUL/._linked/$namever" ]]; then
     if [[ "$isdone" == "false" ]] ; then
       echo -ne "\e[1;32m" ; echolog "$type $namever already installed" ; echo -ne "\e[m" ;
