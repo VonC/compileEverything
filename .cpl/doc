@@ -221,3 +221,19 @@ make: *** [all] Error 2
 Refactoring:
 bash-3.00$ grep "\${H}/src" *
 gen_sed -i 's/\${H}\/src/\${H}\/.cpl\/src/g' xxx
+---------------------
+pcre:
+/bin/sh ./libtool --tag=CXX   --mode=link g++  -O2  -L/home/mccdevm1/envs/201107c/usr/local/lib -L/home/mccdevm1/envs/201107c/usr/local/ssl/lib -L/home/mccdevm1/envs/201107c/usr/local/apps/python/lib -o pcrecpp_unittest pcrecpp_unittest.o libpcrecpp.la
+libtool: link: g++ -O2 -o .libs/pcrecpp_unittest pcrecpp_unittest.o  -L/home/mccdevm1/envs/201107c/usr/local/lib -L/home/mccdevm1/envs/201107c/usr/local/ssl/lib -L/home/mccdevm1/envs/201107c/usr/local/apps/python/lib ./.libs/libpcrecpp.so -L/home/mccdevm1/envs/201107c/.cpl/src/gcc-3.4.6/objdir/x86_64-unknown-linux-gnu/libstdc++-v3/src -L/home/mccdevm1/envs/201107c/.cpl/src/gcc-3.4.6/objdir/x86_64-unknown-linux-gnu/libstdc++-v3/src/.libs -L/home/mccdevm1/envs/201107c/.cpl/src/gcc-3.4.6/objdir/gcc /home/mccdevm1/envs/201107c/.cpl/src/pcre-8.12/.libs/libpcre.so /home/mccdevm1/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64/libstdc++.so -L/lib/../lib64 -L/usr/lib/../lib64 -lm -lc -lgcc_s -Wl,-rpath -Wl,/home/mccdevm1/envs/201107c/usr/local/libs/pcre-8.12/lib -Wl,-rpath -Wl,/home/mccdevm1/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64
+/home/mccdevm1/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64/libstdc++.so: undefined reference to `libintl_textdomain'
+/home/mccdevm1/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64/libstdc++.so: undefined reference to `libintl_bindtextdomain'
+collect2: ld returned 1 exit status
+make[1]: *** [pcrecpp_unittest] Error 1
+make[1]: Leaving directory `/MCCDEVMON01/home/mccdevm1/envs/201107c/.cpl/src/pcre-8.12'
+-------------
+nginx:
+checking for libxslt in /opt/local/ ... not found
+
+./configure: error: the HTTP XSLT module requires the libxml2/libxslt
+libraries. You can either do not enable the module or install the libraries.
+=> replace all /usr/local and /usr/include and /usr/local/include by full local path to usr/local

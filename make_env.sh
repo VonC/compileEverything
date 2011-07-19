@@ -270,7 +270,7 @@ function configure() {
     local longbit=$(getconf LONG_BIT)
     if [[ $longbit == "64" ]] ; then configcmd=${configcmd/@@ENABLE_64BIT@@/--enable-64bit} ;
     else configcmd=${configcmd/@@ENABLE_64BIT@@/} ; fi
-    #echo configcmd $configcmd
+    echo "configcmd=${configcmd}"
     if [[ "${configcmd#@@}" != "${configcmd}" ]] ; then
       configcmd="${configcmd#@@}"
       echo "${configcmd}" > ./configurecmd

@@ -2,6 +2,6 @@ page=http://www.kernel.org/pub/software/scm/git/?C=M;O=D
 url=http://www.kernel.org/pub/software/scm/git/
 verexclude=sign|manpages|htmldocs
 pre=gen_sed -i "s/-pthread -lpthread/-pthreads -lpthreads/g" ${H}/.cpl/src/@@NAMEVER@@/configure
-configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-lib=$HOME/usr/local/lib --with-openssl --with-curl --with-expat --with-iconv=${HUL} --with-gitconfig=${HUL}/var/gitconfig --with-editor=vim --with-perl=${HULA}/perl/bin/perl --with-zlib=${HUL} --with-tcltk=no --with-python=${HULA}/python/bin/python
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-lib=${HULL} --with-openssl --with-curl --with-expat --with-iconv=${HUL} --with-gitconfig=${HUL}/var/gitconfig --with-editor=vim --with-perl=${HULA}/perl/bin/perl --with-zlib=${HUL} --with-tcltk=no --with-python=${HULA}/python/bin/python
 makecmd=gmake
 makeinstcmd=gmake install

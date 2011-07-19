@@ -33,4 +33,9 @@ app subversion gcc,apache,apr,aprutil,neon,sqlite,zlib,python
 lib neon gcc,openssl,expat,libxml2,zlib
 lib libxml2 gcc,zlib,libiconv,readline
 lib openssh gcc,openssl,zlib
+app nginx gcc,openssl,zlib,pcre,libxslt
+lib pcre gcc
+lib libxslt gcc,libxml2,zlib,libiconv,libgcrypt,libgpgerror
+lib libgcrypt gcc,libgpgerror,libiconv
+lib libgpgerror gcc,libiconv
 __no_deps__
