@@ -1,2 +1,2 @@
-configcmd=./configure --prefix=${HUL}/libs/@@NAMEVER@@ --enable-shared --enable-static --enable-utf8 --enable-unicode-properties @@WITH_GNU_LD@@
+configcmd=./configure --prefix=${HUL}/libs/@@NAMEVER@@ --enable-shared --enable-static --enable-utf8 --enable-unicode-properties --enable-pcregrep-libz @@WITH_GNU_LD@@
 premake=gen_sed -i "s/^LDFLAGS = /LDFLAGS = -lintl /g" ${H}/.cpl/src/@@NAMEVER@@/Makefile

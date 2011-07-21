@@ -223,13 +223,31 @@ bash-3.00$ grep "\${H}/src" *
 gen_sed -i 's/\${H}\/src/\${H}\/.cpl\/src/g' xxx
 ---------------------
 pcre:
-/bin/sh ./libtool --tag=CXX   --mode=link g++  -O2  -L/home/mccdevm1/envs/201107c/usr/local/lib -L/home/mccdevm1/envs/201107c/usr/local/ssl/lib -L/home/mccdevm1/envs/201107c/usr/local/apps/python/lib -o pcrecpp_unittest pcrecpp_unittest.o libpcrecpp.la
-libtool: link: g++ -O2 -o .libs/pcrecpp_unittest pcrecpp_unittest.o  -L/home/mccdevm1/envs/201107c/usr/local/lib -L/home/mccdevm1/envs/201107c/usr/local/ssl/lib -L/home/mccdevm1/envs/201107c/usr/local/apps/python/lib ./.libs/libpcrecpp.so -L/home/mccdevm1/envs/201107c/.cpl/src/gcc-3.4.6/objdir/x86_64-unknown-linux-gnu/libstdc++-v3/src -L/home/mccdevm1/envs/201107c/.cpl/src/gcc-3.4.6/objdir/x86_64-unknown-linux-gnu/libstdc++-v3/src/.libs -L/home/mccdevm1/envs/201107c/.cpl/src/gcc-3.4.6/objdir/gcc /home/mccdevm1/envs/201107c/.cpl/src/pcre-8.12/.libs/libpcre.so /home/mccdevm1/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64/libstdc++.so -L/lib/../lib64 -L/usr/lib/../lib64 -lm -lc -lgcc_s -Wl,-rpath -Wl,/home/mccdevm1/envs/201107c/usr/local/libs/pcre-8.12/lib -Wl,-rpath -Wl,/home/mccdevm1/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64
-/home/mccdevm1/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64/libstdc++.so: undefined reference to `libintl_textdomain'
-/home/mccdevm1/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64/libstdc++.so: undefined reference to `libintl_bindtextdomain'
+/bin/sh ./libtool --tag=CXX   --mode=link g++  -O2  -L/home/userapp/envs/201107c/usr/local/lib -L/home/userapp/envs/201107c/usr/local/ssl/lib -L/home/userapp/envs/201107c/usr/local/apps/python/lib -o pcrecpp_unittest pcrecpp_unittest.o libpcrecpp.la
+libtool: link: g++ -O2 -o .libs/pcrecpp_unittest pcrecpp_unittest.o  -L/home/userapp/envs/201107c/usr/local/lib -L/home/userapp/envs/201107c/usr/local/ssl/lib -L/home/userapp/envs/201107c/usr/local/apps/python/lib ./.libs/libpcrecpp.so -L/home/userapp/envs/201107c/.cpl/src/gcc-3.4.6/objdir/x86_64-unknown-linux-gnu/libstdc++-v3/src -L/home/userapp/envs/201107c/.cpl/src/gcc-3.4.6/objdir/x86_64-unknown-linux-gnu/libstdc++-v3/src/.libs -L/home/userapp/envs/201107c/.cpl/src/gcc-3.4.6/objdir/gcc /home/userapp/envs/201107c/.cpl/src/pcre-8.12/.libs/libpcre.so /home/userapp/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64/libstdc++.so -L/lib/../lib64 -L/usr/lib/../lib64 -lm -lc -lgcc_s -Wl,-rpath -Wl,/home/userapp/envs/201107c/usr/local/libs/pcre-8.12/lib -Wl,-rpath -Wl,/home/userapp/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64
+/home/userapp/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64/libstdc++.so: undefined reference to `libintl_textdomain'
+/home/userapp/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64/libstdc++.so: undefined reference to `libintl_bindtextdomain'
 collect2: ld returned 1 exit status
 make[1]: *** [pcrecpp_unittest] Error 1
-make[1]: Leaving directory `/MCCDEVMON01/home/mccdevm1/envs/201107c/.cpl/src/pcre-8.12'
+make[1]: Leaving directory `/myserver/home/userapp/envs/201107c/.cpl/src/pcre-8.12'
+-------------
+pcre on Solaris:
+/bin/bash ./libtool --tag=CXX   --mode=link g++  -O2  -lintl -L/home/userapp/compileEverything/usr/local/lib -L/home/userapp/compileEverything/usr/local/ssl/lib -L/home/userapp/compileEverything/usr/local/apps/python/lib -o pcrecpp_unittest pcrecpp_unittest.o libpcrecpp.la
+libtool: link: g++ -O2 -o .libs/pcrecpp_unittest pcrecpp_unittest.o  -L/home/userapp/compileEverything/usr/local/lib -L/home/userapp/compileEverything/usr/local/ssl/lib -L/home/userapp/compileEverything/usr/local/apps/python/lib ./.libs/libpcrecpp.so -L/myserver/svndata/users/userapp/compileEverything/.cpl/src/gcc-3.4.6/objdir/sparc-sun-solaris2.10/libstdc++-v3/src -L/myserver/svndata/users/userapp/compileEverything/.cpl/src/gcc-3.4.6/objdir/sparc-sun-solaris2.10/libstdc++-v3/src/.libs -L/myserver/svndata/users/userapp/compileEverything/.cpl/src/gcc-3.4.6/objdir/gcc /home/userapp/compileEverything/.cpl/src/pcre-8.12/.libs/libpcre.so /home/userapp/compileEverything/usr/local/libs/gettext-0.14.1/lib/libintl.so /home/userapp/compileEverything/usr/local/libs/libiconv-1.13.1/lib/libiconv.so -lc /home/userapp/compileEverything/usr/local/apps/gcc-3.4.6/lib/libstdc++.so -L/usr/ccs/bin -L/usr/ccs/lib -lm -lgcc_s -Wl,-R -Wl,/home/userapp/compileEverything/usr/local/libs/pcre-8.12/lib -Wl,-R -Wl,/home/userapp/compileEverything/usr/local/libs/gettext-0.14.1/lib -Wl,-R -Wl,/home/userapp/compileEverything/usr/local/libs/libiconv-1.13.1/lib -Wl,-R -Wl,/home/userapp/compileEverything/usr/local/apps/gcc-3.4.6/lib
+ld: fatal: recording name conflict: file `/home/userapp/compileEverything/usr/local/apps/gcc-3.4.6/lib/libstdc++.so' and file `/myserver/svndata/user
+s/userapp/compileEverything/.cpl/src/gcc-3.4.6/objdir/sparc-sun-solaris2.10/libstdc++-v3/src/.libs/libstdc++.so' provide identical dependency names: lib
+stdc++.so.6  (possible multiple inclusion of the same file)
+ld: fatal: File processing errors. No output written to .libs/pcrecpp_unittest
+collect2: ld returned 1 exit status
+make[1]: *** [pcrecpp_unittest] Error 1
+make[1]: Leaving directory `/myserver/svndata/users/userapp/compileEverything/.cpl/src/pcre-8.12'
+
+http://unixerrors.blogspot.com/2007/11/mysql-5_16.html
+
+http://unixerrors.blogspot.com/2007/11/mysql-5_16.htmlThis is a really odd error. To fix it, i had to cd in to the directory from which i compiled gcc (AS you can see in my error message, its opt/install/gcc-3.4.4/), and went in to the directory specififed by the error
+Once in there, i just did a
+[kmorriso@moo]> mv libstdc++.so libstdc++.so.bak
+No idea what the deal with this one was, or why it was looking in my src dir for library files. That directory wasn't in my ld_library_path.
 -------------
 nginx:
 checking for libxslt in /opt/local/ ... not found
@@ -237,3 +255,79 @@ checking for libxslt in /opt/local/ ... not found
 ./configure: error: the HTTP XSLT module requires the libxml2/libxslt
 libraries. You can either do not enable the module or install the libraries.
 => replace all /usr/local and /usr/include and /usr/local/include by full local path to usr/local
+---------
+libgcrypt
+gcc -I/home/userapp/compileEverything/usr/local/libs/libgpgerror-1.10/include -I/home/userapp/compileEverything/usr/local/include -I/home/userapp/compileEverything/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -Wall -o .libs/ac ac.o  -L/home/userapp/compileEverything/usr/local/lib -L/home/userapp/compileEverything/usr/local/ssl/lib -L/home/userapp/compileEverything/usr/local/apps/python/lib ../src/.libs/libgcrypt.so -L/home/userapp/compileEverything/usr/local/libs/libgpgerror-1.10/lib /home/userapp/compileEverything/usr/local/libs/libgpgerror-1.10/lib/libgpg-error.so /home/userapp/compileEverything/usr/local/libs/gettext-0.14.1/lib/libintl.so /home/userapp/compileEverything/usr/local/libs/libiconv-1.13.1/lib/libiconv.so -lc -lnsl -lsocket -R/home/userapp/compileEverything/usr/local/libs/libgcrypt-1.2.4/lib -R/home/userapp/compileEverything/usr/local/libs/libgpgerror-1.10/lib -R/home/msvprd02/compileEverything/usr/local/libs/gettext-0.14.1/lib -R/home/userapp/compileEverything/usr/local/libs/libiconv-1.13.1/lib
+Undefined                       first referenced
+ symbol                             in file
+gcry_ac_data_verify                 ac.o
+gcry_ac_open                        ac.o
+gcry_ac_key_init                    ac.o
+gcry_ac_data_encrypt                ac.o
+gcry_ac_data_decrypt                ac.o
+gcry_ac_data_destroy                ac.o
+gcry_ac_close                       ac.o
+gcry_ac_key_data_get                ac.o
+gcry_ac_key_pair_generate           ac.o
+gcry_ac_key_pair_extract            ac.o
+gcry_ac_data_sign                   ac.o
+gcry_ac_data_copy                   ac.o
+gcry_ac_data_get_index              ac.o
+ld: fatal: Symbol referencing errors. No output written to .libs/ac
+collect2: ld returned 1 exit status
+make[2]: *** [ac] Error 1
+make[2]: Leaving directory `/myserver/svndata/users/userapp/compileEverything/.cpl/src/libgcrypt-1.2.4/tests'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/myserver/svndata/users/userapp/compileEverything/.cpl/src/libgcrypt-1.2.4'
+
+I have the same problem on solaris 2.6, I think it is about the linker or
+libtool. On Solaris with non-gnu linker, libtool generate this command for
+the shared library: 
+
+It seems that the linker can not extract all symbols from libcipher.a
+because "allextract" does not work fine at all, I solved the problem with
+the gnu linker, just rename the path of the non-gnu linker so gcc or cc
+will take the gnu-linker commonly installed in /usr/local/bin. With gnu
+linker the command looks like this : 
+
+--whole-archive instead allextract 
+
+===> add  ../cipher/.libs/ac.o to the LDD options of the test/Makefile
+CCLD = $(CC) ../cipher/.libs/ac.o
+--------------
+libxslt on Solaris
+
+Undefined                       first referenced
+ symbol                             in file
+_fini
+/usr/local/lib/gcc/sparc-sun-solaris2.10/3.4.6/crti.o  (symbol has no
+version assigned)
+_init
+/usr/local/lib/gcc/sparc-sun-solaris2.10/3.4.6/crti.o  (symbol has no
+version assigned)
+xsltPointerListFree                 ./libxslt.syms
+xsltCopyTree                        .libs/transform.o  (symbol has no
+version assigned)
+
+
+
+http://comments.gmane.org/gmane.comp.gnome.lib.xslt/4060
+libxslt:
+
+VERSION_SCRIPT_FLAGS=
+$(/usr/bin/ld --help 2>&1 | grep -- --version-script >/dev/null) && \
+    VERSION_SCRIPT_FLAGS=-Wl,--version-script=
+test "`uname`" == "SunOS" && \
+    VERSION_SCRIPT_FLAGS=""
+#    VERSION_SCRIPT_FLAGS="-Wl,-M -Wl,"
+
+--------------
+nginx on Solaris:
+
+gcc -c -I/home/userapp/compileEverything/usr/local/include -I/home/userapp/compileEverything/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -I/home/m
+svprd02/compileEverything/usr/local/include -I/home/userapp/compileEverything/usr/local/ssl/include -I src/core -I src/event -I src/event/modules -I src
+/os/unix -I /home/userapp/compileEverything/usr/local/include/libxml2 -I objs -o objs/src/core/ngx_file.o src/core/ngx_file.c
+/usr/ccs/bin/as: "/var/tmp//cckhXLrn.s", line 438: error: cannot use v8plus instructions in a non-v8plus target binary
+make[1]: *** [objs/src/core/ngx_file.o] Error 1
+make[1]: Leaving directory `/myserver/svndata/users/userapp/compileEverything/.cpl/src/nginx-1.0.5'
+
