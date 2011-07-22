@@ -18,3 +18,4 @@ bin/
 /.bash_history
 /.ssh/
 /.viminfo
+/.lesshst

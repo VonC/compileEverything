@@ -92,7 +92,7 @@ if [[ -e "${H}/.ssh/curl-ca-bundle.crt.secret" ]] ; then
 fi
 
 export GIT_SSL_CAINFO="${H}/.ssh/curl-ca-bundle.crt"
-if [[ ! -e "${H}/.cpl/.gitconfig.tpl" ]] ; then
+if [[ ! -e "${H}/.gitconfig" ]] ; then
   cp "${H}/.cpl/.gitconfig.tpl" "${H}/.gitconfig"
 fi
 if [[ ! -e "${H}/.bashrc_aliases_git" ]] ; then cp "$H/.cpl/.bashrc_aliases_git.tpl" "$H/.bashrc_aliases_git" ; fi
