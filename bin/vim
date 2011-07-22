@@ -1,0 +1,4 @@
+#!/bin/bash
+
+if [[ -e /usr/local/bin/vim ]] ; then vimp="/usr/local/bin/vim" ; else vimp="$(which vim)" ; fi
+"${vimp}" -u "${H}/.vimrc" "$@"

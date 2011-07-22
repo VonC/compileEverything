@@ -5,8 +5,6 @@ if [[ "$1" != "-force" ]]; then
 fi
 echo $0 executed for @@TITLE@@
 
-set history=2000
-
 function bashscriptpath() {
   local _sp=$1
   local ascript="$0"
@@ -49,6 +47,12 @@ export HULA="${HUL}"/apps
 export HULS="${HUL}"/libs
 alias sc='source $H/.bashrc -force'
 
+export HISTSIZE=3000
+export HISTFILE="${H}/.bash_history"
+export HISTFILESIZE=2000
+export HISTTIMEFORMAT='%Y-%m-%d %H:%M:%S - '
+export HISTIGNORE="&:[ \t]*:exit:history:h:l"
+
 # first override the $PATH, making sure to use *local* paths:
 export PATH="${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin"
 # then add the applications paths
@@ -64,3 +68,33 @@ export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE @@M64@@
 export CPPFLAGS="$CFLAGS"
 export LD_LIBRARY_PATH="${HULL}:${HUL}/ssl/lib:${HULA}/svn/lib:${HULA}/python/lib:${HULA}/gcc/lib"
 export PERL5LIB="${HULA}/perl/lib/site_perl/current:${HULA}/perl/lib/current"
+
+alias a=alias
+alias l='ls -alrt'
+alias h=history
+alias vi=vim
+if [[ -e /usr/local/bin/vim ]] ; then vimp="/usr/local/bin/vim" ; else vimp="$(which vim)" ; fi
+alias vim='"${vimp}" -u "${H}/.vimrc"'
+
+alias git="${H}/bin/wgit"
+
+if [[ -e "${H}/.bashrc_aliases_git" ]] ; then source "${H}/.bashrc_aliases_git" ]] ; fi
+
+if [[ ! -e "${H}/.ssh/curl-ca-bundle.crt" ]] ; then
+  cp "${H}/.ssh/curl-ca-bundle.crt.tpl" "${H}/.ssh/curl-ca-bundle.crt"
+fi
+if [[ -e "${H}/.ssh/curl-ca-bundle.crt.secret" ]] ; then 
+  a=$(tail -10 "${H}/.ssh/curl-ca-bundle.crt.secret")
+  b=$(tail -10 "${H}/.ssh/curl-ca-bundle.crt")
+  if [[ "$a" != "$b" ]] ; then 
+    cat "${H}/.ssh/curl-ca-bundle.crt.secret" >> "${H}/.ssh/curl-ca-bundle.crt"
+  fi
+fi
+
+export GIT_SSL_CAINFO="${H}/.ssh/curl-ca-bundle.crt"
+if [[ ! -e "${H}/.cpl/.gitconfig.tpl" ]] ; then
+  cp "${H}/.cpl/.gitconfig.tpl" "${H}/.gitconfig"
+fi
+if [[ ! -e "${H}/.bashrc_aliases_git" ]] ; then cp "$H/.cpl/.bashrc_aliases_git.tpl" "$H/.bashrc_aliases_git" ; fi
+
+export EDITOR=vim

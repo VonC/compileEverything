@@ -12,3 +12,9 @@ bin/
 /.cpl/_*
 /_lastlog
 /.README.md
+/.ssh/curl-ca-bundle.crt.secret
+/.bashrc_aliases_git
+/.gitconfig
+/.bash_history
+/.ssh/
+/.viminfo

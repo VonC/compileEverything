@@ -1,0 +1,121 @@
+#!/bin/bash
+
+function dirnamex() {
+  local ascriptname="$1"
+  local _sp=$2
+  local ascript="$0"
+  local asp="$(dirname $0)"
+  #echo "b1 asp '$asp', b1 ascript '$ascript'"
+  if [[ "$asp" == "." && "$ascript" != "bash" && "$ascript" != "./${ascriptname}" ]] ; then asp="${BASH_SOURCE[0]%/*}"
+  elif [[ "$asp" == "." && "$ascript" == "./${ascriptname}" ]] ; then asp=$(pwd)
+  else
+    if [[ "$ascript" == "bash" ]] ; then
+      ascript=${BASH_SOURCE[0]}
+      asp="$(dirname $ascript)"
+      if [[ "$asp" == "." ]] ; then asp=$(pwd) ; fi
+      #echo "bb asp '$asp', b1 ascript '$ascript'"
+    fi
+    #echo "b2 asp '$asp', b2 ascript '$ascript'"
+    if [[ "${ascript#/}" != "$ascript" ]]; then asp=$asp ;
+    elif [[ "${ascript#../}" != "$ascript" ]]; then
+      asp=$(pwd)
+      while [[ "${ascript#../}" != "$ascript" ]]; do
+        asp=${asp%/*}
+        ascript=${ascript#../}
+      done
+    elif [[ "${ascript#*/}" != "$ascript" ]];  then
+      if [[ "$asp" == "." ]] ; then asp=$(pwd) ; else asp="$(pwd)/${asp}"; fi
+    fi
+  fi
+  eval $_sp="'$asp'"
+}
+
+dirnamex "git" git_script_path
+ahome=${git_script_path%/*}
+debug=0
+if [[ "$1" == "debug" ]] ; then debug=1 ; shift ; fi
+if [[ $debug == 1 ]] ; then echo "ahome=${ahome}" ; fi
+if [[ -e "${ahome}/bin/git" && ! ${!xxgit[@]} ]]
+then
+   HOME="${ahome}"
+   if [[ $debug == 2 ]] ; then export GIT_TRACE=2; fi
+   if [[ $1 == "u" ]] ; then
+     shift
+     username=`echo $1|awk -F, '{print $1}'`
+     email=`echo $1|awk -F, '{print $2}'`
+     machine=`echo $1|awk -F, '{print $3}'`
+     password=`echo $1|awk -F, '{print $4}'`
+     someconfigs=`echo $1|awk -F, '{print $5}'`
+     shift
+     gitcmd=( "$@" )
+     #echo NEW params: ${gitcmd[@]}: ${gitcmd[1]} :ii $1 $2
+     someconfigs=$(echo $someconfigs | sed 's/#/ /g')
+     set -- $someconfigs ; configs=( $@ )
+     if [[ $debug == 1 ]] ; then echo username $username email $email machine $machine; fi
+     if [[ $debug == 1 && $password ]] ; then echo password is set; fi
+     if [[ $debug == 1 && $someconfigs ]] ; then 
+       echo "configs: $someconfigs vs. configs: ${configs[@]}"; 
+       for aconfigToSet in "${configs[@]}" ; do
+	     echo $aconfigToSet 
+       done
+     fi
+     for aconfigToSet in "${configs[@]}" ; do
+       #echo aconfigToSet $aconfigToSet, with space ${aconfigToSet/=/ }
+       "${ahome}/bin/git" config --global ${aconfigToSet/=/ }
+     done
+   else
+     echo type alias and choose the right agitxx to activate in order for your git to identify yourself
+     exit 1
+   fi
+   if [[ $debug == 1 ]] ; then echo username $username email $email; fi
+   # if parent shell had already set authentication variables, nothing to do: commit will be correctly signed-off
+   if [[ ! ( $GIT_AUTHOR_NAME && $GIT_AUTHOR_EMAIL && $GIT_COMMITTER_NAME  && $GIT_COMMITTER_EMAIL ) ]]
+   then
+     export GIT_AUTHOR_NAME=$username
+     export GIT_COMMITTER_NAME=$username
+     export GIT_AUTHOR_EMAIL=$email
+     export GIT_COMMITTER_EMAIL=$email
+   fi
+   if [[ ! ( $GIT_AUTHOR_NAME && $GIT_AUTHOR_EMAIL && $GIT_COMMITTER_NAME  && $GIT_COMMITTER_EMAIL ) ]]
+   then
+     echo "GIT_AUTHOR_NAME or GIT_AUTHOR_EMAIL or GIT_COMMITTER_NAME or GIT_COMMITTER_EMAIL undefined!"
+     exit 1
+   fi
+   if [[ $debug == 1 ]] ; then
+     echo GIT_AUTHOR_NAME $GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL $GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME $GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL $GIT_COMMITTER_EMAIL
+     echo GIT CMD: ${ahome}/bin/git "$gitcmd"
+   fi
+   echo -e "[ \E[34;47m$GIT_AUTHOR_NAME,$GIT_AUTHOR_EMAIL for $machine\033[0m ]"
+   nextcmd=${gitcmd[0]}
+   #echo NEXT $nextcmd
+   if [[ ( $nextcmd == "push" || $nextcmd == "clone" || $nextcmd == "fetch" ) && ! -f $HOME/.netrc ]]; then
+     authen=1
+     if [[ ! $password ]] ; then
+       stty -echo
+       read -p "Enter your Windows password: " apasswd
+       stty echo
+     else
+       apasswd="${password}"
+     fi
+     echo machine $machine > $HOME/.netrc
+     echo login $GIT_AUTHOR_NAME >> $HOME/.netrc
+     echo password $apasswd >> $HOME/.netrc
+   fi
+   #echo apasswd: $apasswd password $password
+   #more $HOME/.netrc
+   "${ahome}/bin/git" "${gitcmd[@]}"
+   if [[ $authen ]]; then
+     rm $HOME/.netrc
+   fi
+   for aconfigToSet in "${configs[@]}" ; do
+     "${ahome}/bin/git" config --global --unset ${aconfigToSet%%=*}
+   done
+   "${ahome}/bin/git" config --global --remove-section github
+elif [[ ${!xxgit[@]} ]] ; then
+   echo rest "$@"
+   if [[ "$1" == "u" ]] ; then shift ; shift ; fi
+   "${ahome}/bin/git" "$@"
+else
+   echo git is unavailable
+   exit 1
+fi
