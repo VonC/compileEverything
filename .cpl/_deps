@@ -38,4 +38,5 @@ lib pcre gcc,ncurses,libiconv,zlib
 lib libxslt gcc,libxml2,zlib,libiconv,libgcrypt,libgpgerror
 lib libgcrypt gcc,libgpgerror,libiconv
 lib libgpgerror gcc,libiconv
+app ruby gcc,openssl,gdbm,libiconv,ncurses,tcl,zlib,db,expat
 __no_deps__
