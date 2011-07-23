@@ -110,7 +110,11 @@ then
    for aconfigToSet in "${configs[@]}" ; do
      "${ahome}/bin/git" config --global --unset ${aconfigToSet%%=*}
    done
-   "${ahome}/bin/git" config --global --remove-section github
+   gitglobalcfg=$("${ahome}/bin/git" config --global --list)
+   #echo ${gitglobalcfg}
+   if [[ "${gitglobalcfg}" != "${gitglobalcfg%%github*}" ]] ; then
+     "${ahome}/bin/git" config --global --remove-section github
+   fi
 elif [[ ${!xxgit[@]} ]] ; then
    echo rest "$@"
    if [[ "$1" == "u" ]] ; then shift ; shift ; fi
