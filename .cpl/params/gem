@@ -1,0 +1,7 @@
+page=http://rubyforge.org/frs/?group_id=126
+url=http://production.cf.rubygems.org/rubygems/
+ext=tgz
+makefile=setup.rb
+configcmd=ruby setup.rb --prefix=${HULA}/@@NAMEVER@@
+makecmd=none
+makeinstcmd=none

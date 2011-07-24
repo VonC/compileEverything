@@ -110,10 +110,11 @@ function get_sources() {
   local _namever=$2
   get_param $name nameurl "${name}"
   get_param $name page "${_vers}"  
+  get_param $name ext "tar.gz"  
   if [[ -e "${page}" ]] ; then
     local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
   else
-    local asrcline=$(wget -q -O - "${page}"|grep "tar.gz") 
+    local asrcline=$(wget -q -O - "${page}"|grep "${ext}") 
   fi
   get_param $name verexclude ""
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
@@ -136,7 +137,7 @@ function get_sources() {
     echolog "get sources for $name in ${_hpkgs}/$targz"
     loge "wget $source -O ${_pkgs}/$targz" "wget_sources_$targz"
   fi
-  eval $_namever="'${targz%.tar.gz}'"
+  eval $_namever="'${targz%.${ext}}'"
 }
 function gen_which()
 {
@@ -166,7 +167,7 @@ function untar() {
   local namever=$1
   if [[ ! -e "${_src}/$namever" ]]; then
     get_tar tarname
-    loge "$tarname xpvf ${_pkgs}/$namever.tar.gz -C ${_src}" "tar_xpvf_$namever.tar.gz"
+    loge "$tarname xpvf ${_pkgs}/$namever.tgz -C ${_src}" "tar_xpvf_$namever.tgz"
     local lastlog=$(mrf "${_logs}" "*tar_xpvf*")
     local actualname=$(head -3 "$lastlog"|tail -1)
     local anactualname=${actualname}
@@ -397,8 +398,17 @@ function build_item() {
     action $name $namever pre "${asrc}"
     configure $name $namever
     action $name $namever premake "${asrc}"
-    if [[ ! -e "${asrc}"/._build ]] ; then get_param $name makecmd "make" ; loge "${makecmd}" "make_$namever"; echo done > "${asrc}"/._build ; fi
-    if [[ ! -e "${asrc}"/._installed ]] ; then get_param $name makeinstcmd "make install" ; loge "${makeinstcmd}" "make_install_$namever"; echo done > "${asrc}"/._installed ; fi
+    if [[ ! -e "${asrc}"/._build ]] ; then 
+      get_param $name makecmd "make" ; 
+      if [[ "${makecmd}" != none ]] ; then loge "${makecmd}" "make_$namever"; fi
+       echo done > "${asrc}"/._build ; 
+    fi
+    if [[ ! -e "${asrc}"/._installed ]] ; then 
+      get_param $name makeinstcmd "make install" ; 
+      if [[ "${makeinstcmd}" != none ]] ; then
+        loge "${makeinstcmd}" "make_install_$namever"; 
+      fi
+    echo done > "${asrc}"/._installed ; fi
     action $name $namever post "${asrc}"
     if [[ "$type" == "APP" ]] ; then linksrcdef="$HULA/$namever/bin" ; linkdstdef="$H/bin" ; fi
     if [[ "$type" == "LIB" ]] ; then linksrcdef="$HULS/$namever" ; linkdstdef="$HUL" ; fi

@@ -39,4 +39,5 @@ lib libxslt gcc,libxml2,zlib,libiconv,libgcrypt,libgpgerror
 lib libgcrypt gcc,libgpgerror,libiconv
 lib libgpgerror gcc,libiconv
 app ruby gcc,openssl,gdbm,libiconv,ncurses,tcl,zlib,db,expat
+app gem ruby
 __no_deps__
