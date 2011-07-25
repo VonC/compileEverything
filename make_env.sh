@@ -164,10 +164,12 @@ function get_tar() {
   eval $_tarname="'$atarname'";
 }
 function untar() {
-  local namever=$1
+  local name=$1
+  local namever=$2
   if [[ ! -e "${_src}/$namever" ]]; then
     get_tar tarname
-    loge "$tarname xpvf ${_pkgs}/$namever.tgz -C ${_src}" "tar_xpvf_$namever.tgz"
+    get_param $name ext "tar.gz"  
+    loge "$tarname xpvf ${_pkgs}/$namever.${ext} -C ${_src}" "tar_xpvf_$namever.${ext}"
     local lastlog=$(mrf "${_logs}" "*tar_xpvf*")
     local actualname=$(head -3 "$lastlog"|tail -1)
     local anactualname=${actualname}
@@ -392,7 +394,7 @@ function build_item() {
   else
     local asrc="${_src}/${namever}"
     sc
-    untar $namever
+    untar $name $namever
     action $name $namever precond "${asrc}"
     gocd $name $namever
     action $name $namever pre "${asrc}"
