@@ -116,7 +116,7 @@ then
      "${ahome}/bin/git" config --global --remove-section github
    fi
 elif [[ ${!xxgit[@]} ]] ; then
-   echo rest "$@"
+   #echo rest "$@"
    if [[ "$1" == "u" ]] ; then shift ; shift ; fi
    "${ahome}/bin/git" "$@"
 else
