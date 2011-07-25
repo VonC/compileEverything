@@ -1,1 +1,1 @@
-configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared @@WITHOUT_GNU_LD@@
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-out-ext=openssl @@WITHOUT_GNU_LD@@
