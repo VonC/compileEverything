@@ -63,6 +63,10 @@ export PATH="${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin"
 # then add the few system paths we actually need
 export PATH="${PATH}":/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
 
+export -n NGX_PM_CFLAGS
+export -n CC
+export -n LDDLFLAGS
+
 export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib"
 export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE @@M64@@"
 export CPPFLAGS="$CFLAGS"
