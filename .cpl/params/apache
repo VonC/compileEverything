@@ -1,4 +1,4 @@
 nameurl=httpd
 verinclude=-2.2
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-ssl=shared --enable-ssl --with-ssl=${HUL}/ssl --enable-proxy --enable-proxy-connect --enable-proxy-ftp --enable-proxy-http --with-ldap --enable-ldap --enable-authnz-ldap --enable-authn-alias --with-apr=${HUL} --with-apr-util=${HUL} --enable-mods-shared=all --with-z=${HUL} @@WITHOUT_GNU_LD@@
-post=ln -s apps/@@NAMEVER@@ ${HUL}/apache2
+post=ln -fs apps/@@NAMEVER@@ ${HUL}/apache2

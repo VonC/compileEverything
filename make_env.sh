@@ -177,8 +177,8 @@ function untar() {
     actualname=${actualname%%/*}
     #echo "namever ${namever} actualver %/* ${anactualname%/*} actualname%%/* ${anactualname%%/*}, actualname#*/ ${anactualname#*/}, actualname##*/ ${anactualname##*/}"
     if [[ "$namever" != "$actualname" ]] ; then
-      echolog "ln do to: ln -s $actualname ${_src}/$namever"
-      ln -s "$actualname" "${_src}/$namever"
+      echolog "ln do to: ln -fs $actualname ${_src}/$namever"
+      ln -fs "$actualname" "${_src}/$namever"
     fi
   fi
 }

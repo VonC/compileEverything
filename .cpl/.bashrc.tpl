@@ -66,6 +66,9 @@ export PATH="${PATH}":/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
 export -n NGX_PM_CFLAGS
 export -n CC
 export -n LDDLFLAGS
+export -n PKG_CONFIG_PATH
+export -n PERL_LIB
+export -n NGX_AUX
 
 export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib"
 export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE @@M64@@"
