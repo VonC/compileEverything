@@ -110,6 +110,7 @@ function get_sources() {
   local _namever=$2
   get_param $name nameurl "${name}"
   get_param $name page "${_vers}"  
+  if [[ "$page" == "none" ]] ; then eval $_namever="'${name}'" ; return 0 ; fi
   get_param $name ext "tar.gz"  
   if [[ -e "${page}" ]] ; then
     local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
@@ -202,6 +203,7 @@ function get_param() {
   if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then aparam=${aparam##$_param=} ;
   else aparam="" ; fi
   if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
+  if [[ "$aparam" == "none" ]] ; then eval $_param="'$aparam'" ; return 0 ; fi
   if [[ "$aparam" == "##mandatory##" ]]; then echolog "unable to find $_param for $name" ; find2 ; fi
   aparam=${aparam//@@NAMEVER@@/${namever}}
   aparam=${aparam//@@VER@@/${ver}}
@@ -263,26 +265,28 @@ function configure() {
     #pwd
     get_param $name configcmd "##mandatory##"
     #echo "configcmd=${configcmd}"
-    get_gnu_cmd ld path_ld without_gnu_ld with_gnu_ld
-    configcmd=${configcmd/@@PATH_LD@@/${path_ld}}
-    configcmd=${configcmd/@@WITHOUT_GNU_LD@@/${without_gnu_ld}}
-    configcmd=${configcmd/@@WITH_GNU_LD@@/${with_gnu_ld}}
-    get_gnu_cmd as path_as without_gnu_as with_gnu_as
-    configcmd=${configcmd/@@PATH_AS@@/${path_as}}
-    configcmd=${configcmd/@@WITHOUT_GNU_AS@@/${without_gnu_as}}
-    configcmd=${configcmd/@@WITH_GNU_AS@@/${with_gnu_as}}
-    local longbit=$(getconf LONG_BIT)
-    if [[ $longbit == "64" ]] ; then configcmd=${configcmd/@@ENABLE_64BIT@@/--enable-64bit} ;
-    else configcmd=${configcmd/@@ENABLE_64BIT@@/} ; fi
-    echo "configcmd=${configcmd}"
-    if [[ "${configcmd#@@}" != "${configcmd}" ]] ; then
-      configcmd="${configcmd#@@}"
-      echo "${configcmd}" > ./configurecmd
-      chmod 755 ./configurecmd
-      configcmd="./configurecmd"
+    if [[ "${configcmd}" != "none" ]] ; then
+      get_gnu_cmd ld path_ld without_gnu_ld with_gnu_ld
+      configcmd=${configcmd/@@PATH_LD@@/${path_ld}}
+      configcmd=${configcmd/@@WITHOUT_GNU_LD@@/${without_gnu_ld}}
+      configcmd=${configcmd/@@WITH_GNU_LD@@/${with_gnu_ld}}
+      get_gnu_cmd as path_as without_gnu_as with_gnu_as
+      configcmd=${configcmd/@@PATH_AS@@/${path_as}}
+      configcmd=${configcmd/@@WITHOUT_GNU_AS@@/${without_gnu_as}}
+      configcmd=${configcmd/@@WITH_GNU_AS@@/${with_gnu_as}}
+      local longbit=$(getconf LONG_BIT)
+      if [[ $longbit == "64" ]] ; then configcmd=${configcmd/@@ENABLE_64BIT@@/--enable-64bit} ;
+      else configcmd=${configcmd/@@ENABLE_64BIT@@/} ; fi
+      echo "configcmd=${configcmd}"
+      if [[ "${configcmd#@@}" != "${configcmd}" ]] ; then
+        configcmd="${configcmd#@@}"
+        echo "${configcmd}" > ./configurecmd
+        chmod 755 ./configurecmd
+        configcmd="./configurecmd"
+      fi
+      #pwd
+      loge "${configcmd}" "configure_${namever}"
     fi
-    #pwd
-    loge "${configcmd}" "configure_${namever}"
     echo "done" > ._config
   fi
 }
@@ -385,6 +389,7 @@ function build_item() {
   if [[ "$isdone" == "false" ]] ; then echo -ne "\e[1;34m" ; echolog "##### Building $type $name ####" ; echo -ne "\e[m" ; fi
   get_sources $name namever
   ver=${namever#${name}-}
+  echo "var ${ver}, namever ${namever}"
   if [[ -e "$HUL/._linked/$namever" ]]; then
     if [[ "$isdone" == "false" ]] ; then
       echo -ne "\e[1;32m" ; echolog "$type $namever already installed" ; echo -ne "\e[m" ;
@@ -393,30 +398,39 @@ function build_item() {
     if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
   else
     local asrc="${_src}/${namever}"
+    mkdir -p "${asrc}"
     sc
-    untar $name $namever
+    if [[ "${type}" != "MOD" ]] ; then untar $name $namever ; fi
     action $name $namever precond "${asrc}"
     gocd $name $namever
     action $name $namever pre "${asrc}"
     configure $name $namever
     action $name $namever premake "${asrc}"
-    if [[ ! -e "${asrc}"/._build ]] ; then 
-      get_param $name makecmd "make" ; 
-      if [[ "${makecmd}" != none ]] ; then loge "${makecmd}" "make_$namever"; fi
-       echo done > "${asrc}"/._build ; 
+    echo  "BUILD ${asrc}/._build"
+    if [[ ! -e "${asrc}"/._build ]] ; then
+      get_param $name makecmd "make" ;
+      if [[ "${makecmd}" != "none" ]] ; then loge "${makecmd}" "make_$namever"; fi
+      echo done > "${asrc}"/._build
     fi
-    if [[ ! -e "${asrc}"/._installed ]] ; then 
-      get_param $name makeinstcmd "make install" ; 
-      if [[ "${makeinstcmd}" != none ]] ; then
-        loge "${makeinstcmd}" "make_install_$namever"; 
+    if [[ ! -e "${asrc}"/._installed ]] ; then
+      get_param $name makeinstcmd "make install"
+      if [[ "${makeinstcmd}" != "none" ]] ; then
+        loge "${makeinstcmd}" "make_install_$namever"
       fi
-    echo done > "${asrc}"/._installed ; fi
+      echo done > "${asrc}"/._installed
+    fi
     action $name $namever post "${asrc}"
-    if [[ "$type" == "APP" ]] ; then linksrcdef="$HULA/$namever/bin" ; linkdstdef="$H/bin" ; fi
-    if [[ "$type" == "LIB" ]] ; then linksrcdef="$HULS/$namever" ; linkdstdef="$HUL" ; fi
-    get_param $name linksrc $linksrcdef; linksrc=$(echo "${linksrc}") ; # echo "linksrc ${linksrc}"
-    get_param $name linkdst $linkdstdef; linkdst=$(echo "${linkdst}") ; # echo "linkdst ${linkdst}"
-    if [[ ! -e "${HUL}"/._linked/$namever ]] ; then echolog "checking links of $type $namever"; links "$linkdst" "$linksrc" ; echo done > "${HUL}"/._linked/$namever ; fi
+    if [[ "${type}" != "MOD" ]] ; then
+      if [[ "$type" == "APP" ]] ; then linksrcdef="$HULA/$namever/bin" ; linkdstdef="$H/bin" ; fi
+      if [[ "$type" == "LIB" ]] ; then linksrcdef="$HULS/$namever" ; linkdstdef="$HUL" ; fi
+      get_param $name linksrc $linksrcdef; linksrc=$(echo "${linksrc}") ; # echo "linksrc ${linksrc}"
+      get_param $name linkdst $linkdstdef; linkdst=$(echo "${linkdst}") ; # echo "linkdst ${linkdst}"
+    fi
+    echo "LINK ${HUL}/._linked/$namever"
+    if [[ ! -e "${HUL}"/._linked/$namever ]] ; then
+      if [[ "${type}" != "MOD" ]] ; then echolog "checking links of $type $namever"; links "$linkdst" "$linksrc" ; fi
+      echo done > "${HUL}"/._linked/$namever ;
+    fi
     if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
     donelist="${donelist}@${name}@"
   fi
@@ -434,7 +448,7 @@ function build_line() {
     for adep in "${Array[@]}"; do
       #echo adep $adep for $name with $type
       if [[ "$adep" != "none" ]]; then
-        adepline=$(egrep -e "((app|lib) $adep)|__no_deps__" "${_deps}")
+        adepline=$(egrep -e "((app|lib|mod) $adep)|__no_deps__" "${_deps}")
         #echo dep line: "xx${adepline}xx"
         if [[ "$adepline" == "__no_deps__" ]] ; then echolog "unable to find dependencies of $adep"; nodepfound ; fi
         adepline=$(echo "${adepline}" | egrep -e "${adep}")
@@ -444,6 +458,7 @@ function build_line() {
     #echo done deps from $name with $type
     if [[ $type == "app" ]]; then build_item "$name" "APP" "$lineori";
     elif [[ $type == "lib" ]] ; then build_item  "$name" "LIB" "$lineori";
+    elif [[ $type == "mod" ]] ; then build_item "$name" "MOD" "$lineori"
     else echo "unknow type" ; exit 1 ; fi
   fi
 }

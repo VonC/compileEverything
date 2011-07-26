@@ -1,0 +1,4 @@
+page=none
+configcmd=none
+makecmd=gem install svn2git
+makeinstcmd=none
