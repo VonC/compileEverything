@@ -1,0 +1,6 @@
+page=http://search.cpan.org/~miyagawa/App-cpanminus/bin/cpanm
+url=http://search.cpan.org/CPAN/authors/id/M/MI/MIYAGAWA/
+nameurl=App-cpanminus
+configcmd=none
+makecmd=none
+makeinstcmd=mkdir -p "${HULA}/@@NAMEVER@@" ; gtar -cpvf - . | ( cd "${HULA}/@@NAMEVER@@" && gtar -xvpf - )

@@ -108,6 +108,7 @@ function build_bashrc() {
 function get_sources() {
   local name=$1
   local _namever=$2
+  local _ver=$3
   get_param $name nameurl "${name}"
   get_param $name page "${_vers}"  
   if [[ "$page" == "none" ]] ; then eval $_namever="'${name}'" ; return 0 ; fi
@@ -115,30 +116,42 @@ function get_sources() {
   if [[ -e "${page}" ]] ; then
     local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
   else
-    local asrcline=$(wget -q -O - "${page}"|grep "${ext}") 
+    local asrcline=$(wget -q -O - "${page}" | grep "${nameurl}" | grep "${ext}") 
   fi
+  #echo "line0 source! $asrcline"
   get_param $name verexclude ""
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
   get_param $name verinclude ""
   if [[ "${verinclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -e "${verinclude}") ; fi
   #if [[ "${asrcline}" == "" ]]; then echolog "unable to get source version for ${name} with nameurl ${nameurl}, verinclude ${verinclude}, verexclude ${verexclude}" ; get_sources_failed ; fi
   #if [[ $name == "cyrus-sasl" ]] ; then echo line source! $asrcline ; fffg ; fi
-  local IFS="\"" ; set -- $asrcline ; local IFS=" "
-  local source=$2
-  get_param $name url ""
-  if [[ "$url" != "" ]] ; then
-    local targz=${source##*/}
-    source="${url}${targz}"
-  else
-    local IFS="/" ; set -- $source ; local IFS=" "
-    local targz=$7
+  #echo "line1 source! $asrcline"
+  local source="${asrcline%%${ext}\"\>*}"
+  #echo "source0 ${source} vs. ${asrcline}"
+  if [[ "${source}" == "${asrcline}" ]] ; then
+    source="${asrcline%%${ext}\" *}" ; #"
+    #echo "source00 ${source} vs. ${asrcline}"
   fi
-  #echo sources for $name: $targz from $source from $line
+  source="${source}${ext}"
+  # echo "source0 ${source}"
+  source="${source##*\"}"
+  # echo "source1 ${source}"
+  get_param $name url ""
+  #echo "url0 ${url}"
+  local targz=${source##*/}
+  if [[ "$url" != "" ]] ; then
+    #echo "IIIII url ${url} AAAAA targz ${targz}"
+    source="${url}${targz}"
+  fi
+  echo sources for $name: $targz from $source from $line
   if [[ ! -e "${_pkgs}/$targz" ]]; then
     echolog "get sources for $name in ${_hpkgs}/$targz"
     loge "wget $source -O ${_pkgs}/$targz" "wget_sources_$targz"
   fi
-  eval $_namever="'${targz%.${ext}}'"
+  local anamever="${targz%.${ext}}"
+  eval $_namever="'${anamever}'"
+  local aver=${anamever#${name}-}
+  eval $_ver="'${aver}'"
 }
 function gen_which()
 {
@@ -199,8 +212,9 @@ function get_param() {
   local default="$3"
   #echo "name $name, _param $_param, default $default, namever='${namever}', ver='${ver}'"
   if [[ ! -e "$H/.cpl/params/$name" ]] ; then echolog "unable to find param for $name" ; no_param ; fi
-  local aparam=$(grep "$_param=" "$H/.cpl/params/$name")
-  if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then aparam=${aparam##$_param=} ;
+  local aparam=$(grep "$_param=" "$H/.cpl/params/$name"|head -1)
+  if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then 
+    aparam=${aparam##$_param=}
   else aparam="" ; fi
   if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
   if [[ "$aparam" == "none" ]] ; then eval $_param="'$aparam'" ; return 0 ; fi
@@ -387,9 +401,9 @@ function build_item() {
   #echo '$type ${donelist}' "$name : ${donelist}"
   local isdone="false" ; isItDone "$name" isdone ${afrom}
   if [[ "$isdone" == "false" ]] ; then echo -ne "\e[1;34m" ; echolog "##### Building $type $name ####" ; echo -ne "\e[m" ; fi
-  get_sources $name namever
-  ver=${namever#${name}-}
-  echo "var ${ver}, namever ${namever}"
+  get_sources $name namever ver
+  # ver=${namever#${name}-}
+  echo "var ${ver}, namever ${namever} name ${name}"
   if [[ -e "$HUL/._linked/$namever" ]]; then
     if [[ "$isdone" == "false" ]] ; then
       echo -ne "\e[1;32m" ; echolog "$type $namever already installed" ; echo -ne "\e[m" ;
@@ -398,7 +412,7 @@ function build_item() {
     if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
   else
     local asrc="${_src}/${namever}"
-    mkdir -p "${asrc}"
+    if [[ "${type}" == "MOD" ]] ; then mkdir -p "${asrc}" ; fi
     sc
     if [[ "${type}" != "MOD" ]] ; then untar $name $namever ; fi
     action $name $namever precond "${asrc}"
@@ -406,7 +420,6 @@ function build_item() {
     action $name $namever pre "${asrc}"
     configure $name $namever
     action $name $namever premake "${asrc}"
-    echo  "BUILD ${asrc}/._build"
     if [[ ! -e "${asrc}"/._build ]] ; then
       get_param $name makecmd "make" ;
       if [[ "${makecmd}" != "none" ]] ; then loge "${makecmd}" "make_$namever"; fi
@@ -426,7 +439,6 @@ function build_item() {
       get_param $name linksrc $linksrcdef; linksrc=$(echo "${linksrc}") ; # echo "linksrc ${linksrc}"
       get_param $name linkdst $linkdstdef; linkdst=$(echo "${linkdst}") ; # echo "linkdst ${linkdst}"
     fi
-    echo "LINK ${HUL}/._linked/$namever"
     if [[ ! -e "${HUL}"/._linked/$namever ]] ; then
       if [[ "${type}" != "MOD" ]] ; then echolog "checking links of $type $namever"; links "$linkdst" "$linksrc" ; fi
       echo done > "${HUL}"/._linked/$namever ;
