@@ -257,7 +257,7 @@ function configure() {
   local name=$1
   local namever=$2
   get_param $name makefile Makefile
-  if [[ ! -e $makefile || ! -e ._config ]]; then
+  if [[ "${name}" != "${namever}" ]] && [[ ! -e $makefile || ! -e ._config ]]; then
     local haspre="false"; if [[ -e "${_src}/${namever}/._pre" ]] ; then haspre=true ; fi
     rm -f "${_src}/${namever}"/._*
     if [[ "$haspre" == "true" ]] ; then echo "done" > "${_src}/${namever}/._pre" ; fi
@@ -287,8 +287,8 @@ function configure() {
       #pwd
       loge "${configcmd}" "configure_${namever}"
     fi
-    echo "done" > ._config
   fi
+  echo "done" > ._config
 }
 function cleanPath() {
   local path="$1"

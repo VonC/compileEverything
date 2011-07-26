@@ -2,3 +2,4 @@ page=none
 configcmd=none
 makecmd=gem install svn2git
 makeinstcmd=none
+post=svngit=$(find "${HULA}/ruby/lib/ruby/" -name "svn2git" -type f -print); ln -fs "${svngit}" "${HB}/svn2git"
