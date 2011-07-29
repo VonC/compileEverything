@@ -1,0 +1,3 @@
+configcmd=none
+makecmd=cpanm Term::ReadKey
+makeinstcmd=none

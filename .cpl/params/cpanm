@@ -3,4 +3,4 @@ url=http://search.cpan.org/CPAN/authors/id/M/MI/MIYAGAWA/
 nameurl=App-cpanminus
 configcmd=none
 makecmd=none
-makeinstcmd=mkdir -p "${HULA}/@@NAMEVER@@" ; gtar -cpvf - . | ( cd "${HULA}/@@NAMEVER@@" && gtar -xvpf - )
+makeinstcmd=pwd ; mkdir -p "${HULA}/@@NAMEVER@@" ; gtar -cpvf - . | ( cd "${HULA}/@@NAMEVER@@" && gtar -xvpf - )

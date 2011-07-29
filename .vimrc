@@ -48,3 +48,17 @@ else
     colorscheme elflord    " use this color scheme
     set background=dark        " adapt colors for background
 endif
+set viminfo='10,\"100,:20,%,n~/.viminfo
+
+function! ResCur()
+  if line("'\"") <= line("$")
+    normal! g`"
+    return 1
+  endif
+endfunction
+
+augroup resCur
+  autocmd!
+  autocmd BufWinEnter * call ResCur()
+augroup END
+

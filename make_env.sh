@@ -143,14 +143,15 @@ function get_sources() {
     #echo "IIIII url ${url} AAAAA targz ${targz}"
     source="${url}${targz}"
   fi
-  echo sources for $name: $targz from $source from $line
+  #echo sources for $name: $targz from $source from $line
   if [[ ! -e "${_pkgs}/$targz" ]]; then
     echolog "get sources for $name in ${_hpkgs}/$targz"
     loge "wget $source -O ${_pkgs}/$targz" "wget_sources_$targz"
   fi
   local anamever="${targz%.${ext}}"
   eval $_namever="'${anamever}'"
-  local aver=${anamever#${name}-}
+  #echo "YYY anamever ${anamever} vs. name ${name}"
+  local aver=${anamever#${nameurl}-}
   eval $_ver="'${aver}'"
 }
 function gen_which()
@@ -401,9 +402,14 @@ function build_item() {
   #echo '$type ${donelist}' "$name : ${donelist}"
   local isdone="false" ; isItDone "$name" isdone ${afrom}
   if [[ "$isdone" == "false" ]] ; then echo -ne "\e[1;34m" ; echolog "##### Building $type $name ####" ; echo -ne "\e[m" ; fi
-  get_sources $name namever ver
+  if [[ "${type}" != "MOD" ]] ; then
+    get_sources $name namever ver
+  else
+    namever="${name}"
+    ver=""
+  fi
   # ver=${namever#${name}-}
-  echo "var ${ver}, namever ${namever} name ${name}"
+  #echo "XXX ver ${ver}, namever ${namever} name ${name}"
   if [[ -e "$HUL/._linked/$namever" ]]; then
     if [[ "$isdone" == "false" ]] ; then
       echo -ne "\e[1;32m" ; echolog "$type $namever already installed" ; echo -ne "\e[m" ;
@@ -422,14 +428,13 @@ function build_item() {
     action $name $namever premake "${asrc}"
     if [[ ! -e "${asrc}"/._build ]] ; then
       get_param $name makecmd "make" ;
-      if [[ "${makecmd}" != "none" ]] ; then loge "${makecmd}" "make_$namever"; fi
+      if [[ "${makecmd}" != "none" ]] ; then loge "eval ${makecmd}" "make_$namever"; fi
       echo done > "${asrc}"/._build
     fi
     if [[ ! -e "${asrc}"/._installed ]] ; then
       get_param $name makeinstcmd "make install"
-      if [[ "${makeinstcmd}" != "none" ]] ; then
-        loge "${makeinstcmd}" "make_install_$namever"
-      fi
+      echo "makeinstcmd ${makeinstcmd}"
+      if [[ "${makeinstcmd}" != "none" ]] ; then loge "eval ${makeinstcmd}" "make_install_$namever"; fi
       echo done > "${asrc}"/._installed
     fi
     action $name $namever post "${asrc}"
