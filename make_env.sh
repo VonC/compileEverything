@@ -24,6 +24,7 @@ scriptpath H
 export H="${H}"
 echo "make_env: define local home '${H}'."
 isSolaris=""
+longbit=""
 alldone=""
 
 _cpl="${H}/.cpl"
@@ -95,12 +96,19 @@ function mrf() { ls -t1 "$1"/$2 | head -n1 ; }
 function sc() {
   source "$H/.bashrc" -force
 }
+function get_arc(){
+  local _longbit=$1
+  local unamem=$(uname -m)
+  local alongbit="32"
+  if [[ "${unamem//64/}" != "${unamem}" ]] ; then alongbit="64" ; fi
+  eval $_longbit="'${alongbit}'"
+}
 function build_bashrc() {
   local title="$1"
   cp "$H/.cpl/.bashrc.tpl" "$H/.bashrc"
   export PATH=$H/bin:$PATH
   $H/bin/gen_sed -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
-  local longbit=$(getconf LONG_BIT)
+  get_arc longbit
   if [[ "$longbit" == "32" ]]; then $H/bin/gen_sed -i 's/ @@M64@@//g' "$H/.bashrc" ;
   elif [[ "$longbit" == "64" ]]; then $H/bin/gen_sed -i 's/@@M64@@/-m64/g' "$H/.bashrc" ;
   else echolog "Unable to get LONG_BIT conf (32 or 64bits)" ; getconf2 ; fi
@@ -170,10 +178,10 @@ function get_tar() {
   local atarname=""
   gen_which "gtar" gtarpath
   gen_which "tar" tarpath
-  if [[ "${gtarpath}" != "" ]] ; then atarname="gtar";
+  if [[ "${gtarpath}" != "" ]] ; then atarname="gtar xpvf";
   elif [[ "${tarpath}" != "" ]]; then
     local h=$(tar --help|grep GNU)
-    if [[ "$h" != "" ]]; then atarname="tar"; fi;
+    if [[ "$h" != "" ]]; then atarname="tar xpvf"; else atarname="tar -xv -f" ; fi;
   fi
   if [[ "${atarname}" == "" ]] ; then echolog "Unable to find a GNU tar or gtar" ; tar2 ; fi
   eval $_tarname="'$atarname'";
@@ -184,7 +192,7 @@ function untar() {
   if [[ ! -e "${_src}/$namever" ]]; then
     get_tar tarname
     get_param $name ext "tar.gz"  
-    loge "$tarname xpvf ${_pkgs}/$namever.${ext} -C ${_src}" "tar_xpvf_$namever.${ext}"
+    loge "${tarname} ${_pkgs}/$namever.${ext} -C ${_src}" "tar_xpvf_$namever.${ext}"
     local lastlog=$(mrf "${_logs}" "*tar_xpvf*")
     local actualname=$(head -3 "$lastlog"|tail -1)
     local anactualname=${actualname}
@@ -289,7 +297,6 @@ function configure() {
       configcmd=${configcmd/@@PATH_AS@@/${path_as}}
       configcmd=${configcmd/@@WITHOUT_GNU_AS@@/${without_gnu_as}}
       configcmd=${configcmd/@@WITH_GNU_AS@@/${with_gnu_as}}
-      local longbit=$(getconf LONG_BIT)
       if [[ $longbit == "64" ]] ; then configcmd=${configcmd/@@ENABLE_64BIT@@/--enable-64bit} ;
       else configcmd=${configcmd/@@ENABLE_64BIT@@/} ; fi
       echo "configcmd=${configcmd}"
