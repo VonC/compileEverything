@@ -331,3 +331,38 @@ svprd02/compileEverything/usr/local/include -I/home/userapp/compileEverything/us
 make[1]: *** [objs/src/core/ngx_file.o] Error 1
 make[1]: Leaving directory `/myserver/svndata/users/userapp/compileEverything/.cpl/src/nginx-1.0.5'
 
+-------------
+case "cygwin" in \
+          hpux*) gcc -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps
+/python/lib -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE `if test -n ''; the
+n  /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/bin; fi` iconv.o ../srclib/libicrt.a -L/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.
+1/lib -liconv -lintl iconv.res `if test -n ''; then echo " -Wl,+b -Wl,/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib"; fi` -o iconv.exe;; \
+          *) /bin/sh ../libtool --mode=link gcc -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/e
+nvs/20110805/usr/local/apps/python/lib -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY
+_SOURCE `if test -n ''; then  /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/bin; fi` iconv.o ../srclib/libicrt.a /home/ausername/envs/20110805/usr/
+local/libs/libiconv-1.13.1/lib/libiconv.la -lintl iconv.res -o iconv.exe;; \
+        esac
+libtool: link: cannot find the library `/usr/lib/libiconv.la' or unhandled argument `/usr/lib/libiconv.la'
+make[1]: *** [install] Error 1
+make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/libiconv-1.13.1/src'
+
+=> modify libtool to explicitely reference  /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib/libiconv.la
+-------------
+gettext on cygwin during initial configure phase:
+
+configure: configuring in autoconf-lib-link
+configure: running /bin/sh './configure' --prefix=/home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1  '--prefix=/home/ausername/envs/20110805/usr/loc
+al/libs/gettext-0.14.1' '--enable-shared' '--enable-static' '--with-libiconv-prefix=/home/ausername/envs/20110805/usr/local' '--with-libexpat-prefix=/home/43
+640119/envs/20110805/usr/local' 'CFLAGS=-I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FO
+RTIFY_SOURCE' 'CPPFLAGS=-I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE' 'L
+DFLAGS=-L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/li
+b' --cache-file=/dev/null --srcdir=.
+checking for a BSD-compatible install... /bin/install -c
+checking whether build environment is sane... yes
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking for gcc... gcc
+checking for C compiler default output file name... configure: error: C compiler cannot create executables
+See `config.log' for more details.
+configure: error: /bin/sh './configure' failed for autoconf-lib-link
+
