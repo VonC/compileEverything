@@ -351,11 +351,7 @@ make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/libiconv-1.13
 gettext on cygwin during initial configure phase:
 
 configure: configuring in autoconf-lib-link
-configure: running /bin/sh './configure' --prefix=/home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1  '--prefix=/home/ausername/envs/20110805/usr/loc
-al/libs/gettext-0.14.1' '--enable-shared' '--enable-static' '--with-libiconv-prefix=/home/ausername/envs/20110805/usr/local' '--with-libexpat-prefix=/home/43
-640119/envs/20110805/usr/local' 'CFLAGS=-I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FO
-RTIFY_SOURCE' 'CPPFLAGS=-I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE' 'L
-DFLAGS=-L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/li
+configure: running /bin/sh './configure' --prefix=/home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1  '--prefix=/home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1' '--enable-shared' '--enable-static' '--with-libiconv-prefix=/home/ausername/envs/20110805/usr/local' '--with-libexpat-prefix=/home/ausername/envs/20110805/usr/local' 'CFLAGS=-I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE' 'CPPFLAGS=-I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE' 'LDFLAGS=-L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/li
 b' --cache-file=/dev/null --srcdir=.
 checking for a BSD-compatible install... /bin/install -c
 checking whether build environment is sane... yes
@@ -366,3 +362,22 @@ checking for C compiler default output file name... configure: error: C compiler
 See `config.log' for more details.
 configure: error: /bin/sh './configure' failed for autoconf-lib-link
 
+$ cygcheck `gcc -print-prog-name=gcc`
+Found: C:\prog\cygwin\bin\gcc.exe
+Found: C:\prog\cygwin\bin\gcc.exe
+ -> C:\prog\cygwin\etc\alternatives\gcc
+  -> C:\prog\cygwin\bin\gcc-3.exe
+  C:\prog\cygwin\bin\gcc-3.exe
+    C:\prog\cygwin\bin\cygwin1.dll
+        C:\WINDOWS\system32\ADVAPI32.DLL
+	      C:\WINDOWS\system32\KERNEL32.dll
+	              C:\WINDOWS\system32\ntdll.dll
+		            C:\WINDOWS\system32\RPCRT4.dll
+			            C:\WINDOWS\system32\Secur32.dll
+				      C:\prog\cygwin\bin\cygintl-8.dll
+				          C:\prog\cygwin\home\ausername\envs\20110805\usr\local\bin\cygiconv-2.dllcygcheck: C:\prog\cygwin\home\ausername\envs\20110805\usr\local\bin\cygiconv-2.dll is a symlink instead of a DLL
+
+See http://www.mail-archive.com/cygwin@cygwin.com/msg107619.html
+The problem is that the Windows DLL loader doesn't know about symlinks, nor about Windows shortcuts.  
+If at all, it might understand native NTFS symlinks starting with Windows Vista.  
+But as long as we don't become super-rich and purchase Windows from Microsoft, it won't understand Cygwin symlinks.

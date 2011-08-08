@@ -26,6 +26,7 @@ echo "make_env: define local home '${H}'."
 isSolaris=""
 longbit=""
 alldone=""
+unameo=$(uname -o)
 
 _cpl="${H}/.cpl"
 _hcpl=".cpl"
@@ -350,8 +351,15 @@ function onelink() {
   #relpath "$src/$apath/$afile" "$dest/$apath/$afile" relp
   relpath "$dest/$apath/$afile" "$src/$apath/$afile" relp
   #echo relp $relp
-  #echo ln -fs "$relp" "$dest/$apath/$afile"
-  ln -fs "$relp" "$dest/$apath/$afile"
+  #echo "{unameo} ${unameo} {apath%/bin} ${apath%/bin} {afile%.dll} ${afile%.dll}"
+  if [[ "${unameo}" == "Cygwin" && "${apath%/bin}" == "bin" && "${afile%.dll}" != "${afile}" ]] ; then
+    #echo rm -f then cp -f "$src/$apath/$afile" "$dest/$apath/$afile"
+    rm -f "$dest/$apath/$afile"
+    cp -f "$src/$apath/$afile" "$dest/$apath/$afile"
+  else
+    #echo ln -fs "$relp" "$dest/$apath/$afile"
+    ln -fs "$relp" "$dest/$apath/$afile"
+  fi
 }
 function links() {
   local dest="$1"
