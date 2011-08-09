@@ -381,3 +381,60 @@ See http://www.mail-archive.com/cygwin@cygwin.com/msg107619.html
 The problem is that the Windows DLL loader doesn't know about symlinks, nor about Windows shortcuts.  
 If at all, it might understand native NTFS symlinks starting with Windows Vista.  
 But as long as we don't become super-rich and purchase Windows from Microsoft, it won't understand Cygwin symlinks.
+------------
+gcc configure on cygwin:
+
+make[1]: Entering directory `/home/ausername/envs/20110805/.cpl/src/gcc-3.4.6/objdir/libiberty'
+if [ x"" != x ]; then \
+      gcc -c -DHAVE_CONFIG_H -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -I
+      . -I../../libiberty/../include  -W -Wall -Wtraditional -pedantic  ../../libiberty/fibheap.c -o pic/fibheap.o; \
+      else true; fi
+	  gcc -c -DHAVE_CONFIG_H -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -I.
+	  -I../../libiberty/../include  -W -Wall -Wtraditional -pedantic ../../libiberty/fibheap.c -o fibheap.o
+	  ../../libiberty/fibheap.c:1: warning: -fPIC ignored for target (all code is position independent)
+	  ../../libiberty/fibheap.c: In function `fibheap_union':
+	  ../../libiberty/fibheap.c:166: warning: implicit declaration of function `free'
+	  ../../libiberty/fibheap.c: In function `fibheap_delete_node':
+	  ../../libiberty/fibheap.c:285: error: `LONG_MIN' undeclared (first use in this function)
+	  ../../libiberty/fibheap.c:285: error: (Each undeclared identifier is reported only once
+	  ../../libiberty/fibheap.c:285: error: for each function it appears in.)
+	  ../../libiberty/fibheap.c: In function `fibheap_consolidate':
+	  ../../libiberty/fibheap.c:395: warning: implicit declaration of function `memset'
+	  make[1]: *** [fibheap.o] Error 1
+	  make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/gcc-3.4.6/objdir/libiberty'
+	  make: *** [all-libiberty] Error 2
+
+http://gcc.gnu.org/bugzilla/show_bug.cgi?id=13334
+
+Note that using non-standard @code{CFLAGS} can cause bootstrap to fail in
++@file{libiberty}, if these trigger a warning with the new compiler.  For
++example using @samp{-O2 -g -mcpu=i686} on @code{i686-pc-linux-gnu} will
++cause bootstrap failure as @code{-mcpu=} is deprecated in 3.4.0 and above
+
+=> remove any option on CFLAG, and configure will pass on cygwin BUT CHECK NEXT ERROR FIRST
+--------------
+/home/ausername/envs/20110805/.cpl/src/gcc-3.4.6/objdir/gcc/xgcc -B/home/ausernale/envs/20110805/.cpl/src/gcc-3.4.6/objdir/gcc/ -B/home/ausername/envs/20110805/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/bin/ -B/home/ausername/envs/20110805/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/lib/ -isystem /home/ausername/envs/20110805/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/include -isystem /home/ausername/envs/20110805/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/sys-include -c -DHAVE_CONFIG_H -O2 -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -I. -I../../../libiberty/../include -W -Wall -Wtraditional -pedantic ../../../libiberty/strsignal.c -o strsignal.o
+../../../libiberty/strsignal.c:414: error: conflicting types for 'strsignal'
+/usr/include/string.h:93: error: previous declaration of 'strsignal' was here
+../../../libiberty/strsignal.c:414: error: conflicting types for 'strsignal'
+/usr/include/string.h:93: error: previous declaration of 'strsignal' was here
+../../../libiberty/strsignal.c: In function `psignal':
+../../../libiberty/strsignal.c:568: warning: comparison between signed and unsigned
+make[1]: *** [strsignal.o] Error 1
+make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libiberty'
+
+http://gcc.gnu.org/bugzilla/show_bug.cgi?id=38903
+
+This happens because libiberty configure has a hard-coded hack that kicks in
+when building libiberty as a target library, which causes strsignal (and a
+couple of others) to be removed from the list of functions for configure to
+check against the system libraries, causing the libiberty versions to be built
+when they aren't needed.  (They used to be required; formerly, Cygwin pulled in
+the object files from libiberty when linking the DLL, but this was fixed some
+time ago and the hack has been obsolete since then).  I am testing a patch to
+remove the hack.
+
+=> remove cygwin section in libiberty/configure.ac and libiberty/configure
+http://gcc.gnu.org/bugzilla/attachment.cgi?id=17131&action=diff
+
+Check if adding -DHAVE_STRSIGNAL to CFLAGS is enough to avoid this issue and the previous one
