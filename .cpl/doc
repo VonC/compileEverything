@@ -438,3 +438,20 @@ remove the hack.
 http://gcc.gnu.org/bugzilla/attachment.cgi?id=17131&action=diff
 
 Check if adding -DHAVE_STRSIGNAL to CFLAGS is enough to avoid this issue and the previous one
+------------
+zlib make install on cygwin
+
+cp libz.a /home/ausername/envs/20110805/usr/local/libs/zlib-1.2.5/lib
+cp  /home/ausername/envs/20110805/usr/local/libs/zlib-1.2.5/lib
+cp: missing destination file operand after `/home/ausername/envs/20110805/usr/local/libs/zlib-1.2.5/lib'
+Try `cp --help' for more information.
+make: *** [install-libs] Error 1
+
+http://en.gentoo-wiki.com/wiki/Prefix/Cygwin#zlib:_missing_destination
+
+Alternatively: Set a condition for the critical line in Makefile.in and stay with the static lib.
+
+ if test "$(SHAREDLIBV)"; then cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir); fi
+
+-----------
+

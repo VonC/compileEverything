@@ -110,7 +110,7 @@ function build_bashrc() {
   export PATH=$H/bin:$PATH
   $H/bin/gen_sed -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
   get_arc longbit
-  if [[ "${unameo}" == "Cygwin" ]]; then $H/bin/gen_sed -i 's/ @@CYGWNI@@/ -DHAVE_STRSIGNAL/g' "$H/.bashrc" ;
+  if [[ "${unameo}" == "Cygwin" ]] ; then $H/bin/gen_sed -i 's/ @@CYGWNI@@/ -DHAVE_STRSIGNAL/g' "$H/.bashrc" ;
   else $H/bin/gen_sed -i 's/ @@CYGWNI@@//g' "$H/.bashrc" ; fi
   if [[ "$longbit" == "32" ]]; then $H/bin/gen_sed -i 's/ @@M64@@//g' "$H/.bashrc" ;
   elif [[ "$longbit" == "64" ]]; then $H/bin/gen_sed -i 's/@@M64@@/-m64/g' "$H/.bashrc" ;
