@@ -332,15 +332,11 @@ make[1]: *** [objs/src/core/ngx_file.o] Error 1
 make[1]: Leaving directory `/myserver/svndata/users/userapp/compileEverything/.cpl/src/nginx-1.0.5'
 
 -------------
+libiconv on cygwin make:
+
 case "cygwin" in \
-          hpux*) gcc -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps
-/python/lib -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE `if test -n ''; the
-n  /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/bin; fi` iconv.o ../srclib/libicrt.a -L/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.
-1/lib -liconv -lintl iconv.res `if test -n ''; then echo " -Wl,+b -Wl,/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib"; fi` -o iconv.exe;; \
-          *) /bin/sh ../libtool --mode=link gcc -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/e
-nvs/20110805/usr/local/apps/python/lib -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY
-_SOURCE `if test -n ''; then  /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/bin; fi` iconv.o ../srclib/libicrt.a /home/ausername/envs/20110805/usr/
-local/libs/libiconv-1.13.1/lib/libiconv.la -lintl iconv.res -o iconv.exe;; \
+          hpux*) gcc -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE `if test -n ''; then  /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/bin; fi` iconv.o ../srclib/libicrt.a -L/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib -liconv -lintl iconv.res `if test -n ''; then echo " -Wl,+b -Wl,/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib"; fi` -o iconv.exe;; \
+          *) /bin/sh ../libtool --mode=link gcc -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE `if test -n ''; then  /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/bin; fi` iconv.o ../srclib/libicrt.a /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib/libiconv.la -lintl iconv.res -o iconv.exe;; \
         esac
 libtool: link: cannot find the library `/usr/lib/libiconv.la' or unhandled argument `/usr/lib/libiconv.la'
 make[1]: *** [install] Error 1
@@ -506,6 +502,10 @@ Make sure there is no link on dll, potentially on .a in usr/local/lib
 
 -----------
 
+:%s/abadusername/ausername/g
+
+-----------
+
 texinfo on cygwin on make:
 
 mv -f .deps/makedoc.Tpo .deps/makedoc.Po
@@ -515,3 +515,8 @@ rm -f doc.c key.c funs.h
 make[2]: *** [funs.h] Error 127
 mae[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/texinfo-4.13/info'
 make[1]: *** [all-recursive] Error 1
+
+http://www.linuxquestions.org/questions/linux-from-scratch-13/texinfo-make-problems-638014/
+http://www.mail-archive.com/lfs-support@linuxfromscratch.org/msg04469.html
+Probably linked to an error loading ncurses, perhaps because .a are linked instead of copied.
+Change the make_env.sh
