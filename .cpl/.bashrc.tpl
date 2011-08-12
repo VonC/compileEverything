@@ -65,6 +65,7 @@ export PATH="${PATH}":/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
 
 export -n NGX_PM_CFLAGS
 export -n CC
+export CC=gcc
 export -n LDDLFLAGS
 export -n PKG_CONFIG_PATH
 export -n PERL_LIB
