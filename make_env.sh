@@ -354,7 +354,7 @@ function onelink() {
   relpath "$dest/$apath/$afile" "$src/$apath/$afile" relp
   #echo relp $relp
   #echo "{unameo} ${unameo} {apath%/bin} ${apath%/bin} {afile%.dll} ${afile%.dll}"
-  if [[ "${unameo}" == "Cygwin" && "${apath%/bin}" == "bin" && "${afile%.dll}" != "${afile}" ]] ; then
+  if [[ "${unameo}" == "Cygwin" && "${afile%.dll}" != "${afile}" ]] ; then
     #echo rm -f then cp -f "$src/$apath/$afile" "$dest/$apath/$afile"
     rm -f "$dest/$apath/$afile"
     cp -f "$src/$apath/$afile" "$dest/$apath/$afile"

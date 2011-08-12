@@ -454,4 +454,64 @@ Alternatively: Set a condition for the critical line in Makefile.in and stay wit
  if test "$(SHAREDLIBV)"; then cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir); fi
 
 -----------
+db on cygwin make
 
+Creating library file: .libs/libdb_tcl-4.7.dll.a
+.libs/tcl_compat.o:tcl_compat.c:(.text+0x3f): undefined reference to `_Tcl_GetIndexFromObj'
+.libs/tcl_compat.o:tcl_compat.c:(.text+0x5b): undefined reference to `_Tcl_GetStringFromObj'
+...
+.libs/tcl_db.o:tcl_db.c:(.text+0x41): undefined reference to `_Tcl_DeleteCommand'
+.libs/tcl_db.o:tcl_db.c:(.text+0x69): undefined reference to `_Tcl_DeleteCommand'
+...
+.libs/tcl_db_pkg.o:tcl_db_pkg.c:(.text+0x47): undefined reference to `_Tcl_PkgProvide'
+.libs/tcl_db_pkg.o:tcl_db_pkg.c:(.text+0xa0): undefined reference to `_Tcl_CreateObjCommand'
+...
+.libs/tcl_dbcursor.o:tcl_dbcursor.c:(.text+0xd): undefined reference to `_Tcl_ResetResult'
+.libs/tcl_dbcursor.o:tcl_dbcursor.c:(.text+0x50): undefined reference to `_Tcl_WrongNumArgs'
+...
+.libs/tcl_env.o:tcl_env.c:(.text+0x10): undefined reference to `_Tcl_ResetResult'
+.libs/tcl_env.o:tcl_env.c:(.text+0x71): undefined reference to `_Tcl_WrongNumArgs'
+...
+.libs/tcl_env.o:tcl_env.c:(.text+0x4ba9): undefined reference to `_Tcl_SetObjResult'
+.libs/tcl_env.o:tcl_env.c:(.text+0x4cb6): undefined reference to `_Tcl_SetResult'
+...
+.libs/tcl_internal.o:tcl_internal.c:(.text+0x50): undefined reference to `_Tcl_SetResult'
+.libs/tcl_internal.o:tcl_internal.c:(.text+0xa4): undefined reference to `_Tcl_SetResult'
+...
+.libs/tcl_lock.o:tcl_lock.c:(.text+0x1cae): undefined reference to `_Tcl_SetResult'
+.libs/tcl_lock.o:tcl_lock.c:(.text+0x1d71): undefined reference to `_Tcl_CreateObjCommand'
+...
+.libs/tcl_log.o:tcl_log.c:(.text+0x61): undefined reference to `_Tcl_GetIndexFromObj'
+.libs/tcl_log.o:tcl_log.c:(.text+0x85): undefined reference to `_Tcl_GetStringFromObj'
+...
+.libs/tcl_mp.o:tcl_mp.c:(.text+0x21bc): undefined reference to `_Tcl_NewIntObj'
+.libs/tcl_mp.o:tcl_mp.c:(.text+0x21d1): undefined reference to `_Tcl_SetObjResult'
+...
+.libs/tcl_rep.o:tcl_rep.c:(.text+0x22): undefined reference to `_Tcl_ListObjGetElements'
+.libs/tcl_rep.o:tcl_rep.c:(.text+0x7a): undefined reference to `_Tcl_GetIndexFromObj'
+...
+.libs/tcl_seq.o:tcl_seq.c:(.text+0x1067): undefined reference to `_Tcl_NewStringObj'
+.libs/tcl_seq.o:tcl_seq.c:(.text+0x1082): undefined reference to `_Tcl_SetObjResult'
+...
+.libs/tcl_txn.o:tcl_txn.c:(.text+0x53): undefined reference to `_Tcl_DeleteCommand'
+.libs/tcl_txn.o:tcl_txn.c:(.text+0xdb): undefined reference to `_Tcl_GetIndexFromObj'
+...
+.libs/tcl_util.o:tcl_util.c:(.text+0x3f): undefined reference to `_Tcl_GetIndexFromObj'
+.libs/tcl_util.o:tcl_util.c:(.text+0x5b): undefined reference to `_Tcl_GetStringFromObj'
+...
+
+tcl_compat.o undefined reference
+add -ltcl8.5 to Makefile
+Make sure there is no link on dll, potentially on .a in usr/local/lib
+
+-----------
+
+texinfo on cygwin on make:
+
+mv -f .deps/makedoc.Tpo .deps/makedoc.Po
+gcc  -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -DHAVE_STRSIGNAL  -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -o makedoc.exe makedoc.o ../lib/libtxi.a ../gnulib/lib/libgnu.a -lncurses /home/ausername/envs/20110805/usr/local/lib/libintl.dll.a /home/ausername/envs/20110805/usr/local/lib/libiconv.dll.a -L/home/ausername/envs/20110805/usr/local/lib
+rm -f doc.c key.c funs.h
+..//info/makedoc ./session.c ./echo-area.c ./infodoc.c ./m-x.c ./indices.c ./nodemenu.c ./footnotes.c ./variables.c
+make[2]: *** [funs.h] Error 127
+mae[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/texinfo-4.13/info'
+make[1]: *** [all-recursive] Error 1
