@@ -520,3 +520,22 @@ http://www.linuxquestions.org/questions/linux-from-scratch-13/texinfo-make-probl
 http://www.mail-archive.com/lfs-support@linuxfromscratch.org/msg04469.html
 Probably linked to an error loading ncurses, perhaps because .a are linked instead of copied.
 Change the make_env.sh
+-----------
+perl no tinycore during make install:
+
+make[1]: Leaving directory `/home/tc/compileEverything/.cpl/src/perl-5.12.3/ext/DynaLoader'
+rm -f libperl.a
+/home/tc/compileEverything/usr/local/bin/ar rcu libperl.a op.o perl.o   gv.o toke.o perly.o pad.o regcomp.o dump.o util.o mg.o reentr.o mro.o hv.o av.o run.o pp_hot.o sv.o pp.o scope.o pp_ctl.o pp_sys.o doop.o doio.o regexec.o utf8.o taint.o deb.o universal.o globals.o perlio.o perlapi.o numeric.o mathoms.o locale.o pp_pack.o pp_sort.o   DynaLoader.o
+make: /home/tc/compileEverything/usr/local/bin/ar: Command not found
+make: *** [libperl.a] Error 127
+
+-------------
+curl on configure on Tinycore:
+checking run-time libs availability... failed
+configure: error: one or more libs available at link-time are not available run-time. Libs used at link-time: -lidn -lssh2 -lssl -lcrypto -lrt -lssl -lcrypto -ldl -lz   -lz -lssh2
+onfigure:24001: ./conftest
+./conftest: error while loading shared libraries: libssl.so.1.0.0: cannot open shared object file: No such file or directory
+configure:24001: $? = 127
+configure: program exited with status 127
+configure: failed program was:
+| /* confdefs.h */

@@ -61,12 +61,13 @@ export PATH="${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin"
 #export PATH="$PATH:$HULA/perl/bin:$HULA/python/bin"
 #export PATH="$PATH:$HULA/jdk/bin:$HULA/ant/bin"
 # then add the few system paths we actually need
-export PATH="${PATH}":/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
+export PATH="${PATH}":/usr/local/bin:/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
 
 export -n NGX_PM_CFLAGS
 export -n CC
 export CC=gcc
 export -n LDDLFLAGS
+export -n LD_LIBRARY_PATH
 export -n PKG_CONFIG_PATH
 export -n PERL_LIB
 export -n NGX_AUX
@@ -74,7 +75,7 @@ export -n NGX_AUX
 export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib"
 export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE @@M64@@ @@CYGWIN@@"
 export CPPFLAGS="$CFLAGS"
-export LD_LIBRARY_PATH="${HULL}:${HUL}/ssl/lib:${HULA}/svn/lib:${HULA}/python/lib:${HULA}/gcc/lib"
+export LD_RUN_PATH="${HULL}:${HUL}/ssl/lib:${HULA}/svn/lib:${HULA}/python/lib:${HULA}/gcc/lib"
 export PERL5LIB="${HULA}/perl/lib/site_perl/current:${HULA}/perl/lib/current"
 
 alias a=alias
