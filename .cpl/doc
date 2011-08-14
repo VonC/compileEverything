@@ -378,6 +378,14 @@ The problem is that the Windows DLL loader doesn't know about symlinks, nor abou
 If at all, it might understand native NTFS symlinks starting with Windows Vista.  
 But as long as we don't become super-rich and purchase Windows from Microsoft, it won't understand Cygwin symlinks.
 ------------
+gettext on cygwin during make install
+couple of:
+/bin/install -c .libs/libgettextpo.dll.aT /home/ausername/envs/20110813/usr/local/libs/gettext-0.14.1/lib/libgettextpo.dll.a
+/bin/install: cannot stat `.libs/libgettextpo.dll.aT': No such file or directory
+make[4]: *** [install-libLTLIBRARIES] Error 1
+make[4]: Leaving directory `/home/ausername/envs/20110813/.cpl/src/gettext-0.14.1/gettext-tools/src'
+
+------------
 gcc configure on cygwin:
 
 make[1]: Entering directory `/home/ausername/envs/20110805/.cpl/src/gcc-3.4.6/objdir/libiberty'
@@ -539,3 +547,79 @@ configure:24001: $? = 127
 configure: program exited with status 127
 configure: failed program was:
 | /* confdefs.h */
+Proable because of using LD_LIBRARY_PATH: bad => use LD_RUN_PATH.
+http://www.eyrie.org/~eagle/notes/rpath.html
+LD_LIBRARY_PATH is broken and should not be used if at all possible. It's broken because it overrides the search paths for all binaries that you run using it, not just the one that you care about, and it doesn't add easily to other competing settings of LD_LIBRARY_PATH. It has a tendency to cause odd breakage, and it's best to only use it with commercial applications like Oracle where there's no other choice (and then to set it only in a wrapper around a particular application, and never in your general shell environment).
+Encoding rpath in applications
+
+ELF binaries (used by Solaris and Linux) can contain in the binary supplemental paths for shared libraries. (Shared libraries can also contain their own supplemental paths for finding other shared libraries, but that's not as commonly used.) This path is searched before the system default paths (but is overridden by LD_LIBRARY_PATH, if set).
+
+This path must be encoded at compile time and after that doesn't change. The advantage of this approach over the LD_LIBRARY_PATH approach, apart from the other problems caused by LD_LIBRARY_PATH, is that the work is born by the person building the software rather than the person running it. That means the work of configuring library paths only has to be done once, by a fairly clued person, rather than by every user who may or may not understand the issues.
+
+There are two basic ways of telling a compiler to encode a search path in the binary (called an rpath):
+
+Set the environment variable LD_RUN_PATH to the search path (colon-separated) you want to encode. You don't need to include the system default search directories (and indeed should not, since you may interfere with future changes in how the native library searching algorithm works). This environment variable will be picked up by the compiler when it links the binary.
+
+Add -R /usr/local/lib (or whatever path) to the link command line. You can repeat this flag multiple times with different paths, similar to -L. Its order in the command line doesn't matter.
+
+Either can be used, so normally I use LD_RUN_PATH since it's less intrusive. However, note that if there are any -R flags on the command line, the LD_RUN_PATH setting will be ignored. This means that if the normal build process of the software adds -R flags, you'll need to get it to add your -R flags as well (unless it helpfully includes a -R flag for the installation directory, which it sometimes does). If the software package uses Autoconf, generally the easiest way to do this is to set LDFLAGS to "-R /usr/local/lib" (or whatever directory) before running configure, which will then stick it into the Makefile. Failing that, I'll sometimes do something like:
+
+    make CC="gcc -R /usr/local/lib"
+to build the software, which generally does the right thing.
+
+Note that software that uses libtool to link its libraries and to link against libraries will more frequently do the right thing and encode rpath properly when it builds the final binaries, but not always. Thankfully libtool also understands the -R flag and does the right thing when it's provided.
+
+Checking the binaries
+
+To verify that a binary is doing the right thing, use the command ldd on the binary. This will list all of the libraries and either where they came from (if found) or something like "(not found)" if the library wasn't found. On Mac OS X, use otool -L.
+
+Solaris has the very useful -s option to ldd that will additionally show the full library search path, so you can confirm that you encoded the right rpath in the binary.
+
+A partial equivalent under Linux is:
+
+    readelf -d <binary> | grep RPATH
+but note that this only shows the rpath for a particular binary (executable or library). If a shared library depends on other shared libraries, those shared libraries may be searched for using the rpath of the shared library that is loading them. To make sure that the search path is correct on Linux, you may need to use the above readelf command on the binary and all libraries other than system libraries that it uses. readelf comes with binutils, so if you're compiling software you will probably already have it installed.
+
+Changing the rpath
+
+On Linux, a utility called patchelf is available that can modify or remove the rpath or add one if one was not already present. This utility replaces the older chrpath utility, which appears to no longer be maintained.
+
+patchelf won't compile on Solaris out of the box. For it, you may still need chrpath. The maintainer's FTP site used to be at ftp://ftp.hungry.com/pub/hungry/chrpath/ but has been unreachable for some time. At this point, the best source is probably the Debian package.
+-------------
+gcc make install on cygwin
+
+for file in ./i686-pc-cygwin/bits/stdc++.h.gch/*; do \
+  /bin/install -c -m 644 $file /home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/include/c++/3.4.6/./i686-pc-cygwin/bits/stdc++.h.gch; done
+/bin/install: cannot stat `./i686-pc-cygwin/bits/stdc++.h.gch/*': No such file or directory
+make[3]: *** [install-pch] Error 1
+make[3]: Leaving directory `/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/include'
+make[2]: *** [install-am] Error 2
+
+Because of make
+# Build a precompiled C++ include, stdc++.h.gch.
+${pch_input}: ${allstamped} ${host_builddir}/c++config.h ${pch_source}
+	touch ${pch_input}; \
+	if [ ! -d "${pch_output_builddir}" ]; then \
+	  mkdir -p ${pch_output_builddir}; \
+	fi; \
+	$(CXX) $(PCHFLAGS) $(AM_CPPFLAGS) ${pch_source} -O0 -g -o ${pch_output_builddir}/O0g; \
+	$(CXX) $(PCHFLAGS) $(AM_CPPFLAGS) ${pch_source} -O2 -g -o ${pch_output_builddir}/O2g;
+
+if [ ! -d "./i686-pc-cygwin/bits/stdc++.h.gch" ]; then \
+  mkdir -p ./i686-pc-cygwin/bits/stdc++.h.gch; \
+fi; \
+/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/gcc/xgcc -shared-libgcc -B/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/gcc/ -nostdinc++ -L/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/src -L/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/src/.libs -B/home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/bin/ -B/home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/lib/ -isystem /home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/include -isystem /home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/sys-include -Winvalid-pch -Wno-deprecated -x c++-header -g -O2 -I/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/include/i686-pc-cygwin -I/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/include -I/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/libstdc++-v3/libsupc++ /home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/libstdc++-v3/include/stdc++.h -O0 -g -o ./i686-pc-cygwin/bits/stdc++.h.gch/O0g; \
+/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/gcc/xgcc -shared-libgcc -B/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/gcc/ -nostdinc++ -L/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/src -L/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/src/.libs -B/home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/bin/ -B/home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/lib/ -isystem /home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/include -isystem /home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/sys-include -Winvalid-pch -Wno-deprecated -x c++-header -g -O2 -I/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/include/i686-pc-cygwin -I/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/include -I/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/libstdc++-v3/libsupc++ /home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/libstdc++-v3/include/stdc++.h -O2 -g -o ./i686-pc-cygwin/bits/stdc++.h.gch/O2g;
+/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/libstdc++-v3/include/stdc++.h:82: internal compiler error: Segmentation fault
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <URL:http://gcc.gnu.org/bugs.html> for instructions.
+/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/libstdc++-v3/include/stdc++.h:82: internal compiler error: Segmentation fault
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <URL:http://gcc.gnu.org/bugs.html> for instructions.
+make[1]: *** [i686-pc-cygwin/bits/stdc++.h] Error 1
+make[1]: Leaving directory `/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/include'
+
+=> add --disable-libstdcxx-pch for now
+-----------
