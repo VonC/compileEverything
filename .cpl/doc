@@ -696,4 +696,30 @@ This error is caused by missing or corrupt soelim which interprets .so requests 
 
 Installing the groff package will solve this problem
 ---------
+JDK
+http://www.oracle.com/technetwork/java/javase/downloads/index.html
+(?ms)Java SE \d(?: Update \d+)?<.*?href="(/technetwork[^"]+)"><img
+=> for instance for JDK7: http://www.oracle.com/technetwork/java/javase/downloads/java-se-jdk-7-download-432154.html
+Windows x64", "size":"80.25 MB", "filepath":"http://download.oracle.com/otn-pub/java/jdk/7/jdk-7-windows-x64.exe"
+Windows x64.*filepath":"([^"]+)"
 
+JDK7:
+Linux x86 - Compressed Binary
+Linux x64 - Compressed Binary
+Solaris x86 - Compressed Binary
+Solaris SPARC - Compressed Binary
+Solaris SPARC 64-bit
+Solaris x64
+Windows x86
+Windows x64
+
+JDK6:
+ Linux x86 - RPM Installer	76.93 MB  	jdk-6u26-linux-i586-rpm.bin
+ Linux x86 - Self Extracting Installer	81.20 MB  	jdk-6u26-linux-i586.bin
+ Solaris x86 - Self Extracting Binary	81.08 MB  	jdk-6u26-solaris-i586.sh
+ Solaris SPARC - Self Extracting Binary	86.05 MB  	jdk-6u26-solaris-sparc.sh
+ Solaris SPARC 64-bit - Self Extracting Binary	12.24 MB  	jdk-6u26-solaris-sparcv9.sh
+ Solaris x64 - Self Extracting Binary	8.50 MB  	jdk-6u26-solaris-x64.sh
+Windows x86
+Windows Intel Itanium
+Windows x64

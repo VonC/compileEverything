@@ -54,7 +54,23 @@ ver=""
 set -o errexit
 set -o nounset
 
-trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | tee -a "${_log}"; tail -3 "${_log}" ; if [[ -e "${_logs}"/l ]]; then tail -5 "${_logs}"/l; rm "${_logs}"/l; fi" EXIT ;
+function ftrap {
+  tee -a "${_log}"; 
+  tail -3 "${_log}"  
+  if [[ -e "${_logs}"/l ]]; then 
+    tail -5 "${_logs}"/l
+	rm "${_logs}"/l; 
+  fi
+  if [[ "${unameo}" == "Cygwin" ]] ; then
+    local chk=$(grep "cannot stat" "${H}/.lastlog"|grep ".libs/libgettext")
+	echo $chk
+	if [[ ${chk} == "" ]] ; then
+      bash ${H}/make_env.sh
+	fi
+  fi
+}
+
+trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | ftrap" EXIT ;
 
 function main {
   checkOs
@@ -157,12 +173,12 @@ function get_sources() {
     source="${url}${targz}"
   fi
   #echo sources for $name: $targz from $source from $line
-  if [[ ! -e "${_pkgs}/$targz" ]]; then
+  local anamever="${targz%.${ext}}"
+  eval $_namever="'${anamever}'"
+  if [[ ! -e "${_pkgs}/$targz" ]] && [[ ! -e "$HUL/._linked/$namever" ]]; then
     echolog "get sources for $name in ${_hpkgs}/$targz"
     loge "wget $source -O ${_pkgs}/$targz" "wget_sources_$targz"
   fi
-  local anamever="${targz%.${ext}}"
-  eval $_namever="'${anamever}'"
   #echo "YYY anamever ${anamever} vs. name ${name}"
   local aver=${anamever#${nameurl}-}
   eval $_ver="'${aver}'"
