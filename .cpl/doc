@@ -654,6 +654,17 @@ tc@box:~/compileEverything/usr/local/bin$ ldd sqlite3
 Why: libreadline.so.5 => not found
 Is it in sqlite3 config/compil (-R which would cancel any LD_RUN_PATH idrective) ?
 Is is in readline itself?
+
+ldd httpd
+        libdl.so.2 => /lib/libdl.so.2 (0xb7431000)
+        libc.so.6 => /lib/libc.so.6 (0xb72ee000)
+        /lib/ld-linux.so.2 (0xb76f5000)
+        libdb-4.7.so => not found
+        libssl.so.1.0.0 => not found
+        libcrypto.so.1.0.0 => not found
+
+
+
 -------------
 openldap on Tinycore when make
 make[3]: Entering directory `/home/tc/compileEverything/.cpl/src/openldap-2.4.24/doc/man/man1'
