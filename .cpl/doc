@@ -623,3 +623,77 @@ make[1]: Leaving directory `/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/obj
 
 => add --disable-libstdcxx-pch for now
 -----------
+perl in tinycore for make
+/bin/sh: /home/tc/compileEverything/usr/local/bin/ln: not found
+./miniperl -Ilib autodoc.pl
+/home/tc/compileEverything/usr/local/bin/ln -s perl5123delta.pod pod/perldelta.pod
+make: /home/tc/compileEverything/usr/local/bin/ln: Command not found
+make: *** [pod/perldelta.pod] Error 127
+=> 
+premake=gen_sed -i '\''s/^LNS =  .*$/LNS = ln -s/g'\'' "$H/.cpl/src/@@NAMEVER@@/Makefile"
+(make sure ln is used as ln on the path, not an hypothetic local ln)
+
+/home/tc/compileEverything/usr/local/bin/ar rcu libperl.a op.o perl.o   gv.o toke.o perly.o pad.o regcomp.o dump.o util.o mg.o reentr.o mro.o hv.o av.o run.o pp_hot.o sv.o pp.o scope.o pp_ctl.o pp_sys.o doop.o doio.o regexec.o utf8.o taint.o deb.o universal.o globals.o perlio.o perlapi.o numeric.o mathoms.o locale.o pp_pack.o pp_sort.o   DynaLoader.o
+make: /home/tc/compileEverything/usr/local/bin/ar: Command not found
+make: *** [libperl.a] Error 127
+Same deal
+premake=gen_sed -i '\''s/^LNS =  .*$/LNS = ln -s/g'\'' "$H/.cpl/src/@@NAMEVER@@/Makefile" ; gen_sed -i '\''s/^AR =  .*$/AR = ar/g'\'' "$H/.cpl/src/@@NAMEVER@@/Makefile"
+-------------
+TODO TOCHECK:
+tc@box:~/compileEverything/usr/local/bin$ ldd sqlite3 
+        linux-gate.so.1 =>  (0xb770f000)
+        libsqlite3.so.0 => /home/tc/compileEverything/usr/local/libs/sqlite-3.7.2/lib/libsqlite3.so.0 (0xb768d000)
+        libreadline.so.5 => not found
+        libncurses.so.5 => /usr/local/lib/libncurses.so.5 (0xb7673000)
+        libdl.so.2 => /lib/libdl.so.2 (0xb766e000)
+        libpthread.so.0 => /lib/libpthread.so.0 (0xb7656000)
+        libc.so.6 => /lib/libc.so.6 (0xb7513000)
+        libtinfo.so.5 => /usr/local/lib/libtinfo.so.5 (0xb74f1000)
+        /lib/ld-linux.so.2 (0xb7710000)
+
+Why: libreadline.so.5 => not found
+Is it in sqlite3 config/compil (-R which would cancel any LD_RUN_PATH idrective) ?
+Is is in readline itself?
+-------------
+openldap on Tinycore when make
+make[3]: Entering directory `/home/tc/compileEverything/.cpl/src/openldap-2.4.24/doc/man/man1'
+PAGES=`cd .; echo *.1`; \
+for page in $PAGES; do \
+	sed -e "s%LDVERSION%2.4.24%" \
+		-e 's%ETCDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/etc/openldap%g' \
+		-e 's%LOCALSTATEDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/var%' \
+		-e 's%SYSCONFDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/etc/openldap%' \
+		-e 's%DATADIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/share/openldap%' \
+		-e 's%SBINDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/sbin%' \
+		-e 's%BINDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/bin%' \
+		-e 's%LIBDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/lib%' \
+		-e 's%LIBEXECDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/libexec%' \
+		-e 's%MODULEDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/libexec/openldap%' \
+		-e 's%RELEASEDATE%2011/02/10%' \
+			./$page \
+		| (cd .; soelim -) > $page.tmp; \
+done
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+make[3]: *** [all-common] Error 127
+make[3]: Leaving directory `/home/tc/compileEverything/.cpl/src/openldap-2.4.24/doc/man/man1'
+make[2]: *** [all-common] Error 1
+make[2]: Leaving directory `/home/tc/compileEverything/.cpl/src/openldap-2.4.24/doc/man'
+make[1]: *** [all-common] Error 1
+make[1]: Leaving directory `/home/tc/compileEverything/.cpl/src/openldap-2.4.24/doc'
+make: *** [all-common] Error 1
+
+
+http://www.emreakkas.com/linux-tips/ubuntu-solve-bin-sh-soelim-not-found
+This error is caused by missing or corrupt soelim which interprets .so requests in groff input and is necessary for OpenLDAP to compile.
+
+Installing the groff package will solve this problem
+---------
+
