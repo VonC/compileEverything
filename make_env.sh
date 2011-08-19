@@ -43,8 +43,12 @@ _hpkgs="${_hsrc}/_pkgs"
 echo $H
 mkdir -p "${_logs}"
 mkdir -p "${_pkgs}"
-mkdir -p "$H"/bin
-mkdir -p "$H"/usr/local/._linked
+mkdir -p "${H}/bin"
+mkdir -p "${HUL}/._linked"
+mkdir -p "${HUL}/ssl/lib"
+mkdir -p "${HULA}/svn/lib"
+mkdir -p "${HULA}/python/lib"
+mkdir -p "${HULA}/gcc/lib"
 if [[ -e "$H/README.md" ]] ; then mv -f "$H/README.md" "$H/.README.md" ; fi
 ln -fs ${_hlog} "$H/.log"
 donelist=""
@@ -64,7 +68,7 @@ function ftrap {
   if [[ "${unameo}" == "Cygwin" ]] ; then
     local chk=$(grep "cannot stat" "${H}/.lastlog"|grep ".libs/libgettext")
 	echo $chk
-	if [[ ${chk} == "" ]] ; then
+	if [[ ${chk} != "" ]] ; then
       bash ${H}/make_env.sh
 	fi
   fi
