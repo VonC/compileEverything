@@ -744,3 +744,13 @@ $ ldd tclsh8.5.exe | grep -v -E "ntdll|kernel|sxwmon32.dll|GDI32.dll|ADVAPI32.dl
 l|IMM32.DLL|LPK.DLL|USP10.dll|comctl32.dll|comctl32.dll|cygwin1.dll|ADVAPI32.DLL|cygintl-8.dll"
         libtcl8.5.dll => not found
 -------------
+Tinycore configure subversion
+checking for Apache module support via DSO through APXS... /home/tc/compileEverything/usr/local/apps/httpd-2.2.19/bin/httpd: error while loading shared libraries: libssl.so.1.0.0: cannot open shared object file: No such file or directory
+apxs:Error: Sorry, no shared object support for Apache.
+apxs:Error: available under your platform. Make sure.
+apxs:Error: the Apache module mod_so is compiled into.
+apxs:Error: your server binary `/home/tc/compileEverything/usr/local/apps/httpd-2.2.19/bin/httpd'..
+configure: error: no - APXS refers to an old version of Apache
+                     Unable to locate /mod_dav.h
+Should be:
+found at usr/local/apache2/bin/apxs, but no => recompile Apache2
