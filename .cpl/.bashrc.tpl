@@ -72,10 +72,10 @@ export -n PKG_CONFIG_PATH
 export -n PERL_LIB
 export -n NGX_AUX
 
-export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib"
+export LD_RUN_PATH="${HULL}:${HUL}/ssl/lib:${HULA}/svn/lib:${HULA}/python/lib:${HULA}/gcc/lib"
+export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib -Wl,-rpath=${LD_RUN_PATH}"
 export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE @@M64@@ @@CYGWIN@@"
 export CPPFLAGS="$CFLAGS"
-export LD_RUN_PATH="${HULL}:${HUL}/ssl/lib:${HULA}/svn/lib:${HULA}/python/lib:${HULA}/gcc/lib"
 export PERL5LIB="${HULA}/perl/lib/site_perl/current:${HULA}/perl/lib/current"
 
 alias a=alias

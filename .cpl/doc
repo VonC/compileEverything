@@ -1,7 +1,11 @@
 Notes: 
 * to follow the most recent log, tail --follow=name logs/last (with a gnu tail at least) 
 * export PS4='+${BASH_SOURCE}:${LINENO}: ' ; bash -x make_env.sh will display line numbers
- 
+-----------
+$ ldd iconv.exe | grep -v -E "ntdll|kernel|sxwmon32.dll|GDI32.dll|ADVAPI32.dll|RPCRT4.dll|Secur32.dll|SHELL32.dll|msvcrt.dll|SHLWAPI.dll|USER32.dll|ole32.dll|I
+MM32.DLL|LPK.DLL|USP10.dll|comctl32.dll|comctl32.dll|cygwin1.dll|ADVAPI32.DLL|cygintl-8.dll"
+        cygiconv-2.dll => /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/bin/cygiconv-2.dll (0x674c0000)
+        cygintl-8.dll => /usr/bin/cygintl-8.dll (0x6f5c0000) 
 -----------
 tic: symbol lookup error: tic: undefined symbol: _nc_check_termtype2
 userapp@ubvonc:~/apps/test/usr/local/lib$ nm -Ap *.so*|grep nc_check_termtype2
@@ -734,3 +738,9 @@ JDK6:
 Windows x86
 Windows Intel Itanium
 Windows x64
+-------------
+ausername@ahostname ~/envs/20110805/usr/local/bin
+$ ldd tclsh8.5.exe | grep -v -E "ntdll|kernel|sxwmon32.dll|GDI32.dll|ADVAPI32.dll|RPCRT4.dll|Secur32.dll|SHELL32.dll|msvcrt.dll|SHLWAPI.dll|USER32.dll|ole32.dl
+l|IMM32.DLL|LPK.DLL|USP10.dll|comctl32.dll|comctl32.dll|cygwin1.dll|ADVAPI32.DLL|cygintl-8.dll"
+        libtcl8.5.dll => not found
+-------------
