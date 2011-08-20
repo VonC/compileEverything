@@ -44,10 +44,6 @@ echo $H
 mkdir -p "${_logs}"
 mkdir -p "${_pkgs}"
 mkdir -p "${H}/bin"
-mkdir -p "${HUL}/._linked"
-mkdir -p "${HUL}/ssl/lib"
-mkdir -p "${HULA}/svn/lib"
-mkdir -p "${HULA}/python/lib"
 mkdir -p "${HULA}/gcc/lib"
 if [[ -e "$H/README.md" ]] ; then mv -f "$H/README.md" "$H/.README.md" ; fi
 ln -fs ${_hlog} "$H/.log"
@@ -84,6 +80,10 @@ function main {
     build_bashrc "$1"
   fi
   sc
+  mkdir -p "${HUL}/._linked"
+  mkdir -p "${HUL}/ssl/lib"
+  mkdir -p "${HULA}/svn/lib"
+  mkdir -p "${HULA}/python/lib"
   if [[ ! -e "${_vers}" ]]; then
     echolog "#### VERS ####"
     echolog "download compatible versions from SunFreeware"
