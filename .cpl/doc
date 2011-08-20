@@ -759,3 +759,15 @@ ERROR:  Loading command: install (LoadError)
     no such file to load -- zlib
 ERROR:  While executing gem ... (NameError)
     uninitialized constant Gem::Commands::InstallCommand
+---------------
+Tinycore configure subversion
+checking for Apache module support via DSO through APXS... /home/tc/compileEverything/usr/local/apps/httpd-2.2.19/bin/httpd: error while loading shared libraries: libssl.so.1.0.0: cannot open shared object file: No such file or directory
+apxs:Error: Sorry, no shared object support for Apache.
+apxs:Error: available under your platform. Make sure.
+apxs:Error: the Apache module mod_so is compiled into.
+apxs:Error: your server binary `/home/tc/compileEverything/usr/local/apps/httpd-2.2.19/bin/httpd'..
+configure: error: no - APXS refers to an old version of Apache
+                     Unable to locate /mod_dav.h
+Should be:
+found at usr/local/apache2/bin/apxs, but no => recompile Apache2
+---------------
