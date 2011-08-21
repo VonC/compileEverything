@@ -1,0 +1,3 @@
+nameurl=tar
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --with-bzip2=${HULB}/bzip2 --with-libiconv-prefix=${HUL}  --with-libintl-prefix=${HUL} @@WITH_GNU_LD@@
+post=ln -s tar ${HULB}/gtar
