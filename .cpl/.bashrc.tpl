@@ -65,7 +65,7 @@ if [[ -e "${HUL}/jdk6" ]] ; then
   export JAVA_HOME="${HUL}/jdk6"
   export PATH="${PATH}":"${JAVA_HOME}/bin"
 else
-  export -n JAVA_HOME
+  export JAVA_HOME=""
 fi
 export PATH="${PATH}":/usr/local/bin:/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
 
@@ -98,10 +98,10 @@ if [[ -e "${H}/.bashrc_aliases_git" ]] ; then source "${H}/.bashrc_aliases_git" 
 if [[ ! -e "${H}/.ssh/curl-ca-bundle.crt" ]] ; then
   cp "${H}/.ssh/curl-ca-bundle.crt.tpl" "${H}/.ssh/curl-ca-bundle.crt"
 fi
-if [[ -e "${H}/.ssh/curl-ca-bundle.crt.secret" ]] ; then 
+if [[ -e "${H}/.ssh/curl-ca-bundle.crt.secret" ]] ; then
   a=$(tail -10 "${H}/.ssh/curl-ca-bundle.crt.secret")
   b=$(tail -10 "${H}/.ssh/curl-ca-bundle.crt")
-  if [[ "$a" != "$b" ]] ; then 
+  if [[ "$a" != "$b" ]] ; then
     cat "${H}/.ssh/curl-ca-bundle.crt.secret" >> "${H}/.ssh/curl-ca-bundle.crt"
   fi
 fi
