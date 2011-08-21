@@ -4,3 +4,4 @@ nameurl=App-cpanminus
 configcmd=none
 makecmd=none
 makeinstcmd=pwd ; mkdir -p "${HULA}/@@NAMEVER@@" ; gtar -cpvf - . | ( cd "${HULA}/@@NAMEVER@@" && gtar -xvpf - )
+post=gen_sed -i "s/!perl/!${EH}\/bin\/perl/g" "${HULA}/@@NAMEVER@@/bin/cpanm"

@@ -42,8 +42,8 @@ lib libgcrypt gcc,libgpgerror,libiconv
 lib libgpgerror gcc,libiconv
 app ruby gcc,openssl,gdbm,libiconv,ncurses,tcl,zlib,db,expat
 app gem ruby
-mod svn2git gem aliensvn
-mod aliensvn cpanm termreadkey error 
+mod svn2git gem,aliensvn
+mod aliensvn cpanm,termreadkey,error 
 app cpanm none
 mod termreadkey cpanm
 mod error cpanm
