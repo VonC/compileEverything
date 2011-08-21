@@ -1,4 +1,3 @@
-precond=if [[ -e ${JAVA_HOME}/jre ]] ; then ajvv=$(${JAVA_HOME}/bin/java -version 2>&1) ; echo "ajvv=$ajvv" ; if [[ "${ajvv#*1.6.}" == "${ajvv}" ]] ; then echo JDK1.6 required for Subversion ; precond_failed ; fi ; fi
 page=http://subversion.apache.org/download/
 url=http://subversion.tigris.org/downloads/
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static --with-apr=${HUL} --with-apr-util=${HUL}  --with-sasl=${HUL} --with-ssl --with-jdk=${JAVA_HOME} --with-neon=${HUL} --with-sqlite=${HUL} --with-apxs=${HUL}/apache2/bin/apxs @@WITHOUT_GNU_LD@@

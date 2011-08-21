@@ -61,6 +61,12 @@ export PATH="${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin"
 #export PATH="$PATH:$HULA/perl/bin:$HULA/python/bin"
 #export PATH="$PATH:$HULA/jdk/bin:$HULA/ant/bin"
 # then add the few system paths we actually need
+if [[ -e "${HUL}/jdk6" ]] ; then
+  export JAVA_HOME="${HUL}/jdk6"
+  export PATH="${PATH}":"${JAVA_HOME}/bin"
+else
+  export -n JAVA_HOME
+fi
 export PATH="${PATH}":/usr/local/bin:/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
 
 export -n NGX_PM_CFLAGS
@@ -77,7 +83,6 @@ export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib -Wl,-rpath=${LD_
 export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE @@M64@@ @@CYGWIN@@"
 export CPPFLAGS="$CFLAGS"
 export PERL5LIB="${HULA}/perl/lib/site_perl/current:${HULA}/perl/lib/current"
-if [[ -e "${HUL}/jdk6" ]] ; then export JAVA_HOME="${HUL}/jdk6" ; else export -n JAVA_HOME ; fi
 
 alias a=alias
 alias l='ls -alrt'

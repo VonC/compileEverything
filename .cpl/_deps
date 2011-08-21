@@ -29,7 +29,8 @@ lib readline gcc
 lib sqlite readline,tcl
 lib aprutil gcc,openldap,db,sqlite,expat,libiconv
 lib openldap gcc,libtool,openssl,cyrus-sasl,db
-app subversion gcc,apache,apr,aprutil,neon,sqlite,zlib,python
+app subversion jdk,gcc,apache,apr,aprutil,neon,sqlite,zlib,python
+app jdk none
 lib neon gcc,openssl,expat,libxml2,zlib
 lib libxml2 gcc,zlib,libiconv,readline
 lib openssh gcc,openssl,zlib

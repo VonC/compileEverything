@@ -58,47 +58,53 @@ function ftrap {
   tail -3 "${_log}"  
   if [[ -e "${_logs}"/l ]]; then 
     tail -5 "${_logs}"/l
-	rm "${_logs}"/l; 
+  rm "${_logs}"/l; 
   fi
   if [[ "${unameo}" == "Cygwin" ]] ; then
     local chk=$(grep "cannot stat" "${H}/.lastlog"|grep ".libs/libgettext")
-	echo $chk
-	if [[ ${chk} != "" ]] ; then
+  echo $chk
+  if [[ ${chk} != "" ]] ; then
       bash ${H}/make_env.sh
-	fi
+  fi
   fi
 }
 
 trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | ftrap" EXIT ;
 
 function getJDK {
-	set -u
-	echo "Getting JDK6 latest"
-	# local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \ 
-	#  grep -e "(?ms)Java SE \d(?: Update \d+)?<.*?href=\"(/technetwork[^\"]+)\"><img")
-	local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
-		grep "/technetwork/java/javase/downloads/jdk-6u")
-	ajdk=${ajdk#*f=\"}
-	ajdk="http://www.oracle.com${ajdk%%\"*}"
-	echo $ajdk
-	local ajdk2=$(wget -q -O - ${ajdk} | grep "http://download.oracle.com/otn-pub/java/jdk" | \
-	  grep "linux-i586.bin")
-	ajdk2=${ajdk2##*:\"}
-	ajdk2=${ajdk2%%\"*}
-	local ajdkn=${ajdk2##*/}
-	echo $ajdk2 $ajdkn
-	if [[ ! -e "${_pkgs}/${ajdkn}" ]]; then
-	  loge "wget $ajdk2 -O ${_pkgs}/$ajdkn" "wget_sources_${ajdkn}"
-	fi
-	chmod 755 "${_pkgs}/$ajdkn"
-	cd "${H}/usr/local"
-	if [[ ! -e jdk6 ]]; then
-	  local ares=$("${_pkgs}/$ajdkn")
-	  echo $ares
-	  ln -s jdk1.6* jdk6
-	fi
-	export JAVA_HOME="${HUL}/jdk6"
-	cd "${H}"
+  set -u
+  if [[ ! -z "${JAVA_HOME}" ]] && [[ -e "${JAVA_HOME}" ]]; then 
+     ajvv=$(${JAVA_HOME}/bin/java -version 2>&1) ; 
+     echo -ne "\e[1;32m" ; echolog "JDK6 already installed" ; echo -ne "\e[m" ;
+     echo "Java detected, version: ${ajvv}"
+     if [[ ! -z "${ajvv}" ]] && [[ "${ajvv#*1.6.}" != "${ajvv}" ]] ; then  set +u; return 0;  fi
+  fi
+  set +u
+  echolog "##### Getting JDK6 latest ####" ; echo -ne "\e[m"
+  # local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \ 
+  #  grep -e "(?ms)Java SE \d(?: Update \d+)?<.*?href=\"(/technetwork[^\"]+)\"><img")
+  local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
+    grep "/technetwork/java/javase/downloads/jdk-6u")
+  ajdk=${ajdk#*f=\"}
+  ajdk="http://www.oracle.com${ajdk%%\"*}"
+  echo $ajdk
+  local ajdk2=$(wget -q -O - ${ajdk} | grep "http://download.oracle.com/otn-pub/java/jdk" | \
+    grep "linux-i586.bin")
+  ajdk2=${ajdk2##*:\"}
+  ajdk2=${ajdk2%%\"*}
+  local ajdkn=${ajdk2##*/}
+  echo $ajdk2 $ajdkn
+  if [[ ! -e "${_pkgs}/${ajdkn}" ]]; then
+    loge "wget $ajdk2 -O ${_pkgs}/$ajdkn" "wget_sources_${ajdkn}"
+  fi
+  chmod 755 "${_pkgs}/$ajdkn"
+  cd "${H}/usr/local"
+  if [[ ! -e jdk6 ]]; then
+    loge "${_pkgs}/$ajdkn" "wget_extract_${ajdkn}"
+    ln -s jdk1.6* jdk6
+  fi
+  export JAVA_HOME="${HUL}/jdk6"
+  cd "${H}"
 }
 
 function main {
@@ -109,11 +115,6 @@ function main {
     build_bashrc "$1"
   fi
   sc
-  set +u
-  if [[ -z "${JAVA_HOME}" ]] || [[ ! -e "${JAVA_HOME}" ]]; then
-    getJDK
-  fi
-  set -u
   mkdir -p "${HUL}/._linked"
   mkdir -p "${HUL}/ssl/lib"
   mkdir -p "${HULA}/svn/lib"
@@ -547,7 +548,8 @@ function build_line() {
       fi
     done
     #echo done deps from $name with $type
-    if [[ $type == "app" ]]; then build_item "$name" "APP" "$lineori";
+    if [[ $type == "app" ]] && [[ $name == "jdk" ]]; then getJDK ;
+    elif [[ $type == "app" ]]; then build_item "$name" "APP" "$lineori";
     elif [[ $type == "lib" ]] ; then build_item  "$name" "LIB" "$lineori";
     elif [[ $type == "mod" ]] ; then build_item "$name" "MOD" "$lineori"
     else echo "unknow type" ; exit 1 ; fi
