@@ -54,11 +54,11 @@ set -o errexit
 set -o nounset
 
 function ftrap {
-  tee -a "${_log}"; 
-  tail -3 "${_log}"  
-  if [[ -e "${_logs}"/l ]]; then 
+  tee -a "${_log}";
+  tail -3 "${_log}"
+  if [[ -e "${_logs}"/l ]]; then
     tail -5 "${_logs}"/l
-  rm "${_logs}"/l; 
+  rm "${_logs}"/l;
   fi
   if [[ "${unameo}" == "Cygwin" ]] ; then
     local chk=$(grep "cannot stat" "${H}/.lastlog"|grep ".libs/libgettext")
@@ -72,46 +72,51 @@ function ftrap {
 trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | ftrap" EXIT ;
 
 function getJDK {
-  set -u
-  if [[ ! -z "${JAVA_HOME}" ]] && [[ -e "${JAVA_HOME}" ]]; then 
-     ajvv=$(${JAVA_HOME}/bin/java -version 2>&1) ; 
-     echo -ne "\e[1;32m" ; echolog "JDK6 already installed" ; echo -ne "\e[m" ;
-     echo "Java detected, version: ${ajvv}"
-     if [[ ! -z "${ajvv}" ]] && [[ "${ajvv#*1.6.}" != "${ajvv}" ]] ; then  set +u; return 0;  fi
+  local afrom="$1"
+  local name="jdk"
+  #echo '$type ${donelist}' "$name : ${donelist}"
+  local isdone="false" ; isItDone "$name" isdone ${afrom}
+  if [[ "$isdone" == "false" ]] ; then
+    echolog "##### Getting JDK6 latest ####" ; echo -ne "\e[m"
+    if [[ ! -z "${JAVA_HOME}" ]] && [[ -e "${JAVA_HOME}" ]]; then
+       ajvv=$(${JAVA_HOME}/bin/java -version 2>&1) ;
+       echo -ne "\e[1;32m" ; echolog "JDK6 already installed" ; echo -ne "\e[m" ;
+       echo "Java detected, version: ${ajvv}"
+       if [[ ! -z "${ajvv}" ]] && [[ "${ajvv#*1.6.}" != "${ajvv}" ]] ; then donelist="${donelist}@${name}@" ; return 0;  fi
+    fi
+    # local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
+    #  grep -e "(?ms)Java SE \d(?: Update \d+)?<.*?href=\"(/technetwork[^\"]+)\"><img")
+    local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
+      grep "/technetwork/java/javase/downloads/jdk-6u")
+    ajdk=${ajdk#*f=\"}
+    ajdk="http://www.oracle.com${ajdk%%\"*}"
+    echo $ajdk
+    local ajdk2=$(wget -q -O - ${ajdk} | grep "http://download.oracle.com/otn-pub/java/jdk" | \
+      grep "linux-i586.bin")
+    ajdk2=${ajdk2##*:\"}
+    ajdk2=${ajdk2%%\"*}
+    local ajdkn=${ajdk2##*/}
+    echo $ajdk2 $ajdkn
+    if [[ ! -e "${_pkgs}/${ajdkn}" ]]; then
+      loge "wget $ajdk2 -O ${_pkgs}/$ajdkn" "wget_sources_${ajdkn}"
+    fi
+    chmod 755 "${_pkgs}/$ajdkn"
+    cd "${H}/usr/local"
+    if [[ ! -e jdk6 ]]; then
+      loge "${_pkgs}/$ajdkn" "wget_extract_${ajdkn}"
+      ln -s jdk1.6* jdk6
+    fi
+    export JAVA_HOME="${HUL}/jdk6"
+    cd "${H}"
+    donelist="${donelist}@${name}@"
   fi
-  set +u
-  echolog "##### Getting JDK6 latest ####" ; echo -ne "\e[m"
-  # local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \ 
-  #  grep -e "(?ms)Java SE \d(?: Update \d+)?<.*?href=\"(/technetwork[^\"]+)\"><img")
-  local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
-    grep "/technetwork/java/javase/downloads/jdk-6u")
-  ajdk=${ajdk#*f=\"}
-  ajdk="http://www.oracle.com${ajdk%%\"*}"
-  echo $ajdk
-  local ajdk2=$(wget -q -O - ${ajdk} | grep "http://download.oracle.com/otn-pub/java/jdk" | \
-    grep "linux-i586.bin")
-  ajdk2=${ajdk2##*:\"}
-  ajdk2=${ajdk2%%\"*}
-  local ajdkn=${ajdk2##*/}
-  echo $ajdk2 $ajdkn
-  if [[ ! -e "${_pkgs}/${ajdkn}" ]]; then
-    loge "wget $ajdk2 -O ${_pkgs}/$ajdkn" "wget_sources_${ajdkn}"
-  fi
-  chmod 755 "${_pkgs}/$ajdkn"
-  cd "${H}/usr/local"
-  if [[ ! -e jdk6 ]]; then
-    loge "${_pkgs}/$ajdkn" "wget_extract_${ajdkn}"
-    ln -s jdk1.6* jdk6
-  fi
-  export JAVA_HOME="${HUL}/jdk6"
-  cd "${H}"
 }
 
 function main {
   checkOs
   if [[ -e "$H/.bashrc_aliases_git" ]] ; then cp "$H/.cpl/.bashrc_aliases_git.tpl" "$H/.bashrc_aliases_git" ; fi
   if [[ ! -e "$H/.bashrc" ]]; then
-    if [[ $# != 1 ]] ; then echolog "When there is no .bashrc, make_env.sh needs a title for that .bashrc as first parameter. Not needed after that" ; miss_bashrc_title ; fi  
+    if [[ $# != 1 ]] ; then echolog "When there is no .bashrc, make_env.sh needs a title for that .bashrc as first parameter. Not needed after that" ; miss_bashrc_title ; fi
     build_bashrc "$1"
   fi
   sc
@@ -166,7 +171,7 @@ function build_bashrc() {
   export PATH=$H/bin:$PATH
   $H/bin/gen_sed -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
   get_arc longbit
-  if [[ "${unameo}" == "Cygwin" ]] ; then 
+  if [[ "${unameo}" == "Cygwin" ]] ; then
     $H/bin/gen_sed -i 's/ @@CYGWIN@@/ -DHAVE_STRSIGNAL/g' "$H/.bashrc" ;
     $H/bin/gen_sed -i 's/ -fPIC//g' "$H/.bashrc" ;
   else $H/bin/gen_sed -i 's/ @@CYGWIN@@//g' "$H/.bashrc" ; fi
@@ -179,13 +184,13 @@ function get_sources() {
   local _namever=$2
   local _ver=$3
   get_param $name nameurl "${name}"
-  get_param $name page "${_vers}"  
+  get_param $name page "${_vers}"
   if [[ "$page" == "none" ]] ; then eval $_namever="'${name}'" ; return 0 ; fi
-  get_param $name ext "tar.gz"  
+  get_param $name ext "tar.gz"
   if [[ -e "${page}" ]] ; then
     local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
   else
-    local asrcline=$(wget -q -O - "${page}" | grep "${nameurl}" | grep "${ext}") 
+    local asrcline=$(wget -q -O - "${page}" | grep "${nameurl}" | grep "${ext}")
   fi
   #echo "line0 source! $asrcline"
   get_param $name verexclude ""
@@ -252,7 +257,7 @@ function untar() {
   local namever=$2
   if [[ ! -e "${_src}/$namever" ]]; then
     get_tar tarname
-    get_param $name ext "tar.gz"  
+    get_param $name ext "tar.gz"
     loge "${tarname} ${_pkgs}/$namever.${ext} -C ${_src}" "tar_xpvf_$namever.${ext}"
     local lastlog=$(mrf "${_logs}" "*tar_xpvf*")
     local actualname=$(head -3 "$lastlog"|tail -1)
@@ -283,7 +288,7 @@ function get_param() {
   #echo "name $name, _param $_param, default $default, namever='${namever}', ver='${ver}'"
   if [[ ! -e "$H/.cpl/params/$name" ]] ; then echolog "unable to find param for $name" ; no_param ; fi
   local aparam=$(grep "$_param=" "$H/.cpl/params/$name"|head -1)
-  if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then 
+  if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then
     aparam=${aparam##$_param=}
   else aparam="" ; fi
   if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
@@ -548,7 +553,7 @@ function build_line() {
       fi
     done
     #echo done deps from $name with $type
-    if [[ $type == "app" ]] && [[ $name == "jdk" ]]; then getJDK ;
+    if [[ $type == "app" ]] && [[ $name == "jdk" ]]; then getJDK "$lineori";
     elif [[ $type == "app" ]]; then build_item "$name" "APP" "$lineori";
     elif [[ $type == "lib" ]] ; then build_item  "$name" "LIB" "$lineori";
     elif [[ $type == "mod" ]] ; then build_item "$name" "MOD" "$lineori"
