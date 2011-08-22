@@ -1,1 +1,2 @@
+pre=anos=$(uname -o) ; if [[ "${anos#*Cygwin}" != "${anos}" ]] ; then cp -f /usr/bin/cygintl-3.dll "${H}/bin" ; fi
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --with-libiconv-prefix=${HUL} --with-libintl-prefix=${HUL} @@WITH_GNU_LD@@

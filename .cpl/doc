@@ -532,6 +532,10 @@ http://www.linuxquestions.org/questions/linux-from-scratch-13/texinfo-make-probl
 http://www.mail-archive.com/lfs-support@linuxfromscratch.org/msg04469.html
 Probably linked to an error loading ncurses, perhaps because .a are linked instead of copied.
 Change the make_env.sh
+
+Actually works with cygintl-3.dll from C:\prog\cygwin\bin
+=> copy it from /usr/bin to repo/bin
+
 -----------
 perl no tinycore during make install:
 
@@ -770,4 +774,10 @@ configure: error: no - APXS refers to an old version of Apache
                      Unable to locate /mod_dav.h
 Should be:
 found at usr/local/apache2/bin/apxs, but no => recompile Apache2
+---------------
+Cygwin gdbm make install
+/bin/install -c -m 644 -o ausername -g Domain Users gdbm.h \
+	/home/ausername/envs/20110805/usr/local/libs/gdbm-1.8.3/include/gdbm.h
+/bin/install: target `/home/ausername/envs/20110805/usr/local/libs/gdbm-1.8.3/include/gdbm.h' is not a directory
+make: *** [install] Error 1
 ---------------
