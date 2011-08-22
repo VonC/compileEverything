@@ -781,3 +781,11 @@ Cygwin gdbm make install
 /bin/install: target `/home/ausername/envs/20110805/usr/local/libs/gdbm-1.8.3/include/gdbm.h' is not a directory
 make: *** [install] Error 1
 ---------------
+Cygwin cyrus-sasl make:
+gcc -Wall -W -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -L/home/ausername/envs/20110805/usr/local/ssl/lib -Wl,-rpath,/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -L/home/ausername/envs/20110805/usr/local/ssl/include/openssl/lib -o dbconverter-2.exe dbconverter-2.o ../sasldb/.libs/libsasldb.a -lresolv ../lib/.libs/libsasl2.a -ldl -lresolv -lcrypto -lcrypt -ldb -ldb -lresolv
+make[2]: *** No rule to make target `saslpasswd2', needed by `all-am'.  Stop.
+make[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/cyrus-sasl-2.1.21/utils'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/cyrus-sasl-2.1.21'
+make: *** [all] Error 2
+~~~~~~~~~~~~~

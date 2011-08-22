@@ -3,8 +3,6 @@ app make expat,gettext
 lib expat none
 lib gettext libiconv,expat
 lib libiconv none
-lib bzip2 gcc
-lib gtar gcc,libiconv,bzip2
 app git gcc,openssl,libssh2,curl,libiconv,expat,libidn,zlib,perl,apache,python,subversion,openssh
 lib openssl zlib,perl
 lib zlib gcc
@@ -26,6 +24,7 @@ app apache gcc,expat,libiconv,gdbm,zlib,db,openssl,apr,aprutil
 lib apr autoconf,libtool,python
 lib libtool gcc
 app python bzip2,db,openssl,gdbm,ncurses,readline,tcl,libiconv,zlib,expat,sqlite
+lib bzip2 gcc
 lib readline gcc
 lib sqlite readline,tcl
 lib aprutil gcc,openldap,db,sqlite,expat,libiconv
