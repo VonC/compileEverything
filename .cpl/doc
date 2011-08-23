@@ -788,4 +788,5 @@ make[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/cyrus-sasl-2.
 make[1]: *** [all-recursive] Error 1
 make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/cyrus-sasl-2.1.21'
 make: *** [all] Error 2
+$(EXEEXT), which isn't empty on Cygwin, is missing on sasldblistusers2 and saslpasswd2 => rewrite utils/Makefile in premake
 ~~~~~~~~~~~~~
