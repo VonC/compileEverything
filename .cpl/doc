@@ -790,3 +790,116 @@ make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/cyrus-sasl-2.
 make: *** [all] Error 2
 $(EXEEXT), which isn't empty on Cygwin, is missing on sasldblistusers2 and saslpasswd2 => rewrite utils/Makefile in premake
 ~~~~~~~~~~~~~
+Cygwin: libssh2 1.2.4 older than 1.2.7 which is missing on Solaris, and blocked on libssh2.org
+libtool: link: gcc -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DLIBSSH2_WIN32 -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o .libs/direct_tcpip.exe direct_tcpip.o  /home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/ssl/include/openssl/lib -ldl -lresolv ../src/.libs/libssh2.a -lssl -lcrypto -lz
+direct_tcpip.o:direct_tcpip.c:(.text+0x19e): undefined reference to `__imp__libssh2_session_init_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x1f3): undefined reference to `__imp__libssh2_session_startup'
+direct_tcpip.o:direct_tcpip.c:(.text+0x236): undefined reference to `__imp__libssh2_hostkey_hash'
+direct_tcpip.o:direct_tcpip.c:(.text+0x2db): undefined reference to `__imp__libssh2_userauth_list'
+direct_tcpip.o:direct_tcpip.c:(.text+0x3e4): undefined reference to `__imp__libssh2_userauth_password_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x471): undefined reference to `__imp__libssh2_userauth_publickey_fromfile_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x68e): undefined reference to `__imp__libssh2_channel_direct_tcpip_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x7a2): undefined reference to `__imp__libssh2_session_set_blocking'
+direct_tcpip.o:direct_tcpip.c:(.text+0x8ca): undefined reference to `__imp__libssh2_channel_write_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x910): undefined reference to `__imp__libssh2_channel_read_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x972): undefined reference to `__imp__libssh2_channel_eof'
+direct_tcpip.o:direct_tcpip.c:(.text+0x9cc): undefined reference to `__imp__libssh2_channel_free'
+direct_tcpip.o:direct_tcpip.c:(.text+0x9f3): undefined reference to `__imp__libssh2_session_disconnect_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0xa02): undefined reference to `__imp__libssh2_session_free'
+collect2: ld returned 1 exit status
+make[2]: *** [direct_tcpip.exe] Error 1
+make[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/libssh2-1.2.4/example'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/libssh2-1.2.4/example'
+make: *** [all-recursive] Error 1
+
+Will have to try make VERBOSE=1 
+Note C:\prog\cygwin\home\ausername\envs\20110805\.cpl\src\libssh2-1.2.9\src\.libs\libssh2.la is a link to libssh2.lai. Not supported with Cygwin?
+http://itk-insight-users.2283740.n2.nabble.com/link-error-when-learning-Getting-Started-with-ITK-VTK-td3897136.html
+
+None of the sources in example works properly... => 
+empty noinst_PROGRAMS
+noinst_PROGRAMS = scp$(EXEEXT) \
+	scp_nonblock$(EXEEXT) scp_write$(EXEEXT) \
+	scp_write_nonblock$(EXEEXT) sftp$(EXEEXT) \
+	sftp_nonblock$(EXEEXT) sftp_write$(EXEEXT) \
+	sftp_write_nonblock$(EXEEXT) sftp_mkdir$(EXEEXT) \
+	sftp_mkdir_nonblock$(EXEEXT) sftp_RW_nonblock$(EXEEXT) \
+	sftpdir$(EXEEXT) sftpdir_nonblock$(EXEEXT) ssh2_exec$(EXEEXT) \
+	ssh2_agent$(EXEEXT) ssh2_echo$(EXEEXT) sftp_append$(EXEEXT) \
+	subsystem_netconf$(EXEEXT)
+
+ausername@anhostname ~/envs/20110805/.cpl/src/libssh2-1.2.4/example
+$ nm -Ap ../src/.libs/libssh2.a|grep init_ex
+../src/.libs/libssh2.a:session.o:00000517 T _libssh2_session_init_ex
+
+    ----
+
+With libssh2-1.2.9
+
+<     unsigned __int64 ns100; /*time since 1 Jan 1601 in 100ns units */
+---
+>     unsigned long long ns100; /*time since 1 Jan 1601 in 100ns units */
+
+libtool: compile:  gcc -DHAVE_CONFIG_H -I../include -I../src -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DLIBSSH2_WIN32 -MT misc.lo -MD -MP -MF .deps/misc.Tpo -c misc.c  -DDLL_EXPORT -DPIC -o .libs/misc.o
+
+
+misc.c: In function `_libssh2_gettimeofday':
+misc.c:596: warning: no semicolon at end of struct or union
+misc.c:596: error: syntax error before "ns100"
+misc.c:597: error: `FILETIME' undeclared (first use in this function)
+misc.c:597: error: (Each undeclared identifier is reported only once
+misc.c:597: error: for each function it appears in.)
+misc.c: At top level:
+misc.c:598: warning: data definition has no type or storage class
+misc.c:600: error: syntax error before "if"
+misc.c:604: warning: integer constant is too large for "long" type
+make[2]: *** [misc.lo] Error 1
+make[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/libssh2-1.2.9/src'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/libssh2-1.2.9/src'
+make: *** [all-recursive] Error 1
+
+__int64 doesn't seem to be recognized
+
+ausername@anhostname ~/envs/20110805/.cpl/src/libssh2-1.2.9/include
+$ grep __int64 *
+libssh2.h:typedef unsigned __int64 libssh2_uint64_t;
+libssh2.h:typedef __int64 libssh2_int64_t;
+
+#ifdef _MSC_VER
+typedef unsigned char uint8_t;
+typedef unsigned int uint32_t;
+typedef unsigned __int64 libssh2_uint64_t;
+typedef __int64 libssh2_int64_t;
+#ifndef ssize_t
+typedef SSIZE_T ssize_t;
+#endif
+#else
+typedef unsigned long long libssh2_uint64_t;
+typedef long long libssh2_int64_t;
+typedef libssh2_int64_t __int64; <===== ADD THIS LINE, nope
+#endif
+
+misc.c: 596
+    unsigned long long ns100; /*time since 1 Jan 1601 in 100ns units */
+    
+For now (bad): 
+replace
+//#ifdef LIBSSH2_GETTIMEOFDAY_WIN32
+by:
+#ifdef WIN32
+~~~~~~~~~~~~~~
+Cygwin curl make
+libtool: link: gcc -isystem /home/ausername/envs/20110805/usr/local/include -isystem /home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -g0 -Wno-system-headers -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o .libs/curl.exe main.o hugehelp.o urlglob.o writeout.o writeenv.o getpass.o homedir.o curlutil.o os-specific.o xattr.o strtoofft.o strdup.o rawstr.o nonblock.o  -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/libs/openssl-1.0.0d/lib ../lib/.libs/libcurl.a /home/ausername/envs/20110805/usr/local/libs/libidn-1.22/lib/libidn.dll.a /home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1/lib/libintl.dll.a /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib/libiconv.dll.a /home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib/libssh2.a -lssl -lcrypto -lz -L/home/ausername/envs/20110805/usr/local/libs/libidn-1.22/lib -L/home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1/lib -L/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib
+/home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib/libssh2.a(session.o):session.c:(.text+0x1716): undefined reference to `__libssh2_gettimeofday'
+/home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib/libssh2.a(session.o):session.c:(.text+0x1744): undefined reference to `__libssh2_gettimeofday'
+collect2: ld returned 1 exit status
+make[2]: *** [curl.exe] Error 1
+make[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/curl-7.21.7/src'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/curl-7.21.7/src'
+make: *** [all-recursive] Error 1
+
+Should not happens if misc.c in libssh2 did compile properly!
+However illustrates link dependency on libssh2 function

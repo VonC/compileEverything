@@ -1,3 +1,4 @@
-url=http://www.libssh2.org/download/
+#page=http://ftp.uni-erlangen.de/pub/mirrors/gentoo/distfiles/?order=D
+url=http://ftp.uni-erlangen.de/pub/mirrors/gentoo/distfiles/
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-openssl --with-libssl-prefix=${HUL}/ssl --with-libz --with-libz-prefix=${HUL} @@WITHOUT_GNU_LD@@
 premake=gen_sed -i "s/^CFLAGS = /CFLAGS = -lsasl2 /g" ${H}/.cpl/src/@@NAMEVER@@/example/Makefile;gen_sed -i "s/^CFLAGS = /CFLAGS = -lsasl2 /g" ${H}/.cpl/src/@@NAMEVER@@/tests/Makefile
