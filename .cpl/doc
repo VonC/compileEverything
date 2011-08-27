@@ -903,3 +903,17 @@ make: *** [all-recursive] Error 1
 
 Should not happens if misc.c in libssh2 did compile properly!
 However illustrates link dependency on libssh2 function
+---------------
+TinyCore ruby  make
+make[1]: Leaving directory `/home/tc/compileEverything/.cpl/src/ruby-1.9.2-p0/ext/zlib'
+making ruby
+make[1]: Entering directory `/home/tc/compileEverything/.cpl/src/ruby-1.9.2-p0'
+gcc -I/home/tc/compileEverything/usr/local/include -I/home/tc/compileEverything/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -fPIC -L/home/tc/compileEverything/usr/local/lib  -rdynamic -Wl,-export-dynamic   main.o  -Wl,-R -Wl,/home/tc/compileEverything/usr/local/apps/ruby-1.9.2p0/lib -L/home/tc/compileEverything/usr/local/apps/ruby-1.9.2p0/lib -lruby -lpthread -lrt -ldl -lcrypt -lm   -o ruby
+/usr/local/bin/ld: cannot find -lruby
+collect2: ld returned 1 exit status
+make[1]: *** [ruby] Error 1
+make[1]: Leaving directory `/home/tc/compileEverything/.cpl/src/ruby-1.9.2-p0'
+make: *** [main] Error 2
+=> restore -L. in the ruby parameter file
+---------------
+

@@ -1,2 +1,2 @@
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-out-ext=openssl --with-ext=zlib @@WITHOUT_GNU_LD@@
-premake=gen_sed -i "s/-L. /-L${EHULL} /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile" ; cp -f ${HULL}/libz.* "${H}/.cpl/src/@@NAMEVER@@/ext/zlib"
+premake=gen_sed -i "s/-L. /-L. -L${EHULL} /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile" ; cp -f ${HULL}/libz.* "${H}/.cpl/src/@@NAMEVER@@/ext/zlib"
