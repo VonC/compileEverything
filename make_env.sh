@@ -212,7 +212,7 @@ function get_sources() {
   # echo "source1 ${source}"
   get_param $name url ""
   #echo "url0 ${url}"
-  local targz=${source##*/}
+  local targz="${source##*/}"
   if [[ "$url" != "" ]] ; then
     #echo "IIIII url ${url} AAAAA targz ${targz}"
     source="${url}${targz}"
@@ -220,6 +220,11 @@ function get_sources() {
   #echo sources for $name: $targz from $source from $line
   local anamever="${targz%.${ext}}"
   eval $_namever="'${anamever}'"
+  local ss="xx"
+  if [[ -e "${_pkgs}/$targz" ]] ; then ss=$(stat -c%s "${_pkgs}/$targz") ; fi
+  if [[ -e "${_pkgs}/$targz" ]] && [[ "${ss}" == "0" ]] ; then
+    rm -f "${_pkgs}/$targz"
+  fi
   if [[ ! -e "${_pkgs}/$targz" ]] && [[ ! -e "$HUL/._linked/$namever" ]]; then
     echolog "get sources for $name in ${_hpkgs}/$targz"
     loge "wget $source -O ${_pkgs}/$targz" "wget_sources_$targz"
