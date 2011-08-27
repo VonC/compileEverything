@@ -916,4 +916,12 @@ make[1]: Leaving directory `/home/tc/compileEverything/.cpl/src/ruby-1.9.2-p0'
 make: *** [main] Error 2
 => restore -L. in the ruby parameter file
 ---------------
+Cygwin gcc make
+/home/ausername/envs/20110820/.cpl/src/gcc-3.4.6/objdir/gcc/xgcc -B/home/ausername/envs/20110820/.cpl/src/gcc-3.4.6/objdir/gcc/ -B/home/ausername/envs/20110820/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/bin/ -B/home/ausername/envs/20110820/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/lib/ -isystem /home/ausername/envs/20110820/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/include -isystem /home/ausername/envs/20110820/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/sys-include -c -DHAVE_CONFIG_H -O2 -I/home/ausername/envs/20110820/usr/local/include -I/home/ausername/envs/20110820/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I. -I../../../libiberty/../include  -W -Wall -Wtraditional -pedantic ../../../libiberty/sort.c -o sort.o
+xgcc: fork: Resource temporarily unavailable
+make[1]: *** [sort.o] Error 1
+make[1]: Leaving directory `/home/ausername/envs/20110820/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libiberty'
+make: *** [all-target-libiberty] Error 2
 
+=> relaunch? resource issue
+------------
