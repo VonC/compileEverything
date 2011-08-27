@@ -1,6 +1,7 @@
 Notes:
 * to follow the most recent log, tail --follow=name logs/last (with a gnu tail at least)
 * export PS4='+${BASH_SOURCE}:${LINENO}: ' ; bash -x make_env.sh will display line numbers
+* git filter-branch --env-filter 'if [ $GIT_AUTHOR_EMAIL = vonc@laposte.com ]; then GIT_AUTHOR_EMAIL=vonc@laposte.net; fi; export GIT_AUTHOR_EMAIL' HEAD~4..HEAD
 -----------
 $ ldd iconv.exe | grep -v -E "ntdll|kernel|sxwmon32.dll|GDI32.dll|ADVAPI32.dll|RPCRT4.dll|Secur32.dll|SHELL32.dll|msvcrt.dll|SHLWAPI.dll|USER32.dll|ole32.dll|I
 MM32.DLL|LPK.DLL|USP10.dll|comctl32.dll|comctl32.dll|cygwin1.dll|ADVAPI32.DLL|cygintl-8.dll"
@@ -777,7 +778,7 @@ found at usr/local/apache2/bin/apxs, but no => recompile Apache2
 ---------------
 Cygwin gdbm make install
 /bin/install -c -m 644 -o ausername -g Domain Users gdbm.h \
-	/home/ausername/envs/20110805/usr/local/libs/gdbm-1.8.3/include/gdbm.h
+  /home/ausername/envs/20110805/usr/local/libs/gdbm-1.8.3/include/gdbm.h
 /bin/install: target `/home/ausername/envs/20110805/usr/local/libs/gdbm-1.8.3/include/gdbm.h' is not a directory
 make: *** [install] Error 1
 ---------------
@@ -813,21 +814,21 @@ make[1]: *** [all] Error 2
 make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/libssh2-1.2.4/example'
 make: *** [all-recursive] Error 1
 
-Will have to try make VERBOSE=1 
+Will have to try make VERBOSE=1
 Note C:\prog\cygwin\home\ausername\envs\20110805\.cpl\src\libssh2-1.2.9\src\.libs\libssh2.la is a link to libssh2.lai. Not supported with Cygwin?
 http://itk-insight-users.2283740.n2.nabble.com/link-error-when-learning-Getting-Started-with-ITK-VTK-td3897136.html
 
-None of the sources in example works properly... => 
+None of the sources in example works properly... =>
 empty noinst_PROGRAMS
 noinst_PROGRAMS = scp$(EXEEXT) \
-	scp_nonblock$(EXEEXT) scp_write$(EXEEXT) \
-	scp_write_nonblock$(EXEEXT) sftp$(EXEEXT) \
-	sftp_nonblock$(EXEEXT) sftp_write$(EXEEXT) \
-	sftp_write_nonblock$(EXEEXT) sftp_mkdir$(EXEEXT) \
-	sftp_mkdir_nonblock$(EXEEXT) sftp_RW_nonblock$(EXEEXT) \
-	sftpdir$(EXEEXT) sftpdir_nonblock$(EXEEXT) ssh2_exec$(EXEEXT) \
-	ssh2_agent$(EXEEXT) ssh2_echo$(EXEEXT) sftp_append$(EXEEXT) \
-	subsystem_netconf$(EXEEXT)
+  scp_nonblock$(EXEEXT) scp_write$(EXEEXT) \
+  scp_write_nonblock$(EXEEXT) sftp$(EXEEXT) \
+  sftp_nonblock$(EXEEXT) sftp_write$(EXEEXT) \
+  sftp_write_nonblock$(EXEEXT) sftp_mkdir$(EXEEXT) \
+  sftp_mkdir_nonblock$(EXEEXT) sftp_RW_nonblock$(EXEEXT) \
+  sftpdir$(EXEEXT) sftpdir_nonblock$(EXEEXT) ssh2_exec$(EXEEXT) \
+  ssh2_agent$(EXEEXT) ssh2_echo$(EXEEXT) sftp_append$(EXEEXT) \
+  subsystem_netconf$(EXEEXT)
 
 ausername@anhostname ~/envs/20110805/.cpl/src/libssh2-1.2.4/example
 $ nm -Ap ../src/.libs/libssh2.a|grep init_ex
@@ -883,8 +884,8 @@ typedef libssh2_int64_t __int64; <===== ADD THIS LINE, nope
 
 misc.c: 596
     unsigned long long ns100; /*time since 1 Jan 1601 in 100ns units */
-    
-For now (bad): 
+
+For now (bad):
 replace
 //#ifdef LIBSSH2_GETTIMEOFDAY_WIN32
 by:
