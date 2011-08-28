@@ -513,7 +513,15 @@ function build_item() {
     action $name $namever premake "${asrc}"
     if [[ ! -e "${asrc}"/._build ]] ; then
       get_param $name makecmd "make" ;
-      if [[ "${makecmd}" != "none" ]] ; then loge "eval ${makecmd}" "make_$namever"; fi
+      if [[ "${makecmd}" != "none" ]] ; then
+        if [[ "${makecmd#@@}" != "${makecmd}" ]] ; then
+          makecmd="${makecmd#@@}"
+          echo "${makecmd}" > ./makecmd
+          chmod 755 ./makecmd
+          makecmd="./makecmd"
+        fi
+        loge "eval ${makecmd}" "make_$namever";
+      fi
       echo done > "${asrc}"/._build
     fi
     if [[ ! -e "${asrc}"/._installed ]] ; then
