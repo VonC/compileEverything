@@ -890,6 +890,64 @@ replace
 //#ifdef LIBSSH2_GETTIMEOFDAY_WIN32
 by:
 #ifdef WIN32
+
+=> actually define those types:
+
+typedef unsigned long DWORD;
+typedef DWORD LCID;
+typedef struct _FILETIME {
+	DWORD dwLowDateTime;
+	DWORD dwHighDateTime;
+} FILETIME,*PFILETIME,*LPFILETIME;
+
+int __cdecl _libssh2_gettimeofday(struct timeval *tp, void *tzp)
+ {
+  union {
+    unsigned long long ns100; /*time since 1 Jan 1601 in 100ns units */
+    FILETIME ft;
+  }  _now;
+
+  ------------
+  
+direct_tcpip.o:direct_tcpip.c:(.text+0x19e): undefined reference to `__imp__libssh2_session_init_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x1f3): undefined reference to `__imp__libssh2_session_startup'
+
+Note: the libssh.a just before had some:
+
+*** Warning: linker path does not have real file for library -lssl.
+*** I have the capability to make that library automatically link in when
+*** you link to this library.  But I can only do this if you have a
+*** shared version of the library, which you do not appear to have
+*** because I did check the linker path looking for a file starting
+*** with libssl and none of the candidates passed a file format test
+*** using a file magic. Last file checked: /home/ausername/envs/20110805/usr/local/ssl/lib/libssl.dll.a
+
+But libtool use the command `file` which wasn't installed in the current cygwin setup.
+=> install /usr/bin/file
+http://comments.gmane.org/gmane.os.cygwin/124739
+The CYGWIN v1.7.7 distribution includes the command "file" (not part of the default core installation, you have to select it separately)
+
+Then:
+
+ausername@anhostname ~/envs/20110805/.cpl/src/libssh2-1.2.9/src
+$ /bin/sh ../libtool --tag=CC --mode=link gcc  -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DLIBSSH2_WIN32  -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o libssh2.la -rpath/home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib -version-info 1:1:0 -no-undefined -export-symbols-regex '^libssh2_.*'  -L/home/ausername/envs/20110805/usr/local/ssl/lib -lssl -L/home/ausername/envs/20110805/usr/local/ssl/lib -lcrypto -R/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/lib -lz channel.lo comp.lo crypt.lo hostkey.lo kex.lo mac.lo misc.lo packet.lo publickey.lo scp.lo session.lo sftp.lo userauth.lo transport.lo version.lo knownhost.lo agent.lo openssl.lo libgcrypt.lo pem.lo keepalive.lo global.lo
+libtool: link: rm -fr  .libs/libssh2.a .libs/libssh2.la .libs/libssh2.lai
+libtool: link: /bin/nm -B  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   | sed -n -e 's/^.*[     ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[         ][      ]*_\([_A-Za-z][_A-Za-z0-9]*\)$/\1 _\2 \2/p' | /bin/sed -e '/^[BCDGRS][ ]/s/.*[ ]\([^ ]*\)/\1 DATA/' | /bin/sed -e '/^[AITW][ ]/s/.*[ ]//' | sort | uniq > .libs/libssh2.exp
+libtool: link: /bin/grep -E -e "^libssh2_.*" ".libs/libssh2.exp" > ".libs/libssh2.expT"
+libtool: link: mv -f ".libs/libssh2.expT" ".libs/libssh2.exp"
+libtool: link: if test "x`/bin/sed 1q .libs/libssh2.exp`" = xEXPORTS; then cp .libs/libssh2.exp .libs/cygssh2-1.dll.def; else echo EXPORTS > .libs/cygssh2-1.dll.def; cat .libs/libssh2.exp >> .libs/cygssh2-1.dll.def; fi
+libtool: link:  
+gcc -shared .libs/cygssh2-1.dll.def  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -lssl -lcrypto -lz  -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib   -o .libs/cygssh2-1.dll -Wl,--enable-auto-image-base -Xlinker --out-implib -Xlinker .libs/libssh2.dll.a
+Creating library file: .libs/libssh2.dll.a
+.libs/misc.o:misc.c:(.text+0x5f9): undefined reference to `_GetSystemTimeAsFileTime'
+collect2: ld returned 1 exit status
+
+gcc -shared .libs/cygssh2-1.dll.def  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -lssl -lcrypto -lz  -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib   -o .libs/cygssh2-1.dll -Wl,--enable-auto-image-base -Xlinker --out-implib -Xlinker .libs/libssh2.dll.a
+
+WORKAROUND:
+#include <windows.h>
+just before the function in misc.c does the trick
+
 ~~~~~~~~~~~~~~
 Cygwin curl make
 libtool: link: gcc -isystem /home/ausername/envs/20110805/usr/local/include -isystem /home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -g0 -Wno-system-headers -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o .libs/curl.exe main.o hugehelp.o urlglob.o writeout.o writeenv.o getpass.o homedir.o curlutil.o os-specific.o xattr.o strtoofft.o strdup.o rawstr.o nonblock.o  -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/libs/openssl-1.0.0d/lib ../lib/.libs/libcurl.a /home/ausername/envs/20110805/usr/local/libs/libidn-1.22/lib/libidn.dll.a /home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1/lib/libintl.dll.a /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib/libiconv.dll.a /home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib/libssh2.a -lssl -lcrypto -lz -L/home/ausername/envs/20110805/usr/local/libs/libidn-1.22/lib -L/home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1/lib -L/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib
