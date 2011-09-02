@@ -1,2 +1,3 @@
+pre=anos=$(uname -o) ; if [[ "${anos#*Cygwin}" != "${anos}" ]] ; then gen_sed -i "s/-lsasl2  /-lsasl2 -lcrypto -ldb /g" ${H}/.cpl/src/@@NAMEVER@@/configure ; gen_sed -i '\''s/SASL_LIBS=\"/SASL_LIBS=\"-ldb /g'\'' ${H}/.cpl/src/@@NAMEVER@@/configure ; gen_sed -i '\''s/-lssl -lcrypto/-lssl -lcrypto -ldb/g'\'' ${H}/.cpl/src/@@NAMEVER@@/configure ; fi
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-cyrus-sasl @@WITHOUT_GNU_LD@@
 premake=make depend

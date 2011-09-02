@@ -549,7 +549,7 @@ make: *** [libperl.a] Error 127
 -------------
 curl on configure on Tinycore:
 checking run-time libs availability... failed
-configure: error: one or more libs available at link-time are not available run-time. Libs used at link-time: -lidn -lssh2 -lssl -lcrypto -lrt -lssl -lcrypto -ldl -lz   -lz -lssh2
+configure: error: one or more libs available at link-time are not available run-time. Libs used at link-time: -lidn -lssh2 anhostname -lrt anhostname -ldl -lz   -lz -lssh2
 onfigure:24001: ./conftest
 ./conftest: error while loading shared libraries: libssl.so.1.0.0: cannot open shared object file: No such file or directory
 configure:24001: $? = 127
@@ -792,7 +792,7 @@ make: *** [all] Error 2
 $(EXEEXT), which isn't empty on Cygwin, is missing on sasldblistusers2 and saslpasswd2 => rewrite utils/Makefile in premake
 ~~~~~~~~~~~~~
 Cygwin: libssh2 1.2.4 older than 1.2.7 which is missing on Solaris, and blocked on libssh2.org
-libtool: link: gcc -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DLIBSSH2_WIN32 -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o .libs/direct_tcpip.exe direct_tcpip.o  /home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/ssl/include/openssl/lib -ldl -lresolv ../src/.libs/libssh2.a -lssl -lcrypto -lz
+libtool: link: gcc -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DLIBSSH2_WIN32 -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o .libs/direct_tcpip.exe direct_tcpip.o  /home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/ssl/include/openssl/lib -ldl -lresolv ../src/.libs/libssh2.a anhostname -lz
 direct_tcpip.o:direct_tcpip.c:(.text+0x19e): undefined reference to `__imp__libssh2_session_init_ex'
 direct_tcpip.o:direct_tcpip.c:(.text+0x1f3): undefined reference to `__imp__libssh2_session_startup'
 direct_tcpip.o:direct_tcpip.c:(.text+0x236): undefined reference to `__imp__libssh2_hostkey_hash'
@@ -937,12 +937,12 @@ libtool: link: /bin/grep -E -e "^libssh2_.*" ".libs/libssh2.exp" > ".libs/libssh
 libtool: link: mv -f ".libs/libssh2.expT" ".libs/libssh2.exp"
 libtool: link: if test "x`/bin/sed 1q .libs/libssh2.exp`" = xEXPORTS; then cp .libs/libssh2.exp .libs/cygssh2-1.dll.def; else echo EXPORTS > .libs/cygssh2-1.dll.def; cat .libs/libssh2.exp >> .libs/cygssh2-1.dll.def; fi
 libtool: link:  
-gcc -shared .libs/cygssh2-1.dll.def  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -lssl -lcrypto -lz  -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib   -o .libs/cygssh2-1.dll -Wl,--enable-auto-image-base -Xlinker --out-implib -Xlinker .libs/libssh2.dll.a
+gcc -shared .libs/cygssh2-1.dll.def  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib anhostname -lz  -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib   -o .libs/cygssh2-1.dll -Wl,--enable-auto-image-base -Xlinker --out-implib -Xlinker .libs/libssh2.dll.a
 Creating library file: .libs/libssh2.dll.a
 .libs/misc.o:misc.c:(.text+0x5f9): undefined reference to `_GetSystemTimeAsFileTime'
 collect2: ld returned 1 exit status
 
-gcc -shared .libs/cygssh2-1.dll.def  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -lssl -lcrypto -lz  -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib   -o .libs/cygssh2-1.dll -Wl,--enable-auto-image-base -Xlinker --out-implib -Xlinker .libs/libssh2.dll.a
+gcc -shared .libs/cygssh2-1.dll.def  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib anhostname -lz  -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib   -o .libs/cygssh2-1.dll -Wl,--enable-auto-image-base -Xlinker --out-implib -Xlinker .libs/libssh2.dll.a
 
 WORKAROUND:
 #include <windows.h>
@@ -950,7 +950,7 @@ just before the function in misc.c does the trick
 
 ~~~~~~~~~~~~~~
 Cygwin curl make
-libtool: link: gcc -isystem /home/ausername/envs/20110805/usr/local/include -isystem /home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -g0 -Wno-system-headers -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o .libs/curl.exe main.o hugehelp.o urlglob.o writeout.o writeenv.o getpass.o homedir.o curlutil.o os-specific.o xattr.o strtoofft.o strdup.o rawstr.o nonblock.o  -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/libs/openssl-1.0.0d/lib ../lib/.libs/libcurl.a /home/ausername/envs/20110805/usr/local/libs/libidn-1.22/lib/libidn.dll.a /home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1/lib/libintl.dll.a /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib/libiconv.dll.a /home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib/libssh2.a -lssl -lcrypto -lz -L/home/ausername/envs/20110805/usr/local/libs/libidn-1.22/lib -L/home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1/lib -L/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib
+libtool: link: gcc -isystem /home/ausername/envs/20110805/usr/local/include -isystem /home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -g0 -Wno-system-headers -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o .libs/curl.exe main.o hugehelp.o urlglob.o writeout.o writeenv.o getpass.o homedir.o curlutil.o os-specific.o xattr.o strtoofft.o strdup.o rawstr.o nonblock.o  -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/libs/openssl-1.0.0d/lib ../lib/.libs/libcurl.a /home/ausername/envs/20110805/usr/local/libs/libidn-1.22/lib/libidn.dll.a /home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1/lib/libintl.dll.a /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib/libiconv.dll.a /home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib/libssh2.a anhostname -lz -L/home/ausername/envs/20110805/usr/local/libs/libidn-1.22/lib -L/home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1/lib -L/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib
 /home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib/libssh2.a(session.o):session.c:(.text+0x1716): undefined reference to `__libssh2_gettimeofday'
 /home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib/libssh2.a(session.o):session.c:(.text+0x1744): undefined reference to `__libssh2_gettimeofday'
 collect2: ld returned 1 exit status
@@ -984,3 +984,94 @@ make: *** [all-target-libiberty] Error 2
 
 => relaunch? resource issue
 ------------
+Cygwin openldap configure
+
+configure:21991: gcc -o conftest.exe -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib conftest.c -lsasl2   >&5
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x6c): undefined reference to `_EVP_DigestInit'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x82): undefined reference to `_EVP_DigestUpdate'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x98): undefined reference to `_EVP_DigestFinal'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x125): undefined reference to `_EVP_get_digestbyname'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x698): undefined reference to `_EVP_cleanup'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0xbea): undefined reference to `_EVP_DigestInit'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0xc15): undefined reference to `_EVP_DigestUpdate'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0xc37): undefined reference to `_EVP_DigestFinal'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0xde1): undefined reference to `_EVP_get_digestbyname'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x1101): undefined reference to `_EVP_get_digestbyname'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x21c1): undefined reference to `_OpenSSL_add_all_digests'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x2c6e): undefined reference to `_OpenSSL_add_all_digests'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x94): undefined reference to `_db_create'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x100): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x183): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x36b): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x599): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x617): undefined reference to `_db_strerror'
+
+normal:
+$ nm -A /home/ausername/envs/20110805/usr/local/lib/*.a |grep Digest
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a:otp.o:         U _EVP_DigestFinal
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a:otp.o:         U _EVP_DigestInit
+=> recompile correctly cyrus-sasl?
+Actually
+ausername@anhostname ~/envs/20110805/.cpl/src/cyrus-sasl-2.1.21
+$ grep DigestInit *
+aclocal.m4:                     AC_CHECK_LIB(crypto, EVP_DigestInit,
+configure:                      echo "$as_me:$LINENO: checking for EVP_DigestInit in -lcrypto" >&5
+configure:echo $ECHO_N "checking for EVP_DigestInit in -lcrypto... $ECHO_C" >&6
+=> check openssl
+ausername@anhostname ~/envs/20110805/.cpl/src/cyrus-sasl-2.1.21
+$ find ../../../usr/local/ -name "*crypto*"
+../../../usr/local/libs/openssl-1.0.0d/bin/cygcrypto-1.0.0.dll
+../../../usr/local/libs/openssl-1.0.0d/include/openssl/crypto.h
+../../../usr/local/libs/openssl-1.0.0d/lib/libcrypto.a
+../../../usr/local/libs/openssl-1.0.0d/lib/libcrypto.dll.a
+
+ausername@anhostname ~/envs/20110805/.cpl/src/openssl-1.0.0d
+$ nm -A ./libcrypto.a|grep _EVP_DigestInit
+./libcrypto.a:hmac.o:         U _EVP_DigestInit_ex
+./libcrypto.a:rsa_oaep.o:         U _EVP_DigestInit_ex
+./libcrypto.a:rsa_pss.o:         U _EVP_DigestInit_ex
+./libcrypto.a:md_rand.o:         U _EVP_DigestInit_ex
+./libcrypto.a:digest.o:0000003f T _EVP_DigestInit
+./libcrypto.a:digest.o:0000005e T _EVP_DigestInit_ex
+./libcrypto.a:evp_key.o:         U _EVP_DigestInit_ex
+./libcrypto.a:bio_md.o:         U _EVP_DigestInit_ex
+./libcrypto.a:bio_ok.o:         U _EVP_DigestInit_ex
+
+
+and sasl:
+checking for unicode/utypes.h... no
+configure: WARNING: ICU not available
+checking sasl/sasl.h usability... yes
+checking sasl/sasl.h presence... yes
+checking for sasl/sasl.h... yes
+checking sasl.h usability... no
+checking sasl.h presence... no
+checking for sasl.h... no
+checking for sasl_client_init in -lsasl2... no
+checking for sasl_client_init in -lsasl... no
+configure: error: Could not locate Cyrus SASL
+(normal, don't have libsasl.xxx)
+
+WILL WORK with -lsasl2 -lcrypto -ldb
+~~~~~~~~~~~
+openldap Cygwin make
+gcc -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o apitest.exe apitest.o  -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib ./.libs/libldap.a /home/ausername/envs/20110805/.cpl/src/openldap-2.4.24/libraries/liblber/.libs/liblber.a -L/home/ausername/envs/20110805/usr/local/ssl/include/openssl/lib ../../libraries/liblber/.libs/liblber.a ../../libraries/liblutil/liblutil.a /home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a -ldl -lresolv anhostname
+/home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x94): undefined reference to `_db_create'
+/home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x100): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x183): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x36b): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x599): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x617): undefined reference to `_db_strerror'
+collect2: ld returned 1 exit status
+make[2]: *** [apitest] Error 1
+make[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/openldap-2.4.24/libraries/libldap'
+=> miss -ldb in .cpl\src\openldap-2.4.24\libraries\libldap\Makefile, add it to TLS_LIBS
+idem for        .cpl\src\openldap-2.4.24\libraries\libldap_r\Makefile
+                .cpl\src\openldap-2.4.24\libraries\librewrite\Makefile
+                    SASL_LIBS = -lsasl2 -ldb <== change -db in -ldb
+                    TLS_LIBS = -lssl -lcrypto -db
+                    
+To test: Change line 1185 of configure.in TLS_LIBS="-lssl -lcrypto": add ' -ldb'
+         Change line 2099 of configure.in SASL_LIBS="$ol_link_sasl": add ' -ldb'
+=> rewrite the configure accordingly
+-----------
