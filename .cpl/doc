@@ -1075,3 +1075,21 @@ To test: Change line 1185 of configure.in TLS_LIBS="-lssl -lcrypto": add ' -ldb'
          Change line 2099 of configure.in SASL_LIBS="$ol_link_sasl": add ' -ldb'
 => rewrite the configure accordingly
 -----------
+apr-utils Cygwin configure
+ausername@anhostname ~/envs/20110805/.cpl/src/apr-util-1.2.2
+$ gcc -o conftest.exe -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DCYGWIN -I/home/ausername/envs/20110805/usr/local/include -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib-Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -L/home/ausername/envs/20110805/usr/local/lib l.c -lldap -ldl -lpthread -lssl -lsasl2
+/home/ausername/envs/20110805/usr/local/lib/libldap.a(open.o):open.c:(.text+0x1ed): r'ef'erence ind'efinie vers << _ber_memcalloc_x >>
+/home/ausername/envs/20110805/usr/local/lib/libldap.a(open.o):open.c:(.text+0x218): r'ef'erence ind'efinie vers << _ber_memcalloc_x >>
+/home/ausername/envs/20110805/usr/local/lib/libldap.a(open.o):open.c:(.text+0x22e): r'ef'erence ind'efinie vers << _ber_memfree_x >>
+/home/ausername/envs/20110805/usr/local/lib/libldap.a(open.o):open.c:(.text+0x2af): r'ef'erence ind'efinie vers << _ber_strdup_x >>
+
+Mainly missing -llber , but also -lssl -lsasl2 -ldb -lcrypto
+----------
+apr-utils Cygwin make
+/bin/sh /home/ausername/envs/20110805/usr/local/libs/apr-1.2.2/build-1/libtool --silent --mode=compile gcc   -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DHAVE_CONFIG_H -DCYGWIN  -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I/home/ausername/envs/20110805/.cpl/src/aprutil-1.2.2/include -I/home/ausername/envs/20110805/.cpl/src/aprutil-1.2.2/include/private  -I/home/ausername/envs/20110805/usr/local/libs/apr-1.2.2/include/apr-1  -I/home/ausername/envs/20110805/usr/local/include  -o dbd/apr_dbd_sqlite3.lo -c dbd/apr_dbd_sqlite3.c && touch dbd/apr_dbd_sqlite3.lo
+dbd/apr_dbd_sqlite3.c:42: error: syntax error before "apr_thread_mutex_t"
+dbd/apr_dbd_sqlite3.c:42: warning: no semicolon at end of struct or union
+dbd/apr_dbd_sqlite3.c:44: error: syntax error before '}' token
+dbd/apr_dbd_sqlite3.c: In function `dbd_sqlite3_select':
+dbd/apr_dbd_sqlite3.c:91: error: dereferencing pointer to incomplete type
+
