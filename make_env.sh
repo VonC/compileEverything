@@ -361,6 +361,7 @@ function configure() {
     #echo "configcmd=${configcmd}"
     if [[ "${configcmd}" != "none" ]] ; then
       get_gnu_cmd ld path_ld without_gnu_ld with_gnu_ld
+      configcmd=${configcmd/@@PATH@@/${PATH}}
       configcmd=${configcmd/@@PATH_LD@@/${path_ld}}
       configcmd=${configcmd/@@WITHOUT_GNU_LD@@/${without_gnu_ld}}
       configcmd=${configcmd/@@WITH_GNU_LD@@/${with_gnu_ld}}

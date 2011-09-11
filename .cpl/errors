@@ -1,0 +1,1095 @@
+Notes:
+* to follow the most recent log, tail --follow=name logs/last (with a gnu tail at least)
+* export PS4='+${BASH_SOURCE}:${LINENO}: ' ; bash -x make_env.sh will display line numbers
+* git filter-branch --env-filter 'if [ $GIT_AUTHOR_EMAIL = vonc@laposte.com ]; then GIT_AUTHOR_EMAIL=vonc@laposte.net; fi; export GIT_AUTHOR_EMAIL' HEAD~4..HEAD
+-----------
+$ ldd iconv.exe | grep -v -E "ntdll|kernel|sxwmon32.dll|GDI32.dll|ADVAPI32.dll|RPCRT4.dll|Secur32.dll|SHELL32.dll|msvcrt.dll|SHLWAPI.dll|USER32.dll|ole32.dll|I
+MM32.DLL|LPK.DLL|USP10.dll|comctl32.dll|comctl32.dll|cygwin1.dll|ADVAPI32.DLL|cygintl-8.dll"
+        cygiconv-2.dll => /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/bin/cygiconv-2.dll (0x674c0000)
+        cygintl-8.dll => /usr/bin/cygintl-8.dll (0x6f5c0000)
+-----------
+tic: symbol lookup error: tic: undefined symbol: _nc_check_termtype2
+userapp@ubvonc:~/apps/test/usr/local/lib$ nm -Ap *.so*|grep nc_check_termtype2
+libncurses.so.5.7:0003f32c D _nc_check_termtype2
+userapp@ubvonc:~/apps/test/usr/local/lib$ env|grep LD
+LDFLAGS=-L/home/userapp/apps/test/usr/local/lib -L/home/userapp/apps/test/usr/local/ssl/lib -R/home/userapp/apps/test/usr/local/ssl/lib -R/home/userapp/apps/test/usr/local/lib/sasl2
+OLDPWD=/home/userapp/apps/test/usr/local
+LD_LIBRARY_PATH=/home/userapp/apps/test/usr/local/lib:/home/userapp/apps/test/usr/local/ssl/lib:/home/userapp/apps/test/usr/local/apps/svn/lib
+userapp@ubvonc:~/apps/test/usr/local/lib$ cd ../libs/ncurses-5.7/lib/
+userapp@ubvonc:~/apps/test/usr/local/libs/ncurses-5.7/lib$ nm -Ap *.so*|grep nc_check_termtype2
+libcurses.so:0003f32c D _nc_check_termtype2
+libncurses.so:0003f32c D _nc_check_termtype2
+libncurses.so.5:0003f32c D _nc_check_termtype2
+libncurses.so.5.7:0003f32c D _nc_check_termtype2
+
+userapp@ubvonc:~/apps/test/usr/local/libs/ncurses-5.7/bin$ ldd tic
+  linux-gate.so.1 =>  (0x006d8000)
+  libncurses.so.5 => /lib/libncurses.so.5 (0x00a64000)
+  libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0x0050f000)
+  libdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0x002eb000)
+  /lib/ld-linux.so.2 (0x00373000)
+
+http://invisible-island.net/ncurses/ncurses.faq.html#big_terminfo: (not needed)
+tic -s -1 -I -e 'ansi, ansi-m, color_xterm, ecma+color, klone+acs, klone+color, klone+sgr, klone+sgr-dumb, linux, pcansi-m, rxvt, vt52, vt100, vt102, vt220, xterm' terminfo.src > t
+
+userapp@ubvonc:~/apps/test/usr/local/share/terminfo already there after compilation/installation of ncurses
+
+------
+/bin/sh ../../gcc/mkconfig.sh tconfig.h
+/home/userapp/apps/tests/src/gcc-3.4.6/objdir/gcc/xgcc -B/home/userapp/apps/tests/src/gcc-3.4.6/objdir/gcc/ -B/home/userapp/apps/tests/usr/local/apps/gcc-3.4.6/i686-pc-linux-gnu/bin/ -B/home/userapp/apps/tests/usr/local/apps/gcc-3.4.6/i686-pc-linux-gnu/lib/ -isystem /home/userapp/apps/tests/usr/local/apps/gcc-3.4.6/i686-pc-linux-gnu/include -isystem /home/userapp/apps/tests/usr/local/apps/gcc-3.4.6/i686-pc-linux-gnu/sys-include -O2 -DIN_GCC    -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition  -isystem ./include  -I. -I. -I../../gcc -I../../gcc/. -I../../gcc/../include   -g0 -finhibit-size-directive -fno-inline-functions -fno-exceptions -fno-zero-initialized-in-bss -fno-unit-at-a-time -fno-omit-frame-pointer \
+   -c ../../gcc/crtstuff.c -DCRT_BEGIN \
+  -o crtbegin.o
+In file included from /usr/include/bits/errno.h:25,
+                 from /usr/include/errno.h:36,
+                 from ../../gcc/tsystem.h:85,
+                 from ../../gcc/crtstuff.c:62:
+/usr/include/linux/errno.h:4:23: asm/errno.h: No such file or directory
+make[1]: *** [crtbegin.o] Error 1
+make[1]: Leaving directory `/home/userapp/apps/tests/src/gcc-3.4.6/objdir/gcc'
+make: *** [all-gcc] Error 2
+
+=> add linux-api-headers or gcc-multilib
+------
+cyrus-sasl
+
+creating libsasl2.la
+(cd .libs && rm -f libsasl2.la && ln -s ../libsasl2.la libsasl2.la)
+ln -s ../plugins/sasldb.c  ../plugins/cram.c ../plugins/plain.c ../plugins/anonymous.c .
+adding static plugins and dependencies
+ar cru .libs/libsasl2.a sasldb.o db_gdbm.o allockey.o cram.o plain.o anonymous.o
+ar: sasldb.o: No such file or directory
+make[2]: *** [libsasl2.a] Error 1
+make[2]: Leaving directory `/home/userapp/apps/test/src/cyrus-sasl-2.1.21/lib'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/home/userapp/apps/test/src/cyrus-sasl-2.1.21'
+make: *** [all] Error 2
+
+Must copy plugins/*.o and sasldb/*.o in lib for compil to progress
+ 822  ln -s . include
+  823  l
+  824  h
+userapp@ubvonc:~/apps/test/usr/local/ssl/include/openssl$
+
+=> compile ok
+-----------
+For now, installing a JDK is a pre-requisite, but:
+https://svn.java.net/svn/hudson~svn/trunk/experiments/jdk-download/src/main/java/test/App.java
+
+package test;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.NullWriter;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.DOMReader;
+import org.w3c.tidy.Tidy;
+
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * Can we download JDK without using HtmlUnit?
+ *
+ */
+public class App {
+    public static void main(String[] args) throws Exception {
+        URL url = new URL("https://cds.sun.com/is-bin/INTERSHOP.enfinity/WFS/CDS-CDS_Developer-Site/en_US/-/USD/ViewProductDetail-Start?ProductRef=jdk-6u13-oth-JPR@CDS-CDS_Developer");
+
+
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        String cookie = con.getHeaderField("Set-Cookie");
+        LOGGER.info("Cookie="+cookie);
+
+        Tidy tidy = new Tidy();
+        tidy.setErrout(new PrintWriter(new NullWriter()));
+        DOMReader domReader = new DOMReader();
+        Document dom = domReader.read(tidy.parseDOM(con.getInputStream(), null));
+
+        Element form=null;
+        for (Element e : (List<Element>)dom.selectNodes("//form")) {
+            String action = e.attributeValue("action");
+            LOGGER.info("Found form:"+action);
+            if(action.contains("ViewFilteredProducts")) {
+                form = e;
+                break;
+            }
+        }
+
+        con = (HttpURLConnection) new URL(form.attributeValue("action")).openConnection();
+        con.setRequestMethod("POST");
+        con.setDoOutput(true);
+        con.setRequestProperty("Cookie",cookie);
+        con.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+        PrintStream os = new PrintStream(con.getOutputStream());
+
+        // select platform
+        Element p = (Element)form.selectSingleNode(".//select[@id='dnld_platform']");
+        os.print(p.attributeValue("name")+"=Linux");
+
+        // select language
+        Element l = (Element)form.selectSingleNode(".//select[@id='dnld_language']");
+        os.print("&"+l.attributeValue("name")+"="+l.element("option").attributeValue("value"));
+
+        // the rest
+        for (Element e : (List<Element>)form.selectNodes(".//input")) {
+            os.print('&');
+            os.print(e.attributeValue("name"));
+            os.print('=');
+            String value = e.attributeValue("value");
+            if(value==null)
+                os.print("on"); // assume this is a checkbox
+            else
+                os.print(URLEncoder.encode(value,"UTF-8"));
+        }
+        os.close();
+
+        Pattern HREF = Pattern.compile("a href=\"([^\"]+)\"");
+        Matcher m = HREF.matcher(IOUtils.toString(con.getInputStream()));
+        // this page contains a missing --> that confuses dom4j/jtidy
+
+        while(m.find()) {
+            String link = m.group(1);
+            if(link.contains("VerifyItem-Start"))
+                System.out.println(link);
+        }
+    }
+
+    private static final Logger LOGGER = Logger.getLogger(App.class.getName());
+}
+-------------
+git:
+/home/userapp/envs/201107/usr/local/apps/perl/bin/perl Makefile.PL PREFIX='/home/userapp/envs/201107/usr/local/apps/git-1.7.5.4' INSTALL_BASE=''
+Perl lib version (5.12.2) doesn't match executable version (v5.12.3) at /home/userapp/usr/local/perl5.12.2/lib/5.12.2/sun4-solaris/Config.pm line 50.
+Compilation failed in require at /home/userapp/usr/local/perl5.12.2/lib/5.12.2/ExtUtils/MakeMaker/Config.pm line 7.
+BEGIN failed--compilation aborted at /home/userapp/usr/local/perl5.12.2/lib/5.12.2/ExtUtils/MakeMaker/Config.pm line 7.
+Compilation failed in require at /home/userapp/usr/local/perl5.12.2/lib/5.12.2/ExtUtils/MakeMaker.pm line 9.
+BEGIN failed--compilation aborted at /home/userapp/usr/local/perl5.12.2/lib/5.12.2/ExtUtils/MakeMaker.pm line 9.
+Compilation failed in require at Makefile.PL line 1.
+BEGIN failed--compilation aborted at Makefile.PL line 1.
+gmake[1]: *** [perl.mak] Error 255
+gmake: *** [perl/perl.mak] Error 2
+
+=> means PERL5LIB wasn't set
+visible with 'perl -V' (uppercase V, not -v)
+--------------
+bash-3.00$ git config --system -l
+fatal: unable to read config file '/home/userapp/envs/201107/usr/local/var/gitconfig': No such file or directory
+bash-3.00$ git config --global -l
+alia.lg=log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+alias.st=status
+alias.br=branch
+http.sslcainfo=/myserver/home/userapp/ssl/curl-ca-bundle.crt
+color.ui=true
+core.autocrlf=false
+bash-3.00$ git config --local -l
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+remote.origin.url=https://github.com/VonC/compileEverything
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+user.name=VonC
+user.email=vonc@laposte.net
+github.user=VonC
+github.token=123myToken456
+------------------
+See http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=627335
+Connection #0 seems to be dead!
+export GIT_CURL_VERBOSE=1
+export GIT_TRACE_PACKET=1
+----------
+certificate gihub
+see ssl certificate
+http://askubuntu.com/questions/23680/problems-with-certificate-with-wget-and-github-lately
+openssl s_client -showcerts -connect github.com:443
+-------------
+ncurses unix
+/home/userapp/envs/201107b/bin/g++  -o demo ../obj_s/demo.o -L../lib -lncurses++ -L../lib -lform -lmenu -lpanel -lncurses    -L/home/userapp/envs/201107b/usr/local/lib -L/home/userapp/envs/201107b/usr/local/ssl/lib -L/home/userapp/envs/201107b/usr/local/apps/python/lib -Wl,-rpath,/home/userapp/envs/201107b/src/ncurses-5.7/lib  -I../c++ -I../include -I. -DHAVE_CONFIG_H -I. -I../include -I/home/userapp/envs/201107b/usr/local/include -I/home/userapp/envs/201107b/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -D_GNU_SOURCE -DNDEBUG -I/home/userapp/envs/201107b/usr/local/libs/ncurses-5.7/include -g -O2  -fPIC
+/myserver/home/userapp/envs/201107b/usr/local/apps/gcc-3.4.6/bin/../lib/gcc/x86_64-unknown-linux-gnu/3.4.6/../../../../lib64/libstdc++.so: undefined reference to `libintl_textdomain'
+/myserver/home/userapp/envs/201107b/usr/local/apps/gcc-3.4.6/bin/../lib/gcc/x86_64-unknown-linux-gnu/3.4.6/../../../../lib64/libstdc++.so: undefined reference to `libintl_bindtextdomain'
+collect2: ld returned 1 exit status
+make[1]: *** [demo] Error 1
+make[1]: Leaving directory `/myserver/home/userapp/envs/201107b/src/ncurses-5.7/c++'
+make: *** [all] Error 2
+=> add -lintl to the Makefile
+
+---------------------
+Refactoring:
+bash-3.00$ grep "\${H}/src" *
+gen_sed -i 's/\${H}\/src/\${H}\/.cpl\/src/g' xxx
+---------------------
+pcre:
+/bin/sh ./libtool --tag=CXX   --mode=link g++  -O2  -L/home/userapp/envs/201107c/usr/local/lib -L/home/userapp/envs/201107c/usr/local/ssl/lib -L/home/userapp/envs/201107c/usr/local/apps/python/lib -o pcrecpp_unittest pcrecpp_unittest.o libpcrecpp.la
+libtool: link: g++ -O2 -o .libs/pcrecpp_unittest pcrecpp_unittest.o  -L/home/userapp/envs/201107c/usr/local/lib -L/home/userapp/envs/201107c/usr/local/ssl/lib -L/home/userapp/envs/201107c/usr/local/apps/python/lib ./.libs/libpcrecpp.so -L/home/userapp/envs/201107c/.cpl/src/gcc-3.4.6/objdir/x86_64-unknown-linux-gnu/libstdc++-v3/src -L/home/userapp/envs/201107c/.cpl/src/gcc-3.4.6/objdir/x86_64-unknown-linux-gnu/libstdc++-v3/src/.libs -L/home/userapp/envs/201107c/.cpl/src/gcc-3.4.6/objdir/gcc /home/userapp/envs/201107c/.cpl/src/pcre-8.12/.libs/libpcre.so /home/userapp/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64/libstdc++.so -L/lib/../lib64 -L/usr/lib/../lib64 -lm -lc -lgcc_s -Wl,-rpath -Wl,/home/userapp/envs/201107c/usr/local/libs/pcre-8.12/lib -Wl,-rpath -Wl,/home/userapp/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64
+/home/userapp/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64/libstdc++.so: undefined reference to `libintl_textdomain'
+/home/userapp/envs/201107c/usr/local/apps/gcc-3.4.6/lib/../lib64/libstdc++.so: undefined reference to `libintl_bindtextdomain'
+collect2: ld returned 1 exit status
+make[1]: *** [pcrecpp_unittest] Error 1
+make[1]: Leaving directory `/myserver/home/userapp/envs/201107c/.cpl/src/pcre-8.12'
+-------------
+pcre on Solaris:
+/bin/bash ./libtool --tag=CXX   --mode=link g++  -O2  -lintl -L/home/userapp/compileEverything/usr/local/lib -L/home/userapp/compileEverything/usr/local/ssl/lib -L/home/userapp/compileEverything/usr/local/apps/python/lib -o pcrecpp_unittest pcrecpp_unittest.o libpcrecpp.la
+libtool: link: g++ -O2 -o .libs/pcrecpp_unittest pcrecpp_unittest.o  -L/home/userapp/compileEverything/usr/local/lib -L/home/userapp/compileEverything/usr/local/ssl/lib -L/home/userapp/compileEverything/usr/local/apps/python/lib ./.libs/libpcrecpp.so -L/myserver/svndata/users/userapp/compileEverything/.cpl/src/gcc-3.4.6/objdir/sparc-sun-solaris2.10/libstdc++-v3/src -L/myserver/svndata/users/userapp/compileEverything/.cpl/src/gcc-3.4.6/objdir/sparc-sun-solaris2.10/libstdc++-v3/src/.libs -L/myserver/svndata/users/userapp/compileEverything/.cpl/src/gcc-3.4.6/objdir/gcc /home/userapp/compileEverything/.cpl/src/pcre-8.12/.libs/libpcre.so /home/userapp/compileEverything/usr/local/libs/gettext-0.14.1/lib/libintl.so /home/userapp/compileEverything/usr/local/libs/libiconv-1.13.1/lib/libiconv.so -lc /home/userapp/compileEverything/usr/local/apps/gcc-3.4.6/lib/libstdc++.so -L/usr/ccs/bin -L/usr/ccs/lib -lm -lgcc_s -Wl,-R -Wl,/home/userapp/compileEverything/usr/local/libs/pcre-8.12/lib -Wl,-R -Wl,/home/userapp/compileEverything/usr/local/libs/gettext-0.14.1/lib -Wl,-R -Wl,/home/userapp/compileEverything/usr/local/libs/libiconv-1.13.1/lib -Wl,-R -Wl,/home/userapp/compileEverything/usr/local/apps/gcc-3.4.6/lib
+ld: fatal: recording name conflict: file `/home/userapp/compileEverything/usr/local/apps/gcc-3.4.6/lib/libstdc++.so' and file `/myserver/svndata/user
+s/userapp/compileEverything/.cpl/src/gcc-3.4.6/objdir/sparc-sun-solaris2.10/libstdc++-v3/src/.libs/libstdc++.so' provide identical dependency names: lib
+stdc++.so.6  (possible multiple inclusion of the same file)
+ld: fatal: File processing errors. No output written to .libs/pcrecpp_unittest
+collect2: ld returned 1 exit status
+make[1]: *** [pcrecpp_unittest] Error 1
+make[1]: Leaving directory `/myserver/svndata/users/userapp/compileEverything/.cpl/src/pcre-8.12'
+
+http://unixerrors.blogspot.com/2007/11/mysql-5_16.html
+
+http://unixerrors.blogspot.com/2007/11/mysql-5_16.htmlThis is a really odd error. To fix it, i had to cd in to the directory from which i compiled gcc (AS you can see in my error message, its opt/install/gcc-3.4.4/), and went in to the directory specififed by the error
+Once in there, i just did a
+[kmorriso@moo]> mv libstdc++.so libstdc++.so.bak
+No idea what the deal with this one was, or why it was looking in my src dir for library files. That directory wasn't in my ld_library_path.
+-------------
+nginx:
+checking for libxslt in /opt/local/ ... not found
+
+./configure: error: the HTTP XSLT module requires the libxml2/libxslt
+libraries. You can either do not enable the module or install the libraries.
+=> replace all /usr/local and /usr/include and /usr/local/include by full local path to usr/local
+---------
+libgcrypt
+gcc -I/home/userapp/compileEverything/usr/local/libs/libgpgerror-1.10/include -I/home/userapp/compileEverything/usr/local/include -I/home/userapp/compileEverything/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -Wall -o .libs/ac ac.o  -L/home/userapp/compileEverything/usr/local/lib -L/home/userapp/compileEverything/usr/local/ssl/lib -L/home/userapp/compileEverything/usr/local/apps/python/lib ../src/.libs/libgcrypt.so -L/home/userapp/compileEverything/usr/local/libs/libgpgerror-1.10/lib /home/userapp/compileEverything/usr/local/libs/libgpgerror-1.10/lib/libgpg-error.so /home/userapp/compileEverything/usr/local/libs/gettext-0.14.1/lib/libintl.so /home/userapp/compileEverything/usr/local/libs/libiconv-1.13.1/lib/libiconv.so -lc -lnsl -lsocket -R/home/userapp/compileEverything/usr/local/libs/libgcrypt-1.2.4/lib -R/home/userapp/compileEverything/usr/local/libs/libgpgerror-1.10/lib -R/home/msvprd02/compileEverything/usr/local/libs/gettext-0.14.1/lib -R/home/userapp/compileEverything/usr/local/libs/libiconv-1.13.1/lib
+Undefined                       first referenced
+ symbol                             in file
+gcry_ac_data_verify                 ac.o
+gcry_ac_open                        ac.o
+gcry_ac_key_init                    ac.o
+gcry_ac_data_encrypt                ac.o
+gcry_ac_data_decrypt                ac.o
+gcry_ac_data_destroy                ac.o
+gcry_ac_close                       ac.o
+gcry_ac_key_data_get                ac.o
+gcry_ac_key_pair_generate           ac.o
+gcry_ac_key_pair_extract            ac.o
+gcry_ac_data_sign                   ac.o
+gcry_ac_data_copy                   ac.o
+gcry_ac_data_get_index              ac.o
+ld: fatal: Symbol referencing errors. No output written to .libs/ac
+collect2: ld returned 1 exit status
+make[2]: *** [ac] Error 1
+make[2]: Leaving directory `/myserver/svndata/users/userapp/compileEverything/.cpl/src/libgcrypt-1.2.4/tests'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/myserver/svndata/users/userapp/compileEverything/.cpl/src/libgcrypt-1.2.4'
+
+I have the same problem on solaris 2.6, I think it is about the linker or
+libtool. On Solaris with non-gnu linker, libtool generate this command for
+the shared library:
+
+It seems that the linker can not extract all symbols from libcipher.a
+because "allextract" does not work fine at all, I solved the problem with
+the gnu linker, just rename the path of the non-gnu linker so gcc or cc
+will take the gnu-linker commonly installed in /usr/local/bin. With gnu
+linker the command looks like this :
+
+--whole-archive instead allextract
+
+===> add  ../cipher/.libs/ac.o to the LDD options of the test/Makefile
+CCLD = $(CC) ../cipher/.libs/ac.o
+--------------
+libxslt on Solaris
+
+Undefined                       first referenced
+ symbol                             in file
+_fini
+/usr/local/lib/gcc/sparc-sun-solaris2.10/3.4.6/crti.o  (symbol has no
+version assigned)
+_init
+/usr/local/lib/gcc/sparc-sun-solaris2.10/3.4.6/crti.o  (symbol has no
+version assigned)
+xsltPointerListFree                 ./libxslt.syms
+xsltCopyTree                        .libs/transform.o  (symbol has no
+version assigned)
+
+
+
+http://comments.gmane.org/gmane.comp.gnome.lib.xslt/4060
+libxslt:
+
+VERSION_SCRIPT_FLAGS=
+$(/usr/bin/ld --help 2>&1 | grep -- --version-script >/dev/null) && \
+    VERSION_SCRIPT_FLAGS=-Wl,--version-script=
+test "`uname`" == "SunOS" && \
+    VERSION_SCRIPT_FLAGS=""
+#    VERSION_SCRIPT_FLAGS="-Wl,-M -Wl,"
+
+--------------
+nginx on Solaris:
+
+gcc -c -I/home/userapp/compileEverything/usr/local/include -I/home/userapp/compileEverything/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -I/home/m
+svprd02/compileEverything/usr/local/include -I/home/userapp/compileEverything/usr/local/ssl/include -I src/core -I src/event -I src/event/modules -I src
+/os/unix -I /home/userapp/compileEverything/usr/local/include/libxml2 -I objs -o objs/src/core/ngx_file.o src/core/ngx_file.c
+/usr/ccs/bin/as: "/var/tmp//cckhXLrn.s", line 438: error: cannot use v8plus instructions in a non-v8plus target binary
+make[1]: *** [objs/src/core/ngx_file.o] Error 1
+make[1]: Leaving directory `/myserver/svndata/users/userapp/compileEverything/.cpl/src/nginx-1.0.5'
+
+-------------
+libiconv on cygwin make:
+
+case "cygwin" in \
+          hpux*) gcc -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE `if test -n ''; then  /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/bin; fi` iconv.o ../srclib/libicrt.a -L/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib -liconv -lintl iconv.res `if test -n ''; then echo " -Wl,+b -Wl,/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib"; fi` -o iconv.exe;; \
+          *) /bin/sh ../libtool --mode=link gcc -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE `if test -n ''; then  /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/bin; fi` iconv.o ../srclib/libicrt.a /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib/libiconv.la -lintl iconv.res -o iconv.exe;; \
+        esac
+libtool: link: cannot find the library `/usr/lib/libiconv.la' or unhandled argument `/usr/lib/libiconv.la'
+make[1]: *** [install] Error 1
+make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/libiconv-1.13.1/src'
+
+=> modify libtool to explicitely reference  /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib/libiconv.la
+-------------
+gettext on cygwin during initial configure phase:
+
+configure: configuring in autoconf-lib-link
+configure: running /bin/sh './configure' --prefix=/home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1  '--prefix=/home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1' '--enable-shared' '--enable-static' '--with-libiconv-prefix=/home/ausername/envs/20110805/usr/local' '--with-libexpat-prefix=/home/ausername/envs/20110805/usr/local' 'CFLAGS=-I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE' 'CPPFLAGS=-I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE' 'LDFLAGS=-L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/li
+b' --cache-file=/dev/null --srcdir=.
+checking for a BSD-compatible install... /bin/install -c
+checking whether build environment is sane... yes
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking for gcc... gcc
+checking for C compiler default output file name... configure: error: C compiler cannot create executables
+See `config.log' for more details.
+configure: error: /bin/sh './configure' failed for autoconf-lib-link
+
+$ cygcheck `gcc -print-prog-name=gcc`
+Found: C:\prog\cygwin\bin\gcc.exe
+Found: C:\prog\cygwin\bin\gcc.exe
+ -> C:\prog\cygwin\etc\alternatives\gcc
+  -> C:\prog\cygwin\bin\gcc-3.exe
+  C:\prog\cygwin\bin\gcc-3.exe
+    C:\prog\cygwin\bin\cygwin1.dll
+        C:\WINDOWS\system32\ADVAPI32.DLL
+        C:\WINDOWS\system32\KERNEL32.dll
+                C:\WINDOWS\system32\ntdll.dll
+                C:\WINDOWS\system32\RPCRT4.dll
+                  C:\WINDOWS\system32\Secur32.dll
+              C:\prog\cygwin\bin\cygintl-8.dll
+                  C:\prog\cygwin\home\ausername\envs\20110805\usr\local\bin\cygiconv-2.dllcygcheck: C:\prog\cygwin\home\ausername\envs\20110805\usr\local\bin\cygiconv-2.dll is a symlink instead of a DLL
+
+See http://www.mail-archive.com/cygwin@cygwin.com/msg107619.html
+The problem is that the Windows DLL loader doesn't know about symlinks, nor about Windows shortcuts.
+If at all, it might understand native NTFS symlinks starting with Windows Vista.
+But as long as we don't become super-rich and purchase Windows from Microsoft, it won't understand Cygwin symlinks.
+------------
+gettext on cygwin during make install
+couple of:
+/bin/install -c .libs/libgettextpo.dll.aT /home/ausername/envs/20110813/usr/local/libs/gettext-0.14.1/lib/libgettextpo.dll.a
+/bin/install: cannot stat `.libs/libgettextpo.dll.aT': No such file or directory
+make[4]: *** [install-libLTLIBRARIES] Error 1
+make[4]: Leaving directory `/home/ausername/envs/20110813/.cpl/src/gettext-0.14.1/gettext-tools/src'
+
+------------
+gcc configure on cygwin:
+
+make[1]: Entering directory `/home/ausername/envs/20110805/.cpl/src/gcc-3.4.6/objdir/libiberty'
+if [ x"" != x ]; then \
+      gcc -c -DHAVE_CONFIG_H -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -I
+      . -I../../libiberty/../include  -W -Wall -Wtraditional -pedantic  ../../libiberty/fibheap.c -o pic/fibheap.o; \
+      else true; fi
+    gcc -c -DHAVE_CONFIG_H -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -I.
+    -I../../libiberty/../include  -W -Wall -Wtraditional -pedantic ../../libiberty/fibheap.c -o fibheap.o
+    ../../libiberty/fibheap.c:1: warning: -fPIC ignored for target (all code is position independent)
+    ../../libiberty/fibheap.c: In function `fibheap_union':
+    ../../libiberty/fibheap.c:166: warning: implicit declaration of function `free'
+    ../../libiberty/fibheap.c: In function `fibheap_delete_node':
+    ../../libiberty/fibheap.c:285: error: `LONG_MIN' undeclared (first use in this function)
+    ../../libiberty/fibheap.c:285: error: (Each undeclared identifier is reported only once
+    ../../libiberty/fibheap.c:285: error: for each function it appears in.)
+    ../../libiberty/fibheap.c: In function `fibheap_consolidate':
+    ../../libiberty/fibheap.c:395: warning: implicit declaration of function `memset'
+    make[1]: *** [fibheap.o] Error 1
+    make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/gcc-3.4.6/objdir/libiberty'
+    make: *** [all-libiberty] Error 2
+
+http://gcc.gnu.org/bugzilla/show_bug.cgi?id=13334
+
+Note that using non-standard @code{CFLAGS} can cause bootstrap to fail in
++@file{libiberty}, if these trigger a warning with the new compiler.  For
++example using @samp{-O2 -g -mcpu=i686} on @code{i686-pc-linux-gnu} will
++cause bootstrap failure as @code{-mcpu=} is deprecated in 3.4.0 and above
+
+=> remove any option on CFLAG, and configure will pass on cygwin BUT CHECK NEXT ERROR FIRST
+--------------
+/home/ausername/envs/20110805/.cpl/src/gcc-3.4.6/objdir/gcc/xgcc -B/home/ausernale/envs/20110805/.cpl/src/gcc-3.4.6/objdir/gcc/ -B/home/ausername/envs/20110805/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/bin/ -B/home/ausername/envs/20110805/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/lib/ -isystem /home/ausername/envs/20110805/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/include -isystem /home/ausername/envs/20110805/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/sys-include -c -DHAVE_CONFIG_H -O2 -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -I. -I../../../libiberty/../include -W -Wall -Wtraditional -pedantic ../../../libiberty/strsignal.c -o strsignal.o
+../../../libiberty/strsignal.c:414: error: conflicting types for 'strsignal'
+/usr/include/string.h:93: error: previous declaration of 'strsignal' was here
+../../../libiberty/strsignal.c:414: error: conflicting types for 'strsignal'
+/usr/include/string.h:93: error: previous declaration of 'strsignal' was here
+../../../libiberty/strsignal.c: In function `psignal':
+../../../libiberty/strsignal.c:568: warning: comparison between signed and unsigned
+make[1]: *** [strsignal.o] Error 1
+make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libiberty'
+
+http://gcc.gnu.org/bugzilla/show_bug.cgi?id=38903
+
+This happens because libiberty configure has a hard-coded hack that kicks in
+when building libiberty as a target library, which causes strsignal (and a
+couple of others) to be removed from the list of functions for configure to
+check against the system libraries, causing the libiberty versions to be built
+when they aren't needed.  (They used to be required; formerly, Cygwin pulled in
+the object files from libiberty when linking the DLL, but this was fixed some
+time ago and the hack has been obsolete since then).  I am testing a patch to
+remove the hack.
+
+=> remove cygwin section in libiberty/configure.ac and libiberty/configure
+http://gcc.gnu.org/bugzilla/attachment.cgi?id=17131&action=diff
+
+Check if adding -DHAVE_STRSIGNAL to CFLAGS is enough to avoid this issue and the previous one
+------------
+zlib make install on cygwin
+
+cp libz.a /home/ausername/envs/20110805/usr/local/libs/zlib-1.2.5/lib
+cp  /home/ausername/envs/20110805/usr/local/libs/zlib-1.2.5/lib
+cp: missing destination file operand after `/home/ausername/envs/20110805/usr/local/libs/zlib-1.2.5/lib'
+Try `cp --help' for more information.
+make: *** [install-libs] Error 1
+
+http://en.gentoo-wiki.com/wiki/Prefix/Cygwin#zlib:_missing_destination
+
+Alternatively: Set a condition for the critical line in Makefile.in and stay with the static lib.
+
+ if test "$(SHAREDLIBV)"; then cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir); fi
+
+-----------
+db on cygwin make
+
+Creating library file: .libs/libdb_tcl-4.7.dll.a
+.libs/tcl_compat.o:tcl_compat.c:(.text+0x3f): undefined reference to `_Tcl_GetIndexFromObj'
+.libs/tcl_compat.o:tcl_compat.c:(.text+0x5b): undefined reference to `_Tcl_GetStringFromObj'
+...
+.libs/tcl_db.o:tcl_db.c:(.text+0x41): undefined reference to `_Tcl_DeleteCommand'
+.libs/tcl_db.o:tcl_db.c:(.text+0x69): undefined reference to `_Tcl_DeleteCommand'
+...
+.libs/tcl_db_pkg.o:tcl_db_pkg.c:(.text+0x47): undefined reference to `_Tcl_PkgProvide'
+.libs/tcl_db_pkg.o:tcl_db_pkg.c:(.text+0xa0): undefined reference to `_Tcl_CreateObjCommand'
+...
+.libs/tcl_dbcursor.o:tcl_dbcursor.c:(.text+0xd): undefined reference to `_Tcl_ResetResult'
+.libs/tcl_dbcursor.o:tcl_dbcursor.c:(.text+0x50): undefined reference to `_Tcl_WrongNumArgs'
+...
+.libs/tcl_env.o:tcl_env.c:(.text+0x10): undefined reference to `_Tcl_ResetResult'
+.libs/tcl_env.o:tcl_env.c:(.text+0x71): undefined reference to `_Tcl_WrongNumArgs'
+...
+.libs/tcl_env.o:tcl_env.c:(.text+0x4ba9): undefined reference to `_Tcl_SetObjResult'
+.libs/tcl_env.o:tcl_env.c:(.text+0x4cb6): undefined reference to `_Tcl_SetResult'
+...
+.libs/tcl_internal.o:tcl_internal.c:(.text+0x50): undefined reference to `_Tcl_SetResult'
+.libs/tcl_internal.o:tcl_internal.c:(.text+0xa4): undefined reference to `_Tcl_SetResult'
+...
+.libs/tcl_lock.o:tcl_lock.c:(.text+0x1cae): undefined reference to `_Tcl_SetResult'
+.libs/tcl_lock.o:tcl_lock.c:(.text+0x1d71): undefined reference to `_Tcl_CreateObjCommand'
+...
+.libs/tcl_log.o:tcl_log.c:(.text+0x61): undefined reference to `_Tcl_GetIndexFromObj'
+.libs/tcl_log.o:tcl_log.c:(.text+0x85): undefined reference to `_Tcl_GetStringFromObj'
+...
+.libs/tcl_mp.o:tcl_mp.c:(.text+0x21bc): undefined reference to `_Tcl_NewIntObj'
+.libs/tcl_mp.o:tcl_mp.c:(.text+0x21d1): undefined reference to `_Tcl_SetObjResult'
+...
+.libs/tcl_rep.o:tcl_rep.c:(.text+0x22): undefined reference to `_Tcl_ListObjGetElements'
+.libs/tcl_rep.o:tcl_rep.c:(.text+0x7a): undefined reference to `_Tcl_GetIndexFromObj'
+...
+.libs/tcl_seq.o:tcl_seq.c:(.text+0x1067): undefined reference to `_Tcl_NewStringObj'
+.libs/tcl_seq.o:tcl_seq.c:(.text+0x1082): undefined reference to `_Tcl_SetObjResult'
+...
+.libs/tcl_txn.o:tcl_txn.c:(.text+0x53): undefined reference to `_Tcl_DeleteCommand'
+.libs/tcl_txn.o:tcl_txn.c:(.text+0xdb): undefined reference to `_Tcl_GetIndexFromObj'
+...
+.libs/tcl_util.o:tcl_util.c:(.text+0x3f): undefined reference to `_Tcl_GetIndexFromObj'
+.libs/tcl_util.o:tcl_util.c:(.text+0x5b): undefined reference to `_Tcl_GetStringFromObj'
+...
+
+tcl_compat.o undefined reference
+add -ltcl8.5 to Makefile
+Make sure there is no link on dll, potentially on .a in usr/local/lib
+
+-----------
+
+:%s/abadusername/ausername/g
+
+-----------
+
+texinfo on cygwin on make:
+
+mv -f .deps/makedoc.Tpo .deps/makedoc.Po
+gcc  -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -DHAVE_STRSIGNAL  -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -o makedoc.exe makedoc.o ../lib/libtxi.a ../gnulib/lib/libgnu.a -lncurses /home/ausername/envs/20110805/usr/local/lib/libintl.dll.a /home/ausername/envs/20110805/usr/local/lib/libiconv.dll.a -L/home/ausername/envs/20110805/usr/local/lib
+rm -f doc.c key.c funs.h
+..//info/makedoc ./session.c ./echo-area.c ./infodoc.c ./m-x.c ./indices.c ./nodemenu.c ./footnotes.c ./variables.c
+make[2]: *** [funs.h] Error 127
+mae[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/texinfo-4.13/info'
+make[1]: *** [all-recursive] Error 1
+
+http://www.linuxquestions.org/questions/linux-from-scratch-13/texinfo-make-problems-638014/
+http://www.mail-archive.com/lfs-support@linuxfromscratch.org/msg04469.html
+Probably linked to an error loading ncurses, perhaps because .a are linked instead of copied.
+Change the make_env.sh
+
+Actually works with cygintl-3.dll from C:\prog\cygwin\bin
+=> copy it from /usr/bin to repo/bin
+
+-----------
+perl no tinycore during make install:
+
+make[1]: Leaving directory `/home/tc/compileEverything/.cpl/src/perl-5.12.3/ext/DynaLoader'
+rm -f libperl.a
+/home/tc/compileEverything/usr/local/bin/ar rcu libperl.a op.o perl.o   gv.o toke.o perly.o pad.o regcomp.o dump.o util.o mg.o reentr.o mro.o hv.o av.o run.o pp_hot.o sv.o pp.o scope.o pp_ctl.o pp_sys.o doop.o doio.o regexec.o utf8.o taint.o deb.o universal.o globals.o perlio.o perlapi.o numeric.o mathoms.o locale.o pp_pack.o pp_sort.o   DynaLoader.o
+make: /home/tc/compileEverything/usr/local/bin/ar: Command not found
+make: *** [libperl.a] Error 127
+
+-------------
+curl on configure on Tinycore:
+checking run-time libs availability... failed
+configure: error: one or more libs available at link-time are not available run-time. Libs used at link-time: -lidn -lssh2 anhostname -lrt anhostname -ldl -lz   -lz -lssh2
+onfigure:24001: ./conftest
+./conftest: error while loading shared libraries: libssl.so.1.0.0: cannot open shared object file: No such file or directory
+configure:24001: $? = 127
+configure: program exited with status 127
+configure: failed program was:
+| /* confdefs.h */
+Proable because of using LD_LIBRARY_PATH: bad => use LD_RUN_PATH.
+http://www.eyrie.org/~eagle/notes/rpath.html
+LD_LIBRARY_PATH is broken and should not be used if at all possible. It's broken because it overrides the search paths for all binaries that you run using it, not just the one that you care about, and it doesn't add easily to other competing settings of LD_LIBRARY_PATH. It has a tendency to cause odd breakage, and it's best to only use it with commercial applications like Oracle where there's no other choice (and then to set it only in a wrapper around a particular application, and never in your general shell environment).
+Encoding rpath in applications
+
+ELF binaries (used by Solaris and Linux) can contain in the binary supplemental paths for shared libraries. (Shared libraries can also contain their own supplemental paths for finding other shared libraries, but that's not as commonly used.) This path is searched before the system default paths (but is overridden by LD_LIBRARY_PATH, if set).
+
+This path must be encoded at compile time and after that doesn't change. The advantage of this approach over the LD_LIBRARY_PATH approach, apart from the other problems caused by LD_LIBRARY_PATH, is that the work is born by the person building the software rather than the person running it. That means the work of configuring library paths only has to be done once, by a fairly clued person, rather than by every user who may or may not understand the issues.
+
+There are two basic ways of telling a compiler to encode a search path in the binary (called an rpath):
+
+Set the environment variable LD_RUN_PATH to the search path (colon-separated) you want to encode. You don't need to include the system default search directories (and indeed should not, since you may interfere with future changes in how the native library searching algorithm works). This environment variable will be picked up by the compiler when it links the binary.
+
+Add -R /usr/local/lib (or whatever path) to the link command line. You can repeat this flag multiple times with different paths, similar to -L. Its order in the command line doesn't matter.
+
+Either can be used, so normally I use LD_RUN_PATH since it's less intrusive. However, note that if there are any -R flags on the command line, the LD_RUN_PATH setting will be ignored. This means that if the normal build process of the software adds -R flags, you'll need to get it to add your -R flags as well (unless it helpfully includes a -R flag for the installation directory, which it sometimes does). If the software package uses Autoconf, generally the easiest way to do this is to set LDFLAGS to "-R /usr/local/lib" (or whatever directory) before running configure, which will then stick it into the Makefile. Failing that, I'll sometimes do something like:
+
+    make CC="gcc -R /usr/local/lib"
+to build the software, which generally does the right thing.
+
+Note that software that uses libtool to link its libraries and to link against libraries will more frequently do the right thing and encode rpath properly when it builds the final binaries, but not always. Thankfully libtool also understands the -R flag and does the right thing when it's provided.
+
+Checking the binaries
+
+To verify that a binary is doing the right thing, use the command ldd on the binary. This will list all of the libraries and either where they came from (if found) or something like "(not found)" if the library wasn't found. On Mac OS X, use otool -L.
+
+Solaris has the very useful -s option to ldd that will additionally show the full library search path, so you can confirm that you encoded the right rpath in the binary.
+
+A partial equivalent under Linux is:
+
+    readelf -d <binary> | grep RPATH
+but note that this only shows the rpath for a particular binary (executable or library). If a shared library depends on other shared libraries, those shared libraries may be searched for using the rpath of the shared library that is loading them. To make sure that the search path is correct on Linux, you may need to use the above readelf command on the binary and all libraries other than system libraries that it uses. readelf comes with binutils, so if you're compiling software you will probably already have it installed.
+
+Changing the rpath
+
+On Linux, a utility called patchelf is available that can modify or remove the rpath or add one if one was not already present. This utility replaces the older chrpath utility, which appears to no longer be maintained.
+
+patchelf won't compile on Solaris out of the box. For it, you may still need chrpath. The maintainer's FTP site used to be at ftp://ftp.hungry.com/pub/hungry/chrpath/ but has been unreachable for some time. At this point, the best source is probably the Debian package.
+-------------
+gcc make install on cygwin
+
+for file in ./i686-pc-cygwin/bits/stdc++.h.gch/*; do \
+  /bin/install -c -m 644 $file /home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/include/c++/3.4.6/./i686-pc-cygwin/bits/stdc++.h.gch; done
+/bin/install: cannot stat `./i686-pc-cygwin/bits/stdc++.h.gch/*': No such file or directory
+make[3]: *** [install-pch] Error 1
+make[3]: Leaving directory `/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/include'
+make[2]: *** [install-am] Error 2
+
+Because of make
+# Build a precompiled C++ include, stdc++.h.gch.
+${pch_input}: ${allstamped} ${host_builddir}/c++config.h ${pch_source}
+  touch ${pch_input}; \
+  if [ ! -d "${pch_output_builddir}" ]; then \
+    mkdir -p ${pch_output_builddir}; \
+  fi; \
+  $(CXX) $(PCHFLAGS) $(AM_CPPFLAGS) ${pch_source} -O0 -g -o ${pch_output_builddir}/O0g; \
+  $(CXX) $(PCHFLAGS) $(AM_CPPFLAGS) ${pch_source} -O2 -g -o ${pch_output_builddir}/O2g;
+
+if [ ! -d "./i686-pc-cygwin/bits/stdc++.h.gch" ]; then \
+  mkdir -p ./i686-pc-cygwin/bits/stdc++.h.gch; \
+fi; \
+/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/gcc/xgcc -shared-libgcc -B/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/gcc/ -nostdinc++ -L/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/src -L/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/src/.libs -B/home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/bin/ -B/home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/lib/ -isystem /home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/include -isystem /home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/sys-include -Winvalid-pch -Wno-deprecated -x c++-header -g -O2 -I/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/include/i686-pc-cygwin -I/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/include -I/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/libstdc++-v3/libsupc++ /home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/libstdc++-v3/include/stdc++.h -O0 -g -o ./i686-pc-cygwin/bits/stdc++.h.gch/O0g; \
+/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/gcc/xgcc -shared-libgcc -B/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/gcc/ -nostdinc++ -L/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/src -L/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/src/.libs -B/home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/bin/ -B/home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/lib/ -isystem /home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/include -isystem /home/ausername/envs/20110813/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/sys-include -Winvalid-pch -Wno-deprecated -x c++-header -g -O2 -I/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/include/i686-pc-cygwin -I/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/include -I/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/libstdc++-v3/libsupc++ /home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/libstdc++-v3/include/stdc++.h -O2 -g -o ./i686-pc-cygwin/bits/stdc++.h.gch/O2g;
+/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/libstdc++-v3/include/stdc++.h:82: internal compiler error: Segmentation fault
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <URL:http://gcc.gnu.org/bugs.html> for instructions.
+/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/libstdc++-v3/include/stdc++.h:82: internal compiler error: Segmentation fault
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <URL:http://gcc.gnu.org/bugs.html> for instructions.
+make[1]: *** [i686-pc-cygwin/bits/stdc++.h] Error 1
+make[1]: Leaving directory `/home/ausername/envs/20110813/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libstdc++-v3/include'
+
+=> add --disable-libstdcxx-pch for now
+-----------
+perl in tinycore for make
+/bin/sh: /home/tc/compileEverything/usr/local/bin/ln: not found
+./miniperl -Ilib autodoc.pl
+/home/tc/compileEverything/usr/local/bin/ln -s perl5123delta.pod pod/perldelta.pod
+make: /home/tc/compileEverything/usr/local/bin/ln: Command not found
+make: *** [pod/perldelta.pod] Error 127
+=>
+premake=gen_sed -i '\''s/^LNS =  .*$/LNS = ln -s/g'\'' "$H/.cpl/src/@@NAMEVER@@/Makefile"
+(make sure ln is used as ln on the path, not an hypothetic local ln)
+
+/home/tc/compileEverything/usr/local/bin/ar rcu libperl.a op.o perl.o   gv.o toke.o perly.o pad.o regcomp.o dump.o util.o mg.o reentr.o mro.o hv.o av.o run.o pp_hot.o sv.o pp.o scope.o pp_ctl.o pp_sys.o doop.o doio.o regexec.o utf8.o taint.o deb.o universal.o globals.o perlio.o perlapi.o numeric.o mathoms.o locale.o pp_pack.o pp_sort.o   DynaLoader.o
+make: /home/tc/compileEverything/usr/local/bin/ar: Command not found
+make: *** [libperl.a] Error 127
+Same deal
+premake=gen_sed -i '\''s/^LNS =  .*$/LNS = ln -s/g'\'' "$H/.cpl/src/@@NAMEVER@@/Makefile" ; gen_sed -i '\''s/^AR =  .*$/AR = ar/g'\'' "$H/.cpl/src/@@NAMEVER@@/Makefile"
+-------------
+TODO TOCHECK:
+tc@box:~/compileEverything/usr/local/bin$ ldd sqlite3
+        linux-gate.so.1 =>  (0xb770f000)
+        libsqlite3.so.0 => /home/tc/compileEverything/usr/local/libs/sqlite-3.7.2/lib/libsqlite3.so.0 (0xb768d000)
+        libreadline.so.5 => not found
+        libncurses.so.5 => /usr/local/lib/libncurses.so.5 (0xb7673000)
+        libdl.so.2 => /lib/libdl.so.2 (0xb766e000)
+        libpthread.so.0 => /lib/libpthread.so.0 (0xb7656000)
+        libc.so.6 => /lib/libc.so.6 (0xb7513000)
+        libtinfo.so.5 => /usr/local/lib/libtinfo.so.5 (0xb74f1000)
+        /lib/ld-linux.so.2 (0xb7710000)
+
+Why: libreadline.so.5 => not found
+Is it in sqlite3 config/compil (-R which would cancel any LD_RUN_PATH idrective) ?
+Is is in readline itself?
+
+ldd httpd
+        libdl.so.2 => /lib/libdl.so.2 (0xb7431000)
+        libc.so.6 => /lib/libc.so.6 (0xb72ee000)
+        /lib/ld-linux.so.2 (0xb76f5000)
+        libdb-4.7.so => not found
+        libssl.so.1.0.0 => not found
+        libcrypto.so.1.0.0 => not found
+
+
+
+-------------
+openldap on Tinycore when make
+make[3]: Entering directory `/home/tc/compileEverything/.cpl/src/openldap-2.4.24/doc/man/man1'
+PAGES=`cd .; echo *.1`; \
+for page in $PAGES; do \
+  sed -e "s%LDVERSION%2.4.24%" \
+    -e 's%ETCDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/etc/openldap%g' \
+    -e 's%LOCALSTATEDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/var%' \
+    -e 's%SYSCONFDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/etc/openldap%' \
+    -e 's%DATADIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/share/openldap%' \
+    -e 's%SBINDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/sbin%' \
+    -e 's%BINDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/bin%' \
+    -e 's%LIBDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/lib%' \
+    -e 's%LIBEXECDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/libexec%' \
+    -e 's%MODULEDIR%/home/tc/compileEverything/usr/local/libs/openldap-2.4.24/libexec/openldap%' \
+    -e 's%RELEASEDATE%2011/02/10%' \
+      ./$page \
+    | (cd .; soelim -) > $page.tmp; \
+done
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+/bin/sh: soelim: not found
+make[3]: *** [all-common] Error 127
+make[3]: Leaving directory `/home/tc/compileEverything/.cpl/src/openldap-2.4.24/doc/man/man1'
+make[2]: *** [all-common] Error 1
+make[2]: Leaving directory `/home/tc/compileEverything/.cpl/src/openldap-2.4.24/doc/man'
+make[1]: *** [all-common] Error 1
+make[1]: Leaving directory `/home/tc/compileEverything/.cpl/src/openldap-2.4.24/doc'
+make: *** [all-common] Error 1
+
+
+http://www.emreakkas.com/linux-tips/ubuntu-solve-bin-sh-soelim-not-found
+This error is caused by missing or corrupt soelim which interprets .so requests in groff input and is necessary for OpenLDAP to compile.
+
+Installing the groff package will solve this problem
+---------
+JDK
+http://www.oracle.com/technetwork/java/javase/downloads/index.html
+(?ms)Java SE \d(?: Update \d+)?<.*?href="(/technetwork[^"]+)"><img
+=> for instance for JDK7: http://www.oracle.com/technetwork/java/javase/downloads/java-se-jdk-7-download-432154.html
+Windows x64", "size":"80.25 MB", "filepath":"http://download.oracle.com/otn-pub/java/jdk/7/jdk-7-windows-x64.exe"
+Windows x64.*filepath":"([^"]+)"
+
+JDK7:
+Linux x86 - Compressed Binary
+Linux x64 - Compressed Binary
+Solaris x86 - Compressed Binary
+Solaris SPARC - Compressed Binary
+Solaris SPARC 64-bit
+Solaris x64
+Windows x86
+Windows x64
+
+JDK6:
+ Linux x86 - RPM Installer  76.93 MB    jdk-6u26-linux-i586-rpm.bin
+ Linux x86 - Self Extracting Installer  81.20 MB    jdk-6u26-linux-i586.bin
+ Solaris x86 - Self Extracting Binary 81.08 MB    jdk-6u26-solaris-i586.sh
+ Solaris SPARC - Self Extracting Binary 86.05 MB    jdk-6u26-solaris-sparc.sh
+ Solaris SPARC 64-bit - Self Extracting Binary  12.24 MB    jdk-6u26-solaris-sparcv9.sh
+ Solaris x64 - Self Extracting Binary 8.50 MB   jdk-6u26-solaris-x64.sh
+Windows x86
+Windows Intel Itanium
+Windows x64
+-------------
+ausername@ahostname ~/envs/20110805/usr/local/bin
+$ ldd tclsh8.5.exe | grep -v -E "ntdll|kernel|sxwmon32.dll|GDI32.dll|ADVAPI32.dll|RPCRT4.dll|Secur32.dll|SHELL32.dll|msvcrt.dll|SHLWAPI.dll|USER32.dll|ole32.dl
+l|IMM32.DLL|LPK.DLL|USP10.dll|comctl32.dll|comctl32.dll|cygwin1.dll|ADVAPI32.DLL|cygintl-8.dll"
+        libtcl8.5.dll => not found
+-------------
+Ubuntu make git
+Manifying blib/man3/Git.3
+    SUBDIR git_remote_helpers
+gmake[1]: /home/userapp/compileEverything/usr/local/apps/python/bin/python: Command not found
+gmake[1]: *** [all] Error 127
+gmake: *** [all] Error 2
+
+=> The mkdir  usr/local/apps/python/lib at the beginning prevents the creation of the symbolic link python
+add a post make install tp the python params
+---------------
+Ubuntu: ruby svn2git install gem
+ERROR:  Loading command: install (LoadError)
+    no such file to load -- zlib
+ERROR:  While executing gem ... (NameError)
+    uninitialized constant Gem::Commands::InstallCommand
+---------------
+Tinycore configure subversion
+checking for Apache module support via DSO through APXS... /home/tc/compileEverything/usr/local/apps/httpd-2.2.19/bin/httpd: error while loading shared libraries: libssl.so.1.0.0: cannot open shared object file: No such file or directory
+apxs:Error: Sorry, no shared object support for Apache.
+apxs:Error: available under your platform. Make sure.
+apxs:Error: the Apache module mod_so is compiled into.
+apxs:Error: your server binary `/home/tc/compileEverything/usr/local/apps/httpd-2.2.19/bin/httpd'..
+configure: error: no - APXS refers to an old version of Apache
+                     Unable to locate /mod_dav.h
+Should be:
+found at usr/local/apache2/bin/apxs, but no => recompile Apache2
+---------------
+Cygwin gdbm make install
+/bin/install -c -m 644 -o ausername -g Domain Users gdbm.h \
+  /home/ausername/envs/20110805/usr/local/libs/gdbm-1.8.3/include/gdbm.h
+/bin/install: target `/home/ausername/envs/20110805/usr/local/libs/gdbm-1.8.3/include/gdbm.h' is not a directory
+make: *** [install] Error 1
+---------------
+Cygwin cyrus-sasl make:
+gcc -Wall -W -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -L/home/ausername/envs/20110805/usr/local/ssl/lib -Wl,-rpath,/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -L/home/ausername/envs/20110805/usr/local/ssl/include/openssl/lib -o dbconverter-2.exe dbconverter-2.o ../sasldb/.libs/libsasldb.a -lresolv ../lib/.libs/libsasl2.a -ldl -lresolv -lcrypto -lcrypt -ldb -ldb -lresolv
+make[2]: *** No rule to make target `saslpasswd2', needed by `all-am'.  Stop.
+make[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/cyrus-sasl-2.1.21/utils'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/cyrus-sasl-2.1.21'
+make: *** [all] Error 2
+$(EXEEXT), which isn't empty on Cygwin, is missing on sasldblistusers2 and saslpasswd2 => rewrite utils/Makefile in premake
+~~~~~~~~~~~~~
+Cygwin: libssh2 1.2.4 older than 1.2.7 which is missing on Solaris, and blocked on libssh2.org
+libtool: link: gcc -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DLIBSSH2_WIN32 -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o .libs/direct_tcpip.exe direct_tcpip.o  /home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/ssl/include/openssl/lib -ldl -lresolv ../src/.libs/libssh2.a anhostname -lz
+direct_tcpip.o:direct_tcpip.c:(.text+0x19e): undefined reference to `__imp__libssh2_session_init_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x1f3): undefined reference to `__imp__libssh2_session_startup'
+direct_tcpip.o:direct_tcpip.c:(.text+0x236): undefined reference to `__imp__libssh2_hostkey_hash'
+direct_tcpip.o:direct_tcpip.c:(.text+0x2db): undefined reference to `__imp__libssh2_userauth_list'
+direct_tcpip.o:direct_tcpip.c:(.text+0x3e4): undefined reference to `__imp__libssh2_userauth_password_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x471): undefined reference to `__imp__libssh2_userauth_publickey_fromfile_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x68e): undefined reference to `__imp__libssh2_channel_direct_tcpip_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x7a2): undefined reference to `__imp__libssh2_session_set_blocking'
+direct_tcpip.o:direct_tcpip.c:(.text+0x8ca): undefined reference to `__imp__libssh2_channel_write_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x910): undefined reference to `__imp__libssh2_channel_read_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x972): undefined reference to `__imp__libssh2_channel_eof'
+direct_tcpip.o:direct_tcpip.c:(.text+0x9cc): undefined reference to `__imp__libssh2_channel_free'
+direct_tcpip.o:direct_tcpip.c:(.text+0x9f3): undefined reference to `__imp__libssh2_session_disconnect_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0xa02): undefined reference to `__imp__libssh2_session_free'
+collect2: ld returned 1 exit status
+make[2]: *** [direct_tcpip.exe] Error 1
+make[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/libssh2-1.2.4/example'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/libssh2-1.2.4/example'
+make: *** [all-recursive] Error 1
+
+Will have to try make VERBOSE=1
+Note C:\prog\cygwin\home\ausername\envs\20110805\.cpl\src\libssh2-1.2.9\src\.libs\libssh2.la is a link to libssh2.lai. Not supported with Cygwin?
+http://itk-insight-users.2283740.n2.nabble.com/link-error-when-learning-Getting-Started-with-ITK-VTK-td3897136.html
+
+None of the sources in example works properly... =>
+empty noinst_PROGRAMS
+noinst_PROGRAMS = scp$(EXEEXT) \
+  scp_nonblock$(EXEEXT) scp_write$(EXEEXT) \
+  scp_write_nonblock$(EXEEXT) sftp$(EXEEXT) \
+  sftp_nonblock$(EXEEXT) sftp_write$(EXEEXT) \
+  sftp_write_nonblock$(EXEEXT) sftp_mkdir$(EXEEXT) \
+  sftp_mkdir_nonblock$(EXEEXT) sftp_RW_nonblock$(EXEEXT) \
+  sftpdir$(EXEEXT) sftpdir_nonblock$(EXEEXT) ssh2_exec$(EXEEXT) \
+  ssh2_agent$(EXEEXT) ssh2_echo$(EXEEXT) sftp_append$(EXEEXT) \
+  subsystem_netconf$(EXEEXT)
+
+ausername@anhostname ~/envs/20110805/.cpl/src/libssh2-1.2.4/example
+$ nm -Ap ../src/.libs/libssh2.a|grep init_ex
+../src/.libs/libssh2.a:session.o:00000517 T _libssh2_session_init_ex
+
+    ----
+
+With libssh2-1.2.9
+
+<     unsigned __int64 ns100; /*time since 1 Jan 1601 in 100ns units */
+---
+>     unsigned long long ns100; /*time since 1 Jan 1601 in 100ns units */
+
+libtool: compile:  gcc -DHAVE_CONFIG_H -I../include -I../src -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DLIBSSH2_WIN32 -MT misc.lo -MD -MP -MF .deps/misc.Tpo -c misc.c  -DDLL_EXPORT -DPIC -o .libs/misc.o
+
+
+misc.c: In function `_libssh2_gettimeofday':
+misc.c:596: warning: no semicolon at end of struct or union
+misc.c:596: error: syntax error before "ns100"
+misc.c:597: error: `FILETIME' undeclared (first use in this function)
+misc.c:597: error: (Each undeclared identifier is reported only once
+misc.c:597: error: for each function it appears in.)
+misc.c: At top level:
+misc.c:598: warning: data definition has no type or storage class
+misc.c:600: error: syntax error before "if"
+misc.c:604: warning: integer constant is too large for "long" type
+make[2]: *** [misc.lo] Error 1
+make[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/libssh2-1.2.9/src'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/libssh2-1.2.9/src'
+make: *** [all-recursive] Error 1
+
+__int64 doesn't seem to be recognized
+
+ausername@anhostname ~/envs/20110805/.cpl/src/libssh2-1.2.9/include
+$ grep __int64 *
+libssh2.h:typedef unsigned __int64 libssh2_uint64_t;
+libssh2.h:typedef __int64 libssh2_int64_t;
+
+#ifdef _MSC_VER
+typedef unsigned char uint8_t;
+typedef unsigned int uint32_t;
+typedef unsigned __int64 libssh2_uint64_t;
+typedef __int64 libssh2_int64_t;
+#ifndef ssize_t
+typedef SSIZE_T ssize_t;
+#endif
+#else
+typedef unsigned long long libssh2_uint64_t;
+typedef long long libssh2_int64_t;
+typedef libssh2_int64_t __int64; <===== ADD THIS LINE, nope
+#endif
+
+misc.c: 596
+    unsigned long long ns100; /*time since 1 Jan 1601 in 100ns units */
+
+For now (bad):
+replace
+//#ifdef LIBSSH2_GETTIMEOFDAY_WIN32
+by:
+#ifdef WIN32
+
+=> actually define those types:
+
+typedef unsigned long DWORD;
+typedef DWORD LCID;
+typedef struct _FILETIME {
+	DWORD dwLowDateTime;
+	DWORD dwHighDateTime;
+} FILETIME,*PFILETIME,*LPFILETIME;
+
+int __cdecl _libssh2_gettimeofday(struct timeval *tp, void *tzp)
+ {
+  union {
+    unsigned long long ns100; /*time since 1 Jan 1601 in 100ns units */
+    FILETIME ft;
+  }  _now;
+
+  ------------
+  
+direct_tcpip.o:direct_tcpip.c:(.text+0x19e): undefined reference to `__imp__libssh2_session_init_ex'
+direct_tcpip.o:direct_tcpip.c:(.text+0x1f3): undefined reference to `__imp__libssh2_session_startup'
+
+Note: the libssh.a just before had some:
+
+*** Warning: linker path does not have real file for library -lssl.
+*** I have the capability to make that library automatically link in when
+*** you link to this library.  But I can only do this if you have a
+*** shared version of the library, which you do not appear to have
+*** because I did check the linker path looking for a file starting
+*** with libssl and none of the candidates passed a file format test
+*** using a file magic. Last file checked: /home/ausername/envs/20110805/usr/local/ssl/lib/libssl.dll.a
+
+But libtool use the command `file` which wasn't installed in the current cygwin setup.
+=> install /usr/bin/file
+http://comments.gmane.org/gmane.os.cygwin/124739
+The CYGWIN v1.7.7 distribution includes the command "file" (not part of the default core installation, you have to select it separately)
+
+Then:
+
+ausername@anhostname ~/envs/20110805/.cpl/src/libssh2-1.2.9/src
+$ /bin/sh ../libtool --tag=CC --mode=link gcc  -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DLIBSSH2_WIN32  -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o libssh2.la -rpath/home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib -version-info 1:1:0 -no-undefined -export-symbols-regex '^libssh2_.*'  -L/home/ausername/envs/20110805/usr/local/ssl/lib -lssl -L/home/ausername/envs/20110805/usr/local/ssl/lib -lcrypto -R/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/lib -lz channel.lo comp.lo crypt.lo hostkey.lo kex.lo mac.lo misc.lo packet.lo publickey.lo scp.lo session.lo sftp.lo userauth.lo transport.lo version.lo knownhost.lo agent.lo openssl.lo libgcrypt.lo pem.lo keepalive.lo global.lo
+libtool: link: rm -fr  .libs/libssh2.a .libs/libssh2.la .libs/libssh2.lai
+libtool: link: /bin/nm -B  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   | sed -n -e 's/^.*[     ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[         ][      ]*_\([_A-Za-z][_A-Za-z0-9]*\)$/\1 _\2 \2/p' | /bin/sed -e '/^[BCDGRS][ ]/s/.*[ ]\([^ ]*\)/\1 DATA/' | /bin/sed -e '/^[AITW][ ]/s/.*[ ]//' | sort | uniq > .libs/libssh2.exp
+libtool: link: /bin/grep -E -e "^libssh2_.*" ".libs/libssh2.exp" > ".libs/libssh2.expT"
+libtool: link: mv -f ".libs/libssh2.expT" ".libs/libssh2.exp"
+libtool: link: if test "x`/bin/sed 1q .libs/libssh2.exp`" = xEXPORTS; then cp .libs/libssh2.exp .libs/cygssh2-1.dll.def; else echo EXPORTS > .libs/cygssh2-1.dll.def; cat .libs/libssh2.exp >> .libs/cygssh2-1.dll.def; fi
+libtool: link:  
+gcc -shared .libs/cygssh2-1.dll.def  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib anhostname -lz  -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib   -o .libs/cygssh2-1.dll -Wl,--enable-auto-image-base -Xlinker --out-implib -Xlinker .libs/libssh2.dll.a
+Creating library file: .libs/libssh2.dll.a
+.libs/misc.o:misc.c:(.text+0x5f9): undefined reference to `_GetSystemTimeAsFileTime'
+collect2: ld returned 1 exit status
+
+gcc -shared .libs/cygssh2-1.dll.def  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib anhostname -lz  -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib   -o .libs/cygssh2-1.dll -Wl,--enable-auto-image-base -Xlinker --out-implib -Xlinker .libs/libssh2.dll.a
+
+WORKAROUND:
+#include <windows.h>
+just before the function in misc.c does the trick
+
+~~~~~~~~~~~~~~
+Cygwin curl make
+libtool: link: gcc -isystem /home/ausername/envs/20110805/usr/local/include -isystem /home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -g0 -Wno-system-headers -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o .libs/curl.exe main.o hugehelp.o urlglob.o writeout.o writeenv.o getpass.o homedir.o curlutil.o os-specific.o xattr.o strtoofft.o strdup.o rawstr.o nonblock.o  -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -L/home/ausername/envs/20110805/usr/local/libs/openssl-1.0.0d/lib ../lib/.libs/libcurl.a /home/ausername/envs/20110805/usr/local/libs/libidn-1.22/lib/libidn.dll.a /home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1/lib/libintl.dll.a /home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib/libiconv.dll.a /home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib/libssh2.a anhostname -lz -L/home/ausername/envs/20110805/usr/local/libs/libidn-1.22/lib -L/home/ausername/envs/20110805/usr/local/libs/gettext-0.14.1/lib -L/home/ausername/envs/20110805/usr/local/libs/libiconv-1.13.1/lib
+/home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib/libssh2.a(session.o):session.c:(.text+0x1716): undefined reference to `__libssh2_gettimeofday'
+/home/ausername/envs/20110805/usr/local/libs/libssh2-1.2.9/lib/libssh2.a(session.o):session.c:(.text+0x1744): undefined reference to `__libssh2_gettimeofday'
+collect2: ld returned 1 exit status
+make[2]: *** [curl.exe] Error 1
+make[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/curl-7.21.7/src'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/curl-7.21.7/src'
+make: *** [all-recursive] Error 1
+
+Should not happens if misc.c in libssh2 did compile properly!
+However illustrates link dependency on libssh2 function
+---------------
+TinyCore ruby  make
+make[1]: Leaving directory `/home/tc/compileEverything/.cpl/src/ruby-1.9.2-p0/ext/zlib'
+making ruby
+make[1]: Entering directory `/home/tc/compileEverything/.cpl/src/ruby-1.9.2-p0'
+gcc -I/home/tc/compileEverything/usr/local/include -I/home/tc/compileEverything/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -fPIC -L/home/tc/compileEverything/usr/local/lib  -rdynamic -Wl,-export-dynamic   main.o  -Wl,-R -Wl,/home/tc/compileEverything/usr/local/apps/ruby-1.9.2p0/lib -L/home/tc/compileEverything/usr/local/apps/ruby-1.9.2p0/lib -lruby -lpthread -lrt -ldl -lcrypt -lm   -o ruby
+/usr/local/bin/ld: cannot find -lruby
+collect2: ld returned 1 exit status
+make[1]: *** [ruby] Error 1
+make[1]: Leaving directory `/home/tc/compileEverything/.cpl/src/ruby-1.9.2-p0'
+make: *** [main] Error 2
+=> restore -L. in the ruby parameter file
+---------------
+Cygwin gcc make
+/home/ausername/envs/20110820/.cpl/src/gcc-3.4.6/objdir/gcc/xgcc -B/home/ausername/envs/20110820/.cpl/src/gcc-3.4.6/objdir/gcc/ -B/home/ausername/envs/20110820/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/bin/ -B/home/ausername/envs/20110820/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/lib/ -isystem /home/ausername/envs/20110820/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/include -isystem /home/ausername/envs/20110820/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/sys-include -c -DHAVE_CONFIG_H -O2 -I/home/ausername/envs/20110820/usr/local/include -I/home/ausername/envs/20110820/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I. -I../../../libiberty/../include  -W -Wall -Wtraditional -pedantic ../../../libiberty/sort.c -o sort.o
+xgcc: fork: Resource temporarily unavailable
+make[1]: *** [sort.o] Error 1
+make[1]: Leaving directory `/home/ausername/envs/20110820/.cpl/src/gcc-3.4.6/objdir/i686-pc-cygwin/libiberty'
+make: *** [all-target-libiberty] Error 2
+
+=> relaunch? resource issue
+------------
+Cygwin openldap configure
+
+configure:21991: gcc -o conftest.exe -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib conftest.c -lsasl2   >&5
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x6c): undefined reference to `_EVP_DigestInit'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x82): undefined reference to `_EVP_DigestUpdate'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x98): undefined reference to `_EVP_DigestFinal'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x125): undefined reference to `_EVP_get_digestbyname'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x698): undefined reference to `_EVP_cleanup'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0xbea): undefined reference to `_EVP_DigestInit'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0xc15): undefined reference to `_EVP_DigestUpdate'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0xc37): undefined reference to `_EVP_DigestFinal'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0xde1): undefined reference to `_EVP_get_digestbyname'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x1101): undefined reference to `_EVP_get_digestbyname'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x21c1): undefined reference to `_OpenSSL_add_all_digests'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(otp.o):otp.c:(.text+0x2c6e): undefined reference to `_OpenSSL_add_all_digests'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x94): undefined reference to `_db_create'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x100): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x183): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x36b): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x599): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x617): undefined reference to `_db_strerror'
+
+normal:
+$ nm -A /home/ausername/envs/20110805/usr/local/lib/*.a |grep Digest
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a:otp.o:         U _EVP_DigestFinal
+/home/ausername/envs/20110805/usr/local/lib/libsasl2.a:otp.o:         U _EVP_DigestInit
+=> recompile correctly cyrus-sasl?
+Actually
+ausername@anhostname ~/envs/20110805/.cpl/src/cyrus-sasl-2.1.21
+$ grep DigestInit *
+aclocal.m4:                     AC_CHECK_LIB(crypto, EVP_DigestInit,
+configure:                      echo "$as_me:$LINENO: checking for EVP_DigestInit in -lcrypto" >&5
+configure:echo $ECHO_N "checking for EVP_DigestInit in -lcrypto... $ECHO_C" >&6
+=> check openssl
+ausername@anhostname ~/envs/20110805/.cpl/src/cyrus-sasl-2.1.21
+$ find ../../../usr/local/ -name "*crypto*"
+../../../usr/local/libs/openssl-1.0.0d/bin/cygcrypto-1.0.0.dll
+../../../usr/local/libs/openssl-1.0.0d/include/openssl/crypto.h
+../../../usr/local/libs/openssl-1.0.0d/lib/libcrypto.a
+../../../usr/local/libs/openssl-1.0.0d/lib/libcrypto.dll.a
+
+ausername@anhostname ~/envs/20110805/.cpl/src/openssl-1.0.0d
+$ nm -A ./libcrypto.a|grep _EVP_DigestInit
+./libcrypto.a:hmac.o:         U _EVP_DigestInit_ex
+./libcrypto.a:rsa_oaep.o:         U _EVP_DigestInit_ex
+./libcrypto.a:rsa_pss.o:         U _EVP_DigestInit_ex
+./libcrypto.a:md_rand.o:         U _EVP_DigestInit_ex
+./libcrypto.a:digest.o:0000003f T _EVP_DigestInit
+./libcrypto.a:digest.o:0000005e T _EVP_DigestInit_ex
+./libcrypto.a:evp_key.o:         U _EVP_DigestInit_ex
+./libcrypto.a:bio_md.o:         U _EVP_DigestInit_ex
+./libcrypto.a:bio_ok.o:         U _EVP_DigestInit_ex
+
+
+and sasl:
+checking for unicode/utypes.h... no
+configure: WARNING: ICU not available
+checking sasl/sasl.h usability... yes
+checking sasl/sasl.h presence... yes
+checking for sasl/sasl.h... yes
+checking sasl.h usability... no
+checking sasl.h presence... no
+checking for sasl.h... no
+checking for sasl_client_init in -lsasl2... no
+checking for sasl_client_init in -lsasl... no
+configure: error: Could not locate Cyrus SASL
+(normal, don't have libsasl.xxx)
+
+WILL WORK with -lsasl2 -lcrypto -ldb
+~~~~~~~~~~~
+openldap Cygwin make
+gcc -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -o apitest.exe apitest.o  -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib ./.libs/libldap.a /home/ausername/envs/20110805/.cpl/src/openldap-2.4.24/libraries/liblber/.libs/liblber.a -L/home/ausername/envs/20110805/usr/local/ssl/include/openssl/lib ../../libraries/liblber/.libs/liblber.a ../../libraries/liblutil/liblutil.a /home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a -ldl -lresolv anhostname
+/home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x94): undefined reference to `_db_create'
+/home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x100): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x183): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x36b): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x599): undefined reference to `_db_strerror'
+/home/ausername/envs/20110805/usr/local/libs/cyrus-sasl-2.1.21/lib/libsasl2.a(db_berkeley.o):db_berkeley.c:(.text+0x617): undefined reference to `_db_strerror'
+collect2: ld returned 1 exit status
+make[2]: *** [apitest] Error 1
+make[2]: Leaving directory `/home/ausername/envs/20110805/.cpl/src/openldap-2.4.24/libraries/libldap'
+=> miss -ldb in .cpl\src\openldap-2.4.24\libraries\libldap\Makefile, add it to TLS_LIBS
+idem for        .cpl\src\openldap-2.4.24\libraries\libldap_r\Makefile
+                .cpl\src\openldap-2.4.24\libraries\librewrite\Makefile
+                    SASL_LIBS = -lsasl2 -ldb <== change -db in -ldb
+                    TLS_LIBS = -lssl -lcrypto -db
+                    
+To test: Change line 1185 of configure.in TLS_LIBS="-lssl -lcrypto": add ' -ldb'
+         Change line 2099 of configure.in SASL_LIBS="$ol_link_sasl": add ' -ldb'
+=> rewrite the configure accordingly
+-----------
+apr-utils Cygwin configure
+ausername@anhostname ~/envs/20110805/.cpl/src/apr-util-1.2.2
+$ gcc -o conftest.exe -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DCYGWIN -I/home/ausername/envs/20110805/usr/local/include -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib-Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -L/home/ausername/envs/20110805/usr/local/lib l.c -lldap -ldl -lpthread -lssl -lsasl2
+/home/ausername/envs/20110805/usr/local/lib/libldap.a(open.o):open.c:(.text+0x1ed): r'ef'erence ind'efinie vers << _ber_memcalloc_x >>
+/home/ausername/envs/20110805/usr/local/lib/libldap.a(open.o):open.c:(.text+0x218): r'ef'erence ind'efinie vers << _ber_memcalloc_x >>
+/home/ausername/envs/20110805/usr/local/lib/libldap.a(open.o):open.c:(.text+0x22e): r'ef'erence ind'efinie vers << _ber_memfree_x >>
+/home/ausername/envs/20110805/usr/local/lib/libldap.a(open.o):open.c:(.text+0x2af): r'ef'erence ind'efinie vers << _ber_strdup_x >>
+
+Mainly missing -llber , but also -lssl -lsasl2 -ldb -lcrypto
+----------
+apr-utils Cygwin make
+/bin/sh /home/ausername/envs/20110805/usr/local/libs/apr-1.2.2/build-1/libtool --silent --mode=compile gcc   -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DHAVE_CONFIG_H -DCYGWIN  -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I/home/ausername/envs/20110805/.cpl/src/aprutil-1.2.2/include -I/home/ausername/envs/20110805/.cpl/src/aprutil-1.2.2/include/private  -I/home/ausername/envs/20110805/usr/local/libs/apr-1.2.2/include/apr-1  -I/home/ausername/envs/20110805/usr/local/include  -o dbd/apr_dbd_sqlite3.lo -c dbd/apr_dbd_sqlite3.c && touch dbd/apr_dbd_sqlite3.lo
+dbd/apr_dbd_sqlite3.c:42: error: syntax error before "apr_thread_mutex_t"
+dbd/apr_dbd_sqlite3.c:42: warning: no semicolon at end of struct or union
+dbd/apr_dbd_sqlite3.c:44: error: syntax error before '}' token
+dbd/apr_dbd_sqlite3.c: In function `dbd_sqlite3_select':
+dbd/apr_dbd_sqlite3.c:91: error: dereferencing pointer to incomplete type
+
