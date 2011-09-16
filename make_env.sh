@@ -130,6 +130,7 @@ function main {
     echolog "download compatible versions from SunFreeware"
     loge "wget http://sunfreeware.com/programlistsparc10.html -O ${_vers}$(Ymd)" "wget_vers_sunfreeware"
     log "ln -fs ${_vers}$(Ymd) ${_vers}" ln_vers
+    gen_sed -i 's/ftp:\/\/ftp.sunfreeware.com/http:\/\/ftp.sunfreeware.com\/ftp/g' ${_vers}$(Ymd)
   fi
   cat "${_deps}" | while read line; do
     #echo $line
@@ -297,7 +298,7 @@ function get_param() {
     aparam=${aparam##$_param=}
   else aparam="" ; fi
   if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
-  if [[ "$aparam" == "none" ]] ; then eval $_param="'$aparam'" ; return 0 ; fi
+  if [[ "$aparam" == "" ]] || [[ "$aparam" == "none" ]] ; then eval $_param="'$aparam'" ; return 0 ; fi
   if [[ "$aparam" == "##mandatory##" ]]; then echolog "unable to find $_param for $name" ; find2 ; fi
   aparam=${aparam//@@NAMEVER@@/${namever}}
   aparam=${aparam//@@VER@@/${ver}}
@@ -330,6 +331,13 @@ function get_param() {
   aparam=${aparam//\$\{EHULB\}/${HULB//\//\\/}}
   aparam=${aparam//\$\{EHULA\}/${HULA//\//\\/}}
   aparam=${aparam//\$\{EHULS\}/${HULS//\//\\/}}
+  if [[ "${aparam%@@HULifnotCygwin@@*}" != "${aparam}" ]] ; then
+    if [[ "${unameo}" == "Cygwin" ]] ; then
+        aparam=${aparam/@@HULifnotCygwin@@/no}
+    else
+        aparam=${aparam/@@HULifnotCygwin@@/${HUL}}
+    fi
+  fi;
   #if [[ "$_param" == "pre" && "$name" == "perl" ]] ; then echo $name $_param xx${aparam}xx ; fi
   eval $_param="'$aparam'"
 }
