@@ -1231,3 +1231,56 @@ remove any reference to -lapr
 replace it by /home/ausername/compileEverything/usr/local/libs/apr-1.2.2/lib/libapr-1.la
 works as well
 try in configure to reference the usr/local/bin/apr-1-config and usr/local/bin/apu-1-config for --with-apr and --with-aprutils
+~~~~~~~~~~~~~~~~
+Cygwin Subversion make
+cd subversion/tests/libsvn_subr && /bin/sh /home/ausername/compileEverything/.cpl/src/subversion-1.6.17/libtool --tag=CC --silent --mode=link gcc  -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL     -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/ssl/lib -L/home/ausername/compileEverything/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/compileEverything/usr/local/lib:/home/ausername/compileEverything/usr/local/ssl/lib:/home/ausername/compileEverything/usr/local/apps/svn/lib:/home/ausername/compileEverything/usr/local/apps/python/lib:/home/ausername/compileEverything/usr/local/apps/gcc/lib    -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/lib  -rpath /home/ausername/compileEverything/usr/local/apps/subversion-1.6.17/lib -o dirent_uri-test.exe  dirent_uri-test.o ../../../subversion/tests/libsvn_test-1.la ../../../subversion/libsvn_subr/libsvn_subr-1.la /home/ausername/compileEverything/usr/local/libs/aprutil-1.2.2/lib/libaprutil-1.la -lldap -llber -lssl -lsasl2 -ldb -lcrypto -llber -lgdbm -lexpat -liconv /home/ausername/compileEverything/usr/local/libs/apr-1.2.2/lib/libapr-1.la -lcrypt -lintl -lapr -lintl -lsasl2 -ldb -lcrypto 
+dirent_uri-test.o:dirent_uri-test.c:(.text+0x2ebd): undefined reference to `_ausername'
+collect2: ld returned 1 exit status
+make: *** [subversion/tests/libsvn_subr/dirent_uri-test.exe] Error 1
+Note: libtool: link: warning: undefined symbols not allowed in i686-pc-cygwin shared libraries
+
+nm /usr/lib/libmsvcrt.a | grep ausername
+00000000 I __imp___wausername
+00000000 T __wausername
+00000000 T __ausername
+
+Solution 1 (workaround) Avoid in compileEverything\.cpl\src\subversion-1.6.17\subversion\tests\libsvn_subr\dirent_uri-test.c to compile the part with #if defined(WIN32) || defined(__CYGWIN1__)
+
+Solution 2 (not tested yet)
+http://cygwin.com/ml/cygwin/2010-07/msg00048.html
+
+> After writing and sending the below note, I found the message recommending the use of the "-no-undefined" option.  I will use it and see if it helps.
+> 
+> If that is the problem's solution though, wouldn't it would be nice not to have to manually set it for programs involving shared libraries?  Couldn't this option be made into a default, which by doing so would make a lot of source code packages buildable as is, I should think.
+
+The Autobook
+  http://sourceware.org/autobook/autobook/autobook_88.html
+says:
+  "Historically, the default behaviour of Libtool was as if `-no-undefined' was always passed on the command line"
+and goes on to explain why that default was changed.
+
+Team
+
+I beleive I have found a resolution to this problem.
+
+By setting the LDFLAGS environment variable was able to get the non CXX components of  mailutils and all of apache to compile cleanly. Subversion I think will compile once I put a newer version of neon on. The library errors common to all three projects I was experiencing have not returned. 
+
+Apache and Subversion have their own libtool scripts. I presume they are generated in the configure process. I have not investigated that. They both now have the undefined flag defined in the latest attempt.
+
+To make this simpler I put the flag in my .profile for ksh
+
+    # GCC Options
+    export LDFLAGS=-no-undefined
+
+Thanks all for helping!
+
+-R
+~~~~~~~~~~~~~~~
+Subversion Cygwin make
+
+cd subversion/tests/libsvn_fs_base && /bin/sh /home/ausername/compileEverything/.cpl/src/subversion-1.6.17/libtool --tag=CC --silent --mode=link gcc  -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL     -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/ssl/lib -L/home/ausername/compileEverything/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/compileEverything/usr/local/lib:/home/ausername/compileEverything/usr/local/ssl/lib:/home/ausername/compileEverything/usr/local/apps/svn/lib:/home/ausername/compileEverything/usr/local/apps/python/lib:/home/ausername/compileEverything/usr/local/apps/gcc/lib    -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/lib  -rpath /home/ausername/compileEverything/usr/local/apps/subversion-1.6.17/lib -o strings-reps-test.exe  strings-reps-test.o ../../../subversion/tests/libsvn_test-1.la ../../../subversion/libsvn_fs/libsvn_fs-1.la ../../../subversion/libsvn_fs_base/libsvn_fs_base-1.la ../../../subversion/libsvn_delta/libsvn_delta-1.la ../../../subversion/libsvn_subr/libsvn_subr-1.la /home/ausername/compileEverything/usr/local/libs/aprutil-1.2.2/lib/libaprutil-1.la -lldap -llber -lssl -lsasl2 -ldb -lcrypto -llber -lgdbm -lexpat -liconv /home/ausername/compileEverything/usr/local/libs/apr-1.2.2/lib/libapr-1.la -lcrypt -lintl -lapr -lintl -lsasl2 -ldb -lcrypto 
+
+/home/ausername/compileEverything/usr/local/bin/msgfmt  -o subversion/po/de.mo subversion/po/de.po
+make: *** [subversion/po/de.mo] Aborted
+Means that gettext exe like msgfmt actually hang! => to investigate
+
