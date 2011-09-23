@@ -962,7 +962,7 @@ make: *** [all-recursive] Error 1
 
 Should not happens if misc.c in libssh2 did compile properly!
 However illustrates link dependency on libssh2 function
----------------
+~~~~~~~~~~~~~~~~
 TinyCore ruby  make
 make[1]: Leaving directory `/home/tc/compileEverything/.cpl/src/ruby-1.9.2-p0/ext/zlib'
 making ruby
@@ -974,7 +974,7 @@ make[1]: *** [ruby] Error 1
 make[1]: Leaving directory `/home/tc/compileEverything/.cpl/src/ruby-1.9.2-p0'
 make: *** [main] Error 2
 => restore -L. in the ruby parameter file
----------------
+~~~~~~~~~~~~~~~~
 Cygwin gcc make
 /home/ausername/envs/20110820/.cpl/src/gcc-3.4.6/objdir/gcc/xgcc -B/home/ausername/envs/20110820/.cpl/src/gcc-3.4.6/objdir/gcc/ -B/home/ausername/envs/20110820/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/bin/ -B/home/ausername/envs/20110820/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/lib/ -isystem /home/ausername/envs/20110820/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/include -isystem /home/ausername/envs/20110820/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/sys-include -c -DHAVE_CONFIG_H -O2 -I/home/ausername/envs/20110820/usr/local/include -I/home/ausername/envs/20110820/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I. -I../../../libiberty/../include  -W -Wall -Wtraditional -pedantic ../../../libiberty/sort.c -o sort.o
 xgcc: fork: Resource temporarily unavailable
@@ -983,7 +983,7 @@ make[1]: Leaving directory `/home/ausername/envs/20110820/.cpl/src/gcc-3.4.6/obj
 make: *** [all-target-libiberty] Error 2
 
 => relaunch? resource issue
-------------
+~~~~~~~~~~~~~~~~
 Cygwin openldap configure
 
 configure:21991: gcc -o conftest.exe -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib conftest.c -lsasl2   >&5
@@ -1074,7 +1074,7 @@ idem for        .cpl\src\openldap-2.4.24\libraries\libldap_r\Makefile
 To test: Change line 1185 of configure.in TLS_LIBS="-lssl -lcrypto": add ' -ldb'
          Change line 2099 of configure.in SASL_LIBS="$ol_link_sasl": add ' -ldb'
 => rewrite the configure accordingly
------------
+~~~~~~~~~~~~~~~~
 apr-utils Cygwin configure
 ausername@anhostname ~/envs/20110805/.cpl/src/apr-util-1.2.2
 $ gcc -o conftest.exe -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DCYGWIN -I/home/ausername/envs/20110805/usr/local/include -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib-Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib -L/home/ausername/envs/20110805/usr/local/lib l.c -lldap -ldl -lpthread -lssl -lsasl2
@@ -1084,7 +1084,7 @@ $ gcc -o conftest.exe -I/home/ausername/envs/20110805/usr/local/include -I/home/
 /home/ausername/envs/20110805/usr/local/lib/libldap.a(open.o):open.c:(.text+0x2af): r'ef'erence ind'efinie vers << _ber_strdup_x >>
 
 Mainly missing -llber , but also -lssl -lsasl2 -ldb -lcrypto
-----------
+~~~~~~~~~~~~~~~~
 apr-utils Cygwin make
 /bin/sh /home/ausername/envs/20110805/usr/local/libs/apr-1.2.2/build-1/libtool --silent --mode=compile gcc   -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -DHAVE_CONFIG_H -DCYGWIN  -I/home/ausername/envs/20110805/usr/local/include -I/home/ausername/envs/20110805/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I/home/ausername/envs/20110805/.cpl/src/aprutil-1.2.2/include -I/home/ausername/envs/20110805/.cpl/src/aprutil-1.2.2/include/private  -I/home/ausername/envs/20110805/usr/local/libs/apr-1.2.2/include/apr-1  -I/home/ausername/envs/20110805/usr/local/include  -o dbd/apr_dbd_sqlite3.lo -c dbd/apr_dbd_sqlite3.c && touch dbd/apr_dbd_sqlite3.lo
 dbd/apr_dbd_sqlite3.c:42: error: syntax error before "apr_thread_mutex_t"
@@ -1104,7 +1104,7 @@ typedef struct apr_thread_mutex_t apr_thread_mutex_t; // opaque struct
 does the trick
 
 But the true solution is to NOT INCLUDE sqlite3: --with-sqlite3=no
-------------
+~~~~~~~~~~~~~~~~
 Cygwin apache httpd make
 gcc   -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL  -DCYGWIN  -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL  -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/srclib/pcre -I. -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/os/unix -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/server/mpm/prefork -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/http-I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/filters -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/proxy -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/include -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/generators -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/mappers -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/database -I/home/ausername/compileEverything/usr/local/libs/apr-1.2.2/include/apr-1 -I/home/ausername/compileEverything/usr/local/libs/aprutil-1.2.2/include/apr-1 -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/server -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/proxy/../generators -I/home/ausername/compileEverything/usr/local/ssl/include -I/home/ausername/compileEverything/usr/local/libs/openssl-1.0.0e/include -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/ssl -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/dav/main  -c /home/ausername/compileEverything/.cpl/src/httpd-2.2.20/server/buildmark.c /home/ausername/compileEverything/usr/local/libs/apr-1.2.2/build-1/libtool --silent --mode=link 
 
@@ -1283,4 +1283,74 @@ cd subversion/tests/libsvn_fs_base && /bin/sh /home/ausername/compileEverything/
 /home/ausername/compileEverything/usr/local/bin/msgfmt  -o subversion/po/de.mo subversion/po/de.po
 make: *** [subversion/po/de.mo] Aborted
 Means that gettext exe like msgfmt actually hang! => to investigate
+~~~~~~~~~~~~~~~
+gettext Cygwin make
 
+Actually, it hangs because of the premake steps, remove them for Cywin and it works.
+But it always generate an error 127 when executed
+http://web.archiveorange.com/archive/v/8XiUW7pNJcx3JSdHlX1p
+the price we pay for using gettext-0.14 
+Make distcheck currently fails like this:
+
+    make[2]: Entering directory `/t/libvirt-0.7.6/_build/po'
+    /bin/sh @MKINSTALLDIRS@ /t/libvirt-0.7.6/_inst/share
+    /bin/sh: @MKINSTALLDIRS@: No such file or directory
+    make[2]: *** [install-data-yes] Error 127
+
+That is due to our use of a version of gettext that is way too old:
+
+    $ grep GETT configure.ac
+    AM_GNU_GETTEXT_VERSION([0.14.1])
+
+The work-around is to define (via AC_SUBST) the now-obsolete symbol,
+MKINSTALLDIRS, so that @MKINSTALLDIRS@ in the autopoint-provided
+Makefile.in.in (from the old version of gettext) ends up being
+substituted.
+
+As I recall, people insist on using this old version of gettext,
+because nothing newer is supplied by RHEL5.x.  IMHO, that is RHEL5's
+problem, and should not be allowed to cause continuing problems
+in upstream projects.  It is easy and safe to install a newer version
+of gettext, especially since any project using autopoint will
+automatically continue to get the same bit-rotting old files:
+a gettext installation includes an archive of all older versions
+of its files, to provide just this type of backwards compatibility.
+
+We had a similar problem in libguestfs, and it was not trivial to diagnose
+there, either, even though I'd seen it at least once or twice before then.
+
+Here's the work-around:
+[just realized this requires a comment.  adding that now]
+
+>From 16b9418427101a495b7fdd6917f518f254d22720 Mon Sep 17 00:00:00 2001
+From: Jim Meyering <meye...@redhat.com>
+Date: Wed, 24 Feb 2010 10:53:44 +0100
+Subject: [PATCH] build: ensure that MKINSTALLDIRS is AC_SUBST-defined
+
+since we're using gettext-0.14.1, which uses that now-obsolete
+automake symbol.  Otherwise, make distcheck would fails like this:
+
+    make[2]: Entering directory `/t/libvirt-0.7.6/_build/po'
+    /bin/sh @MKINSTALLDIRS@ /t/libvirt-0.7.6/_inst/share
+    /bin/sh: @MKINSTALLDIRS@: No such file or directory
+    make[2]: *** [install-data-yes] Error 127
+
+* configure.ac (MKINSTALLDIRS): Define.
+---
+ configure.ac |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 117cb20..2f79970 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -49,6 +49,8 @@ AC_PROG_CPP
+
+ AC_OBJEXT
+
++AC_SUBST([MKINSTALLDIRS], [$ac_aux_dir/mkinstalldirs])
++
+ dnl gl_INIT uses m4_foreach_w, yet that is not defined in autoconf-2.59.
+ dnl In order to accommodate developers with such old tools, here's a
+ dnl replacement definition.
+~~~~~~~~~~~~~~~~
