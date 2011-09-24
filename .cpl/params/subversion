@@ -1,4 +1,5 @@
 page=http://subversion.apache.org/download/
 url=http://subversion.tigris.org/downloads/
+pre=anos=$(uname -o) ; if [[ "${anos#*Cygwin}" != "${anos}" ]] ; then gen_sed -i "s/-lsasl2  /-lsasl2 -lcrypto -ldb /g" ${H}/.cpl/src/@@NAMEVER@@/configure ; fi ;
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static --with-apr=${HULB}/apr-1-config --with-apr-util=${HULB}/apu-1-config  --with-sasl=${HUL} --with-ssl --with-jdk=${JAVA_HOME} --with-neon=${HUL} --with-sqlite=${HUL} --with-apxs=${HUL}/apache2/bin/apxs @@WITHOUT_GNU_LD@@
-premake=astop;gen_sed -i "s/^LIBS = /LIBS = -lintl /g" Makefile
+premake=astop;gen_sed -i "s/^LIBS = /LIBS = -lintl -lapr -lsasl2 -lcrypto -ldb /g" Makefile

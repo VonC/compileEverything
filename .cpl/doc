@@ -1,12 +1,12 @@
 port:
 lsof -i :port
-
+~~~~~~~~~~~~~~
 userapp@vonc-VirtualBox:~$ ifconfig|grep inet|grep -v '::'|grep -v ':10'|grep -v ':127'
           inet addr:192.168.xxx.zzz  Bcast:192.168.xxx.255  Mask:255.255.255.0
-
+~~~~~~~~~~~~~~
 last changed 5 minutes or more:
 userapp@vonc-VirtualBox:~$ find . -mmin -60 -print
-
+~~~~~~~~~~~~~~
 ssh   SSH connections (like telnet:) and  IETF Draft  ssh://[<user>[;fingerprint=<host-key fingerprint>]@]<host>[:<port>]
 
 foo://username:password@example.com:8042/over/there/index.dtb?type=animal&name=narwhal#nose
@@ -22,7 +22,8 @@ scheme name       authority                    path   |    |
   / \ /                        \                           |
   urn:example:animal:ferret:nose             interpretable as extension
 
-ssh pam
+~~~~~~~~~~~~~~
+ssh with pam:
 
 debug1: Next authentication method: password
 userapp@192.168.xxx.zzz's password:
@@ -41,12 +42,12 @@ Sep 11 12:55:30 vonc-VirtualBox sshd[3221]: error: Could not get shadow informat
 Sep 11 12:55:30 vonc-VirtualBox sshd[3221]: Failed password for userapp from 192.168.xxx.yyy port 57166 ssh2
 
 PAM not suported: PAM headers not found during configure of openssh => no --with-pam => no "UsePAM"
-
+~~~~~~~~~~~~~~
 chmod 600 authorized_keys
-
+~~~~~~~~~~~~~~
 redirection tcsh for find:
 tcsh$( s find . -name "libXtst*" > /dev/tty ) > & /dev/null
-
+~~~~~~~~~~~~~~
 Sep 11 16:11:45 vonc-VirtualBox sshd[13412]: Invalid user ausername from 192.168.xxx.yyy
 Sep 11 16:11:45 vonc-VirtualBox sshd[13412]: input_userauth_request: invalid user ausername
 Sep 11 16:11:45 vonc-VirtualBox sshd[13412]: Failed none for invalid user ausername from 192.168.xxx.yyy port 59596 ssh2
@@ -61,3 +62,14 @@ key_read: uudecode AAAAB3NzaC1yc2EAAAADAQABAAABAQDREEhRsePmCxHm2j5FKolAZeJYMfUAO
 debug3: key_read: missing whitespace
 debug3: key_read: missing whitespace
 The local user public key was copied on several lines instead of one (result of a copy/paste) => put it on one line
+~~~~~~~~~~~~~~
+Debug bash script with line number:
+#!/bin/bash -x
+me=`basename $0`
+export 'PS4=+ $me.$LINENO '
+function testfunction() {
+  echo $*
+}
+testfunction testing
+testfunction 123
+~~~~~~~~~~~~~~

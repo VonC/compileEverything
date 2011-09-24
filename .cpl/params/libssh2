@@ -1,6 +1,8 @@
 # p age=http://ftp.uni-erlangen.de/pub/mirrors/gentoo/distfiles/?order=D
-page=http://www.libssh2.org/
-url=http://www.libssh2.org/download/
+page=http://freebsd.ntu.edu.tw/FreeBSD/ports/local-distfiles/sbz/
+#u rl=http://www.libssh2.org/download/
+url=http://freebsd.ntu.edu.tw/FreeBSD/ports/local-distfiles/sbz/
+verinclude=-1.3
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-openssl --with-libssl-prefix=${HUL}/ssl --with-libz --with-libz-prefix=${HUL} @@WITHOUT_GNU_LD@@
 pre=anos=$(uname -o) ; if [[ "${anos#*Cygwin}" != "${anos}" ]] ; then gen_sed -i "/int __cdecl _/ i #include <windows.h>" ${H}/.cpl/src/@@NAMEVER@@/src/misc.c ; fi
 premake=gen_sed -i "s/^CFLAGS = /CFLAGS = -lsasl2 /g" ${H}/.cpl/src/@@NAMEVER@@/example/Makefile;gen_sed -i "s/^CFLAGS = /CFLAGS = -lsasl2 /g" ${H}/.cpl/src/@@NAMEVER@@/tests/Makefile
