@@ -1,4 +1,4 @@
 page=http://subversion.apache.org/download/
 url=http://subversion.tigris.org/downloads/
-configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static --with-apr=${HUL} --with-apr-util=${HUL}  --with-sasl=${HUL} --with-ssl --with-jdk=${JAVA_HOME} --with-neon=${HUL} --with-sqlite=${HUL} --with-apxs=${HUL}/apache2/bin/apxs @@WITHOUT_GNU_LD@@
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static --with-apr=${HULB}/apr-1-config --with-apr-util=${HULB}/apu-1-config  --with-sasl=${HUL} --with-ssl --with-jdk=${JAVA_HOME} --with-neon=${HUL} --with-sqlite=${HUL} --with-apxs=${HUL}/apache2/bin/apxs @@WITHOUT_GNU_LD@@
 premake=astop;gen_sed -i "s/^LIBS = /LIBS = -lintl /g" Makefile
