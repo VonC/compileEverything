@@ -1354,3 +1354,51 @@ index 117cb20..2f79970 100644
  dnl In order to accommodate developers with such old tools, here's a
  dnl replacement definition.
 ~~~~~~~~~~~~~~~~
+Cygwin libxslt make
+libtool: link: gcc -shared  .libs/exslt.o .libs/common.o .libs/crypto.o .libs/math.o .libs/sets.o .libs/functions.o .libs/strings.o .libs/date.o .libs/saxon.o .libs/dynamic.o   -L/home/ausername/compileEverything/usr/local/libs/libgcrypt-1.4.6/lib -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/ssl/lib -L/home/ausername/compileEverything/usr/local/apps/python/lib -L/home/ausername/compileEverything/usr/local/libs/libgpgerror-1.10/lib -L/home/ausername/compileEverything/usr/local/libs/gettext-0.18.1.1/lib -L/home/ausername/compileEverything/usr/local/libs/libiconv-1.14/lib /home/ausername/compileEverything/usr/local/libs/gettext-0.18.1.1/lib/libintl.dll.a ../libxslt/.libs/libxslt.dll.a -L/home/ausername/compileEverything/usr/local/libs/libxml2-2.7.8/lib /home/ausername/compileEverything/usr/local/libs/libxml2-2.7.8/lib/libxml2.dll.a -lz /home/ausername/compileEverything/usr/local/libs/libiconv-1.14/lib/libiconv.dll.a  -Wl,-rpath=/home/ausername/compileEverything/usr/local/lib:/home/ausername/compileEverything/usr/local/ssl/lib:/home/ausername/compileEverything/usr/local/apps/svn/lib:/home/ausername/compileEverything/usr/local/apps/python/lib:/home/ausername/compileEverything/usr/local/apps/gcc/lib   -o .libs/cygexslt-0.dll -Wl,--enable-auto-image-base -Xlinker --out-implib -Xlinker .libs/libexslt.dll.a
+Creating library file: .libs/libexslt.dll.a
+.libs/crypto.o:crypto.c:(.text+0x12e): undefined reference to `_gcry_check_version'
+.libs/crypto.o:crypto.c:(.text+0x16a): undefined reference to `_gcry_md_hash_buffer'
+.libs/crypto.o:crypto.c:(.text+0x19f): undefined reference to `_gcry_cipher_open'
+.libs/crypto.o:crypto.c:(.text+0x1ab): undefined reference to `_gcry_strerror'
+
+need to add -lgcrypt -lgpg-error -lintl in the configure part, in order to generate the right libtool
+But add also 
+      new_libs="-lgcrypt -lgpg-error -lintl $new_libs" at line 6536
+----
+Cygwin libxslt make
+Making all in xsltproc
+make[2] : on entre dans le r¦pertoire ¦ /home/ausername/compileEverything/.cpl/src/libxslt-1.1.26/xsltproc ¦
+/bin/sh ../libtool --tag=CC   --mode=link gcc -I/home/ausername/compileEverything/usr/local/libs/libgcrypt-1.4.6/include -I/home/ausername/compileEverything/usr/l
+ocal/libs/libgpgerror-1.10/include -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_S
+OURCE -DHAVE_STRSIGNAL -Wall  -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/ssl/lib -L/home/ausername/compileEver
+ything/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/compileEverything/usr/local/lib:/home/ausername/compileEverything/usr/local/ssl/lib:/home/ausername/com
+pileEverything/usr/local/apps/svn/lib:/home/ausername/compileEverything/usr/local/apps/python/lib:/home/ausername/compileEverything/usr/local/apps/gcc/lib -o xslt
+proc.exe xsltproc.o -L/home/ausername/compileEverything/usr/local/libs/libgcrypt-1.4.6/lib -lgcrypt -L/home/ausername/compileEverything/usr/local/libs/libgpgerror
+-1.10/lib -lgpg-error ../libxslt/libxslt.la ../libexslt/libexslt.la -L/home/ausername/compileEverything/usr/local/libs/libxml2-2.7.8/lib -lxml2 -L/home/ausername/
+compileEverything/usr/local/lib -lz -L/home/ausername/compileEverything/usr/local/lib -liconv -lm -L/home/ausername/compileEverything/usr/local/libs/libxml2-2.7.8
+/lib -lxml2 -L/home/ausername/compileEverything/usr/local/lib -lz -L/home/ausername/compileEverything/usr/local/lib -liconv -lm
+libtool: link: gcc -I/home/ausername/compileEverything/usr/local/libs/libgcrypt-1.4.6/include -I/home/ausername/compileEverything/usr/local/libs/libgpgerror-1.10/
+include -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -Wal
+l -Wl,-rpath=/home/ausername/compileEverything/usr/local/lib:/home/ausername/compileEverything/usr/local/ssl/lib:/home/ausername/compileEverything/usr/local/apps/s
+vn/lib:/home/ausername/compileEverything/usr/local/apps/python/lib:/home/ausername/compileEverything/usr/local/apps/gcc/lib -o .libs/xsltproc.exe xsltproc.o  -lgc
+rypt -lgpg-error -lintl -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/ssl/lib -L/home/ausername/compileEverything
+/usr/local/apps/python/lib -L/home/ausername/compileEverything/usr/local/libs/libgpgerror-1.10/lib -L/home/ausername/compileEverything/usr/local/libs/libgcrypt-1.
+4.6/lib ../libxslt/.libs/libxslt.dll.a -L/home/ausername/compileEverything/usr/local/libs/libxml2-2.7.8/lib ../libexslt/.libs/libexslt.a /home/ausername/compileEv
+erything/.cpl/src/libxslt-1.1.26/libxslt/.libs/libxslt.dll.a /home/ausername/compileEverything/usr/local/libs/gettext-0.18.1.1/lib/libintl.dll.a /home/ausername/c
+ompileEverything/usr/local/libs/libxml2-2.7.8/lib/libxml2.dll.a -lz /home/ausername/compileEverything/usr/local/libs/libiconv-1.14/lib/libiconv.dll.a /home/43640
+119/compileEverything/usr/local/libs/libgcrypt-1.4.6/lib/libgcrypt.a /home/ausername/compileEverything/usr/local/libs/libgpgerror-1.10/lib/libgpg-error.a -L/home
+/ausername/compileEverything/usr/local/libs/gettext-0.18.1.1/lib -L/home/ausername/compileEverything/usr/local/libs/libxslt-1.1.26/lib -L/home/ausername/compileEve
+rything/usr/local/libs/libxml2-2.7.8/lib -L/home/ausername/compileEverything/usr/local/libs/libiconv-1.14/lib
+/home/ausername/compileEverything/usr/local/libs/libgpgerror-1.10/lib/libgpg-error.a(libgpg_error_la-strerror.o):strerror.c:(.text+0xa4): undefined reference to
+`_libintl_dgettext'
+/home/ausername/compileEverything/usr/local/libs/libgpgerror-1.10/lib/libgpg-error.a(libgpg_error_la-strerror.o):strerror.c:(.text+0x206): undefined reference to
+ `_libintl_dgettext'
+/home/ausername/compileEverything/usr/local/libs/libgpgerror-1.10/lib/libgpg-error.a(libgpg_error_la-strsource.o):strsource.c:(.text+0x3e): undefined reference t
+o `_libintl_dgettext'
+collect2: ld returned 1 exit status
+make[2]: *** [xsltproc.exe] Erreur 1
+make[2] : on quitte le r¦pertoire ¦ /home/ausername/compileEverything/.cpl/src/libxslt-1.1.26/xsltproc ¦
+make[1]: *** [all-recursive] Erreur 1
+make[1] : on quitte le r¦pertoire ¦ /home/ausername/compileEverything/.cpl/src/libxslt-1.1.26 ¦
+make: *** [all] Erreur 2
