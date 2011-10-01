@@ -896,8 +896,8 @@ by:
 typedef unsigned long DWORD;
 typedef DWORD LCID;
 typedef struct _FILETIME {
-	DWORD dwLowDateTime;
-	DWORD dwHighDateTime;
+  DWORD dwLowDateTime;
+  DWORD dwHighDateTime;
 } FILETIME,*PFILETIME,*LPFILETIME;
 
 int __cdecl _libssh2_gettimeofday(struct timeval *tp, void *tzp)
@@ -908,7 +908,7 @@ int __cdecl _libssh2_gettimeofday(struct timeval *tp, void *tzp)
   }  _now;
 
   ------------
-  
+
 direct_tcpip.o:direct_tcpip.c:(.text+0x19e): undefined reference to `__imp__libssh2_session_init_ex'
 direct_tcpip.o:direct_tcpip.c:(.text+0x1f3): undefined reference to `__imp__libssh2_session_startup'
 
@@ -936,7 +936,7 @@ libtool: link: /bin/nm -B  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/host
 libtool: link: /bin/grep -E -e "^libssh2_.*" ".libs/libssh2.exp" > ".libs/libssh2.expT"
 libtool: link: mv -f ".libs/libssh2.expT" ".libs/libssh2.exp"
 libtool: link: if test "x`/bin/sed 1q .libs/libssh2.exp`" = xEXPORTS; then cp .libs/libssh2.exp .libs/cygssh2-1.dll.def; else echo EXPORTS > .libs/cygssh2-1.dll.def; cat .libs/libssh2.exp >> .libs/cygssh2-1.dll.def; fi
-libtool: link:  
+libtool: link:
 gcc -shared .libs/cygssh2-1.dll.def  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   -L/home/ausername/envs/20110805/usr/local/lib -L/home/ausername/envs/20110805/usr/local/ssl/lib -L/home/ausername/envs/20110805/usr/local/apps/python/lib anhostname -lz  -Wl,-rpath=/home/ausername/envs/20110805/usr/local/lib:/home/ausername/envs/20110805/usr/local/ssl/lib:/home/ausername/envs/20110805/usr/local/apps/svn/lib:/home/ausername/envs/20110805/usr/local/apps/python/lib:/home/ausername/envs/20110805/usr/local/apps/gcc/lib   -o .libs/cygssh2-1.dll -Wl,--enable-auto-image-base -Xlinker --out-implib -Xlinker .libs/libssh2.dll.a
 Creating library file: .libs/libssh2.dll.a
 .libs/misc.o:misc.c:(.text+0x5f9): undefined reference to `_GetSystemTimeAsFileTime'
@@ -1070,7 +1070,7 @@ idem for        .cpl\src\openldap-2.4.24\libraries\libldap_r\Makefile
                 .cpl\src\openldap-2.4.24\libraries\librewrite\Makefile
                     SASL_LIBS = -lsasl2 -ldb <== change -db in -ldb
                     TLS_LIBS = -lssl -lcrypto -db
-                    
+
 To test: Change line 1185 of configure.in TLS_LIBS="-lssl -lcrypto": add ' -ldb'
          Change line 2099 of configure.in SASL_LIBS="$ol_link_sasl": add ' -ldb'
 => rewrite the configure accordingly
@@ -1093,9 +1093,9 @@ dbd/apr_dbd_sqlite3.c:44: error: syntax error before '}' token
 dbd/apr_dbd_sqlite3.c: In function `dbd_sqlite3_select':
 dbd/apr_dbd_sqlite3.c:91: error: dereferencing pointer to incomplete type
 
-Turns out 
+Turns out
 - apr_thread_mutex_t is defined in compileEverything\.cpl\src\apr-1.2.2\include\arch\win32\apr_arch_thread_mutex.h
-- APR_THREAD_MUTEX_DEFAULT is defined in compileEverything\usr\local\libs\apr-1.2.2\include\apr-1\apr_thread_mutex.h 
+- APR_THREAD_MUTEX_DEFAULT is defined in compileEverything\usr\local\libs\apr-1.2.2\include\apr-1\apr_thread_mutex.h
 and they don't seem to be included properly.
 
 Adding:
@@ -1106,7 +1106,7 @@ does the trick
 But the true solution is to NOT INCLUDE sqlite3: --with-sqlite3=no
 ~~~~~~~~~~~~~~~~
 Cygwin apache httpd make
-gcc   -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL  -DCYGWIN  -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL  -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/srclib/pcre -I. -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/os/unix -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/server/mpm/prefork -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/http-I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/filters -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/proxy -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/include -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/generators -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/mappers -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/database -I/home/ausername/compileEverything/usr/local/libs/apr-1.2.2/include/apr-1 -I/home/ausername/compileEverything/usr/local/libs/aprutil-1.2.2/include/apr-1 -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/server -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/proxy/../generators -I/home/ausername/compileEverything/usr/local/ssl/include -I/home/ausername/compileEverything/usr/local/libs/openssl-1.0.0e/include -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/ssl -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/dav/main  -c /home/ausername/compileEverything/.cpl/src/httpd-2.2.20/server/buildmark.c /home/ausername/compileEverything/usr/local/libs/apr-1.2.2/build-1/libtool --silent --mode=link 
+gcc   -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL  -DCYGWIN  -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL  -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/srclib/pcre -I. -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/os/unix -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/server/mpm/prefork -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/http-I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/filters -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/proxy -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/include -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/generators -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/mappers -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/database -I/home/ausername/compileEverything/usr/local/libs/apr-1.2.2/include/apr-1 -I/home/ausername/compileEverything/usr/local/libs/aprutil-1.2.2/include/apr-1 -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/server -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/proxy/../generators -I/home/ausername/compileEverything/usr/local/ssl/include -I/home/ausername/compileEverything/usr/local/libs/openssl-1.0.0e/include -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/ssl -I/home/ausername/compileEverything/.cpl/src/httpd-2.2.20/modules/dav/main  -c /home/ausername/compileEverything/.cpl/src/httpd-2.2.20/server/buildmark.c /home/ausername/compileEverything/usr/local/libs/apr-1.2.2/build-1/libtool --silent --mode=link
 
 gcc   -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL   -L/home/ausername/compileEverything/usr/local/libs/openssl-1.0.0e/lib -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/ssl/lib -L/home/ausername/compileEverything/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/compileEverything/usr/local/lib:/home/ausername/compileEverything/usr/local/ssl/lib:/home/ausername/compileEverything/usr/local/apps/svn/lib:/home/ausername/compileEverything/usr/local/apps/python/lib:/home/ausername/compileEverything/usr/local/apps/gcc/lib -o httpd  modules.lo buildmark.o -export-dynamic server/libmain.la modules/http/libmod_http.la modules/mappers/libmod_so.la server/mpm/prefork/libprefork.la os/unix/libos.la  /home/ausername/compileEverything/.cpl/src/httpd-2.2.20/srclib/pcre/libpcre.la /home/ausername/compileEverything/usr/local/libs/aprutil-1.2.2/lib/libaprutil-1.la -lldap -llber -lssl -lsasl2 -ldb -lcrypto -llber -lgdbm -lsqlite3 -lexpat -liconv /home/ausername/compileEverything/usr/local/libs/apr-1.2.2/lib/libapr-1.la -lcrypt
 
@@ -1182,7 +1182,7 @@ configure: failed program was:
 | #define SVN_FS_WANT_DB_MINOR 0
 | #define SVN_FS_WANT_DB_PATCH 14
 | /* end confdefs.h.  */
-| 
+|
 | /* Override any GCC internal prototype to avoid an error.
 |    Use char because int might match the return type of a GCC
 |    builtin and then its argument prototype would still apply.  */
@@ -1233,7 +1233,7 @@ works as well
 try in configure to reference the usr/local/bin/apr-1-config and usr/local/bin/apu-1-config for --with-apr and --with-aprutils
 ~~~~~~~~~~~~~~~~
 Cygwin Subversion make
-cd subversion/tests/libsvn_subr && /bin/sh /home/ausername/compileEverything/.cpl/src/subversion-1.6.17/libtool --tag=CC --silent --mode=link gcc  -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL     -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/ssl/lib -L/home/ausername/compileEverything/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/compileEverything/usr/local/lib:/home/ausername/compileEverything/usr/local/ssl/lib:/home/ausername/compileEverything/usr/local/apps/svn/lib:/home/ausername/compileEverything/usr/local/apps/python/lib:/home/ausername/compileEverything/usr/local/apps/gcc/lib    -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/lib  -rpath /home/ausername/compileEverything/usr/local/apps/subversion-1.6.17/lib -o dirent_uri-test.exe  dirent_uri-test.o ../../../subversion/tests/libsvn_test-1.la ../../../subversion/libsvn_subr/libsvn_subr-1.la /home/ausername/compileEverything/usr/local/libs/aprutil-1.2.2/lib/libaprutil-1.la -lldap -llber -lssl -lsasl2 -ldb -lcrypto -llber -lgdbm -lexpat -liconv /home/ausername/compileEverything/usr/local/libs/apr-1.2.2/lib/libapr-1.la -lcrypt -lintl -lapr -lintl -lsasl2 -ldb -lcrypto 
+cd subversion/tests/libsvn_subr && /bin/sh /home/ausername/compileEverything/.cpl/src/subversion-1.6.17/libtool --tag=CC --silent --mode=link gcc  -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL     -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/ssl/lib -L/home/ausername/compileEverything/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/compileEverything/usr/local/lib:/home/ausername/compileEverything/usr/local/ssl/lib:/home/ausername/compileEverything/usr/local/apps/svn/lib:/home/ausername/compileEverything/usr/local/apps/python/lib:/home/ausername/compileEverything/usr/local/apps/gcc/lib    -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/lib  -rpath /home/ausername/compileEverything/usr/local/apps/subversion-1.6.17/lib -o dirent_uri-test.exe  dirent_uri-test.o ../../../subversion/tests/libsvn_test-1.la ../../../subversion/libsvn_subr/libsvn_subr-1.la /home/ausername/compileEverything/usr/local/libs/aprutil-1.2.2/lib/libaprutil-1.la -lldap -llber -lssl -lsasl2 -ldb -lcrypto -llber -lgdbm -lexpat -liconv /home/ausername/compileEverything/usr/local/libs/apr-1.2.2/lib/libapr-1.la -lcrypt -lintl -lapr -lintl -lsasl2 -ldb -lcrypto
 dirent_uri-test.o:dirent_uri-test.c:(.text+0x2ebd): undefined reference to `_ausername'
 collect2: ld returned 1 exit status
 make: *** [subversion/tests/libsvn_subr/dirent_uri-test.exe] Error 1
@@ -1250,7 +1250,7 @@ Solution 2 (not tested yet)
 http://cygwin.com/ml/cygwin/2010-07/msg00048.html
 
 > After writing and sending the below note, I found the message recommending the use of the "-no-undefined" option.  I will use it and see if it helps.
-> 
+>
 > If that is the problem's solution though, wouldn't it would be nice not to have to manually set it for programs involving shared libraries?  Couldn't this option be made into a default, which by doing so would make a lot of source code packages buildable as is, I should think.
 
 The Autobook
@@ -1263,7 +1263,7 @@ Team
 
 I beleive I have found a resolution to this problem.
 
-By setting the LDFLAGS environment variable was able to get the non CXX components of  mailutils and all of apache to compile cleanly. Subversion I think will compile once I put a newer version of neon on. The library errors common to all three projects I was experiencing have not returned. 
+By setting the LDFLAGS environment variable was able to get the non CXX components of  mailutils and all of apache to compile cleanly. Subversion I think will compile once I put a newer version of neon on. The library errors common to all three projects I was experiencing have not returned.
 
 Apache and Subversion have their own libtool scripts. I presume they are generated in the configure process. I have not investigated that. They both now have the undefined flag defined in the latest attempt.
 
@@ -1278,7 +1278,7 @@ Thanks all for helping!
 ~~~~~~~~~~~~~~~
 Subversion Cygwin make
 
-cd subversion/tests/libsvn_fs_base && /bin/sh /home/ausername/compileEverything/.cpl/src/subversion-1.6.17/libtool --tag=CC --silent --mode=link gcc  -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL     -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/ssl/lib -L/home/ausername/compileEverything/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/compileEverything/usr/local/lib:/home/ausername/compileEverything/usr/local/ssl/lib:/home/ausername/compileEverything/usr/local/apps/svn/lib:/home/ausername/compileEverything/usr/local/apps/python/lib:/home/ausername/compileEverything/usr/local/apps/gcc/lib    -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/lib  -rpath /home/ausername/compileEverything/usr/local/apps/subversion-1.6.17/lib -o strings-reps-test.exe  strings-reps-test.o ../../../subversion/tests/libsvn_test-1.la ../../../subversion/libsvn_fs/libsvn_fs-1.la ../../../subversion/libsvn_fs_base/libsvn_fs_base-1.la ../../../subversion/libsvn_delta/libsvn_delta-1.la ../../../subversion/libsvn_subr/libsvn_subr-1.la /home/ausername/compileEverything/usr/local/libs/aprutil-1.2.2/lib/libaprutil-1.la -lldap -llber -lssl -lsasl2 -ldb -lcrypto -llber -lgdbm -lexpat -liconv /home/ausername/compileEverything/usr/local/libs/apr-1.2.2/lib/libapr-1.la -lcrypt -lintl -lapr -lintl -lsasl2 -ldb -lcrypto 
+cd subversion/tests/libsvn_fs_base && /bin/sh /home/ausername/compileEverything/.cpl/src/subversion-1.6.17/libtool --tag=CC --silent --mode=link gcc  -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL     -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/ssl/lib -L/home/ausername/compileEverything/usr/local/apps/python/lib -Wl,-rpath=/home/ausername/compileEverything/usr/local/lib:/home/ausername/compileEverything/usr/local/ssl/lib:/home/ausername/compileEverything/usr/local/apps/svn/lib:/home/ausername/compileEverything/usr/local/apps/python/lib:/home/ausername/compileEverything/usr/local/apps/gcc/lib    -L/home/ausername/compileEverything/usr/local/lib -L/home/ausername/compileEverything/usr/local/lib  -rpath /home/ausername/compileEverything/usr/local/apps/subversion-1.6.17/lib -o strings-reps-test.exe  strings-reps-test.o ../../../subversion/tests/libsvn_test-1.la ../../../subversion/libsvn_fs/libsvn_fs-1.la ../../../subversion/libsvn_fs_base/libsvn_fs_base-1.la ../../../subversion/libsvn_delta/libsvn_delta-1.la ../../../subversion/libsvn_subr/libsvn_subr-1.la /home/ausername/compileEverything/usr/local/libs/aprutil-1.2.2/lib/libaprutil-1.la -lldap -llber -lssl -lsasl2 -ldb -lcrypto -llber -lgdbm -lexpat -liconv /home/ausername/compileEverything/usr/local/libs/apr-1.2.2/lib/libapr-1.la -lcrypt -lintl -lapr -lintl -lsasl2 -ldb -lcrypto
 
 /home/ausername/compileEverything/usr/local/bin/msgfmt  -o subversion/po/de.mo subversion/po/de.po
 make: *** [subversion/po/de.mo] Aborted
@@ -1289,7 +1289,7 @@ gettext Cygwin make
 Actually, it hangs because of the premake steps, remove them for Cywin and it works.
 But it always generate an error 127 when executed
 http://web.archiveorange.com/archive/v/8XiUW7pNJcx3JSdHlX1p
-the price we pay for using gettext-0.14 
+the price we pay for using gettext-0.14
 Make distcheck currently fails like this:
 
     make[2]: Entering directory `/t/libvirt-0.7.6/_build/po'
@@ -1363,7 +1363,7 @@ Creating library file: .libs/libexslt.dll.a
 .libs/crypto.o:crypto.c:(.text+0x1ab): undefined reference to `_gcry_strerror'
 
 need to add -lgcrypt -lgpg-error -lintl in the configure part, in order to generate the right libtool
-But add also 
+But add also
       new_libs="-lgcrypt -lgpg-error -lintl $new_libs" at line 6536
 ----
 Cygwin libxslt make
@@ -1402,3 +1402,85 @@ make[2] : on quitte le r¦pertoire ¦ /home/ausername/compileEverything/.cpl/src/l
 make[1]: *** [all-recursive] Erreur 1
 make[1] : on quitte le r¦pertoire ¦ /home/ausername/compileEverything/.cpl/src/libxslt-1.1.26 ¦
 make: *** [all] Erreur 2
+~~~~~~~~~~~~~~~~~
+Ubuntu gettext make
+ibtool: compile:  gcc -c -DLOCALEDIR=\"/home/userapp/compileEverything/usr/local/libs/gettext-0.18.1.1/share/locale\" -DLOCALE_ALIAS_PATH=\"/home/userapp/compileEverything/usr/local/libs/gettext-0.18.1.1/share/locale\" -DLIBDIR=\"/home/userapp/compileEverything/usr/local/libs/gettext-0.18.1.1/lib\" -DBUILDING_LIBINTL -DBUILDING_DLL -DIN_LIBINTL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/home/userapp/compileEverything/usr/local/libs/gettext-0.18.1.1/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libintl_set_relocation_prefix -Drelocate=libintl_relocate -DDEPENDS_ON_LIBICONV=1 -DHAVE_CONFIG_H -I. -I. -I.. -I/home/userapp/compileEverything/usr/local/include -I/home/userapp/compileEverything/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -I/home/userapp/compileEverything/usr/local/include -I/home/userapp/compileEverything/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -fvisibility=hidden ./bindtextdom.c  -fPIC -DPIC -o .libs/bindtextdom.o
+In file included from ./gettextP.h:72:0,
+                 from ./bindtextdom.c:28:
+./libgnuintl.h: In function __declspec:
+./libgnuintl.h:142:35: error: storage class specified for parameter 'libintl_gettext'
+./libgnuintl.h:144:8: warning: '__visibility__' attribute ignored
+./libgnuintl.h:160:35: error: storage class specified for parameter 'libintl_dgettext'
+./libgnuintl.h:162:8: warning: '__visibility__' attribute ignored
+./libgnuintl.h:180:35: error: storage class specified for parameter 'libintl_dcgettext'
+./libgnuintl.h:183:8: warning: '__visibility__' attribute ignored
+./libgnuintl.h:202:35: error: storage class specified for parameter 'libintl_ngettext'
+./libgnuintl.h:205:8: warning: '__visibility__' attribute ignored
+./libgnuintl.h:223:35: error: storage class specified for parameter 'libintl_dngettext'
+./libgnuintl.h:227:8: warning: '__visibility__' attribute ignored
+./libgnuintl.h:247:35: error: storage class specified for parameter 'libintl_dcngettext'
+./libgnuintl.h:251:8: warning: '__visibility__' attribute ignored
+./libgnuintl.h:269:35: error: storage class specified for parameter 'libintl_textdomain'
+./libgnuintl.h:270:8: warning: '__visibility__' attribute ignored
+./libgnuintl.h:287:35: error: storage class specified for parameter 'libintl_bindtextdomain'
+./libgnuintl.h:288:8: warning: '__visibility__' attribute ignored
+./libgnuintl.h:305:35: error: storage class specified for parameter 'libintl_bind_textdomain_codeset'
+./libgnuintl.h:307:8: warning: '__visibility__' attribute ignored
+./libgnuintl.h:462:8: error: storage class specified for parameter 'libintl_set_relocation_prefix'
+./libgnuintl.h:463:39: warning: '__visibility__' attribute ignored
+In file included from ./bindtextdom.c:28:0:
+./gettextP.h:80:14: error: storage class specified for parameter 'libintl_dcigettext'
+In file included from ./gettextP.h:87:0,
+                 from ./bindtextdom.c:28:
+./loadinfo.h:65:1: warning: empty declaration
+./loadinfo.h:81:20: error: storage class specified for parameter '_nl_normalize_codeset'
+./loadinfo.h:99:1: error: storage class specified for parameter '_nl_make_l10nflist'
+./loadinfo.h:110:41: error: storage class specified for parameter '_nl_expand_alias'
+./loadinfo.h:110:1: warning: '__visibility__' attribute ignored
+./loadinfo.h:127:12: error: storage class specified for parameter '_nl_explode_name'
+In file included from ./gettextP.h:89:0,
+                 from ./bindtextdom.c:28:
+./gmo.h:56:18: error: storage class specified for parameter 'nls_uint32'
+./gmo.h:76:3: error: expected specifier-qualifier-list before 'nls_uint32'
+./gmo.h:73:1: warning: empty declaration
+./gmo.h:111:3: error: expected specifier-qualifier-list before 'nls_uint32'
+./gmo.h:108:1: warning: empty declaration
+./gmo.h:122:3: error: expected specifier-qualifier-list before 'nls_uint32'
+./gmo.h:119:1: warning: empty declaration
+./gmo.h:131:3: error: expected specifier-qualifier-list before 'nls_uint32'
+./gmo.h:128:1: warning: empty declaration
+./gmo.h:140:3: error: expected specifier-qualifier-list before 'nls_uint32'
+./gmo.h:137:1: warning: empty declaration
+In file included from ./bindtextdom.c:28:0:
+./gettextP.h:120:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'SWAP'
+./gmo.h:56:18: error: declaration for parameter 'nls_uint32' but no such parameter
+./loadinfo.h:127:12: error: declaration for parameter '_nl_explode_name' but no such parameter
+./loadinfo.h:110:41: error: declaration for parameter '_nl_expand_alias' but no such parameter
+./loadinfo.h:99:1: error: declaration for parameter '_nl_make_l10nflist' but no such parameter
+./loadinfo.h:81:20: error: declaration for parameter '_nl_normalize_codeset' but no such parameter
+./gettextP.h:80:14: error: declaration for parameter 'libintl_dcigettext' but no such parameter
+./libgnuintl.h:462:8: error: declaration for parameter 'libintl_set_relocation_prefix' but no such parameter
+./libgnuintl.h:305:35: error: declaration for parameter 'libintl_bind_textdomain_codeset' but no such parameter
+./libgnuintl.h:287:35: error: declaration for parameter 'libintl_bindtextdomain' but no such parameter
+./libgnuintl.h:269:35: error: declaration for parameter 'libintl_textdomain' but no such parameter
+./libgnuintl.h:247:35: error: declaration for parameter 'libintl_dcngettext' but no such parameter
+./libgnuintl.h:223:35: error: declaration for parameter 'libintl_dngettext' but no such parameter
+./libgnuintl.h:202:35: error: declaration for parameter 'libintl_ngettext' but no such parameter
+./libgnuintl.h:180:35: error: declaration for parameter 'libintl_dcgettext' but no such parameter
+./libgnuintl.h:160:35: error: declaration for parameter 'libintl_dgettext' but no such parameter
+./libgnuintl.h:142:35: error: declaration for parameter 'libintl_gettext' but no such parameter
+./libgnuintl.h:66:56: error: declaration for parameter 'libintl_version' but no such parameter
+./gettextP.h:124:11: error: 'i' undeclared (first use in this function)
+./gettextP.h:124:11: note: each undeclared identifier is reported only once for each function it appears in
+./gettextP.h: At top level:
+./gettextP.h:173:3: error: expected specifier-qualifier-list before 'nls_uint32'
+make[3]: *** [bindtextdom.lo] Error 1
+make[3]: Leaving directory `/home/userapp/compileEverything/.cpl/src/gettext-0.18.1.1/gettext-runtime/intl'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory `/home/userapp/compileEverything/.cpl/src/gettext-0.18.1.1/gettext-runtime'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/userapp/compileEverything/.cpl/src/gettext-0.18.1.1/gettext-runtime'
+make: *** [all-recursive] Error 1
+
+=> The premake "fixes" are no longer needed for a 0.18.1.1
+----------------

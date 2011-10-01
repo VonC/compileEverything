@@ -1,2 +1,2 @@
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
-post=anos=$(uname -o) ; if [[ "${anos#*Cygwin}" != "${anos}" ]] ; then ln -s libapr-1.a ${HULL}/libapr.a ; fi ;
+post=ln -s libapr-1.a ${HULL}/libapr.a
