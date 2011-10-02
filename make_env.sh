@@ -193,23 +193,24 @@ function get_sources() {
   else
     local asrcline=$(wget -q -O - "${page}" | grep "${nameurl}" | grep "${ext}")
   fi
-  #echo "line0 source! $asrcline"
+  # echo "line0 source! from page ${page}, nameurl ${nameurl}, ext ${ext}"
+  # echo "line00 ${asrcline}"
   get_param $name verexclude ""
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
   get_param $name verinclude ""
   if [[ "${verinclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -e "${verinclude}") ; fi
-  #if [[ "${asrcline}" == "" ]]; then echolog "unable to get source version for ${name} with nameurl ${nameurl}, verinclude ${verinclude}, verexclude ${verexclude}" ; get_sources_failed ; fi
+  if [[ "${asrcline}" == "" ]]; then echolog "unable to get source version for ${name} with nameurl ${nameurl}, verinclude ${verinclude}, verexclude ${verexclude}" ; get_sources_failed ; fi
   #if [[ $name == "cyrus-sasl" ]] ; then echo line source! $asrcline ; fffg ; fi
-  #echo "line1 source! $asrcline"
+  # echo "line1 source! $asrcline"
   local source="${asrcline%%${ext}\"\>*}"
-  #echo "source0 ${source} vs. ${asrcline}"
-  if [[ "${source}" == "${asrcline}" ]] ; then
-    source="${asrcline%%${ext}\" *}" ; #"
-    #echo "source00 ${source} vs. ${asrcline}"
-  fi
+  if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${ext}\" *}" ; fi
+  if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${ext}\'\>*}" ; fi
+  if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${ext}\' *}" ; fi
   source="${source}${ext}"
-  # echo "source0 ${source}"
-  source="${source##*\"}"
+  # echo "sour0 ${source}"
+  local source0="${source}"
+  source="${source0##*\"}"
+  if [[ "${source}" == "${source0}" ]] ; then source="${source0##*\'}" ; fi
   # echo "source1 ${source}"
   get_param $name url ""
   #echo "url0 ${url}"

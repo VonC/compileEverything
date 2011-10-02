@@ -20,7 +20,8 @@ lib libssh2 openssl,zlib,cyrus-sasl
 lib cyrus-sasl db,openssl
 lib curl gcc,openssl,zlib,libssh2,libiconv,libidn
 lib libidn gcc,libiconv
-app apache gcc,expat,libiconv,gdbm,zlib,db,openssl,apr,aprutil
+app lynx gcc,bzip2,zlib
+app apache gcc,expat,libiconv,gdbm,zlib,db,openssl,apr,aprutil,lynx
 lib apr autoconf,libtool,python
 lib libtool gcc
 app python bzip2,db,openssl,gdbm,ncurses,readline,tcl,libiconv,zlib,expat,sqlite
