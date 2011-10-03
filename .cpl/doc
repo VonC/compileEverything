@@ -170,6 +170,13 @@ ExtendedStatus On
 
 </IfModule>
 auser@vonc-VirtualBox:~/compileEverything/apache$ lynx vonc-VirtualBox:8080/server-status
-
-
-
+~~~~~~~~~~~~~~
+bash colors
+https://wiki.archlinux.org/index.php/Color_Bash_Prompt
+http://tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html
+~~~~~~~~~~~~~~
+bash nounset
+http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_03_06.html
+set +o nounset # desactive
+set -o nounset # desactive
+~~~~~~~~~~~~~~

@@ -27,6 +27,7 @@ isSolaris=""
 longbit=""
 alldone=""
 unameo=$(uname -o)
+refresh="false"
 
 _cpl="${H}/.cpl"
 _hcpl=".cpl"
@@ -114,6 +115,12 @@ function getJDK {
 
 function main {
   checkOs
+  set +o nounset
+  until [ -z "$1" ] ; do # Until all parameters used up . . .
+    read_param "$1"
+    shift
+  done
+  set -o nounset
   if [[ -e "$H/.bashrc_aliases_git" ]] ; then cp "$H/.cpl/.bashrc_aliases_git.tpl" "$H/.bashrc_aliases_git" ; fi
   if [[ ! -e "$H/.bashrc" ]]; then
     if [[ $# != 1 ]] ; then echolog "When there is no .bashrc, make_env.sh needs a title for that .bashrc as first parameter. Not needed after that" ; miss_bashrc_title ; fi
@@ -138,6 +145,28 @@ function main {
       build_line "$line"
     fi
   done
+}
+
+function read_param {
+  local aparam="$1"
+  local akey="${aparam%%=*}"
+  local avalue="${aparam##*=}"
+  if [[ "${akey}" == "" ]] ; then akey="${aparam}" ; fi
+  case "${akey}" in
+    -h ) echo "make_env.sh help"
+         trap - EXIT
+         echo -ne "\033[32m"
+         echo "-h: display this page"
+         echo "-title=atitle: (only for the first usage)"
+         echo "-refresh: force reading versions from website (default false)"
+         echo -ne "\033[0m"
+         echo "----"
+         exit 0
+    ;;
+    -title ) title="${avalue}" ;;
+    -refresh ) refresh="true" ;;
+    * ) echolog "unknwon option ${akey} with value ${avalue}" ; unknown_option ;;
+  esac
 }
 
 function checkOs() {
@@ -213,28 +242,74 @@ function get_sources() {
   if [[ "${source}" == "${source0}" ]] ; then source="${source0##*\'}" ; fi
   # echo "source1 ${source}"
   get_param $name url ""
-  #echo "url0 ${url}"
+  # echo "url0 ${url}"
   local targz="${source##*/}"
   if [[ "$url" != "" ]] ; then
     #echo "IIIII url ${url} AAAAA targz ${targz}"
     source="${url}${targz}"
   fi
-  #echo sources for $name: $targz from $source from $line
+  # echo sources for $name: $targz from $source
   local anamever="${targz%.${ext}}"
-  eval $_namever="'${anamever}'"
   local ss="xx"
   if [[ -e "${_pkgs}/$targz" ]] ; then ss=$(stat -c%s "${_pkgs}/$targz") ; fi
   if [[ -e "${_pkgs}/$targz" ]] && [[ "${ss}" == "0" ]] ; then
     rm -f "${_pkgs}/$targz"
   fi
-  if [[ ! -e "${_pkgs}/$targz" ]] && [[ ! -e "$HUL/._linked/$namever" ]]; then
+  if [[ ! -e "${_pkgs}/$targz" ]] && [[ ! -e "$HUL/._linked/${anamever}" ]]; then
     echolog "get sources for $name in ${_hpkgs}/$targz"
     loge "wget $source -O ${_pkgs}/$targz" "wget_sources_$targz"
   fi
-  #echo "YYY anamever ${anamever} vs. name ${name}"
+  # echo "YYY anamever ${anamever} vs. name ${name}"
   local aver=${anamever#${nameurl}-}
+  if [[ "${aver}" == "${anamever}" ]] ; then aver=${anamever#${nameurl}} ; fi
+  update_cache "${name}" "${anamever}" "${aver}"
+  # echo "get sources final: anamever ${anamever}, aver ${aver}"
+  eval $_namever="'${anamever}'"
   eval $_ver="'${aver}'"
 }
+
+function get_sources_from_cache() {
+  local name=$1
+  local _namever=$2
+  local _ver=$3
+  acachenamever=""
+  acachever=""
+  if [[ -e "${H}/.cpl/cache" ]] ; then
+    local aline=$(grep "#${name}#" "${H}/.cpl/cache")
+    if [[ "${aline}" != "" ]] ; then
+      acachenamever=${aline##*#}
+      acachenamever=${acachenamever%%~*}
+      acachever=${aline%%*~}
+    else
+      get_sources $name acachenamever acachever
+      # echo "cache no line: get_sources $name, acachenamever $acachenamever, acachever $acachever"
+    fi
+  else
+    get_sources $name acachenamever acachever
+    # echo "cache no cache: get_sources $name, cachenamever $acachenamever, acachever $acachever"
+  fi
+  # echo "get_sources_from_cache cachenamever $acachenamever, acachever $acachever"
+  eval $_namever="'${acachenamever}'"
+  eval $_ver="'${acachever}'"
+}
+
+function update_cache() {
+  local name=$1
+  local anamever=$2
+  local aver=$3
+  local aline="#${name}#${anamever}~${aver}"
+  if [[ -e "${H}/.cpl/cache" ]] ; then
+    local anExistingline=$(grep "#${name}#" "${H}/.cpl/cache")
+    if [[ "${anExistingline}" != "" ]] ; then
+      $H/bin/gen_sed -i "s/^#${name}#.*$/${aline}/g" "$H/.cpl/cache"
+    else
+      $(echo "${aline}" >> "$H/.cpl/cache")
+    fi
+  else
+    $(echo "${aline}" > "$H/.cpl/cache")
+  fi
+}
+
 function gen_which()
 {
   local acmd="$1"
@@ -271,7 +346,7 @@ function untar() {
     local anactualname=${actualname}
     #echo "anactualname=${anactualname}";
     actualname=${actualname%%/*}
-    #echo "namever ${namever} actualver %/* ${anactualname%/*} actualname%%/* ${anactualname%%/*}, actualname#*/ ${anactualname#*/}, actualname##*/ ${anactualname##*/}"
+    echo "namever ${namever} actualver %/* ${anactualname%/*} actualname%%/* ${anactualname%%/*}, actualname#*/ ${anactualname#*/}, actualname##*/ ${anactualname##*/}"
     if [[ "$namever" != "$actualname" ]] ; then
       echolog "ln do to: ln -fs $actualname ${_src}/$namever"
       ln -fs "$actualname" "${_src}/$namever"
@@ -498,7 +573,13 @@ function build_item() {
   local isdone="false" ; isItDone "$name" isdone ${afrom}
   if [[ "$isdone" == "false" ]] ; then echo -ne "\e[1;34m" ; echolog "##### Building $type $name ####" ; echo -ne "\e[m" ; fi
   if [[ "${type}" != "MOD" ]] ; then
-    get_sources $name namever ver
+    if [[ "${refresh}" == "true" ]] ; then
+      get_sources $name namever ver
+      # echo "get_sources $name, namever $namever, ver $ver"
+    else
+      get_sources_from_cache $name namever ver
+      # echo "get_sources_from_cache $name, namever $namever, ver $ver"
+    fi
   else
     namever="${name}"
     ver=""
