@@ -1402,6 +1402,10 @@ make[2] : on quitte le r¦pertoire ¦ /home/ausername/compileEverything/.cpl/src/l
 make[1]: *** [all-recursive] Erreur 1
 make[1] : on quitte le r¦pertoire ¦ /home/ausername/compileEverything/.cpl/src/libxslt-1.1.26 ¦
 make: *** [all] Erreur 2
+
+Add to libtool
+if test "${my_cmd#gcc*}" != "$my_cmd" ; then eval "$my_cmd -lintl -lgettextlib   -lgettextpo" ; else eval "$my_cmd" ; fi
+instead of just eval "$my_cmd"
 ~~~~~~~~~~~~~~~~~
 Ubuntu gettext make
 ibtool: compile:  gcc -c -DLOCALEDIR=\"/home/userapp/compileEverything/usr/local/libs/gettext-0.18.1.1/share/locale\" -DLOCALE_ALIAS_PATH=\"/home/userapp/compileEverything/usr/local/libs/gettext-0.18.1.1/share/locale\" -DLIBDIR=\"/home/userapp/compileEverything/usr/local/libs/gettext-0.18.1.1/lib\" -DBUILDING_LIBINTL -DBUILDING_DLL -DIN_LIBINTL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/home/userapp/compileEverything/usr/local/libs/gettext-0.18.1.1/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libintl_set_relocation_prefix -Drelocate=libintl_relocate -DDEPENDS_ON_LIBICONV=1 -DHAVE_CONFIG_H -I. -I. -I.. -I/home/userapp/compileEverything/usr/local/include -I/home/userapp/compileEverything/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -I/home/userapp/compileEverything/usr/local/include -I/home/userapp/compileEverything/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -fvisibility=hidden ./bindtextdom.c  -fPIC -DPIC -o .libs/bindtextdom.o
@@ -1484,3 +1488,99 @@ make: *** [all-recursive] Error 1
 
 => The premake "fixes" are no longer needed for a 0.18.1.1
 ----------------
+Cygwin NGinX make
+make[2] : on entre dans le répertoire « /home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl »
+cp nginx.pm blib/lib/nginx.pm
+/home/ausername/compileEverything/usr/local/apps/perl-5.12.3/bin/perl.exe /home/ausername/compileEverything/usr/local/apps/perl/lib/current/ExtUtils/xsubpp  -typemap /home/ausername/compileEverything/usr/local/apps/perl-5.12.3/lib/5.12.3/ExtUtils/typemap -typemap typemap  nginx.xs > nginx.xsc && mv nginx.xsc nginx.c
+Please specify prototyping behavior for nginx.xs (see perlxs manual)
+gcc -c  -I ../../../../../src/core -I ../../../../../src/event -I ../../../../../src/os/unix -I ../../../../../src/http -I ../../../../../src/http/modules -I ../../../../../src/http/modules/perl -I ../../../../../objs  -DPERL_USE_SAFE_PUTENV -U__STRICT_ANSI__ -fno-strict-aliasing -pipe -I/home/ausername/compileEverything/usr/local/apps/perl-5.12.3/lib/5.12.3/cygwin-thread-multi-64int/CORE -g -I/home/ausername/compileEverything/usr/local/include -I/home/ausername/compileEverything/usr/local/ssl/include -DUSEIMPORTLIB -O   -DVERSION=\"1.0.8\" -DXS_VERSION=\"1.0.8\"  "-I/home/ausername/compileEverything/usr/local/apps/perl-5.12.3/lib/5.12.3/cygwin-thread-multi-64int/CORE"   nginx.c
+Running Mkbootstrap for nginx ()
+chmod 644 nginx.bs
+rm -f blib/arch/auto/nginx/nginx.dll
+g++  --shared  -Wl,--enable-auto-import -Wl,--export-all-symbols -Wl,--stack,8388608 -Wl,--enable-auto-image-base -L/home/ausername/compileEverything/usr/local/lib nginx.o  -o blib/arch/auto/nginx/nginx.dll 	\
+  /home/ausername/compileEverything/usr/local/apps/perl-5.12.3/lib/5.12.3/cygwin-thread-multi-64int/CORE/cygperl5_12_3.dll   	\
+  
+nginx.o: dans la fonction << ngx_http_perl_sv2str >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:45: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:51: r'ef'erence ind'efinie vers << _ngx_pnalloc >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:58: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+nginx.o: dans la fonction << ngx_http_perl_output >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:73: r'ef'erence ind'efinie vers << _ngx_http_perl_module >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:76: r'ef'erence ind'efinie vers << _ngx_alloc_chain_link >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:93: r'ef'erence ind'efinie vers << _ngx_http_output_filter >>
+nginx.o: dans la fonction << XS_nginx_status >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:110: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+nginx.o: dans la fonction << XS_nginx_send_http_header >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:141: r'ef'erence ind'efinie vers << _ngx_http_set_content_type >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:146: r'ef'erence ind'efinie vers << _ngx_http_send_header >>
+nginx.o: dans la fonction << XS_nginx_header_in >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:245: r'ef'erence ind'efinie vers << _ngx_pnalloc >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:250: r'ef'erence ind'efinie vers << _ngx_hash_strlow >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:252: r'ef'erence ind'efinie vers << _ngx_http_core_module >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:254: r'ef'erence ind'efinie vers << _ngx_hash_find >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:292: r'ef'erence ind'efinie vers << _ngx_pnalloc >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:331: r'ef'erence ind'efinie vers << _ngx_strcasecmp >>
+nginx.o: dans la fonction << XS_nginx_has_request_body >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:363: r'ef'erence ind'efinie vers << _ngx_http_perl_module >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:374: r'ef'erence ind'efinie vers << _ngx_http_perl_handle_request >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:374: r'ef'erence ind'efinie vers << _ngx_http_read_client_request_body >>
+nginx.o: dans la fonction << XS_nginx_discard_request_body >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:437: r'ef'erence ind'efinie vers << _ngx_http_discard_request_body >>
+nginx.o: dans la fonction << XS_nginx_header_out >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:454: r'ef'erence ind'efinie vers << _ngx_list_push >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:469: r'ef'erence ind'efinie vers << _ngx_strncasecmp >>
+nginx.o: dans la fonction << XS_nginx_filename >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:489: r'ef'erence ind'efinie vers << _ngx_http_perl_module >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:494: r'ef'erence ind'efinie vers << _ngx_http_map_uri_to_path >>
+nginx.o: dans la fonction << XS_nginx_print >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:543: r'ef'erence ind'efinie vers << _ngx_pcalloc >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:554: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:573: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:583: r'ef'erence ind'efinie vers << _ngx_create_temp_buf >>
+nginx.o: dans la fonction << XS_nginx_sendfile >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:628: r'ef'erence ind'efinie vers << _ngx_pcalloc >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:633: r'ef'erence ind'efinie vers << _ngx_pcalloc >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:640: r'ef'erence ind'efinie vers << _ngx_pnalloc >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:645: r'ef'erence ind'efinie vers << _ngx_cpystrn >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:647: r'ef'erence ind'efinie vers << _ngx_http_core_module >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:658: r'ef'erence ind'efinie vers << _ngx_open_cached_file >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:665: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+nginx.o: dans la fonction << XS_nginx_flush >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:699: r'ef'erence ind'efinie vers << _ngx_pcalloc >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:706: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+nginx.o: dans la fonction << XS_nginx_internal_redirect >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:726: r'ef'erence ind'efinie vers << _ngx_http_perl_module >>
+nginx.o: dans la fonction << XS_nginx_unescape >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:772: r'ef'erence ind'efinie vers << _ngx_pnalloc >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:781: r'ef'erence ind'efinie vers << _ngx_unescape_uri >>
+nginx.o: dans la fonction << XS_nginx_variable >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:829: r'ef'erence ind'efinie vers << _ngx_pnalloc >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:834: r'ef'erence ind'efinie vers << _ngx_hash_strlow >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:841: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:844: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:849: r'ef'erence ind'efinie vers << _ngx_http_get_variable >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:856: r'ef'erence ind'efinie vers << _ngx_http_perl_module >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:883: r'ef'erence ind'efinie vers << _ngx_array_create >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:890: r'ef'erence ind'efinie vers << _ngx_array_push >>
+nginx.o: dans la fonction << XS_nginx_sleep >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:937: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:940: r'ef'erence ind'efinie vers << _ngx_http_perl_module >>
+nginx.o: dans la fonction << XS_nginx_sleep >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/../../../../../src/event/ngx_event_timer.h:63: r'ef'erence ind'efinie vers << _ngx_current_msec >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/../../../../../src/event/ngx_event_timer.h:76: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/../../../../../src/event/ngx_event_timer.h:37: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/../../../../../src/event/ngx_event_timer.h:43: r'ef'erence ind'efinie vers << _ngx_event_timer_rbtree >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/../../../../../src/event/ngx_event_timer.h:43: r'ef'erence ind'efinie vers << _ngx_rbtree_delete >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/../../../../../src/event/ngx_event_timer.h:87: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/../../../../../src/event/ngx_event_timer.h:93: r'ef'erence ind'efinie vers << _ngx_event_timer_rbtree >>
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/../../../../../src/event/ngx_event_timer.h:93: r'ef'erence ind'efinie vers << _ngx_rbtree_insert >>
+nginx.o: dans la fonction << XS_nginx_sleep >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:946: r'ef'erence ind'efinie vers << _ngx_http_perl_sleep_handler >>
+nginx.o: dans la fonction << XS_nginx_log_error >>:
+/home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl/nginx.xs:978: r'ef'erence ind'efinie vers << _ngx_log_error_core >>
+collect2: ld a retourné 1 code d'état d'exécution
+make[2]: *** [blib/arch/auto/nginx/nginx.dll] Erreur 1
+make[2] : on quitte le répertoire « /home/ausername/compileEverything/.cpl/src/nginx-1.0.8/objs/src/http/modules/perl »
+make[1]: *** [objs/src/http/modules/perl/blib/arch/auto/nginx/nginx.so] Erreur 2
+make[1] : on quitte le répertoire « /home/ausername/compileEverything/.cpl/src/nginx-1.0.8 »
+make: *** [build] Erreur 2
