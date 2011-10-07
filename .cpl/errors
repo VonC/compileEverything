@@ -1584,3 +1584,34 @@ make[2] : on quitte le répertoire « /home/ausername/compileEverything/.cpl/src/n
 make[1]: *** [objs/src/http/modules/perl/blib/arch/auto/nginx/nginx.so] Erreur 2
 make[1] : on quitte le répertoire « /home/ausername/compileEverything/.cpl/src/nginx-1.0.8 »
 make: *** [build] Erreur 2
+
+ausername@anhostname ~/compileEverything
+$ find .cpl/src/nginx-1.0.8/ -name "*.o" | xargs nm -A | grep ngx_log_error_core | grep T
+.cpl/src/nginx-1.0.8/objs/src/core/ngx_log.o:00000000 T _ngx_log_error_core
+
+ausername@anhostname ~/compileEverything
+$ find .cpl/src/nginx-1.0.8/ -name "*.o" | xargs nm -A | grep ngx_pnalloc | grep T
+.cpl/src/nginx-1.0.8/objs/src/core/ngx_palloc.o:00000222 T _ngx_pnalloc
+
+ausername@anhostname ~/compileEverything
+$ find .cpl/src/nginx-1.0.8/ -name "*.o" | xargs nm -A | grep ngx_http_perl_module | grep T
+
+
+../../../core/ngx_log.o
+../../../core/ngx_palloc.o
+ngx_http_perl_module.o
+../../../core/ngx_buf.o
+../../ngx_http_core_module.o
+../../../core/ngx_hash.o
+../../../core/ngx_string.o
+../../ngx_http_request_body.o
+../../../core/ngx_list.o
+../../../core/ngx_open_file_cache.o
+../../ngx_http_variables.o
+../../../core/ngx_array.o
+../../../core/ngx_conf_file.o
+
+g++  --shared  -Wl,--enable-auto-import -Wl,--export-all-symbols -Wl,--stack,8388608 -Wl,--enable-auto-image-base -L/home/43640119/compileEverything/usr/local/lib nginx.o ../../../core/ngx_log.o ../../../core/ngx_palloc.o ngx_http_perl_module.o ../../../core/ngx_buf.o ../../ngx_http_core_module.o ../../../core/ngx_hash.o ../../../core/ngx_string.o ../../ngx_http_request_body.o ../../../core/ngx_list.o ../../../core/ngx_open_file_cache.o ../../ngx_http_variables.o ../../../core/ngx_array.o ../../../core/ngx_conf_file.o -o blib/arch/auto/nginx/nginx.dll /home/43640119/compileEverything/usr/local/apps/perl-5.12.3/lib/5.12.3/cygwin-thread-multi-64int/CORE/cygperl5_12_3.dll
+
+
+~~~~~~~~~~~~~~~~
