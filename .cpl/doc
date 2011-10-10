@@ -180,3 +180,64 @@ http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_03_06.html
 set +o nounset # desactive
 set -o nounset # desactive
 ~~~~~~~~~~~~~~
+auser@vonc-VirtualBox:~/compileEverything$ usr/local/sbin/sshd 
+sshd re-exec requires execution with an absolute path
+auser@vonc-VirtualBox:~/compileEverything$ which sshd
+/home/auser/compileEverything/usr/local/sbin/sshd
+auser@vonc-VirtualBox:~/compileEverything$ /home/auser/compileEverything/usr/local/sbin/sshd
+Privilege separation user sshd does not exist
+=> UsePrivilegeSeparation no
+----
+auser@vonc-VirtualBox:~/compileEverything$ ssh localhost:2200
+ssh: Could not resolve hostname localhost:2200: Name or service not known
+auser@vonc-VirtualBox:~/compileEverything$ man ssh
+auser@vonc-VirtualBox:~/compileEverything$ ssh -p 2200 localhost
+=> ok but ask for password
+~~~~~~~~~~
+ssh-keygen -t rsa -f .ssh/gitoliteadm -C "Gitolite Admin with interactive access" -q -P ""
+no passphrase
+mkdir .ssh
+$ chmod 700 .ssh
+$ cd .ssh
+$ touch authorized_keys
+$ chmod 600 authorized_keys
+$ cat ../identity.pub >> authorized_keys
+-----
+sh example: http://www.styma.org/SunAtHome/sample_files/sshd.html
+do_rsa_keygen()
+{
+   if [ ! -s $RsaKey ]
+   then
+	echo "Generating SSH2 RSA host key... \c"
+	if $KeyGen -q -t rsa -f $RsaKey -C '' -N '' > /dev/null 2>&1
+	then
+	   /bin/chmod 600 $RsaKey
+	   /bin/chmod 644 $RsaKey.pub
+	   echo "done\n"
+	else
+	   echo "FAILED\n"
+	   exit 1
+	fi
+   fi
+} # function do_rsa_keygen
+~~~~~~~~~
+#PidFile /home/auser/compileEverything/usr/local/var/run/sshd.pid
+=> make sure #PidFile /home/auser/compileEverything/usr/local/var/run/ exists!
+~~~~~~~~~~
+ssh -F config gitolitesrv echo $PATH
+with config file
+Host gitolitesrv
+Hostname localhost
+User auser
+Port 2200
+IdentityFile /home/auser/compileEverything/.ssh/gitoliteadm
+~~~~~~~~~~~
+ssh -F config gitolitesrv echo $PATH
+auser@vonc-VirtualBox:~/compileEverything$ ssh -F .ssh/config gitolitesrv compileEverything/usr/local/apps/git/bin/git --version
+git version 1.7.6.1
+~~~~~~~~
+cd .cpl
+git clone https://github.com/sitaramc/gitolite
+cd gitolite/
+auser@vonc-VirtualBox:~/compileEverything/.cpl/gitolite$ src/gl-system-install /home/auser/compileEverything/gitolite/bin /home/auser/compileEverything/gitolite/conf /home/auser/compileEverything/gitolite/hooks
+auser@vonc-VirtualBox:~/compileEverything/.cpl/gitolite$ l ../../gitolite/

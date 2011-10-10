@@ -16,9 +16,13 @@ bin/
 /.bashrc_aliases_git
 /.gitconfig
 /.bash_history
-/.ssh/
 /.viminfo
 /.lesshst
 .*.swp
 /gitweb/
 /.cpl/cache
+/.ssh/curl-ca-bundle.crt
+/.ssh/authorized_keys
+/.ssh/config
+/.ssh/gitoliteadm
+/.ssh/*.pub
