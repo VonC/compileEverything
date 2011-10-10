@@ -67,6 +67,9 @@ if [[ -e "${HUL}/jdk6" ]] ; then
 else
   export JAVA_HOME=""
 fi
+export -n GITOLITE_HTTP_HOME
+export GITOLITE_HOME="${H}/gitolite"
+export PATH="${PATH}":"${GITOLITE_HOME}/bin"
 export PATH="${PATH}":/usr/local/bin:/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
 
 export -n NGX_PM_CFLAGS

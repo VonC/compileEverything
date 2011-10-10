@@ -26,3 +26,7 @@ bin/
 /.ssh/config
 /.ssh/gitoliteadm
 /.ssh/*.pub
+/.cpl/gitolite/
+/.gitolite/
+/gitolite/
+/.gitolite.rc
