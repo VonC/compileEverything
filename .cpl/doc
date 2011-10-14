@@ -241,3 +241,31 @@ git clone https://github.com/sitaramc/gitolite
 cd gitolite/
 auser@vonc-VirtualBox:~/compileEverything/.cpl/gitolite$ src/gl-system-install /home/auser/compileEverything/gitolite/bin /home/auser/compileEverything/gitolite/conf /home/auser/compileEverything/gitolite/hooks
 auser@vonc-VirtualBox:~/compileEverything/.cpl/gitolite$ l ../../gitolite/
+~~~~~~~~~~~~~~
+cd /home/ausername/compileEverything/usr/local
+$ kill -TERM $(cat ./libs/openldap-2.4.24/var/run/slapd.pid)
+$ ./libexec/slapd.exe -f etc/openldap/slapd.conf
+$ ./bin/ldapsearch.exe -s base -b cn=monitor 'objectclass=*'
+SASL/OTP authentication started
+ldap_sasl_interactive_bind_s: Invalid credentials (49)
+        additional info: SASL(-13): user not found: no OTP secret in database
+http://www.openldap.org/lists/openldap-software/200309/msg00048.html
+Well slapd uses SASL auth mechanisms per default unless told not to do so (providing the -x switch to ldap(add,modify,delete,passwd). Apparently OTP is your default SASL mech but you're lacking the secrets.
+
+$ ./bin/ldapsearch.exe -x -s base -b cn=Manager 'objectclass=*'
+# extended LDIF
+#
+# LDAPv3
+# base <cn=Manager> with scope baseObject
+# filter: objectclass=*
+# requesting: ALL
+#
+
+# search result
+search: 2
+result: 32 No such object
+
+# numResponses: 1
+---
+$ ./bin/ldapsearch.exe -x -d5
+
