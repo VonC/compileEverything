@@ -50,6 +50,7 @@ ln -fs ${_hlog} "$H/.log"
 donelist=""
 namever=""
 ver=""
+title=""
 
 set -o errexit
 set -o nounset
@@ -123,8 +124,8 @@ function main {
   set -o nounset
   if [[ -e "$H/.bashrc_aliases_git" ]] ; then cp "$H/.cpl/.bashrc_aliases_git.tpl" "$H/.bashrc_aliases_git" ; fi
   if [[ ! -e "$H/.bashrc" ]]; then
-    if [[ $# != 1 ]] ; then echolog "When there is no .bashrc, make_env.sh needs a title for that .bashrc as first parameter. Not needed after that" ; miss_bashrc_title ; fi
-    build_bashrc "$1"
+    if [[ "${title}" == "" ]] ; then echolog "When there is no .bashrc, make_env.sh needs a title for that .bashrc as first parameter. Not needed after that" ; miss_bashrc_title ; fi
+    build_bashrc
   fi
   sc
   mkdir -p "${HUL}/._linked"
@@ -196,17 +197,16 @@ function get_arc(){
   eval $_longbit="'${alongbit}'"
 }
 function build_bashrc() {
-  local title="$1"
   cp "$H/.cpl/.bashrc.tpl" "$H/.bashrc"
   export PATH=$H/bin:$PATH
-  $H/bin/gen_sed -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
+  gen_sed -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
   get_arc longbit
   if [[ "${unameo}" == "Cygwin" ]] ; then
-    $H/bin/gen_sed -i 's/ @@CYGWIN@@/ -DHAVE_STRSIGNAL/g' "$H/.bashrc" ;
-    $H/bin/gen_sed -i 's/ -fPIC//g' "$H/.bashrc" ;
-  else $H/bin/gen_sed -i 's/ @@CYGWIN@@//g' "$H/.bashrc" ; fi
-  if [[ "$longbit" == "32" ]]; then $H/bin/gen_sed -i 's/ @@M64@@//g' "$H/.bashrc" ;
-  elif [[ "$longbit" == "64" ]]; then $H/bin/gen_sed -i 's/@@M64@@/-m64/g' "$H/.bashrc" ;
+    gen_sed -i 's/ @@CYGWIN@@/ -DHAVE_STRSIGNAL/g' "$H/.bashrc" ;
+    gen_sed -i 's/ -fPIC//g' "$H/.bashrc" ;
+  else gen_sed -i 's/ @@CYGWIN@@//g' "$H/.bashrc" ; fi
+  if [[ "$longbit" == "32" ]]; then gen_sed -i 's/ @@M64@@//g' "$H/.bashrc" ;
+  elif [[ "$longbit" == "64" ]]; then gen_sed -i 's/@@M64@@/-m64/g' "$H/.bashrc" ;
   else echolog "Unable to get LONG_BIT conf (32 or 64bits)" ; getconf2 ; fi
 }
 function get_sources() {
@@ -301,7 +301,7 @@ function update_cache() {
   if [[ -e "${H}/.cpl/cache" ]] ; then
     local anExistingline=$(grep "#${name}#" "${H}/.cpl/cache")
     if [[ "${anExistingline}" != "" ]] ; then
-      $H/bin/gen_sed -i "s/^#${name}#.*$/${aline}/g" "$H/.cpl/cache"
+      gen_sed -i "s/^#${name}#.*$/${aline}/g" "$H/.cpl/cache"
     else
       $(echo "${aline}" >> "$H/.cpl/cache")
     fi

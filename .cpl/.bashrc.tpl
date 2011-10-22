@@ -38,6 +38,7 @@ bashscriptpath H
 export H=${H}
 echo "bashrc set local home to '${H}'"
 export HB="$H"/bin
+export HS="$H"/sbin
 export HU="$H"/usr
 export HUL="${HU}"/local
 export HULL="${HUL}"/lib
@@ -54,7 +55,7 @@ export HISTTIMEFORMAT='%Y-%m-%d %H:%M:%S - '
 export HISTIGNORE="&:[ \t]*:exit:history:h:l"
 
 # first override the $PATH, making sure to use *local* paths:
-export PATH="${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin"
+export PATH="${H}/sbin:${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin"
 # then add the applications paths
 #export PATH="$PATH:$HULA/gcc/bin"
 #export PATH="$PATH:$HULA/git/bin:$HULA/svn/bin:$HULA/apache/bin"
@@ -94,13 +95,10 @@ alias vi=vim
 if [[ -e /usr/local/bin/vim ]] ; then vimp="/usr/local/bin/vim" ; else vimp="$(which vim)" ; fi
 alias vim='"${vimp}" -u "${H}/.vimrc"'
 
-alias git="${H}/bin/wgit"
+alias git="${H}/sbin/wgit"
 
 if [[ -e "${H}/.bashrc_aliases_git" ]] ; then source "${H}/.bashrc_aliases_git" ]] ; fi
 
-if [[ ! -e "${H}/.ssh/curl-ca-bundle.crt" ]] ; then
-  cp "${H}/.ssh/curl-ca-bundle.crt.tpl" "${H}/.ssh/curl-ca-bundle.crt"
-fi
 if [[ -e "${H}/.ssh/curl-ca-bundle.crt.secret" ]] ; then
   a=$(tail -10 "${H}/.ssh/curl-ca-bundle.crt.secret")
   b=$(tail -10 "${H}/.ssh/curl-ca-bundle.crt")
