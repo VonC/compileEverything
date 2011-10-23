@@ -15,3 +15,13 @@ Lauch sshd with -f right config file with right paths in it
 ~~~~~~~~~~~
 Make sure httpd.conf includes env.conf at the end
 ~~~~~~~~~~~
+Add export HOME=/home/auser/compileEverything && to all gl-setup keys added
+gitolite.pm line 982 and 983: export HOME=$ENV{H} && 
+gl-tool line 57
+~~~~~~~~~~~
+configure the gitweb.conf.pl
+~~~~~~~~~~~auser@vonc-VirtualBox:~/usr/local/libs/openssh-5.9p1/etc$ mv ssh_config ssh_config.old
+auser@vonc-VirtualBox:~/usr/local/libs/openssh-5.9p1/etc$ ln -s ../../../../../.ssh/
+authorized_keys     cnf                 config              curl-ca-bundle.crt  gitoliteadm         gitoliteadm.pub     svc                 svc.pub
+auser@vonc-VirtualBox:~/usr/local/libs/openssh-5.9p1/etc$ ln -s ../../../../../.ssh/config ssh_config
+~~~~~~~~~~~~~~

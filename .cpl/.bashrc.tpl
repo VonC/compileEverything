@@ -36,6 +36,7 @@ function bashscriptpath() {
 
 bashscriptpath H
 export H=${H}
+export HOME=${H}
 echo "bashrc set local home to '${H}'"
 export HB="$H"/bin
 export HS="$H"/sbin

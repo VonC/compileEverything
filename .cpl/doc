@@ -239,7 +239,8 @@ git version 1.7.6.1
 cd .cpl
 git clone https://github.com/sitaramc/gitolite
 cd gitolite/
-auser@vonc-VirtualBox:~/compileEverything/.cpl/gitolite$ src/gl-system-install /home/auser/compileEverything/gitolite/bin /home/auser/compileEverything/gitolite/conf /home/auser/compileEverything/gitolite/hooks
+auser@vonc-VirtualBox:~/compileEverything/.cpl/gitolite$ 
+src/gl-system-install /home/auser/compileEverything/gitolite/bin /home/auser/compileEverything/gitolite/conf /home/auser/compileEverything/gitolite/hooks
 auser@vonc-VirtualBox:~/compileEverything/.cpl/gitolite$ l ../../gitolite/
 ~~~~~~~~~~~~~~
 cd /home/ausername/compileEverything/usr/local
@@ -362,9 +363,21 @@ Signature ok
 subject=/C=FR/ST=France/L=FR/O=company/CN=itsvcprdgit.world.company/emailAddress=itsvcprdgit@world.company
 Getting Private key
 ~~~~~~~~~~~~~
-https://itsvcprdgit:8443/
+https://itsvcprdgit:8443/git/
 Sun Oct 23 02:33:54 2011] [info] Initial (No.1) HTTPS request received for child 0 (server itsvcprdgit.world.company:443)
 [Sun Oct 23 02:33:54 2011] [debug] mod_authnz_ldap.c(403): [client 127.0.0.1] [20443] auth_ldap authenticate: using URL ldap://localhost:9011/DC=example,DC=com?cn?sub?(objectClass=person)
 [Sun Oct 23 02:33:54 2011] [info] [client 127.0.0.1] [20443] auth_ldap authenticate: user Manager authentication failed; URI /git/ [LDAP: ldap_simple_bind_s() failed][Invalid DN syntax]
-~~~~~~~~~~~
+format logs apache: http://www.webhostgear.com/69.html
 
+ldap_bv2dn(Manager)=-4 Decoding error
+conn=1001 op=0 do_bind: invalid dn (Manager)
+~~~~~~~~~~~
+auser@vonc-VirtualBox:~$ cd gitolite/
+auser@vonc-VirtualBox:~/gitolite$ git clone gitolitesrv:gitolite-admin
+[ VonC,vonc@laposte.net for github.com ]
+Enter your Windows password: (no password entered) Cloning into gitolite-admin...
+remote: Counting objects: 6, done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 6 (delta 0), reused 0 (delta 0)
+Receiving objects: 100% (6/6), done.
+~~~~~~~~~~~~~~

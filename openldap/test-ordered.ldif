@@ -31,6 +31,10 @@ dn: ou=Alumni Association,ou=People,dc=example,dc=com
 objectclass: organizationalUnit
 ou: Alumni Association
 
+dn: ou=Demo,ou=People,dc=example,dc=com
+objectclass: organizationalUnit
+ou: Demo
+
 dn: ou=Information Technology Division,ou=People,dc=example,dc=com
 objectclass: organizationalUnit
 ou: Information Technology Division

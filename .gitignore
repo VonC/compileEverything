@@ -34,3 +34,6 @@ bin/
 *_log
 *.args
 *.pid
+/.ssh/svc
+/projects.list
+/repositories/
