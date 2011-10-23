@@ -3,6 +3,7 @@ dep*
 *.*~
 log*
 .*log
+*.log
 src/
 .bashrc
 usr/
@@ -19,7 +20,6 @@ bin/
 /.viminfo
 /.lesshst
 .*.swp
-/gitweb/
 /.cpl/cache
 /.ssh/curl-ca-bundle.crt
 /.ssh/authorized_keys
@@ -30,3 +30,7 @@ bin/
 /.gitolite/
 /gitolite/
 /.gitolite.rc
+/openldap/db.1.a/
+*_log
+*.args
+*.pid

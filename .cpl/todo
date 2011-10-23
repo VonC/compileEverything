@@ -1,0 +1,17 @@
+Make sure apache does reference external conf
+auser@vonc-VirtualBox:~/compileEverything/.cpl/src/openldap-2.4.24$ diff ../../../apache/conf/httpd.conf ../../../apache/conf/original/httpd.conf 
+40c40
+< #Listen 80
+---
+> Listen 80
+116,117d115
+< LoadModule dav_svn_module     modules/mod_dav_svn.so
+< LoadModule authz_svn_module   modules/mod_authz_svn.so
+480,481d477
+< 
+< Include /home/auser/compileEverything/apache/env.conf
+~~~~~~~~~~~
+Lauch sshd with -f right config file with right paths in it
+~~~~~~~~~~~
+Make sure httpd.conf includes env.conf at the end
+~~~~~~~~~~~

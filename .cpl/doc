@@ -269,3 +269,102 @@ result: 32 No such object
 ---
 $ ./bin/ldapsearch.exe -x -d5
 
+~~~~~~~~~~~~~~~
+auser@vonc-VirtualBox:~/compileEverything$ ldapsearch -P 3 -x  -LLL -b "" -s base -h localhost -p 9011 '@extensibleObject' 
+dn:
+objectClass: top
+objectClass: OpenLDAProotDSE
+structuralObjectClass: OpenLDAProotDSE
+configContext: cn=config
+namingContexts: dc=example,dc=com
+monitorContext: cn=Monitor
+supportedControl: 1.3.6.1.4.1.4203.1.9.1.1
+supportedControl: 2.16.840.1.113730.3.4.18
+supportedControl: 2.16.840.1.113730.3.4.2
+supportedControl: 1.3.6.1.4.1.4203.1.10.1
+supportedControl: 1.2.840.113556.1.4.319
+supportedControl: 1.2.826.0.1.3344810.2.3
+supportedControl: 1.3.6.1.1.13.2
+supportedControl: 1.3.6.1.1.13.1
+supportedControl: 1.3.6.1.1.12
+supportedExtension: 1.3.6.1.4.1.4203.1.11.1
+supportedExtension: 1.3.6.1.4.1.4203.1.11.3
+supportedExtension: 1.3.6.1.1.8
+supportedFeatures: 1.3.6.1.1.14
+supportedFeatures: 1.3.6.1.4.1.4203.1.5.1
+supportedFeatures: 1.3.6.1.4.1.4203.1.5.2
+supportedFeatures: 1.3.6.1.4.1.4203.1.5.3
+supportedFeatures: 1.3.6.1.4.1.4203.1.5.4
+supportedFeatures: 1.3.6.1.4.1.4203.1.5.5
+supportedLDAPVersion: 3
+supportedSASLMechanisms: CRAM-MD5
+supportedSASLMechanisms: OTP
+entryDN:
+subschemaSubentry: cn=Subschema
+~~~~~~~~~~~~
+auser@vonc-VirtualBox:~/compileEverything/openldap$ ldapmodify -a -P 3 -x -D "cn=Manager,dc=example,dc=com" -h localhost -p 9011 -w secret < test-ordered.ldif 
+adding new entry "dc=example,dc=com"
+
+~~~~~~~~~~~~~
+auser@vonc-VirtualBox:~/compileEverything/openldap$ ldapsearch -P 3 -x -LLL -S "" -b "dc=example,dc=com" -h localhost -p 9011 'objectclass=*'
+dn: cn=All Staff,ou=Groups,dc=example,dc=com
+member: cn=Manager,dc=example,dc=com
+member: cn=Barbara Jensen,ou=Information Technology Division,ou=People,dc=example,dc=com
+member: cn=Jane Doe,ou=Alumni Association,ou=People,dc=example,dc=com
+member: cn=John Doe,ou=Information Technology Division,ou=People,dc=example,dc=com
+member: cn=Mark Elliot,ou=Alumni Association,ou=People,dc=example,dc=com
+~~~~~~~~~~~
+http://slacksite.com/apache/certificate.php
+
+auser@vonc-VirtualBox:~/compileEverything/apache$ openssl genrsa -des3 -out itsvcprdgit.worl.company.passphrase.key 1024
+Generating RSA private key, 1024 bit long modulus
+....................++++++
+....................................++++++
+e is 65537 (0x10001)
+Enter pass phrase for itsvcprdgit.worl.company.passphrase.key:
+Verifying - Enter pass phrase for itsvcprdgit.worl.company.passphrase.key:
+
+Remove passphrase:
+auser@vonc-VirtualBox:~/compileEverything/apache$ openssl rsa -in itsvcprdgit.worl.company.passphrase.key -out itsvcprdgit.worl.company.key 
+Enter pass phrase for itsvcprdgit.worl.company.passphrase.key:
+writing RSA key
+~~~~~~~~~~~
+cat /etc/hosts
+127.0.0.1       itsvcprdgit.world.company itsvcprdgit
+auser@vonc-VirtualBox:~/compileEverything/apache$ ping itsvcprdgit
+PING itsvcprdgit.world.company (127.0.0.1) 56(84) bytes of data.
+64 bytes from localhost (127.0.0.1): icmp_req=1 ttl=64 time=0.055 ms
+
+~~~~~~~~~~~
+auser@vonc-VirtualBox:~/compileEverything/apache$ openssl req -new -key itsvcprdgit.worl.company.key -out itsvcprdgit.worl.company.csr
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:FR
+State or Province Name (full name) [Some-State]:France
+Locality Name (eg, city) []:FR
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:company
+Organizational Unit Name (eg, section) []:.
+Common Name (eg, YOUR name) []:itsvcprdgit.world.company
+Email Address []:itsvcprdgit@world.company
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+~~~~~~~~~~~~~
+openssl x509 -req -days 600 -in itsvcprdgit.worl.company.csr -signkey itsvcprdgit.worl.company.key -out itsvcprdgit.worl.company.crt
+Signature ok
+subject=/C=FR/ST=France/L=FR/O=company/CN=itsvcprdgit.world.company/emailAddress=itsvcprdgit@world.company
+Getting Private key
+~~~~~~~~~~~~~
+https://itsvcprdgit:8443/
+Sun Oct 23 02:33:54 2011] [info] Initial (No.1) HTTPS request received for child 0 (server itsvcprdgit.world.company:443)
+[Sun Oct 23 02:33:54 2011] [debug] mod_authnz_ldap.c(403): [client 127.0.0.1] [20443] auth_ldap authenticate: using URL ldap://localhost:9011/DC=example,DC=com?cn?sub?(objectClass=person)
+[Sun Oct 23 02:33:54 2011] [info] [client 127.0.0.1] [20443] auth_ldap authenticate: user Manager authentication failed; URI /git/ [LDAP: ldap_simple_bind_s() failed][Invalid DN syntax]
+~~~~~~~~~~~
+
