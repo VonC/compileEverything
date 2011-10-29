@@ -381,3 +381,66 @@ remote: Compressing objects: 100% (4/4), done.
 remote: Total 6 (delta 0), reused 0 (delta 0)
 Receiving objects: 100% (6/6), done.
 ~~~~~~~~~~~~~~
+Using ldapsearch to read all the entries
+ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p 9011 'objectclass=*'
+
+Searching for an entry, or just an attribute:
+auser@vonc-VirtualBox:~/.ssh$ ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p 9011 'uid=bjensen'
+dn: cn=Barbara Jensen,ou=Information Technology Division,ou=People,dc=example,
+ dc=com
+objectClass: OpenLDAPperson
+cn: Barbara Jensen
+cn: Babs Jensen
+sn:: IEplbnNlbiA=
+uid: bjensen
+title: Mythical Manager, Research Systems
+postalAddress: ITD Prod Dev & Deployment $ 535 W. William St. Room 4212 $ Anyt
+ own, MI 48103-4943
+seeAlso: cn=All Staff,ou=Groups,dc=example,dc=com
+userPassword:: YmplbnNlbg==
+mail: bjensen@mailgw.example.com
+homePostalAddress: 123 Wesley $ Anytown, MI 48103
+description: Mythical manager of the rsdd unix project
+drink: water
+homePhone: +1 313 555 2333
+pager: +1 313 555 3233
+facsimileTelephoneNumber: +1 313 555 2274
+telephoneNumber: +1 313 555 9022
+
+auser@vonc-VirtualBox:~/.ssh$ ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p 9011 'uid=bjensen' uid
+dn: cn=Barbara Jensen,ou=Information Technology Division,ou=People,dc=example,
+ dc=com
+uid: bjensen
+
+auser@vonc-VirtualBox:~/.ssh$ ldapsearch -P 3 -x  -LLL -s "sub" -b "dc=example,dc=com" -h localhost -p 9011 'objectclass=person' uid
+dn: cn=Barbara Jensen,ou=Information Technology Division,ou=People,dc=example,
+ dc=com
+uid: bjensen
+
+dn: cn=Bjorn Jensen,ou=Information Technology Division,ou=People,dc=example,dc
+ =com
+uid: bjorn
+
+
+Components of an LDAP URL
+ldap[s]://hostname:port/base_dn?attributes?scope?filter
+ldap://localhost:9011/dc=example,dc=com?uid?sub?(objectClass=*)
+http://www.centos.org/docs/5/html/CDS/ag/8.0/LDAP_URLs-Components_of_an_LDAP_URL.html
+
+Monitoring your LDAP
+http://tille.garrels.be/training/ldap/ch05s02.html
+
+Add an entry
+http://www.ldapsource.com/content/ldap_utility.html
+auser@vonc-VirtualBox:~/openldap$ ldapmodify -a -P 3 -x -D "cn=manager,dc=example,dc=com" -h localhost -p 9011 -w secret < gitoliteadm.ldif 
+adding new entry "cn=Gitolite Admin,ou=People,dc=example,dc=com"
+~~~~~~~~~~~~~
+alias git='/home/auser/compileEverything/sbin/wgit u bjensen,bjensen@example.com,itsvcprdgit.world.company,bjensen'
+rm -Rf demo/
+auser@vonc-VirtualBox:~/gitolite$ !git
+git clone https://itsvcprdgit.world.company:8453/hgit/demo
+[ bjensen,bjensen@example.com for itsvcprdgit.world.company ]
+Cloning into demo...
+warning: You appear to have cloned an empty repository.
+auser@vonc-VirtualBox:~/gitolite$ 
+~~~~~~~~~~~

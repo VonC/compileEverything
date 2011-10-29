@@ -1,0 +1,10 @@
+dn: cn=Gitolite Admin,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Gitolite Admin
+sn: gadm
+uid: gitoliteadm
+givenname: gadm
+mail: gitoliteadm@company.com
+userPassword: gitoliteadm
+description: Gitolite Admin

@@ -25,3 +25,10 @@ auser@vonc-VirtualBox:~/usr/local/libs/openssh-5.9p1/etc$ ln -s ../../../../../.
 authorized_keys     cnf                 config              curl-ca-bundle.crt  gitoliteadm         gitoliteadm.pub     svc                 svc.pub
 auser@vonc-VirtualBox:~/usr/local/libs/openssh-5.9p1/etc$ ln -s ../../../../../.ssh/config ssh_config
 ~~~~~~~~~~~~~~
+add cert from apache at the end of ~/.ssh/curl-ca-bundle.crt
+~~~~~~~~~~~~~~
+add at the beginning of .gitolite.rc
+$ENV{GIT_HTTP_BACKEND} = "$ENV{HOME}/usr/local/git/libexec/git-core/git-http-backend";
+    # or wherever you have that file; note: NO trailing slash
+$ENV{PATH} .= ":$ENV{GITOLITE_HTTP_HOME}/.gitolite/src";
+    # note the ".=" here, not "="

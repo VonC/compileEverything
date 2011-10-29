@@ -1615,3 +1615,44 @@ g++  --shared  -Wl,--enable-auto-import -Wl,--export-all-symbols -Wl,--stack,838
 
 
 ~~~~~~~~~~~~~~~~
+auser@vonc-VirtualBox:~/gitolite$ git clone https://itsvcprdgit:8453/hgit/demo
+[ VonC,vonc@laposte.net for github.com ]
+Enter your Windows password: Cloning into demo...
+error: SSL certificate problem, verify that the CA cert is OK. Details:
+error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed while accessing https://itsvcprdgit:8453/hgit/demo/info/refs
+
+fatal: HTTP request failed
+auser@vonc-VirtualBox:~/gitolite$ export GIT_CURL_VERBOSE=1
+auser@vonc-VirtualBox:~/gitolite$ git clone https://itsvcprdgit:8453/hgit/demo.git
+[ VonC,vonc@laposte.net for github.com ]
+Enter your Windows password: Cloning into demo...
+* Couldn't find host itsvcprdgit in the .netrc file; using defaults
+* About to connect() to itsvcprdgit port 8453 (#0)
+
+auser@vonc-VirtualBox:~/gitolite$ git clone https://itsvcprdgit:8453/hgit/demo
+[ VonC,vonc@laposte.net for github.com ]
+Enter your Windows password: Cloning into demo...
+error: SSL: certificate subject name 'itsvcprdgit.world.company' does not match target host name 'itsvcprdgit' while accessing https://itsvcprdgit:8453/hgit/demo/info/refs
+
+fatal: HTTP request failed
+auser@vonc-VirtualBox:~/gitolite$ git clone https://itsvcprdgit.world.company:8453/hgit/demo
+[ VonC,vonc@laposte.net for github.com ]
+Enter your Windows password: Cloning into demo...
+Username: 
+Password: 
+error: The requested URL returned error: 500 while accessing https://itsvcprdgit.world.company:8453/hgit/demo/info/refs
+
+fatal: HTTP request failed
+
+Check: /home/auser/compileEverything/apache/githttp_error_log
+[Sat Oct 29 17:47:56 2011] [error] [client 127.0.0.1] Use of uninitialized value $ENV{"GIT_HTTP_BACKEND"} in exec at /home/auser/compileEverything/gitolite/bin/gl-auth-command line 188.
+
+Add at the beginning of .gitolite.rc
+$ENV{GIT_HTTP_BACKEND} = "$ENV{HOME}/usr/local/git/libexec/git-core/git-http-backend";
+    # or wherever you have that file; note: NO trailing slash
+$ENV{PATH} .= ":$ENV{GITOLITE_HTTP_HOME}/.gitolite/src";
+    # note the ".=" here, not "="
+
+
+alias git='/home/auser/compileEverything/sbin/wgit u bjensen,bjensen@example.com,itsvcprdgit.world.company:8453,bjensen'
+alias agitBjensenItsvcprdgit='alias git="${H}/sbin/wgit u bjensen,bjensen@example.com,itsvcprdgit.world.company:8453,bjensen"'
