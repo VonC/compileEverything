@@ -32,3 +32,22 @@ $ENV{GIT_HTTP_BACKEND} = "$ENV{HOME}/usr/local/git/libexec/git-core/git-http-bac
     # or wherever you have that file; note: NO trailing slash
 $ENV{PATH} .= ":$ENV{GITOLITE_HTTP_HOME}/.gitolite/src";
     # note the ".=" here, not "="
+~~~~~~~~~~~~~
+find how to configure $H/.cpl/cgit.conf
+~~~~~~~~~~~~~
+add ln -s git-1.7.6.1 git after untar of git sources, for cgit to use them.
+~~~~~~~~~~~~~
+auser@vonc-VirtualBox:~$ diff -w .cpl/src/cgit-0.9.0.2/Makefile ../Documents/gitolite/conf/cgit/Makefile 
+1c1
+< CGIT_VERSION = v0.9.0.2
+---
+> CGIT_VERSION = v0.9
+91c91
+< EXTLIBS = ../git/libgit.a ../git/xdiff/lib.a -lz -lpthread
+---
+> EXTLIBS = git/libgit.a git/xdiff/lib.a -lz -lpthread
+161c161
+< cgit: $(OBJECTS)
+---
+> cgit: $(OBJECTS) libgit
+make git link to ../git within cgit

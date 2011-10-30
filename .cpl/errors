@@ -1652,7 +1652,26 @@ $ENV{GIT_HTTP_BACKEND} = "$ENV{HOME}/usr/local/git/libexec/git-core/git-http-bac
     # or wherever you have that file; note: NO trailing slash
 $ENV{PATH} .= ":$ENV{GITOLITE_HTTP_HOME}/.gitolite/src";
     # note the ".=" here, not "="
+~~~~~~~~~~~~~~
+Ubuntu cgit make
+shared.c: In function `cgit_diff_tree':
+shared.c:318: error: structure has no member named `nr_paths'
+shared.c:319: error: structure has no member named `paths'
+shared.c:321: error: structure has no member named `pathlens'
 
+cgit uses an old (January 2011) git1.7.4
 
-alias git='/home/auser/compileEverything/sbin/wgit u bjensen,bjensen@example.com,itsvcprdgit.world.company:8453,bjensen'
-alias agitBjensenItsvcprdgit='alias git="${H}/sbin/wgit u bjensen,bjensen@example.com,itsvcprdgit.world.company:8453,bjensen"'
+-    if (rev->diffopt.nr_paths != 1)
++    if (rev->diffopt.pathspec.nr != 1)
+
+-  revs.prune_data = opt->paths;
++  revs.prune_data = opt->pathspec.raw;
+
+-  free(opt->pathlens);
++  free_pathspec(&opt->pathspec);
+
+		opt.pathspec.nr = 1;
+		opt.pathspec.raw = &prefix;
+		prefixlen = strlen(prefix);
+		//&opt.pathlens = &prefixlen;
+        

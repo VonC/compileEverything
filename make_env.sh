@@ -324,6 +324,7 @@ function gen_which()
 function get_tar() {
   local _tarname=$1
   local atarname=""
+  get_param $name ext "tar.gz"
   gen_which "gtar" gtarpath
   gen_which "tar" tarpath
   if [[ "${gtarpath}" != "" ]] ; then atarname="gtar xpvf";
@@ -332,6 +333,11 @@ function get_tar() {
     if [[ "$h" != "" ]]; then atarname="tar xpvf"; else atarname="tar -xv -f" ; fi;
   fi
   if [[ "${atarname}" == "" ]] ; then echolog "Unable to find a GNU tar or gtar" ; tar2 ; fi
+  if [[ "${ext}" == "zip" ]] ; then
+    gen_which "unzip" unzippath
+    if [[ "${unzippath}" != "" ]] ; then atarname="unzip"; fi
+    if [[ "${atarname}" == "" ]] ; then echolog "Unable to find unzip" ; unzip2 ; fi
+  fi
   eval $_tarname="'$atarname'";
 }
 function untar() {
@@ -340,7 +346,9 @@ function untar() {
   if [[ ! -e "${_src}/$namever" ]]; then
     get_tar tarname
     get_param $name ext "tar.gz"
-    loge "${tarname} ${_pkgs}/$namever.${ext} -C ${_src}" "tar_xpvf_$namever.${ext}"
+    local dirext="-C"
+    if [[ "${ext}" == "zip" ]] ; then dirext="-d" ; fi
+    loge "${tarname} ${_pkgs}/$namever.${ext} ${dirext} ${_src}" "tar_xpvf_$namever.${ext}"
     local lastlog=$(mrf "${_logs}" "*tar_xpvf*")
     local actualname=$(head -3 "$lastlog"|tail -1)
     local anactualname=${actualname}

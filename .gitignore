@@ -37,3 +37,6 @@ bin/
 /.ssh/svc
 /projects.list
 /repositories/
+/cgit/cgit.cgi
+/cgit/cgit.css
+/cgit/cgit.png

@@ -1,0 +1,5 @@
+page=http://hjemli.net/git/cgit/
+url=http://hjemli.net/git/cgit/snapshot/
+ext=zip
+configcmd=none
+premake=cp "${H}/.cpl/cgit.conf" "${H}/.cpl/src/@@NAMEVER@@/" ; gen_sed -i "s/@NAMEVER@/@@NAMEVER@@/g" "${H}/.cpl/src/@@NAMEVER@@/cgit.conf"

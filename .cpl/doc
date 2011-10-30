@@ -435,6 +435,7 @@ http://www.ldapsource.com/content/ldap_utility.html
 auser@vonc-VirtualBox:~/openldap$ ldapmodify -a -P 3 -x -D "cn=manager,dc=example,dc=com" -h localhost -p 9011 -w secret < gitoliteadm.ldif 
 adding new entry "cn=Gitolite Admin,ou=People,dc=example,dc=com"
 ~~~~~~~~~~~~~
+alias agitBjensenItsvcprdgit='alias git="${H}/sbin/wgit u bjensen,bjensen@example.com,itsvcprdgit.world.company,bjensen"'
 alias git='/home/auser/compileEverything/sbin/wgit u bjensen,bjensen@example.com,itsvcprdgit.world.company,bjensen'
 rm -Rf demo/
 auser@vonc-VirtualBox:~/gitolite$ !git

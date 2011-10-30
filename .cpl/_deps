@@ -47,4 +47,5 @@ mod aliensvn cpanm,termreadkey,error
 app cpanm none
 mod termreadkey cpanm
 mod error cpanm
+app cgit git,zlib,libgcrypt,openssl
 __no_deps__
