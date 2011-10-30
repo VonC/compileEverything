@@ -332,6 +332,8 @@ writing RSA key
 ~~~~~~~~~~~
 cat /etc/hosts
 127.0.0.1       itsvcprdgit.world.company itsvcprdgit
+127.0.0.1       itsvc.world.company itsvc
+
 auser@vonc-VirtualBox:~/compileEverything/apache$ ping itsvcprdgit
 PING itsvcprdgit.world.company (127.0.0.1) 56(84) bytes of data.
 64 bytes from localhost (127.0.0.1): icmp_req=1 ttl=64 time=0.055 ms
