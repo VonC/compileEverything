@@ -1,33 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-<title>ITSVC NGinx Reverse Proxy</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ITSVC NGinx Reverse Proxy</title>
+    <link href="tabs.css" rel="stylesheet" type="text/css" />
 </head>
-<body bgcolor="white" text="black">
-<center><h1>Reverse Proxys for ITSVC</h1></center>
-<p />
-<h2>ITSVC addresses</h2>
-<dl>
-  <dt>GitWeb:</dt>
-  <dd><a href="https://itsvc/git">https://itsvc/git</a></dd>
-  <dd><a href="https://itsvc.world.company/git">https://itsvc.world.company/git</a></dd>
-  <dt>Smart Http Git access:</dt>
-  <dd><a href="https://itsvc/hgit">https://itsvc/hgit</a></dd>
-  <dd><a href="https://itsvc.world.company/hgit">https://itsvc.world.company/hgit</a></dd>
-  <dt>CGit:</dt>
-  <dd><a href="https://itsvc/cgit">https://itsvc/cgit</a></dd>
-  <dd><a href="https://itsvc.world.company/cgit">https://itsvc.world.company/cgit</a></dd>
-</dl>
-<h2>Raw addresses</h2>
-<dl>
-  <dt>GitWeb:</dt>
-  <dd><a href="https://itsvcprdgit:8443/git">https://itsvcprdgit:8443/git</a></dd>
-  <dd><a href="https://itsvcprdgit.world.company:8443/git">https://itsvcprdgit.world.company:8443/git</a></dd>
-  <dt>Smart Http Git access:</dt>
-  <dd><a href="https://itsvcprdgit:8453/hgit/">https://itsvcprdgit:8453/hgit</a></dd>
-  <dd><a href="https://itsvcprdgit.world.company:8453/hgit/">https://itsvcprdgit.world.company:8453/hgit</a></dd>
-  <dt>CGit:</dt>
-  <dd><a href="https://itsvcprdgit:8463/cgit">https://itsvcprdgit:8463/cgit</a></dd>
-  <dd><a href="https://itsvcprdgit.world.company:8463/cgit">https://itsvcprdgit.world.company:8463/cgit</a></dd>
-</dl>
+<body>
+<h1>Reverse Proxys for ITSVC</h1>
+<ol id="toc">
+    <li><a href="#page-1"><span>Page 1</span></a></li>
+
+    <li><a href="#page-2"><span>Page 2</span></a></li>
+    <li><a href="#page-3"><span>Page 3</span></a></li>
+</ol>
+<div class="content" id="page-1">
+    <h2>How to access those services?</h2>
+      Different addresses, each with a different root:
+      <ul>
+        <li><b>Gitweb</b>: http(s)://xxx/git</li>
+        <li><b>Smart Http</b>: http(s)://xxx/hgit</li>
+        <li><b>CGit</b>: http(s)://xxx/cgit</li>
+      </ul>
+</div>
+<div class="content" id="page-2">
+  <h2>Raw addresses</h2>
+  <dl>
+    <dt>GitWeb:</dt>
+    <dd><a href="https://itsvcprdgit:8443/git">https://itsvcprdgit:8443/git</a></dd>
+    <dd><a href="https://itsvcprdgit.world.company:8443/git">https://itsvcprdgit.world.company:8443/git</a></dd>
+    <dt>Smart Http Git access:</dt>
+    <dd><a href="https://itsvcprdgit:8453/hgit/">https://itsvcprdgit:8453/hgit</a></dd>
+    <dd><a href="https://itsvcprdgit.world.company:8453/hgit/">https://itsvcprdgit.world.company:8453/hgit</a></dd>
+    <dt>CGit:</dt>
+    <dd><a href="https://itsvcprdgit:8463/cgit">https://itsvcprdgit:8463/cgit</a></dd>
+    <dd><a href="https://itsvcprdgit.world.company:8463/cgit">https://itsvcprdgit.world.company:8463/cgit</a></dd>
+  </dl>
+</div>
+<div class="content" id="page-3">
+  <h2>Proxy addresses</h2>
+  <dl>
+    <dt>GitWeb:</dt>
+    <dd><a href="https://itsvc/git">https://itsvc/git</a></dd>
+    <dd><a href="https://itsvc.world.company/git">https://itsvc.world.company/git</a></dd>
+    <dt>Smart Http Git access:</dt>
+    <dd><a href="https://itsvc/hgit">https://itsvc/hgit</a></dd>
+    <dd><a href="https://itsvc.world.company/hgit">https://itsvc.world.company/hgit</a></dd>
+    <dt>CGit:</dt>
+    <dd><a href="https://itsvc/cgit">https://itsvc/cgit</a></dd>
+    <dd><a href="https://itsvc.world.company/cgit">https://itsvc.world.company/cgit</a></dd>
+  </dl>
+</div>
+<script src="activatables.js" type="text/javascript"></script>
+<script type="text/javascript">
+activatables('page', ['page-1', 'page-2', 'page-3']);
+</script>
 </body>
+
 </html>
