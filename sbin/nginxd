@@ -1,0 +1,55 @@
+#! /bin/bash
+
+auser=$(id -nu)
+aps=$(ps -ef|grep ${auser}|grep "${H}/usr/local/apps/nginx/sbin/nginx"|grep -v grep|awk '{print $2}')
+afps=""
+afpid="${H}/usr/local/apps/nginx/logs/nginx.pid"
+if [[ -e "${afpid}" ]] ; then 
+  afps=$(cat "${afpid}")
+fi
+
+# echo "aps ${aps}, afps ${afps}"
+
+case "$1" in
+
+'start')
+  if [[ "$aps" == "" ]] ; then
+    echo starting nginx
+    "${H}/usr/local/apps/nginx/sbin/nginx"
+  else
+    echo "nginx already started, process ${aps}"
+  fi
+  ;;
+'stop')
+  if [[ "$aps" != "" ]] ; then
+    echo stopping nginx
+    "${H}/usr/local/apps/nginx/sbin/nginx" -s stop
+  else
+    echo "nginx already stopped"
+  fi
+  ;;
+'restart')
+  nginxd stop
+  nginxd start
+;;
+'status')
+  if [[ "${aps}" == "" ]] ; then
+    echo "nginx is stopped"
+  else
+    echo "nginx running, process ${aps}"
+  fi
+  if [[ "${afps}" != "${aps}" ]] ; then
+    echo "Warning, the nginx pid recorded is not the same: ${afps}"
+  fi
+  ;;
+'test')
+  "${H}/usr/local/apps/nginx/sbin/nginx" -t
+  ;;
+'reload')
+  "${H}/usr/local/apps/nginx/sbin/nginx" -s reload
+  ;;
+*)
+  echo "usage: ${H}/sbin/nginxd {start|stop|restart|status|test|reload}"
+  ;;
+esac
+

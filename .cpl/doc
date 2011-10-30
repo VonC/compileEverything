@@ -317,17 +317,17 @@ member: cn=Mark Elliot,ou=Alumni Association,ou=People,dc=example,dc=com
 ~~~~~~~~~~~
 http://slacksite.com/apache/certificate.php
 
-auser@vonc-VirtualBox:~/compileEverything/apache$ openssl genrsa -des3 -out itsvcprdgit.worl.company.passphrase.key 1024
+auser@vonc-VirtualBox:~/compileEverything/apache$ openssl genrsa -des3 -out itsvcprdgit.world.company.passphrase.key 1024
 Generating RSA private key, 1024 bit long modulus
 ....................++++++
 ....................................++++++
 e is 65537 (0x10001)
-Enter pass phrase for itsvcprdgit.worl.company.passphrase.key:
-Verifying - Enter pass phrase for itsvcprdgit.worl.company.passphrase.key:
+Enter pass phrase for itsvcprdgit.world.company.passphrase.key:
+Verifying - Enter pass phrase for itsvcprdgit.world.company.passphrase.key:
 
 Remove passphrase:
-auser@vonc-VirtualBox:~/compileEverything/apache$ openssl rsa -in itsvcprdgit.worl.company.passphrase.key -out itsvcprdgit.worl.company.key 
-Enter pass phrase for itsvcprdgit.worl.company.passphrase.key:
+auser@vonc-VirtualBox:~/compileEverything/apache$ openssl rsa -in itsvcprdgit.world.company.passphrase.key -out itsvcprdgit.world.company.key 
+Enter pass phrase for itsvcprdgit.world.company.passphrase.key:
 writing RSA key
 ~~~~~~~~~~~
 cat /etc/hosts
@@ -337,7 +337,7 @@ PING itsvcprdgit.world.company (127.0.0.1) 56(84) bytes of data.
 64 bytes from localhost (127.0.0.1): icmp_req=1 ttl=64 time=0.055 ms
 
 ~~~~~~~~~~~
-auser@vonc-VirtualBox:~/compileEverything/apache$ openssl req -new -key itsvcprdgit.worl.company.key -out itsvcprdgit.worl.company.csr
+auser@vonc-VirtualBox:~/compileEverything/apache$ openssl req -new -key itsvcprdgit.world.company.key -out itsvcprdgit.world.company.csr
 You are about to be asked to enter information that will be incorporated
 into your certificate request.
 What you are about to enter is what is called a Distinguished Name or a DN.
@@ -358,7 +358,7 @@ to be sent with your certificate request
 A challenge password []:
 An optional company name []:
 ~~~~~~~~~~~~~
-openssl x509 -req -days 600 -in itsvcprdgit.worl.company.csr -signkey itsvcprdgit.worl.company.key -out itsvcprdgit.worl.company.crt
+openssl x509 -req -days 600 -in itsvcprdgit.world.company.csr -signkey itsvcprdgit.world.company.key -out itsvcprdgit.world.company.crt
 Signature ok
 subject=/C=FR/ST=France/L=FR/O=company/CN=itsvcprdgit.world.company/emailAddress=itsvcprdgit@world.company
 Getting Private key
@@ -448,4 +448,117 @@ auser@vonc-VirtualBox:~/gitolite$
 list only files, not subdirectories (not recursively ls)
 ls -d xxx
 ~~~~~~~~~~~
+Run server on lower port (<1024): http://serverfault.com/questions/112795/how-can-i-run-a-server-on-linux-on-port-80-as-a-normal-user
+http://stackoverflow.com/questions/413807/is-there-a-way-for-non-root-processes-to-bind-to-privileged-ports-1024-on-l
+setcap 'cap_net_bind_service=+ep' /path/to/program
+~~~~~~~~~~~~~
+auser@vonc-VirtualBox:~/nginx$ ./nginx -h
+nginx: nginx version: nginx/1.0.8
+nginx: Usage: nginx [-?hvVtq] [-s signal] [-c filename] [-p prefix] [-g directives]
 
+Options:
+  -?,-h         : this help
+  -v            : show version and exit
+  -V            : show version and configure options then exit
+  -t            : test configuration and exit
+  -q            : suppress non-error messages during configuration testing
+  -s signal     : send signal to a master process: stop, quit, reopen, reload
+  -p prefix     : set prefix path (default: /home/auser/compileEverything/usr/local/apps/nginx-1.0.8/)
+  -c filename   : set configuration file (default: conf/nginx.conf)
+  -g directives : set global directives out of configuration file
+
+auser@vonc-VirtualBox:~/nginx$ ./nginx -V
+nginx: nginx version: nginx/1.0.8
+nginx: TLS SNI support enabled
+nginx: configure arguments: --prefix=/home/auser/compileEverything/usr/local/apps/nginx-1.0.8 --user=auser --group=auser --with-rtsig_module --with-select_module --with-poll_module --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_stub_status_module --with-http_perl_module --with-debug --with-mail --with-mail_ssl_module --with-perl=/home/auser/compileEverything/usr/local/apps/perl/bin/perl --with-ld-opt='-L/home/auser/compileEverything/usr/local/lib -L/home/auser/compileEverything/usr/local/ssl/lib -R/home/auser/compileEverything/usr/local/lib -R/home/auser/compileEverything/usr/local/ssl/lib' --with-cc-opt='-I/home/auser/compileEverything/usr/local/include -I/home/auser/compileEverything/usr/local/ssl/include'
+
+auser@vonc-VirtualBox:~/nginx$ ./nginx -v
+nginx: nginx version: nginx/1.0.8
+
+auser@vonc-VirtualBox:~/nginx$ ./nginx -t
+nginx: the configuration file /home/auser/compileEverything/usr/local/apps/nginx-1.0.8/conf/nginx.conf syntax is ok
+nginx: [emerg] bind() to 0.0.0.0:80 failed (13: Permission denied)
+nginx: configuration file /home/auser/compileEverything/usr/local/apps/nginx-1.0.8/conf/nginx.conf test failed
+
+auser@vonc-VirtualBox:~/nginx$ ./nginx -tq
+nginx: [emerg] bind() to 0.0.0.0:80 failed (13: Permission denied)
+nginx: configuration file /home/auser/compileEverything/usr/local/apps/nginx-1.0.8/conf/nginx.conf test failed
+
+~~~~~~~~~~~~~~~~~~
+http://www.kernel.org/doc/man-pages/online/pages/man7/capabilities.7.html
+       CAP_NET_BIND_SERVICE
+              Bind a socket to Internet domain privileged ports (port numbers less than 1024).
+auser@vonc-VirtualBox:~/nginx$ sudo /sbin/setcap 'cap_net_bind_service=+ep' /home/auser/compileEverything/usr/local/apps/nginx/sbin/nginx 
+auser@vonc-VirtualBox:~/nginx$ ./nginx -t
+nginx: the configuration file /home/auser/compileEverything/usr/local/apps/nginx-1.0.8/conf/nginx.conf syntax is ok
+nginx: configuration file /home/auser/compileEverything/usr/local/apps/nginx-1.0.8/conf/nginx.conf test is successful
+~~~~~~~~~~~~
+auser@vonc-VirtualBox:~/nginx$ ./nginx
+auser@vonc-VirtualBox:~/nginx$ cd ..
+auser@vonc-VirtualBox:~$ find . -mmin -2
+./.cpl
+./.cpl/doc
+./usr/local/apps/nginx-1.0.8/logs/nginx.pid
+~~~~~~~~~~~~
+Equivalent of Gitolite for Mercurial, From Kev (Kevin Kenny) http://stackoverflow.com/users/419/kev
+http://blog.zygonia.net/2011/10/26/mercurial-and-mercurial-server-on-centos/
+Mercurial and mercurial-server on CentOS
+mercurial-server 1.2 sources
+http://dev.lshift.net/paul/mercurial-server/mercurial-server
+How mercurial-server works: http://dev.lshift.net/paul/mercurial-server/docbook.html#id3887137
+~~~~~~~~~~~~~~~~
+For certificates, don't forget to add an alternate name
+auser@vonc-VirtualBox:/home/auser/Documents/gitolite/conf$ diff -w ./itsvcgit/ssl/openssl.cnf ./itsvcsvn10/ssl/openssl.cnf
+88d87
+< req_extensions = v3_req # The extensions to add to a certificate request
+173,180d171
+< 
+< [ v3_req ]
+< 
+< # Extensions to add to a certificate request
+< 
+< basicConstraints = CA:FALSE
+< keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+< subjectAltName = DNS:itsvcgit.fr.world.socgen,DNS:itsvcgit
+~~~~~~~~~~~~~~~
+cd nginx/
+openssl genrsa -des3 -out itsvc.world.company.passphrase.key 1024
+openssl rsa -in itsvc.world.company.passphrase.key -out itsvc.world.company.key
+openssl req -new -config openssl.cnf -key itsvc.world.company.key -out itsvc.world.company.csr
+openssl x509 -req -days 600 -in itsvc.world.company.csr -signkey itsvc.world.company.key -out itsvc.world.company.crt
+with openssl:
+auser@vonc-VirtualBox:~/nginx$ diff -w openssl.cnf ../.cpl/openssl.cnf.ori 
+88d87
+< req_extensions = v3_req # The extensions to add to a certificate request
+92c91
+< countryName_default		= FR
+---
+> countryName_default		= 
+97c96
+< stateOrProvinceName_default	= France
+---
+> stateOrProvinceName_default	= 
+100d98
+< localityName_default = Paris
+103c101
+< 0.organizationName_default	= company
+---
+> 0.organizationName_default	= Webmin
+110c108
+< organizationalUnitName_default	= .
+---
+> #organizationalUnitName_default	=
+114d111
+< commonName_default = itsvc.world.company
+118d114
+< emailAddress_default = itsvc@world.company
+176,183d171
+< 
+< [ v3_req ]
+< 
+< # Extensions to add to a certificate request
+< 
+< basicConstraints = CA:FALSE
+< keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+< subjectAltName = DNS:itsvc.world.company,DNS:itsvc
+~~~~~~~~~~~~~

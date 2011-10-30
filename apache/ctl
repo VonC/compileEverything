@@ -97,9 +97,10 @@ fullstatus)
     $LYNX $STATUSURL
     ;;
 -h)
-    echo "ctl start|stop|restart|graceful|graceful-stop"
-    echo "ctl configtest"
-    echo "ctl status|fullstatus"
+    echo "usage: ${H}/sbin/ctld:"
+    echo "ctld start|stop|restart|graceful|graceful-stop"
+    echo "ctld configtest"
+    echo "ctld status|fullstatus"
     ;;
 *)
     $HTTPD $ARGV

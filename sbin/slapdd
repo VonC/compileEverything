@@ -62,7 +62,7 @@ case "$1" in
   fi
   ;;
 *)
-  echo "usage: ${H}/slapdd {start|stop|restart|status}"
+  echo "usage: ${H}/sbin/slapdd {start|stop|restart|status}"
   ;;
 esac
 

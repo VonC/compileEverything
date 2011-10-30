@@ -4,3 +4,5 @@ scan-path=/home/auser/compileEverything/repositories
 project-list=/home/auser/compileEverything/projects.list
 root-title=ITSVC Git Repositories
 root-desc=Fast web interface (linked to Gitolite for ACL)
+css=/cgit/cgit/cgit.css
+logo=/cgit/cgit/cgit.png

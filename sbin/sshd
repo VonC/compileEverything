@@ -42,7 +42,7 @@ case "$1" in
   fi
   ;;
 *)
-  echo "usage: ${H}/sshd {start|stop|restart|status}"
+  echo "usage: ${H}/sbin/sshd {start|stop|restart|status}"
   ;;
 esac
 
