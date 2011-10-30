@@ -89,7 +89,7 @@ export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE @@M64@@
 export CPPFLAGS="$CFLAGS"
 export PERL5LIB="${HULA}/perl/lib/site_perl/current:${HULA}/perl/lib/current"
 
-export SSL_CERT_FILE="${HUL}/ssl/cert.pem"
+export SSL_CERT_FILE="${H}/openssl/cert.pem"
 
 alias a=alias
 alias l='ls -alrt'

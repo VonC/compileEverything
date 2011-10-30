@@ -4,6 +4,8 @@ auser=$(id -nu)
 aps=$(ps -ef|grep ${auser}|grep "${H}/usr/local/apps/nginx/sbin/nginx"|grep -v grep|awk '{print $2}')
 afps=""
 afpid="${H}/usr/local/apps/nginx/logs/nginx.pid"
+cnf="${H}/nginx/cnf"
+
 if [[ -e "${afpid}" ]] ; then 
   afps=$(cat "${afpid}")
 fi
@@ -15,7 +17,7 @@ case "$1" in
 'start')
   if [[ "$aps" == "" ]] ; then
     echo starting nginx
-    "${H}/usr/local/apps/nginx/sbin/nginx"
+    "${H}/usr/local/apps/nginx/sbin/nginx" -c "${cnf}"
   else
     echo "nginx already started, process ${aps}"
   fi
@@ -23,7 +25,7 @@ case "$1" in
 'stop')
   if [[ "$aps" != "" ]] ; then
     echo stopping nginx
-    "${H}/usr/local/apps/nginx/sbin/nginx" -s stop
+    "${H}/usr/local/apps/nginx/sbin/nginx" -s stop -c "${cnf}"
   else
     echo "nginx already stopped"
   fi
@@ -43,10 +45,10 @@ case "$1" in
   fi
   ;;
 'test')
-  "${H}/usr/local/apps/nginx/sbin/nginx" -t
+  "${H}/usr/local/apps/nginx/sbin/nginx" -t -c "${cnf}"
   ;;
 'reload')
-  "${H}/usr/local/apps/nginx/sbin/nginx" -s reload
+  "${H}/usr/local/apps/nginx/sbin/nginx" -s reload -c "${cnf}"
   ;;
 *)
   echo "usage: ${H}/sbin/nginxd {start|stop|restart|status|test|reload}"

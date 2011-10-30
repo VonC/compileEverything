@@ -524,8 +524,32 @@ auser@vonc-VirtualBox:/home/auser/Documents/gitolite/conf$ diff -w ./itsvcgit/ss
 cd nginx/
 openssl genrsa -des3 -out itsvc.world.company.passphrase.key 1024
 openssl rsa -in itsvc.world.company.passphrase.key -out itsvc.world.company.key
-openssl req -new -config openssl.cnf -key itsvc.world.company.key -out itsvc.world.company.csr
+
+bad:
+openssl req -new -config openssl.cnf -extensions v3_req -key itsvc.world.company.key -out itsvc.world.company.csr
 openssl x509 -req -days 600 -in itsvc.world.company.csr -signkey itsvc.world.company.key -out itsvc.world.company.crt
+
+good:
+auser@vonc-VirtualBox:~/nginx$ openssl req -new -config openssl.cnf -extensions v3_req -x509 -days 730 -key itsvc.world.company.key -out itsvc.world.company.crt
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [FR]:
+State or Province Name (full name) [France]:
+Locality Name (eg, city) [Paris]:
+Organization Name (eg, company) [company]:
+Organizational Unit Name (eg, section) [.]:.
+Common Name (eg, YOUR name) [itsvc.world.company]:
+Email Address [itsvc@world.company]:
+
+
+Display the contents of a certificate:
+auser@vonc-VirtualBox:~/nginx$ openssl x509 -noout -text -in itsvc.world.company.crt
+
 with openssl:
 auser@vonc-VirtualBox:~/nginx$ diff -w openssl.cnf ../.cpl/openssl.cnf.ori 
 88d87

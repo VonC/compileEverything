@@ -1675,3 +1675,7 @@ cgit uses an old (January 2011) git1.7.4
 		prefixlen = strlen(prefix);
 		//&opt.pathlens = &prefixlen;
         
+~~~~~~~~~~~~~~~~~
+NGinx access issue
+http://stackoverflow.com/questions/4547233/nginx-passenger-rails-403-forbidden-error
+http://wiki.nginx.org/HttpAutoindexModule

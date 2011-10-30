@@ -108,7 +108,7 @@ localityName_default = Paris
 #1.organizationName_default	= World Wide Web Pty Ltd
 
 organizationalUnitName		= Organizational Unit Name (eg, section)
-organizationalUnitName_default	= .
+organizationalUnitName_default=""
 
 commonName			= Common Name (eg, YOUR name)
 commonName_max			= 64
@@ -181,7 +181,7 @@ authorityKeyIdentifier=keyid,issuer:always
 
 basicConstraints = CA:FALSE
 keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-subjectAltName = DNS:itsvc.world.company,DNS:itsvc
+subjectAltName="DNS:itsvc.world.company,DNS:itsvc"
 
 [ v3_ca ]
 
