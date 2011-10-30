@@ -51,3 +51,10 @@ auser@vonc-VirtualBox:~$ diff -w .cpl/src/cgit-0.9.0.2/Makefile ../Documents/git
 ---
 > cgit: $(OBJECTS) libgit
 make git link to ../git within cgit
+~~~~~~~~~~~
+add self-signed certificates like the one in apache to usr/local/ssl/cert.pem
+(referenced by the newly environment variable SSL_CERT_FILE)
+Modify usr/local/apps/lynx/etc/lynx.cfg for replacing ^FORCE_SSL_PROMPT.*$ with FORCE_SSL_PROMPT:yes
+~~~~~~~~~~~
+When unzipping archive (.zip => unzip), must isolate actual files created in order to find actual name
+~~~~~~~~~~~

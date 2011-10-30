@@ -527,15 +527,17 @@ function onelink() {
 function links() {
   local dest="$1"
   local src="$2"
-  cd "$src"
-  find . -type f -print | while read line; do
-    # echo check $line
-    onelink "$dest" "$src" "$line"
-  done
-  find . -type l -print | while read line; do
-    # echo check $line
-    onelink "$dest" "$src" "$line"
-  done
+  if [[ -d "${src}" ]] ; then
+    cd "$src"
+    find . -type f -print | while read line; do
+      # echo check $line
+      onelink "$dest" "$src" "$line"
+    done
+    find . -type l -print | while read line; do
+      # echo check $line
+      onelink "$dest" "$src" "$line"
+    done
+  fi
 }
 function action() {
   local name=$1

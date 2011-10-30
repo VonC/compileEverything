@@ -445,3 +445,7 @@ Cloning into demo...
 warning: You appear to have cloned an empty repository.
 auser@vonc-VirtualBox:~/gitolite$ 
 ~~~~~~~~~~~
+list only files, not subdirectories (not recursively ls)
+ls -d xxx
+~~~~~~~~~~~
+
