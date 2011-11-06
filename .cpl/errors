@@ -1621,6 +1621,12 @@ Enter your Windows password: Cloning into demo...
 error: SSL certificate problem, verify that the CA cert is OK. Details:
 error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed while accessing https://itsvcprdgit:8453/hgit/demo/info/refs
 
+Check .gitconfig
+[http]
+	sslcainfo = /home/auser/compileEverything/.ssh/curl-ca-bundle.crt
+Check certificates for itsvcprdgit and itsvc at the end of .ssh/curl-ca-bundle.crt
+Check which .netrc is generated according to the current git alias
+
 fatal: HTTP request failed
 auser@vonc-VirtualBox:~/gitolite$ export GIT_CURL_VERBOSE=1
 auser@vonc-VirtualBox:~/gitolite$ git clone https://itsvcprdgit:8453/hgit/demo.git
@@ -1679,3 +1685,129 @@ cgit uses an old (January 2011) git1.7.4
 NGinx access issue
 http://stackoverflow.com/questions/4547233/nginx-passenger-rails-403-forbidden-error
 http://wiki.nginx.org/HttpAutoindexModule
+~~~~~~~~~~~~~
+auser@vonc-VirtualBox:~/gitolite/demo$ curl --cacert /home/auser/compileEverything/openssl/cert.pem -n -vvv https://itsvcprdgit.world.company:8453/hgit/
+* About to connect() to itsvcprdgit.world.company port 8453 (#0)
+*   Trying 127.0.0.1... connected
+* Connected to itsvcprdgit.world.company (127.0.0.1) port 8453 (#0)
+* successfully set certificate verify locations:
+*   CAfile: /home/auser/compileEverything/openssl/cert.pem
+  CApath: none
+* SSLv3, TLS handshake, Client hello (1):
+* SSLv3, TLS handshake, Server hello (2):
+* SSLv3, TLS handshake, CERT (11):
+* SSLv3, TLS alert, Server hello (2):
+* SSL certificate problem, verify that the CA cert is OK. Details:
+error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
+* Closing connection #0
+curl: (60) SSL certificate problem, verify that the CA cert is OK. Details:
+error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
+More details here: http://curl.haxx.se/docs/sslcerts.html
+
+curl performs SSL certificate verification by default, using a "bundle"
+ of Certificate Authority (CA) public keys (CA certs). If the default
+ bundle file isn't adequate, you can specify an alternate file
+ using the --cacert option.
+If this HTTPS server uses a certificate signed by a CA represented in
+ the bundle, the certificate verification probably failed due to a
+ problem with the certificate (it might be expired, or the name might
+ not match the domain name in the URL).
+If you'd like to turn off curl's verification of the certificate, use
+ the -k (or --insecure) option.
+----
+auser@vonc-VirtualBox:~/gitolite/demo$ openssl s_client -host itsvcprdgit.world.company -port 8453CONNECTED(00000003)
+depth=0 C = FR, ST = France, L = Paris, O = company, CN = itsvcprdgit.world.company, emailAddress = itsvcprdgit@world.company
+verify error:num=20:unable to get local issuer certificate
+verify return:1
+depth=0 C = FR, ST = France, L = Paris, O = company, CN = itsvcprdgit.world.company, emailAddress = itsvcprdgit@world.company
+verify error:num=21:unable to verify the first certificate
+verify return:1
+---
+Certificate chain
+ 0 s:/C=FR/ST=France/L=Paris/O=company/CN=itsvcprdgit.world.company/emailAddress=itsvcprdgit@world.company
+   i:/C=FR/ST=France/L=Paris/O=company/CN=itsvcprdgit.world.company/emailAddress=itsvcprdgit@world.company
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIC6TCCAlKgAwIBAgIJANipJrtF8+oVMA0GCSqGSIb3DQEBBQUAMIGOMQswCQYD
+VQQGEwJGUjEPMA0GA1UECBMGRnJhbmNlMQ4wDAYDVQQHEwVQYXJpczEQMA4GA1UE
+ChMHY29tcGFueTEiMCAGA1UEAxMZaXRzdmNwcmRnaXQud29ybGQuY29tcGFueTEo
+MCYGCSqGSIb3DQEJARYZaXRzdmNwcmRnaXRAd29ybGQuY29tcGFueTAeFw0xMTEw
+MzAxNzU2NTlaFw0xMzEwMjkxNzU2NTlaMIGOMQswCQYDVQQGEwJGUjEPMA0GA1UE
+CBMGRnJhbmNlMQ4wDAYDVQQHEwVQYXJpczEQMA4GA1UEChMHY29tcGFueTEiMCAG
+A1UEAxMZaXRzdmNwcmRnaXQud29ybGQuY29tcGFueTEoMCYGCSqGSIb3DQEJARYZ
+aXRzdmNwcmRnaXRAd29ybGQuY29tcGFueTCBnzANBgkqhkiG9w0BAQEFAAOBjQAw
+gYkCgYEAt8K8sqMNhgzTejdRmLOJm8VYZDOSYaOB3ynUmxGe0Eh1F0r9LnaRzzf2
+Kc2geo0/tPsFFQJ0iLemn+RLG3yo4DHLuOW7FK/LH+vcx4Jn7hjefk//9fyFpXfV
+I0VrrKL6t0gFwMi0cViU3dkQvr15JVV4eLLzcqaBzmWfVWu0gfMCAwEAAaNNMEsw
+CQYDVR0TBAIwADALBgNVHQ8EBAMCBeAwMQYDVR0RBCowKIIZaXRzdmNwcmRnaXQu
+d29ybGQuY29tcGFueYILaXRzdmNwcmRnaXQwDQYJKoZIhvcNAQEFBQADgYEAUq8K
+/sAhKS9lkZKxavaeGYvV+hZnFRGNWyta9FzCxLsWNMpW9lcwongETctisltMdVmZ
+DEy2eWKvYUqmRIbxZ5YqA/A+ib4R/kw6u4hup0lDjaWynvl+Gbid54IJyKCeHowJ
+cdiQ9yqNVpour7gIFAkhl6fkphQhth9DuNNRPpw=
+-----END CERTIFICATE-----
+subject=/C=FR/ST=France/L=Paris/O=company/CN=itsvcprdgit.world.company/emailAddress=itsvcprdgit@world.company
+issuer=/C=FR/ST=France/L=Paris/O=company/CN=itsvcprdgit.world.company/emailAddress=itsvcprdgit@world.company
+---
+No client certificate CA names sent
+---
+SSL handshake has read 1499 bytes and written 409 bytes
+---
+New, TLSv1/SSLv3, Cipher is DHE-RSA-AES256-SHA
+Server public key is 1024 bit
+Secure Renegotiation IS supported
+Compression: zlib compression
+Expansion: zlib compression
+SSL-Session:
+    Protocol  : TLSv1
+    Cipher    : DHE-RSA-AES256-SHA
+    Session-ID: 3A0C7F91E1A32CD9C81A27D4493E4FFEDEE86A77B5B5B94856D2712BFDCA378A
+    Session-ID-ctx: 
+    Master-Key: 47353CA0A0D602D80FD476F28035B66A543A29572B69BF86C0A3329A134D0F12521EF4A16330C399C7B741C61B70387F
+    Key-Arg   : None
+    PSK identity: None
+    PSK identity hint: None
+    TLS session ticket:
+    0000 - 8f 59 28 1d d8 e9 92 6c-45 80 38 ba c1 a1 47 7c   .Y(....lE.8...G|
+    0010 - 1e dd 85 73 15 ef 4d 98-31 f7 74 a6 bb 2c a1 f5   ...s..M.1.t..,..
+    0020 - 14 ac 5a 65 87 68 00 b2-29 75 f2 7a 11 0a 57 74   ..Ze.h..)u.z..Wt
+    0030 - 57 1d 83 f2 b5 79 f0 28-64 d9 91 f6 ba 11 55 82   W....y.(d.....U.
+    0040 - b5 0e 4a 0d 5e 43 fa b9-06 0c 17 1f d6 e4 c1 c5   ..J.^C..........
+    0050 - 5f 7b f5 24 0e c8 4b c1-e2 ee e0 24 bf 98 25 9a   _{.$..K....$..%.
+    0060 - 76 89 8b 2d 59 9c 0b e1-e0 7b dc 27 04 eb d8 31   v..-Y....{.'...1
+    0070 - 25 c5 35 9d c8 a9 71 cd-0c c2 96 8d 09 18 53 63   %.5...q.......Sc
+    0080 - 48 3e 31 fd e1 d4 f4 87-4c 40 f5 2f 7a 2d 97 0e   H>1.....L@./z-..
+    0090 - cb 2c 75 1a 57 c5 49 4b-a5 15 d8 d8 d2 be e6 ee   .,u.W.IK........
+    00a0 - 43 10 35 ff c9 cd 60 07-52 80 61 32 02 cf f2 9a   C.5...`.R.a2....
+    00b0 - c2 ea 64 f6 a1 53 79 30-8e b4 bf ec 25 9f 91 95   ..d..Sy0....%...
+
+    Compression: 1 (zlib compression)
+    Start Time: 1320613385
+    Timeout   : 300 (sec)
+    Verify return code: 21 (unable to verify the first certificate)
+---
+
+auser@vonc-VirtualBox:~/gitolite/demo$ openssl s_client -CAfile /home/auser/compileEverything/.ssh/curl-ca-bundle.crt -showcerts -connect itsvcprdgit.world.company:8453
+
+
+=> openssl.conf had
+basicConstraints = CA:FALSE
+keyUsage = ...
+instead of
+basicConstraints = CA:TRUE
+keyUsage = keyCertSign,...
+
+=> self-signed certificate wasn't recognized as CA
+~~~~~~~~~~~~~
+auser@vonc-VirtualBox:~/gitolite/gitolite-admin$ ../../bin/git fetch
+no rc file found
+Compilation failed in require at /home/auser/compileEverything/gitolite/bin/gl-auth-command line 44.
+BEGIN failed--compilation aborted at /home/auser/compileEverything/gitolite/bin/gl-auth-command line 44.
+fatal: The remote end hung up unexpectedly
+
+more ../../.ssh/authorized_keys 
+# gitolite start
+command="export HOME=/home/auser/compileEverything 
+(full home was missing)
+~~~~~~~~~~~~~
+

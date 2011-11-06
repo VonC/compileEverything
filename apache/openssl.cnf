@@ -179,8 +179,8 @@ authorityKeyIdentifier=keyid,issuer:always
 
 # Extensions to add to a certificate request
 
-basicConstraints = CA:FALSE
-keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+basicConstraints = CA:TRUE
+keyUsage = keyCertSign,nonRepudiation, digitalSignature, keyEncipherment
 subjectAltName="DNS:itsvcprdgit.world.company,DNS:itsvcprdgit"
 
 [ v3_ca ]

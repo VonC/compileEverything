@@ -1,0 +1,40 @@
+#! /bin/bash
+
+case "$1" in
+'start')
+  "${H}/sbin/sshd" start
+  "${H}/sbin/slapdd" start
+  "${H}/sbin/ctld" start
+  "${H}/sbin/nginxd" start
+  ;;
+'stop')
+  "${H}/sbin/sshd" stop
+  "${H}/sbin/slapdd" stop
+  "${H}/sbin/ctld" stop
+  "${H}/sbin/nginxd" stop
+  ;;
+'restart')
+  "${H}/sbin/sshd" restart
+  "${H}/sbin/slapdd" restart
+  "${H}/sbin/ctld" restart
+  "${H}/sbin/nginxd" restart
+;;
+'status')
+  "${H}/sbin/ctld" status
+  "${H}/sbin/sshd" status
+  "${H}/sbin/slapdd" status
+  "${H}/sbin/nginxd" status
+  ;;
+'test')
+  "${H}/sbin/ctld" test
+  "${H}/sbin/nginxd" test
+  ;;
+'reload')
+  "${H}/sbin/ctld" reload
+  "${H}/sbin/nginxd" reload
+  ;;
+*)
+  echo "usage: ${H}/sbin/demod {start|stop|restart|status|test|reload}"
+  ;;
+esac
+

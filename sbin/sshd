@@ -23,6 +23,7 @@ case "$1" in
   if [[ "$aps" != "" ]] ; then
     echo stopping sshd
     kill -9 "${aps}"
+    rm -f "${H}/usr/local/var/run/sshd.pid"
   else
     echo "sshd already stopped"
   fi

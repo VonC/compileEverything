@@ -58,3 +58,5 @@ Modify usr/local/apps/lynx/etc/lynx.cfg for replacing ^FORCE_SSL_PROMPT.*$ with 
 ~~~~~~~~~~~
 When unzipping archive (.zip => unzip), must isolate actual files created in order to find actual name
 ~~~~~~~~~~~
+Configure .gitconfig with correct sslcainfo path to .ssh/curl-ca-bundle.crt
+~~~~~~~~~~~
