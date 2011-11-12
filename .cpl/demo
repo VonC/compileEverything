@@ -1,0 +1,19 @@
+demo:
+
+wget https://github.com/VonC/compileEverything/tarball/master
+
+ssh -F .ssh/config gitolitesrv ls
+ssh -F .ssh/config gitolitesrv
+git clone gitolitesrv:gitolite-admin a
+
+slapdd start
+ctld start
+git clone https://itsvcprdgit.world.company:8453/hgit/demo
+lynx https://itsvcprdgit.world.company:8453/hgit/
+
+https://itsvcprdgit.world.company:8443/git/
+
+https://itsv
+ps -ef|grep compileEverything
+
+git clone https://itsvc/hgit/demo

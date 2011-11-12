@@ -552,6 +552,17 @@ Email Address [itsvc@world.company]:
 Display the contents of a certificate:
 auser@vonc-VirtualBox:~/nginx$ openssl x509 -noout -text -in itsvc.world.company.crt
 
+auser@vonc-VirtualBox:~$ git clone https://itsvc/hgit/demo
+[ bjensen,bjensen@example.com for itsvcprdgit.world.company ]
+Cloning into demo...
+error: SSL certificate problem, verify that the CA cert is OK. Details:
+error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed while accessing https://itsvc/hgit/demo/info/refs
+
+cat itsvc.world.company.crt >> $SSL_CERT_FILE doesn't seem to do any good.
+
+OK: auser@vonc-VirtualBox:~$ cat nginx/itsvc.world.company.crt >> .ssh/curl-ca-bundle.crt 
+=> clone ok
+
 with openssl:
 auser@vonc-VirtualBox:~/nginx$ diff -w openssl.cnf ../.cpl/openssl.cnf.ori 
 88d87
@@ -587,4 +598,7 @@ auser@vonc-VirtualBox:~/nginx$ diff -w openssl.cnf ../.cpl/openssl.cnf.ori
 < basicConstraints = CA:FALSE
 < keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 < subjectAltName = DNS:itsvc.world.company,DNS:itsvc
+
+
+
 ~~~~~~~~~~~~~
