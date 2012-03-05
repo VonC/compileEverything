@@ -1,5 +1,5 @@
 page=http://hjemli.net/git/cgit/
 url=http://hjemli.net/git/cgit/snapshot/
-pre=cp "${H}/.cpl/cgit.conf" "${H}/.cpl/src/@@NAMEVER@@/" ; gen_sed -i "s/@NAMEVER@/@@NAMEVER@@/g" "${H}/.cpl/src/@@NAMEVER@@/cgit.conf" ; make get-git ;
+pre=cp "${H}/.cpl/cgit.conf" "${H}/.cpl/src/@@NAMEVER@@/" ; gen_sed -i "s/@NAMEVER@/@@NAMEVER@@/g" "${H}/.cpl/src/@@NAMEVER@@/cgit.conf" ; gen_sed -i "s/@H@/${EH}/g" "${H}/.cpl/src/@@NAMEVER@@/cgit.conf" ; make get-git ;
 configcmd=@@if [[ ! -e ${H}/.cpl/src/@@NAMEVER@@/git/configure ]] ; then autoconf -o ${H}/.cpl/src/@@NAMEVER@@/git/configure ${H}/.cpl/src/@@NAMEVER@@/git/configure.ac ; fi ; gen_sed -i "s/-pthread -lpthread/-pthread -lpthreads/g" ${H}/.cpl/src/@@NAMEVER@@/git/configure
 premake=cd "${H}/.cpl/src/@@NAMEVER@@/git" ; ./configure --prefix=${HULA}/git --with-lib=${HULL} --with-openssl --with-curl --with-expat --with-iconv=${HUL} --with-gitconfig=${HUL}/var/gitconfig --with-editor=vim --with-perl=${HULA}/perl/bin/perl --with-zlib=${HUL} --with-tcltk=no --with-python=${HULA}/python/bin/python ; gmake; cd ..

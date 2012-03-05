@@ -41,3 +41,6 @@ bin/
 /cgit/cgit.css
 /cgit/cgit.png
 /.rnd
+.cpanm/
+.bash_history
+.gem/

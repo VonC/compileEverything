@@ -136,9 +136,10 @@ function main {
   if [[ ! -e "${_vers}" ]]; then
     echolog "#### VERS ####"
     echolog "download compatible versions from SunFreeware"
-    loge "wget http://sunfreeware.com/programlistsparc10.html -O ${_vers}$(Ymd)" "wget_vers_sunfreeware"
+    loge "wget http://www.sunfreeware.com/programlistsparc10.html -O ${_vers}$(Ymd)" "wget_vers_sunfreeware"
     log "ln -fs ${_vers}$(Ymd) ${_vers}" ln_vers
     gen_sed -i 's/ftp:\/\/ftp.sunfreeware.com/http:\/\/ftp.sunfreeware.com\/ftp/g' ${_vers}$(Ymd)
+    gen_sed -i 's/\/SOURCES\//http:\/\/www.sunfreeware.com\/SOURCES\//g' ${_vers}$(Ymd)
   fi
   cat "${_deps}" | while read line; do
     #echo $line
@@ -199,14 +200,14 @@ function get_arc(){
 function build_bashrc() {
   cp "$H/.cpl/.bashrc.tpl" "$H/.bashrc"
   export PATH=$H/bin:$PATH
-  gen_sed -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
+  "${H}/sbin/gen_sed" -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
   get_arc longbit
   if [[ "${unameo}" == "Cygwin" ]] ; then
-    gen_sed -i 's/ @@CYGWIN@@/ -DHAVE_STRSIGNAL/g' "$H/.bashrc" ;
-    gen_sed -i 's/ -fPIC//g' "$H/.bashrc" ;
-  else gen_sed -i 's/ @@CYGWIN@@//g' "$H/.bashrc" ; fi
-  if [[ "$longbit" == "32" ]]; then gen_sed -i 's/ @@M64@@//g' "$H/.bashrc" ;
-  elif [[ "$longbit" == "64" ]]; then gen_sed -i 's/@@M64@@/-m64/g' "$H/.bashrc" ;
+    "${H}/sbin/gen_sed" -i 's/ @@CYGWIN@@/ -DHAVE_STRSIGNAL/g' "$H/.bashrc" ;
+    "${H}/sbin/gen_sed" -i 's/ -fPIC//g' "$H/.bashrc" ;
+  else "${H}/sbin/gen_sed" -i 's/ @@CYGWIN@@//g' "$H/.bashrc" ; fi
+  if [[ "$longbit" == "32" ]]; then "${H}/sbin/gen_sed" -i 's/ @@M64@@//g' "$H/.bashrc" ;
+  elif [[ "$longbit" == "64" ]]; then "${H}/sbin/gen_sed" -i 's/@@M64@@/-m64/g' "$H/.bashrc" ;
   else echolog "Unable to get LONG_BIT conf (32 or 64bits)" ; getconf2 ; fi
 }
 function get_sources() {

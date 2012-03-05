@@ -28,7 +28,7 @@ function bashscriptpath() {
         ascript=${ascript#../}
       done
     elif [[ "${ascript#*/}" != "$ascript" ]];  then
-      if [[ "$asp" == "." ]] ; then asp=$(pwd) ; else asp="$(pwd)/${asp}"; fi
+      if [[ "$asp" == "." ]] ; then asp=$(pwd) ; elif [[ "${asp#/}" == "${asp}" ]]; then asp="$(pwd)/${asp}"; fi
     fi
   fi
   eval $_sp="'$asp'"
@@ -102,6 +102,7 @@ alias git="${H}/sbin/wgit"
 
 if [[ -e "${H}/.bashrc_aliases_git" ]] ; then source "${H}/.bashrc_aliases_git" ]] ; fi
 
+if [[ ! -e "${H}/.ssh/curl-ca-bundle.crt" ]] ; then cp "${H}/.cpl/scripts/curl-ca-bundle.crt" "${H}/.ssh"; fi
 if [[ -e "${H}/.ssh/curl-ca-bundle.crt.secret" ]] ; then
   a=$(tail -10 "${H}/.ssh/curl-ca-bundle.crt.secret")
   b=$(tail -10 "${H}/.ssh/curl-ca-bundle.crt")

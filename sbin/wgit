@@ -24,7 +24,7 @@ function dirnamex() {
         ascript=${ascript#../}
       done
     elif [[ "${ascript#*/}" != "$ascript" ]];  then
-      if [[ "$asp" == "." ]] ; then asp=$(pwd) ; else asp="$(pwd)/${asp}"; fi
+      if [[ "$asp" == "." ]] ; then asp=$(pwd) ; elif [[ "${asp#/}" == "${asp}" ]]; then asp="$(pwd)/${asp}"; fi
     fi
   fi
   eval $_sp="'$asp'"

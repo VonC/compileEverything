@@ -11,7 +11,7 @@ MM32.DLL|LPK.DLL|USP10.dll|comctl32.dll|comctl32.dll|cygwin1.dll|ADVAPI32.DLL|cy
 tic: symbol lookup error: tic: undefined symbol: _nc_check_termtype2
 userapp@ubvonc:~/apps/test/usr/local/lib$ nm -Ap *.so*|grep nc_check_termtype2
 libncurses.so.5.7:0003f32c D _nc_check_termtype2
-userapp@ubvonc:~/apps/test/usr/local/lib$ env|grep LD
+USERAPP@UBVONC:~/APps/test/usr/local/lib$ env|grep LD
 LDFLAGS=-L/home/userapp/apps/test/usr/local/lib -L/home/userapp/apps/test/usr/local/ssl/lib -R/home/userapp/apps/test/usr/local/ssl/lib -R/home/userapp/apps/test/usr/local/lib/sasl2
 OLDPWD=/home/userapp/apps/test/usr/local
 LD_LIBRARY_PATH=/home/userapp/apps/test/usr/local/lib:/home/userapp/apps/test/usr/local/ssl/lib:/home/userapp/apps/test/usr/local/apps/svn/lib
@@ -1809,5 +1809,73 @@ more ../../.ssh/authorized_keys
 # gitolite start
 command="export HOME=/home/auser/compileEverything 
 (full home was missing)
-~~~~~~~~~~~~~
+
+
+~----------------
+2012/03/01-17:03:43 ~~~ ./configure --prefix=/home/auser/compileEverything/usr/local/libs/expat-2.0.1 --enable-shared --enable-static --with-gnu-ld
+~~~~~~~~~~~~~~~~~~~
+checking build system type... x86_64-unknown-linux-gnu
+checking host system type... x86_64-unknown-linux-gnu
+checking for gcc... gcc
+checking for C compiler default output file name... configure: error: C compiler cannot create executables
+See `config.log' for more details.
+Said config.log contains:
+gcc: @@M64@@: No such file or directory
+gcc: @@CYGWIN@@: No such file or directory
+gcc: @@M64@@: No such file or directory
+gcc: @@CYGWIN@@: No such file or directory
+Which means the .bashrc hasn't been correctly generated (hasn't recognized the uname -m or uname -o values)
+~~--------------
+auser:51 ahostname /home/auser/compileEverything #./make_env.sh -title="test"
+make_env: define local home '/home/auser/compileEverything'.
+/home/auser/compileEverything
+./make_env.sh: line 203: gen_sed: command not found
+!!!!_FAIL_!!!!
+2012/03/01-17:03:43 ~ (see /home/auser/compileEverything/.cpl/logs/20120301.170343.configure_expat-2.0.1.log or simply tail -f /home/auser/compileEverything/.cpl/l
+ogs/l)
+!!!!_FAIL_!!!!
+!!!!_FAIL_!!!!
+~~-----
+2012/03/02-11:36:25 ~ (see /home/auser/compileEverything/.cpl/logs/20120302.113625.premake_libxslt-1.1.26.log or simply tail -f /home/auser/compileEverything/.cpl/
+logs/l)
+!!!!_FAIL_!!!!
+2012/03/02-11:36:25 ~~~ eval gen_sed -i "s/^VERSION_SCRIPT_FLAGS.*/VERSION_SCRIPT_FLAGS = /g" "/home/auser/compileEverything/.cpl/src/libxslt-1.1.26/libxslt/Makefile" ;
+gen_sed -i "s/^LIBS = $/LIBS = -lgcrypt -lgpg-error -lintl -lgettextlib -lgettextpo /g" "/home/auser/compileEverything/.cpl/src/libxslt-1.1.26/Makefile" ; gen_sed -i 's/
+\"\/usr\/lib /\"\/devit_home\/users\/auser\/gitpoc\/ce1\/usr\/local\/lib \/usr\/lib /g' /home/auser/compileEverything/.cpl/src/libxslt-1.1.26/libtool ; gen_sed -i 's/\"
+\/lib /\"\/devit_home\/users\/auser\/gitpoc\/ce1\/usr\/local\/lib \/lib /g' /home/auser/compileEverything/.cpl/src/libxslt-1.1.26/libtool ; gen_sed -i "s/eval \"\$my_cm
+d\"/if test \"\${my_cmd#gcc\*}" \!= \"\$my_cmd\" ; then eval \"\$my_cmd -lintl -lgettextlib -lgettextpo\" ; else eval \"\$my_cmd\" ; fi/g" /home/auser/compileEverything/
+.cpl/src/libxslt-1.1.26/libtool ;
+~~~~~~~~~~~~~~~~~~~
+./make_env.sh: eval: line 185: syntax error near unexpected token `then'
+A double-quote wasn't escaped
+~~-------
+2012/03/02-11:53:48 ~ (see /home/auser/compileEverything/.cpl/logs/20120302.115348.pre_nginx-1.0.12.log or simply tail -f /home/auser/compileEverything/.cpl/logs/l
+)
+!!!!_FAIL_!!!!
+2012/03/02-11:53:48 ~~~ eval gen_sed -i "s/\([\"' IRL]\)\/usr\/local/\1\\/devit_home\/users\/auser\/gitpoc\/ce1\/usr\/local/g" "/home/auser/compileEverything/.cpl/src/n
+ginx-1.0.12/auto/lib/libxslt/conf" ; gen_sed -i "s/\([\"' IRL]\)\/usr\/include/\1\\/devit_home\/users\/auser\/gitpoc\/ce1\/usr\/local\/include/g" "/devit_home/users/auser/gi
+tpoc/ce1/.cpl/src/nginx-1.0.12/auto/lib/libxslt/conf" ; gen_sed -i "s/\([\"' IRL]\)\/usr\/local\/include/\1\\/devit_home\/users\/auser\/gitpoc\/ce1\/usr\/local\/include/g" "/
+devit_home/users/auser/gitpoc/ce1/.cpl/src/nginx-1.0.12/auto/lib/libxslt/conf" ; gen_sed -i "s/-lexslt\-lexslt -lgcrypt -lgpg-error -lxml2 -lxslt -lintl -lgettextpo/g" "/devi
+t_home/users/auser/gitpoc/ce1/.cpl/src/nginx-1.0.12/auto/lib/libxslt/conf"
+~~~~~~~~~~~~~~~~~~~
+/bin/sed: -e expression #1, char 73: unterminated `s' command
+A \ was instead of a / in a sed expression
+~~~---------
+2012/03/02-12:06:40 ~ (see /home/auser/compileEverything/.cpl/logs/20120302.120640.make_termreadkey.log or simply tail -f /home/auser/compileEverything/.cpl/logs/l
+)
+!!!!_FAIL_!!!!
+--> Working on Term::ReadKey
+Fetching http://search.cpan.org/CPAN/authors/id/J/JS/JSTOWE/TermReadKey-2.30.tar.gz ... OK
+Configuring TermReadKey-2.30 ... OK
+Building and testing TermReadKey-2.30 ... FAIL
+! Installing Term::ReadKey failed. See /home/auser/compileEverything/.cpanm/build.log for details.
+
+Unable to get Terminal Size. The TIOCGWINSZ ioctl didn't work. The COLUMNS and LINES environment variables didn't work. The resize program didn't work. at
+ blib/lib/Term/ReadKey.pm line 362.
+ make: *** [test_dynamic] Error 127
+ -> FAIL Installing Term::ReadKey failed. See /home/auser/compileEverything/.cpanm/build.log for details.
+ auser12:11 ahostname /home/auser/compileEverything #find . -name "ReadKey.pm" -print
+ ./.cpanm/work/1330690000.16124/TermReadKey-2.30/ReadKey.pm
+ ./.cpanm/work/1330690000.16124/TermReadKey-2.30/blib/lib/Term/ReadKey.pm
+Strange, I needed to go to .cpanm/work/xxx/Term.../, and do a 'cpanm -v .' instead of the 'cpanm .': the verbose status somehow allowed the test.pl to execute properly
 

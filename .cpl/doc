@@ -1,3 +1,6 @@
+./make_env.sh -title="test"
+tail --follow=name .lastlog
+~~~~~~~~~~~
 port:
 lsof -i :port
 ~~~~~~~~~~~~~~
