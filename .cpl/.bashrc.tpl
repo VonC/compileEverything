@@ -95,6 +95,7 @@ alias a=alias
 alias l='ls -alrt'
 alias h=history
 alias vi=vim
+alias t='tail --follow=name'
 if [[ -e /usr/local/bin/vim ]] ; then vimp="/usr/local/bin/vim" ; else vimp="$(which vim)" ; fi
 alias vim='"${vimp}" -u "${H}/.vimrc"'
 

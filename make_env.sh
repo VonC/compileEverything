@@ -6,7 +6,7 @@ function scriptpath() {
   local asp="$(dirname $0)"
   if [[ "$asp" == "." ]] ; then asp=$(pwd) ;
   else
-    echo "asp '$asp', ascript '$ascript'"
+    # echo "asp '$asp', ascript '$ascript'"
     if [[ "${ascript#/}" != "$ascript" ]]; then asp=$asp ;
     elif [[ "${ascript#../}" != "$ascript" ]]; then
       asp=$(pwd)
@@ -215,28 +215,34 @@ function get_sources() {
   local _namever=$2
   local _ver=$3
   get_param $name nameurl "${name}"
+  get_param $name nameact "${nameurl}"
   get_param $name page "${_vers}"
   if [[ "$page" == "none" ]] ; then eval $_namever="'${name}'" ; return 0 ; fi
   get_param $name ext "tar.gz"
+  get_param $name exturl "${ext}"
+  if [[ "${exturl}" == "none" ]] ; then exturl="" ; fi
+  get_param $name extact "${ext}"
   if [[ -e "${page}" ]] ; then
     local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
   else
+    #echo local asrcline wget -q -O - "${page}" grep "${nameurl}" grep "${ext}"
     local asrcline=$(wget -q -O - "${page}" | grep "${nameurl}" | grep "${ext}")
   fi
-  # echo "line0 source! from page ${page}, nameurl ${nameurl}, ext ${ext}"
-  # echo "line00 ${asrcline}"
+   #echo "line0 source! from page ${page}, nameurl ${nameurl}, ext _${ext}_, exturl _${exturl}_"
+   #echo "line00 ${asrcline}"
   get_param $name verexclude ""
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
   get_param $name verinclude ""
   if [[ "${verinclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -e "${verinclude}") ; fi
-  if [[ "${asrcline}" == "" ]]; then echolog "unable to get source version for ${name} with nameurl ${nameurl}, verinclude ${verinclude}, verexclude ${verexclude}" ; get_sources_failed ; fi
+  if [[ "${asrcline}" == "" ]]; then echolog "unable to get source version for ${name} with nameact ${nameact}, nameurl ${nameurl}, verinclude ${verinclude}, verexclude ${verexclude}, ext _${ext}_, exturl _${exturl}_" ; get_sources_failed ; fi
   #if [[ $name == "cyrus-sasl" ]] ; then echo line source! $asrcline ; fffg ; fi
   # echo "line1 source! $asrcline"
-  local source="${asrcline%%${ext}\"\>*}"
-  if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${ext}\" *}" ; fi
-  if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${ext}\'\>*}" ; fi
-  if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${ext}\' *}" ; fi
-  source="${source}${ext}"
+  local source="${asrcline%%${exturl}\"\>*}"
+  # echo "line2 source! $asrcline"
+  if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\" *}" ; fi
+  if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\'\>*}" ; fi
+  if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\' *}" ; fi
+  source="${source}${exturl}"
   # echo "sour0 ${source}"
   local source0="${source}"
   source="${source0##*\"}"
@@ -250,7 +256,9 @@ function get_sources() {
     source="${url}${targz}"
   fi
   # echo sources for $name: $targz from $source
-  local anamever="${targz%.${ext}}"
+  if [[ "${exturl}" == "" ]] ; then targz="${targz}.${extact}" ; fi 
+  if [[  "${nameurl}" != "${nameact}" ]] ; then targz="${nameact}-${targz#${nameurl}}" ; echo "new targz ${targz}" ; fi
+  local anamever="${targz%.${extact}}"
   local ss="xx"
   if [[ -e "${_pkgs}/$targz" ]] ; then ss=$(stat -c%s "${_pkgs}/$targz") ; fi
   if [[ -e "${_pkgs}/$targz" ]] && [[ "${ss}" == "0" ]] ; then
@@ -261,8 +269,8 @@ function get_sources() {
     loge "wget $source -O ${_pkgs}/$targz" "wget_sources_$targz"
   fi
   # echo "YYY anamever ${anamever} vs. name ${name}"
-  local aver=${anamever#${nameurl}-}
-  if [[ "${aver}" == "${anamever}" ]] ; then aver=${anamever#${nameurl}} ; fi
+  local aver=${anamever#${nameact}-}
+  if [[ "${aver}" == "${anamever}" ]] ; then aver=${anamever#${nameact}} ; fi
   update_cache "${name}" "${anamever}" "${aver}"
   # echo "get sources final: anamever ${anamever}, aver ${aver}"
   eval $_namever="'${anamever}'"
@@ -326,6 +334,7 @@ function get_tar() {
   local _tarname=$1
   local atarname=""
   get_param $name ext "tar.gz"
+  get_param $name extact "${ext}"
   gen_which "gtar" gtarpath
   gen_which "tar" tarpath
   if [[ "${gtarpath}" != "" ]] ; then atarname="gtar xpvf";
@@ -334,7 +343,7 @@ function get_tar() {
     if [[ "$h" != "" ]]; then atarname="tar xpvf"; else atarname="tar -xv -f" ; fi;
   fi
   if [[ "${atarname}" == "" ]] ; then echolog "Unable to find a GNU tar or gtar" ; tar2 ; fi
-  if [[ "${ext}" == "zip" ]] ; then
+  if [[ "${extact}" == "zip" ]] ; then
     gen_which "unzip" unzippath
     if [[ "${unzippath}" != "" ]] ; then atarname="unzip"; fi
     if [[ "${atarname}" == "" ]] ; then echolog "Unable to find unzip" ; unzip2 ; fi
@@ -347,15 +356,16 @@ function untar() {
   if [[ ! -e "${_src}/$namever" ]]; then
     get_tar tarname
     get_param $name ext "tar.gz"
+    get_param $name extact "${ext}"
     local dirext="-C"
-    if [[ "${ext}" == "zip" ]] ; then dirext="-d" ; fi
-    loge "${tarname} ${_pkgs}/$namever.${ext} ${dirext} ${_src}" "tar_xpvf_$namever.${ext}"
+    if [[ "${extact}" == "zip" ]] ; then dirext="-d" ; fi
+    loge "${tarname} ${_pkgs}/$namever.${extact} ${dirext} ${_src}" "tar_xpvf_$namever.${extact}"
     local lastlog=$(mrf "${_logs}" "*tar_xpvf*")
     local actualname=$(head -3 "$lastlog"|tail -1)
     local anactualname=${actualname}
     #echo "anactualname=${anactualname}";
     actualname=${actualname%%/*}
-    echo "namever ${namever} actualver %/* ${anactualname%/*} actualname%%/* ${anactualname%%/*}, actualname#*/ ${anactualname#*/}, actualname##*/ ${anactualname##*/}"
+    # echo "namever ${namever} actualver %/* ${anactualname%/*} actualname%%/* ${anactualname%%/*}, actualname#*/ ${anactualname#*/}, actualname##*/ ${anactualname##*/}"
     if [[ "$namever" != "$actualname" ]] ; then
       echolog "ln do to: ln -fs $actualname ${_src}/$namever"
       ln -fs "$actualname" "${_src}/$namever"

@@ -605,3 +605,25 @@ auser@vonc-VirtualBox:~/nginx$ diff -w openssl.cnf ../.cpl/openssl.cnf.ori
 
 
 ~~~~~~~~~~~~~
+http://www.amwsites.com/blog/2011/03/get-rid-of-funky-escape-characters-from-git-diff/
+s your git diff output fill of escape characters? Do you want it to display colourful messages instead?
+This is what it used to look like on my screen when I ran git diff. Notice the funky characters such as ESC[.
+# git diff
+ESC[1mdiff --git a/myfile.php b/myfile.phpESC[m
+ESC[1mindex 20169dd..c0beb0e 100644ESC[m
+ESC[1m--- a/myfile.phpESC[m
+ESC[1m+++ b/myfile.phpESC[m
+ESC[36m@@ -1,4 +1,5 @@ESC[m
+<?phpESC[m
+ESC[32m+ESC[mESC[32m/* Added a comment */ESC[m
+ESC[m
+function myfunction()ESC[m
+{ESC[m
+It turns out that depending on how your environment is setup, the default pager that is being used to view git diff output may be .more. and a simple switch to .less. makes it more colour-friendly.
+To make less your pager when going a git diff, run the following:
+# git config --add core.pager less
+Now, the next time you run git diff, you should get coloured output.
+---
+On RedHat Linux, I actually had to set pager to more, not less!
+~~~~~~~~~~~~~~~
+
