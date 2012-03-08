@@ -87,36 +87,26 @@ distinguished_name	= req_distinguished_name
 attributes		= req_attributes
 x509_extensions	= v3_ca	# The extentions to add to the self signed cert
 req_extensions = v3_req # The extensions to add to a certificate request
+prompt = no
 
 [ req_distinguished_name ]
-countryName			= Country Name (2 letter code)
-countryName_default		= FR
-countryName_min			= 2
-countryName_max			= 2
+countryName			= FR # Country Name (2 letter code)
 
-stateOrProvinceName		= State or Province Name (full name)
-stateOrProvinceName_default	= France
+stateOrProvinceName		= France # State or Province Name (full name)
 
-localityName			= Locality Name (eg, city)
-localityName_default = Paris
+localityName			= Paris # Locality Name (eg, city)
 
-0.organizationName		= Organization Name (eg, company)
-0.organizationName_default	= company
+0.organizationName		= company # Organization Name (eg, company)
 
 # we can do this but it is not needed normally :-)
 #1.organizationName		= Second Organization Name (eg, company)
 #1.organizationName_default	= World Wide Web Pty Ltd
 
-organizationalUnitName		= Organizational Unit Name (eg, section)
-organizationalUnitName_default=""
+# organizationalUnitName		= section # Organizational Unit Name (eg, section)
 
-commonName			= Common Name (eg, YOUR name)
-commonName_max			= 64
-commonName_default = itsvcprdgit.world.company
+commonName			= @FQN@ # Common Name (eg, YOUR name)
 
-emailAddress			= Email Address
-emailAddress_max		= 40
-emailAddress_default = itsvcprdgit@world.company
+emailAddress			= @EMAIL@ # Email Address
 
 # SET-ex3			= SET extension number 3
 
@@ -125,7 +115,7 @@ challengePassword		= A challenge password
 challengePassword_min		= 4
 challengePassword_max		= 20
 
-unstructuredName		= An optional company name
+# unstructuredName		= An optional company name
 
 [ usr_cert ]
 
@@ -181,7 +171,7 @@ authorityKeyIdentifier=keyid,issuer:always
 
 basicConstraints = CA:TRUE
 keyUsage = keyCertSign,nonRepudiation, digitalSignature, keyEncipherment
-subjectAltName="DNS:itsvcprdgit.world.company,DNS:itsvcprdgit"
+subjectAltName="DNS:@FQN@,DNS:@HOSTNAME@"
 
 [ v3_ca ]
 

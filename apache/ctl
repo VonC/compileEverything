@@ -41,11 +41,11 @@ ARGV="$@"
 # --------------------                              --------------------
 # 
 # the path to your httpd binary, including options if necessary
-HTTPD='/home/auser/compileEverything/bin/httpd'
+HTTPD="${HB}/httpd"
 #
 # pick up any necessary environment variables
-if test -f /home/auser/compileEverything/apache/envvars; then
-  . /home/auser/compileEverything/apache/envvars
+if test -f "${H}/apache/envvars"; then
+  . "${H}/apache/envvars"
 fi
 #
 # a command that outputs a formatted text version of the HTML at the
@@ -55,7 +55,7 @@ LYNX="lynx -dump"
 #
 # the URL to your server's mod_status status page.  If you do not
 # have one, then status and fullstatus will not work.
-STATUSURL="http://localhost:8080/server-status"
+STATUSURL="http://localhost:8090/server-status"
 #
 # Set this variable to a command that increases the maximum
 # number of file descriptors allowed per child process. This is

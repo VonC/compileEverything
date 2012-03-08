@@ -1,5 +1,5 @@
 ServerName vonc-VirtualBox
-Listen 8080
+Listen 8090
 Include conf/extra/httpd-manual.conf
 <IfModule mod_status.c>
 #
@@ -24,9 +24,9 @@ SSLRandomSeed connect file:/dev/urandom 512
 SSLPassPhraseDialog  builtin
 AddType application/x-x509-ca-cert .crt
 AddType application/x-pkcs7-crl    .crl
-SSLSessionCache        "shmcb:/home/auser/compileEverything/apache/ssl_scache(512000)"
+SSLSessionCache        "shmcb:@H@/apache/ssl_scache(512000)"
 SSLSessionCacheTimeout  300
-SSLMutex  "file:/home/auser/compileEverything/apache/ssl_mutex"
+SSLMutex  "file:@H@/apache/ssl_mutex"
 
 <AuthnProviderAlias ldap myldap>
   AuthLDAPBindDN cn=Manager,dc=example,dc=com
@@ -36,19 +36,19 @@ SSLMutex  "file:/home/auser/compileEverything/apache/ssl_mutex"
 
 # GitWeb on 8443
 Listen 8443
-<VirtualHost itsvcprdgit.world.company:8443>
-    ServerName itsvcprdgit.world.company
-    ServerAlias itsvcprdgit
-    SSLCertificateFile "/home/auser/compileEverything/apache/itsvcprdgit.world.company.crt"
-    SSLCertificateKeyFile "/home/auser/compileEverything/apache/itsvcprdgit.world.company.key"
+<VirtualHost @FQN@:8443>
+    ServerName @FQN@
+    ServerAlias @HOSTNAME@
+    SSLCertificateFile "@H@/apache/@FQN@.crt"
+    SSLCertificateKeyFile "@H@/apache/@FQN@.key"
     SSLEngine on
     SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
-    DocumentRoot /home/auser/compileEverything/gitweb
-    Alias /git /home/auser/compileEverything/gitweb
+    DocumentRoot @H@/gitweb
+    Alias /git @H@/gitweb
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars
     </FilesMatch>
-    <Directory /home/auser/compileEverything/gitweb>
+    <Directory @H@/gitweb>
         SSLOptions +StdEnvVars
         Options ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
         AllowOverride All
@@ -73,25 +73,25 @@ Listen 8443
          nokeepalive ssl-unclean-shutdown \
          downgrade-1.0 force-response-1.0
     LogLevel Debug
-    CustomLog "/home/auser/compileEverything/apache/gitweb_ssl_request_log" \
+    CustomLog "@H@/apache/gitweb_ssl_request_log" \
           "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
-    ErrorLog "/home/auser/compileEverything/apache/gitweb_error_log"
-    TransferLog "/home/auser/compileEverything/apache/gitweb_access_log"
+    ErrorLog "@H@/apache/gitweb_error_log"
+    TransferLog "@H@/apache/gitweb_access_log"
 </VirtualHost>
 
 # GitHttp on 8453
 Listen 8453
-<VirtualHost itsvcprdgit.world.company:8453>
-    ServerName itsvcprdgit.world.company
-    ServerAlias itsvcprdgit
-    SSLCertificateFile "/home/auser/compileEverything/apache/itsvcprdgit.world.company.crt"
-    SSLCertificateKeyFile "/home/auser/compileEverything/apache/itsvcprdgit.world.company.key"
+<VirtualHost @FQN@:8453>
+    ServerName @FQN@
+    ServerAlias @HOSTNAME@
+    SSLCertificateFile "@H@/apache/@FQN@.crt"
+    SSLCertificateKeyFile "@H@/apache/@FQN@.key"
     SSLEngine on
     SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
-    SetEnv GIT_PROJECT_ROOT /home/auser/compileEverything/repositories
+    SetEnv GIT_PROJECT_ROOT @H@/repositories
     SetEnv GIT_HTTP_EXPORT_ALL
-    SetEnv GITOLITE_HTTP_HOME /home/auser/compileEverything
-    ScriptAlias /hgit/ /home/auser/compileEverything/gitolite/bin/gl-auth-command/
+    SetEnv GITOLITE_HTTP_HOME @H@
+    ScriptAlias /hgit/ @H@/gitolite/bin/gl-auth-command/
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars
     </FilesMatch>
@@ -111,29 +111,29 @@ Listen 8453
     BrowserMatch ".*MSIE.*" \
          nokeepalive ssl-unclean-shutdown \
          downgrade-1.0 force-response-1.0
-    CustomLog "/home/auser/compileEverything/apache/githttp_ssl_request_log" \
+    CustomLog "@H@/apache/githttp_ssl_request_log" \
           "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
-    ErrorLog "/home/auser/compileEverything/apache/githttp_error_log"
-    TransferLog "/home/auser/compileEverything/apache/githttp_access_log"
+    ErrorLog "@H@/apache/githttp_error_log"
+    TransferLog "@H@/apache/githttp_access_log"
 </VirtualHost>
 
 
 # CGit on 8463
 Listen 8463
-<VirtualHost itsvcprdgit.world.company:8463>
-    ServerName itsvcprdgit.world.company
-    ServerAlias itsvcprdgit
-    SSLCertificateFile "/home/auser/compileEverything/apache/itsvcprdgit.world.company.crt"
-    SSLCertificateKeyFile "/home/auser/compileEverything/apache/itsvcprdgit.world.company.key"
+<VirtualHost @FQN@:8463>
+    ServerName @FQN@
+    ServerAlias @HOSTNAME@
+    SSLCertificateFile "@H@/apache/@FQN@.crt"
+    SSLCertificateKeyFile "@H@/apache/@FQN@.key"
     SSLEngine on
     SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
-    DocumentRoot /home/auser/compileEverything/cgit
-    Alias /cgit /home/auser/compileEverything/cgit
+    DocumentRoot @H@/cgit
+    Alias /cgit @H@/cgit
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars
     </FilesMatch>
-    ScriptAlias /gitolite/ /home/auser/compileEverything/gitolite/bin/gl-auth-command/
-    <Directory /home/auser/compileEverything/cgit>
+    ScriptAlias /gitolite/ @H@/gitolite/bin/gl-auth-command/
+    <Directory @H@/cgit>
         SSLOptions +StdEnvVars
         Options ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
         AllowOverride All
@@ -145,7 +145,7 @@ Listen 8463
 
         #RewriteEngine on
  
-        SetEnv GIT_PROJECT_ROOT=/home/auser/compileEverything/repositories
+        SetEnv GIT_PROJECT_ROOT=@H@/repositories
  
         AuthName "LDAP authentication for ITSVC CGit repositories"
         AuthType Basic
@@ -166,9 +166,9 @@ Listen 8463
     BrowserMatch ".*MSIE.*" \
          nokeepalive ssl-unclean-shutdown \
          downgrade-1.0 force-response-1.0
-    CustomLog "/home/auser/compileEverything/apache/gitcgit_ssl_request_log" \
+    CustomLog "@H@/apache/gitcgit_ssl_request_log" \
           "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
-    ErrorLog "/home/auser/compileEverything/apache/gitcgit_error_log"
-    TransferLog "/home/auser/compileEverything/apache/gitcgit_access_log"
+    ErrorLog "@H@/apache/gitcgit_error_log"
+    TransferLog "@H@/apache/gitcgit_access_log"
     LogLevel info
 </VirtualHost>

@@ -44,3 +44,8 @@ bin/
 .cpanm/
 .bash_history
 .gem/
+.subversion/
+apache/env.conf
+apache/openssl.cnf
+*.crt*
+*.key

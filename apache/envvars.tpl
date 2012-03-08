@@ -18,7 +18,7 @@
 #
 # This file is generated from envvars-std.in
 #
-LD_LIBRARY_PATH="/home/auser/compileEverything/usr/local/apps/httpd-2.2.21/lib:$LD_LIBRARY_PATH"
+LD_LIBRARY_PATH="@H@/usr/local/apache2/lib:$LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 #
 

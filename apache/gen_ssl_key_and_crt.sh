@@ -1,0 +1,15 @@
+#! /bin/bash
+
+fqn=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*} 
+fqnpassword="${fqn}1";
+apache="${H}/apache"
+passphrasekey="${apache}/${fqn}.passphrase.key"
+key="${apache}/${fqn}.key"
+cert="${apache}/${fqn}.crt"
+cnf="${apache}/openssl.cnf"
+if [[ ! -e "${passphrasekey}" ]]; then
+  openssl genrsa -des3 -passout pass:${fqnpassword} -out "${passphrasekey}" 1024
+  openssl rsa -passin pass:${fqnpassword} -in "${passphrasekey}" -out "${key}"
+  openssl req -new -config "${cnf}" -extensions v3_req -x509 -days 730 -key "${key}" -out "${cert}"
+fi
+
