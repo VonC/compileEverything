@@ -14,7 +14,7 @@ case "$1" in
 'start')
   if [[ "$aps" == "" ]] ; then
     echo starting sshd
-    "${H}/usr/local/sbin/sshd"
+    "${H}/usr/local/sbin/sshd" -f "${H}/.ssh/cnf"
   else
     echo "sshd already started, process ${aps}"
   fi
@@ -32,6 +32,11 @@ case "$1" in
   sshd stop
   sshd start
 ;;
+'debug')
+  sshd stop
+  echo "starting sshd in a one-shot debug session (logs on stdout)"
+  "${H}/usr/local/sbin/sshd" -d -f "${H}/.ssh/cnf"
+;;
 'status')
   if [[ "${aps}" == "" ]] ; then
     echo "sshd is stopped"
@@ -39,11 +44,14 @@ case "$1" in
     echo "sshd running, process ${aps}"
   fi
   if [[ "${afps}" != "${aps}" ]] ; then
-    echo "Warning, the sshd pid recorded is not the same: ${afps}"
+    echo "Warning, the sshd pid recorded ~/usr/local/var/run/sshd.pid _${afps}_ is not the same than the running one: ${aps}"
   fi
   ;;
+'test')
+  "${H}/usr/local/sbin/sshd" -T -f "${H}/.ssh/cnf"
+;;
 *)
-  echo "usage: ${H}/sbin/sshd {start|stop|restart|status}"
+  echo "usage: ${H}/sbin/sshd {start|stop|restart|status|test|debug}"
   ;;
 esac
 

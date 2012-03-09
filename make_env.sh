@@ -689,4 +689,6 @@ function build_line() {
 main $*
 trap - EXIT
 echo -e "\e[00;32mAll Done.\e[00m"
+echo "Gitolite installation/update"
+"${H}/gitolite/install_or_update_gitolite.sh"
 exit 0

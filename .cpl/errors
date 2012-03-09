@@ -1841,8 +1841,8 @@ logs/l)
 !!!!_FAIL_!!!!
 2012/03/02-11:36:25 ~~~ eval gen_sed -i "s/^VERSION_SCRIPT_FLAGS.*/VERSION_SCRIPT_FLAGS = /g" "/home/auser/compileEverything/.cpl/src/libxslt-1.1.26/libxslt/Makefile" ;
 gen_sed -i "s/^LIBS = $/LIBS = -lgcrypt -lgpg-error -lintl -lgettextlib -lgettextpo /g" "/home/auser/compileEverything/.cpl/src/libxslt-1.1.26/Makefile" ; gen_sed -i 's/
-\"\/usr\/lib /\"\/devit_home\/users\/auser\/gitpoc\/ce1\/usr\/local\/lib \/usr\/lib /g' /home/auser/compileEverything/.cpl/src/libxslt-1.1.26/libtool ; gen_sed -i 's/\"
-\/lib /\"\/devit_home\/users\/auser\/gitpoc\/ce1\/usr\/local\/lib \/lib /g' /home/auser/compileEverything/.cpl/src/libxslt-1.1.26/libtool ; gen_sed -i "s/eval \"\$my_cm
+\"\/usr\/lib /\"/home/auser/compileEverything\/usr\/local\/lib \/usr\/lib /g' /home/auser/compileEverything/.cpl/src/libxslt-1.1.26/libtool ; gen_sed -i 's/\"
+\/lib /\"/home/auser/compileEverything\/usr\/local\/lib \/lib /g' /home/auser/compileEverything/.cpl/src/libxslt-1.1.26/libtool ; gen_sed -i "s/eval \"\$my_cm
 d\"/if test \"\${my_cmd#gcc\*}" \!= \"\$my_cmd\" ; then eval \"\$my_cmd -lintl -lgettextlib -lgettextpo\" ; else eval \"\$my_cmd\" ; fi/g" /home/auser/compileEverything/
 .cpl/src/libxslt-1.1.26/libtool ;
 ~~~~~~~~~~~~~~~~~~~
@@ -1852,11 +1852,7 @@ A double-quote wasn't escaped
 2012/03/02-11:53:48 ~ (see /home/auser/compileEverything/.cpl/logs/20120302.115348.pre_nginx-1.0.12.log or simply tail -f /home/auser/compileEverything/.cpl/logs/l
 )
 !!!!_FAIL_!!!!
-2012/03/02-11:53:48 ~~~ eval gen_sed -i "s/\([\"' IRL]\)\/usr\/local/\1\\/devit_home\/users\/auser\/gitpoc\/ce1\/usr\/local/g" "/home/auser/compileEverything/.cpl/src/n
-ginx-1.0.12/auto/lib/libxslt/conf" ; gen_sed -i "s/\([\"' IRL]\)\/usr\/include/\1\\/devit_home\/users\/auser\/gitpoc\/ce1\/usr\/local\/include/g" "/devit_home/users/auser/gi
-tpoc/ce1/.cpl/src/nginx-1.0.12/auto/lib/libxslt/conf" ; gen_sed -i "s/\([\"' IRL]\)\/usr\/local\/include/\1\\/devit_home\/users\/auser\/gitpoc\/ce1\/usr\/local\/include/g" "/
-devit_home/users/auser/gitpoc/ce1/.cpl/src/nginx-1.0.12/auto/lib/libxslt/conf" ; gen_sed -i "s/-lexslt\-lexslt -lgcrypt -lgpg-error -lxml2 -lxslt -lintl -lgettextpo/g" "/devi
-t_home/users/auser/gitpoc/ce1/.cpl/src/nginx-1.0.12/auto/lib/libxslt/conf"
+2012/03/02-11:53:48 ~~~ eval gen_sed -i "s/\([\"' IRL]\)\/usr\/local/\1\/home/auser/compileEverything\/usr\/local/g" "/home/auser/compileEverything/.cpl/src/nginx-1.0.12/auto/lib/libxslt/conf" ; gen_sed -i "s/\([\"' IRL]\)\/usr\/include/\1\/home/auser/compileEverything\/usr\/local\/include/g" "/home/auser/compileEverything/.cpl/src/nginx-1.0.12/auto/lib/libxslt/conf" ; gen_sed -i "s/\([\"' IRL]\)\/usr\/local\/include/\1\/home/auser/compileEverything\/usr\/local\/include/g" "/home/auser/compileEverything/.cpl/src/nginx-1.0.12/auto/lib/libxslt/conf" ; gen_sed -i "s/-lexslt\-lexslt -lgcrypt -lgpg-error -lxml2 -lxslt -lintl -lgettextpo/g" "/home/auser/compileEverything/.cpl/src/nginx-1.0.12/auto/lib/libxslt/conf"
 ~~~~~~~~~~~~~~~~~~~
 /bin/sed: -e expression #1, char 73: unterminated `s' command
 A \ was instead of a / in a sed expression
@@ -1878,4 +1874,183 @@ Unable to get Terminal Size. The TIOCGWINSZ ioctl didn't work. The COLUMNS and L
  ./.cpanm/work/1330690000.16124/TermReadKey-2.30/ReadKey.pm
  ./.cpanm/work/1330690000.16124/TermReadKey-2.30/blib/lib/Term/ReadKey.pm
 Strange, I needed to go to .cpanm/work/xxx/Term.../, and do a 'cpanm -v .' instead of the 'cpanm .': the verbose status somehow allowed the test.pl to execute properly
+~~~~--------------
+auser:07 ahostname /home/auser/compileEverything/gitolite/github #gl-setup /tmp/gitoliteadm.pub
+The default settings in the rc file (/home/auser/compileEverything/.gitolite.rc) are fine for most
+people but if you wish to make any changes, you can do so now.
+
+hit enter...
+
+                ***** ABORTING *****
+        bad username '/tmp/gitoliteadm.pub'  => unset GITOLITE_HTTP_HOME!!!
+/home/auser/compileEverything/bin/gl-setup: line 179: cd: /home/auser/compileEverything/repositories/gitolite-admin.git: No such file or directory
+[master f077f10] gl-setup /tmp/gitoliteadm.pub
+ 139 files changed, 7 insertions(+), 27004 deletions(-)
+ delete mode 100644 .bashrc_ssh
+ delete mode 100755 .cpl/.bashrc.tpl
+
+ 
+How to reset a gitolite install 
+ 
+auser:10 ahostname /home/auser/compileEverything/gitolite #rm -Rf github/
+auser:10 ahostname /home/auser/compileEverything/gitolite #xxgit=1 git clone https://github.com/sitaramc/gitolite github
+Cloning into 'github'...
+remote: Counting objects: 5364, done.
+remote: Compressing objects: 100% (1811/1811), done.
+remote: Total 5364 (delta 3711), reused 5118 (delta 3497)
+Receiving objects: 100% (5364/5364), 1.79 MiB | 699 KiB/s, done.
+Resolving deltas: 100% (3711/3711), done.
+auser:11 ahostname /home/auser/compileEverything/gitolite #cd github/
+auser:11 ahostname /home/auser/compileEverything/gitolite/github #git lg -10
+[ VonC,vonc@laposte.net for github.com ]
+* 06eb523 - (HEAD, origin/pu, origin/HEAD, pu) Be compatible with older versions of File::Path (7 hours ago) <Greg Bacon>
+* e098bc6 - specify documentation licensing as CC-BY-NC-SA (7 days ago) <Sitaram Chamarty>
+* f554c21 - replaced comm with grep for devices without comm (7 days ago) <Arno Gramatke>
+* 3fab743 - replaced mktemp with a perl equivalent to make the setup usable on machines without mktemp. (7 days ago) <Arno Gramatke>
+* d3b2dda - fork ADC: stop carrying along non-gitolite hooks (9 days ago) <Sitaram Chamarty>
+*   a6ab6cd - merge all the '-h' related changes (9 days ago) <Sitaram Chamarty>
+|\
+| * f56c422 - gl-conf-convert learns '-h' (11 days ago) <Sitaram Chamarty>
+| * 23b3d54 - gl-dryrun learns '-h', plus a couple of other fixes (11 days ago) <Sitaram Chamarty>
+| * e6586cb - gl-admin-push learns '-h' (11 days ago) <Sitaram Chamarty>
+| * 1019b43 - gl-mirror-shell learns '-h' (11 days ago) <Sitaram Chamarty>
+auser:12 ahostname /home/auser/compileEverything/gitolite/github #cd ..
+auser:12 ahostname /home/auser/compileEverything/gitolite #github/src/gl-system-install "${H}/bin" "${H}/gitolite/conf" "${H}/gitolite/hooks"
+
+
+auser:14 ahostname /home/auser/compileEverything/bin #rm -Rf $H/.gitolite ; rm -f $H/.gitolite.rc ; rm -Rf $H/repositories
+
+~~~~-----------------
+
+auser:37 ahostname /home/auser/compileEverything #sshd start
+starting sshd
+/home/auser/compileEverything/usr/local/var/empty must be owned by root and not group or world-writable. => Wrong config file (sshd script fixed)
+
+auser:41 ahostname /home/auser/compileEverything/.cpl/logs #grep empty 20120306.125602.make_install_openssh-5.9p1.log
+(umask 022 ; ./mkinstalldirs /home/auser/compileEverything/usr/local/var/empty)
+mkdir /home/auser/compileEverything/usr/local/var/empty
+/home/auser/compileEverything/usr/local/var/empty must be owned by root and not group or world-writable.
+
+/home/auser/compileEverything/usr/local/libs/openssh-5.9p1/sbin/sshd -t -f /home/auser/compileEverything/usr/local/libs/openssh-5.9p1/etc/sshd_config
+/home/auser/compileEverything/usr/local/var/empty must be owned by root and not group or world-writable.
+
+auser:48 ahostname /home/auser/compileEverything/.ssh #l /home/auser/compileEverything/usr/local/etc/sshd_config
+lrwxrwxrwx 1 auser dev_user 37 2012-03-06 12:56 /home/auser/compileEverything/usr/local/etc/sshd_config -> ../libs/openssh-5.9p1/etc/sshd_config
+
+Testing local config
+auser:11 ahostname /home/auser/compileEverything/.ssh #"${H}/usr/local/sbin/sshd" -t -f cnf
+cnf: line 13: Bad configuration option: Port2
+cnf: terminating, 1 bad configuration options
+
+rm -f $H/usr/local/._linked/openssh-5.9p1 ; rm -f $H/.cpl/src/openssh-5.9p1/._post
+
+~~~~-----------------
+
+auser:47 ahostname /home/auser/compileEverything/.ssh #ssh -vvv -F gitoliteadm.config gitolitesrv echo $PATH
+OpenSSH_5.9p1, OpenSSL 1.0.0g 18 Jan 2012
+debug1: Reading configuration data gitoliteadm.config
+debug1: gitoliteadm.config line 1: Applying options for gitolitesrv
+debug2: ssh_connect: needpriv 0
+debug1: Connecting to localhost [127.0.0.1] port 2200.
+debug1: Connection established.
+debug3: Incorrect RSA1 identifier
+debug3: Could not load "/home/auser/compileEverything/.ssh/gitoliteadm" as a RSA1 public key
+debug1: identity file /home/auser/compileEverything/.ssh/gitoliteadm type 1
+debug1: identity file /home/auser/compileEverything/.ssh/gitoliteadm-cert type -1
+
+  651  2012-03-08 16:35:55 - ssh-keygen -t rsa -f "${H}/.ssh/gitoliteadm" -C "Gitolite Admin with interactive access" -q -P ""
+  
+  Test with:
+  ssh-keygen -t rsa -f "${H}/.ssh/root" -C "Root-kind access with local account interactive access" -q -P ""
+  
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDf0MnDhf3Y2cVc1TZA9xpXLD3Cd5P35KygKsQ+ZV29zd4cw0c8rDqrCL1IcW7yfUWT3bmUiOwex7p6hrvQGuUXTilxRWeEMcQt0P1vfnru5myeizNypLsXfGVPpTr9QoPxrCXzMnHfw9vES6+SUyBi1McOi7yrVJCjfIAYfjD9TspTnL0JFwB8GmVRa6KwKM1wwBFle+2JXWtjemwh8mLEmZh6rIUPDX1IkBLRYiMBaTdthYyumj/HEDEMTDYLH7FiMMZ2cjEAwzNDOMwer9Pz1TbeBemwaat8q05FDBCtNuZ0ZChn/A+SDL27gSnPOCqkCyo/lcgAU+oeZxrU53WF Root-kind access with local account interactive access
+  
+Launching sshd with -d (debug) option, and LogLevel VERBOSE gives:
+
+Failed none for auser from 127.0.0.1 port 60458 ssh2
+debug1: userauth-request for user auser service ssh-connection method publickey
+debug1: attempt 1 failures 0
+debug1: test whether pkalg/pkblob are acceptable
+debug1: temporarily_use_uid: 50080/2500 (e=50080/2500)
+debug1: trying public key file /home/auser/compileEverything/.ssh/authorized_keys
+debug1: fd 4 clearing O_NONBLOCK
+Authentication refused: bad ownership or modes for directory /home/auser/gitpoc  <===================== 
+  ==> MEANS THAT:
+  ==> One of the parent directories has a writable group: 755 or 750 for all parent directories otherwise fail
+debug1: restore_uid: (unprivileged)
+Failed publickey for auser from 127.0.0.1 port 60458 ssh2
+debug1: userauth-request for user auser service ssh-connection method keyboard-interactive
+debug1: attempt 2 failures 1
+debug1: keyboard-interactive devs
+debug1: auth2_challenge: user=auser devs=
+debug1: kbdint_alloc: devices ''
+
+http://platonic.techfiz.info/2008/10/13/pty-allocation-request-failed-on-channel-0/
+Now, check the SSH configuration to confirm that SSH daemon is logging the messages under /var/log/secure or /var/log/messages. Following line must be uncommented for the same in /etc/ssh/sshd_config.
+
+SyslogFacility AUTHPRIV
+~~~~~~~~~~~-----------
+auser01:29 ahostname /home/auser/compileEverything/.ssh #ssh -F gitoliteadm.config gitolitesrv
+PTY allocation request failed on channel 0
+no rc file found
+Compilation failed in require at /home/auser/compileEverything/bin/gl-auth-command line 43.
+BEGIN failed--compilation aborted at /home/auser/compileEverything/bin/gl-auth-command line 43.
+Connection to localhost closed.
+
+# ------------------------------------------------------------------------------
+#       bring in the rc vars and allow querying them
+# ------------------------------------------------------------------------------
+
+# in case we're running under Apache using smart http
+$ENV{HOME} = $ENV{GITOLITE_HTTP_HOME} if $ENV{GITOLITE_HTTP_HOME};
+
+# we also need to "bring in" the rc variables.  The rc can only be in one of
+# these two places; the first one we find, wins
+for ("$ENV{HOME}/.gitolite.rc", "/etc/gitolite/gitolite.rc") {
+    $ENV{GL_RC} ||= $_ if -f;
+}
+die "no rc file found\n" unless $ENV{GL_RC};
+do $ENV{GL_RC} or die "error parsing $ENV{GL_RC}\n";
+
+=> restore GITOLITE_HTTP_HOME in bashrc, but unset it just before gl-setup, otherwise bad username ?
+NOT GOOD IDEA?
+
+Anyway, add in /home/auser/compileEverything/bin/gitolite_rc.pm $ENV{HOME} = '/home/auser/compileEverything';
+~~~~~~~-----
+
+auser:35 ahostname /home/auser/compileEverything #ssh -F $H/.ssh/gitoliteadm.config gitolitesrv
+PTY allocation request failed on channel 0
+Environment:
+  USER=auser
+  LOGNAME=auser
+  HOME=/home/auser
+  PATH=/home/auser/compileEverything/sbin:/home/auser/compileEverything/bin:/home/auser/compileEverything/usr/local/bin:/home/auser/compileEverything/usr/local/sbin:/home/a
+  MAIL=/var/mail/auser
+  SHELL=/bin/ksh
+  SSH_CLIENT=127.0.0.1 31466 2200
+  SSH_CONNECTION=127.0.0.1 31466 127.0.0.1 2200
+hello gitoliteadm, this is gitolite v2.3-30-g06eb523 running on git 1.7.9.3
+the gitolite config gives you the following access:
+     R   W      gitolite-admin
+    @R_ @W_     testing
+Connection to localhost closed.
+
+
+debug1: server_input_channel_open: confirm session
+debug1: server_input_global_request: rtype no-more-sessions@openssh.com want_reply 0
+debug1: server_input_channel_req: channel 0 request pty-req reply 1
+debug1: session_by_channel: session 0 channel 0
+debug1: session_input_channel_req: session 0 req pty-req
+debug1: Allocating a pty not permitted for this authentication.
+debug1: server_input_channel_req: channel 0 request shell reply 1
+debug1: session_by_channel: session 0 channel 0
+debug1: session_input_channel_req: session 0 req shell
+
+Quite normal here because of the no-tty found in each gitolite forced-command:
+
+http://oreilly.com/catalog/sshtdg/chapter/ch08.html
+
+auser:52 ahostname /home/auser/compileEverything #ssh -F $H/.ssh/gitoliteadm.config gitolitesrv ls
+bad command: ls
+~~~~~~~------------
 

@@ -25,6 +25,9 @@ bin/
 /.ssh/authorized_keys
 /.ssh/config
 /.ssh/gitoliteadm
+/.ssh/gitoliteadm.config
+/.ssh/root
+/.ssh/root.config
 /.ssh/*.pub
 /.cpl/gitolite/
 /.gitolite/
@@ -52,3 +55,4 @@ apache/openssl.cnf
 gitolite/hooks
 gitolite/conf
 gitolite/github
+/.ssh/cnf
