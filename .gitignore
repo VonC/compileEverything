@@ -56,3 +56,5 @@ gitolite/hooks
 gitolite/conf
 gitolite/github
 /.ssh/cnf
+/.ssh/known_hosts
+/a/
