@@ -28,7 +28,6 @@ bin/
 /.ssh/*.pub
 /.cpl/gitolite/
 /.gitolite/
-/gitolite/
 /.gitolite.rc
 /openldap/db.1.a/
 *_log
@@ -49,3 +48,7 @@ apache/env.conf
 apache/openssl.cnf
 *.crt*
 *.key
+.ssh/old_authkeys
+gitolite/hooks
+gitolite/conf
+gitolite/github
