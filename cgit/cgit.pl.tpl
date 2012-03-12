@@ -1,4 +1,4 @@
-#!/home/auser/compileEverything/usr/local/apps/perl/bin/perl
+#!@H@/usr/local/apps/perl/bin/perl
 #print "<pre>\n";
 use Time::localtime;
 my $remote_user=$ENV{"REMOTE_USER"}; 
@@ -12,9 +12,9 @@ my $request_uri=$ENV{"REQUEST_URI"};
 # }
 #print "</pre>\n";
 
-my $gl_home = $ENV{HOME} = "/home/auser/compileEverything";
+my $gl_home = $ENV{HOME} = "@H@";
 $ENV{GL_RC} = "$gl_home/.gitolite.rc";
-$ENV{GL_BINDIR} = "$gl_home/gitolite/bin";
+$ENV{GL_BINDIR} = "$gl_home/bin";
 $ENV{GL_USER} = $remote_user;
 # now get gitolite stuff in...
 unshift @INC, $ENV{GL_BINDIR};
@@ -32,7 +32,7 @@ if ($request_uri ne "/cgit/" && $request_uri ne "/cgit/cgit.pl/") {
   #print "ok: perm $perm<br />";
   #print "ok: creator $creator<br />";
   if ($perm =~ /R/) {
-    system("/home/auser/compileEverything/cgit/cgit.cgi");
+    system("@H@/cgit/cgit.cgi");
   }
   else {
     print "Content-type: text/html\n\n";
@@ -46,7 +46,7 @@ if ($request_uri ne "/cgit/" && $request_uri ne "/cgit/cgit.pl/") {
 }
 else {
     my $fname="$remote_user.".timestamp().".tpl";
-    system("/home/auser/compileEverything/cgit/cgit.cgi > $fname");
+    system("@H@/cgit/cgit.cgi > $fname");
     open(INFO, $fname);		# Open the file
     @lines = <INFO>;		# Read it into an array
     close(INFO);

@@ -39,10 +39,11 @@ Listen 8443
 <VirtualHost @FQN@:8443>
     ServerName @FQN@
     ServerAlias @HOSTNAME@
-    SSLCertificateFile "@H@/apache/@FQN@.crt"
-    SSLCertificateKeyFile "@H@/apache/@FQN@.key"
+    SSLCertificateFile "@H@/apache/crt"
+    SSLCertificateKeyFile "@H@/apache/key"
     SSLEngine on
     SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
+    SetEnv GIT_HTTP_BACKEND "@H@/usr/local/apps/git/libexec/git-core/git-http-backend"
     DocumentRoot @H@/gitweb
     Alias /git @H@/gitweb
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
@@ -84,14 +85,15 @@ Listen 8453
 <VirtualHost @FQN@:8453>
     ServerName @FQN@
     ServerAlias @HOSTNAME@
-    SSLCertificateFile "@H@/apache/@FQN@.crt"
-    SSLCertificateKeyFile "@H@/apache/@FQN@.key"
+    SSLCertificateFile "@H@/apache/crt"
+    SSLCertificateKeyFile "@H@/apache/key"
     SSLEngine on
     SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
     SetEnv GIT_PROJECT_ROOT @H@/repositories
     SetEnv GIT_HTTP_EXPORT_ALL
     SetEnv GITOLITE_HTTP_HOME @H@
-    ScriptAlias /hgit/ @H@/gitolite/bin/gl-auth-command/
+    ScriptAlias /hgit/ @H@/bin/gl-auth-command/
+    SetEnv GIT_HTTP_BACKEND "@H@/usr/local/apps/git/libexec/git-core/git-http-backend"
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars
     </FilesMatch>
@@ -123,16 +125,17 @@ Listen 8463
 <VirtualHost @FQN@:8463>
     ServerName @FQN@
     ServerAlias @HOSTNAME@
-    SSLCertificateFile "@H@/apache/@FQN@.crt"
-    SSLCertificateKeyFile "@H@/apache/@FQN@.key"
+    SSLCertificateFile "@H@/apache/crt"
+    SSLCertificateKeyFile "@H@/apache/key"
     SSLEngine on
     SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
+    SetEnv GIT_HTTP_BACKEND "@H@/usr/local/apps/git/libexec/git-core/git-http-backend"
     DocumentRoot @H@/cgit
     Alias /cgit @H@/cgit
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars
     </FilesMatch>
-    ScriptAlias /gitolite/ @H@/gitolite/bin/gl-auth-command/
+    ScriptAlias /gitolite/ @H@/bin/gl-auth-command/
     <Directory @H@/cgit>
         SSLOptions +StdEnvVars
         Options ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch

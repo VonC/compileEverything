@@ -15,3 +15,4 @@ configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-lib=${HULL} --with-ope
 premake=gen_sed -i "s/^EXTLIBS =/EXTLIBS = -lintl /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile"
 makecmd=gmake
 makeinstcmd=gmake install
+post=cp "${H}/gitweb/gitweb.conf.pl.tpl" "${H}/gitweb/gitweb.conf.pl" ; gen_sed -i "s/@H@/${EH}/g" "${H}/gitweb/gitweb.conf.pl"

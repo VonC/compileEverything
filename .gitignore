@@ -58,3 +58,10 @@ gitolite/github
 /.ssh/cnf
 /.ssh/known_hosts
 /a/
+/cgit/cgitrc
+/cgit/cgit.pl
+*.nfs*
+/gitweb/gitweb.conf.pl
+/apache/crt
+/apache/key
+/apache/o.cnf
