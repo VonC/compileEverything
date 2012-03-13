@@ -65,3 +65,7 @@ gitolite/github
 /apache/key
 /apache/o.cnf
 /openldap/slapd.1.conf
+/apache/old/
+/openldap/a
+/openldap/*.pem
+/openldap/ldap.conf

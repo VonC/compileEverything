@@ -1,4 +1,4 @@
 pre=anos=$(uname -o) ; if [[ "${anos#*Cygwin}" != "${anos}" ]] ; then gen_sed -i "s/-lsasl2  /-lsasl2 -lcrypto -ldb /g" ${H}/.cpl/src/@@NAMEVER@@/configure ; gen_sed -i '\''s/SASL_LIBS=\"/SASL_LIBS=\"-ldb /g'\'' ${H}/.cpl/src/@@NAMEVER@@/configure ; gen_sed -i '\''s/-lssl -lcrypto/-lssl -lcrypto -ldb/g'\'' ${H}/.cpl/src/@@NAMEVER@@/configure ; fi
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-cyrus-sasl --enable-overlays @@WITHOUT_GNU_LD@@
 premake=make depend
-post=cp "${H}/openldap/slapd.1.conf.tpl" "${H}/openldap/slapd.1.conf" ; gen_sed -i "s/@H@/${EH}/g" "${H}/openldap/slapd.1.conf" ; "${H}/openldap/ini_ldap_db.sh"
+post=cp "${H}/openldap/slapd.1.conf.tpl" "${H}/openldap/slapd.1.conf" ; gen_sed -i "s/@H@/${EH}/g" "${H}/openldap/slapd.1.conf" ; "${H}/openldap/ini_ldap_db.sh" ; ln -fs ../../../../openldap/ldap.conf "${HUL}/etc/openldap/cnf1" ; ln -fs ../../../../openldap/slapd.conf "${HUL}/etc/openldap/cnf" ; cp "${H}/openldap/ldap.conf.tpl" "${H}/openldap/ldap.conf" ; gen_sed -i "s/@H@/${EH}/g" "${H}/openldap/ldap.conf" 

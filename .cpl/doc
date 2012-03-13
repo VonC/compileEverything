@@ -632,4 +632,5 @@ Now, the next time you run git diff, you should get coloured output.
 ---
 On RedHat Linux, I actually had to set pager to more, not less!
 ~~~~~~~~~~~~~~~
-
+Get the certificate of an LDAP server:
+openssl s_client -connect ldap.co.xx:3269  2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p'

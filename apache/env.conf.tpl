@@ -19,6 +19,10 @@ ExtendedStatus On
 
 </IfModule>
 
+SSLCACertificateFile "@H@/.ssh/curl-ca-bundle.crt"
+LDAPTrustedGlobalCert CA_BASE64 "@H@/apache/global_ca.crt"
+#LDAPVerifyServerCert off
+
 SSLRandomSeed startup file:/dev/urandom 512
 SSLRandomSeed connect file:/dev/urandom 512
 SSLPassPhraseDialog  builtin
@@ -32,6 +36,12 @@ SSLMutex  "file:@H@/apache/ssl_mutex"
   AuthLDAPBindDN cn=Manager,dc=example,dc=com
   AuthLDAPBindPassword secret
   AuthLDAPURL ldap://localhost:9011/dc=example,dc=com?uid?sub?(objectClass=*)
+</AuthnProviderAlias>
+
+<AuthnProviderAlias ldap companyldap>
+  AuthLDAPBindDN "CN=A-Binding-Account,OU=Service-Accounts,DC=Prod,DC=company"
+  AuthLDAPBindPassword binDN-password
+  AuthLDAPURL ldaps://company.co.comp:4269/OU=CompanyPeople,DC=Prod,DC=company?employeeID
 </AuthnProviderAlias>
 
 # GitWeb on 8443
@@ -58,7 +68,7 @@ Listen 8443
 
         AuthName "LDAP authentication for ITSVC Prod GitWeb repositories"
         AuthType Basic
-        AuthBasicProvider myldap
+        AuthBasicProvider myldap companyldap
         AuthzLDAPAuthoritative On
         Require valid-user
 
@@ -105,7 +115,7 @@ Listen 8453
         Allow from all
         AuthName "LDAP authentication for ITSVC Smart HTTP Git repositories"
         AuthType Basic
-        AuthBasicProvider myldap
+        AuthBasicProvider myldap companyldap
         AuthzLDAPAuthoritative On
         Require valid-user
         AddHandler cgi-script cgi
@@ -152,7 +162,7 @@ Listen 8463
  
         AuthName "LDAP authentication for ITSVC CGit repositories"
         AuthType Basic
-        AuthBasicProvider myldap
+        AuthBasicProvider myldap companyldap
         AuthzLDAPAuthoritative On
         Require valid-user
 
