@@ -311,9 +311,10 @@ supportedSASLMechanisms: OTP
 entryDN:
 subschemaSubentry: cn=Subschema
 ~~~~~~~~~~~~
+Create the db files within the (at least empty) db.1.a directory:
 auser@vonc-VirtualBox:~/compileEverything/openldap$ ldapmodify -a -P 3 -x -D "cn=Manager,dc=example,dc=com" -h localhost -p 9011 -w secret < test-ordered.ldif 
 adding new entry "dc=example,dc=com"
-
+See also http://www.openldap.org/doc/admin22/dbtools.html: ldapadd -f test-ordered.ldif -x -D "cn=Manager,dc=example,dc=com" -w secret
 ~~~~~~~~~~~~~
 auser@vonc-VirtualBox:~/compileEverything/openldap$ ldapsearch -P 3 -x -LLL -S "" -b "dc=example,dc=com" -h localhost -p 9011 'objectclass=*'
 dn: cn=All Staff,ou=Groups,dc=example,dc=com

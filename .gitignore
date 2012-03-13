@@ -32,7 +32,6 @@ bin/
 /.cpl/gitolite/
 /.gitolite/
 /.gitolite.rc
-/openldap/db.1.a/
 *_log
 *.args
 *.pid
@@ -65,3 +64,4 @@ gitolite/github
 /apache/crt
 /apache/key
 /apache/o.cnf
+/openldap/slapd.1.conf

@@ -13,16 +13,16 @@
 ## top-level directory of the distribution or, alternatively, at
 ## <http://www.OpenLDAP.org/license.html>.
 
-include		/home/auser/compileEverything/openldap/schema/core.schema
-include		/home/auser/compileEverything/openldap/schema/cosine.schema
-include		/home/auser/compileEverything/openldap/schema/inetorgperson.schema
-include		/home/auser/compileEverything/openldap/schema/openldap.schema
-include		/home/auser/compileEverything/openldap/schema/nis.schema
-include		/home/auser/compileEverything/openldap/test.schema
+include		@H@/openldap/schema/core.schema
+include		@H@/openldap/schema/cosine.schema
+include		@H@/openldap/schema/inetorgperson.schema
+include		@H@/openldap/schema/openldap.schema
+include		@H@/openldap/schema/nis.schema
+include		@H@/openldap/test.schema
 
 #
-pidfile		/home/auser/compileEverything/openldap/slapd.1.pid
-argsfile	/home/auser/compileEverything/openldap/slapd.1.args
+pidfile		@H@/openldap/slapd.1.pid
+argsfile	@H@/openldap/slapd.1.args
 
 # allow big PDUs from anonymous (for testing purposes)
 sockbuf_max_incoming 4194303
@@ -41,7 +41,7 @@ suffix		"dc=example,dc=com"
 rootdn		"cn=Manager,dc=example,dc=com"
 rootpw		secret
 #null#bind		on
-directory	/home/auser/compileEverything/openldap/db.1.a
+directory	@H@/openldap/db.1.a
 index		objectClass	eq
 index		cn,sn,uid	pres,eq,sub
 checkpoint		1024 5
