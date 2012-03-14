@@ -69,3 +69,4 @@ gitolite/github
 /openldap/a
 /openldap/*.pem
 /openldap/ldap.conf
+/.history

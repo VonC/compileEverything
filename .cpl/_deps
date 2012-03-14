@@ -1,8 +1,9 @@
 app gcc make
-app make expat,gettext
+app make expat,gettext,groff
 lib expat none
 lib gettext libiconv,expat
 lib libiconv none
+lib groff gettext,libiconv
 app git gcc,openssl,libssh2,curl,libiconv,expat,libidn,zlib,perl,apache,python,subversion,openssh
 lib openssl zlib,perl
 lib zlib gcc
