@@ -12,3 +12,5 @@
 #TIMELIMIT	15
 #DEREF		never
 TLS_CACERT "@H@/openldap/global_ca.crt"
+TLS_REQCERT demand
+ssl     start_tls

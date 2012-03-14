@@ -634,3 +634,12 @@ On RedHat Linux, I actually had to set pager to more, not less!
 ~~~~~~~~~~~~~~~
 Get the certificate of an LDAP server:
 openssl s_client -connect ldap.co.xx:3269  2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p'
+~~~~~~~~~~~~
+Check what files are accessed by a process
+http://blog.plenz.com/2011-01/which-files-are-accessed.html
+ahostname:55 gbl03097 /home/auser/openldap #strace -efile ldapsearch -d 1 -x -H ldaps://company.co.xx:3269 -D 'CN=bindingUser,OU=Accounts,DC=Full,DC=Context,DC=Company' -w password -b 'OU=Accounts,DC=Full,DC=Context,DC=Company' -ZZ  2>&1 1>/dev/null | grep ^open | cut -d\" -f2 | grep ldap
+/home/auser/usr/local/libs/openldap-2.4.26/etc/openldap/ldap.conf
+/home/auser/ldaprc
+/home/auser/.ldaprc
+ldaprc
+~
