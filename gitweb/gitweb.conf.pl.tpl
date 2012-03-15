@@ -20,7 +20,7 @@ $ENV{GL_RC} = "$gl_home/.gitolite.rc";
 # if you used RPM/DEB or "root" methods it **might** be this:
 $ENV{GL_BINDIR} = "/usr/local/bin";
 # if you used the "non-root" method it **might** be this:
-$ENV{GL_BINDIR} = "$gl_home/bin";
+$ENV{GL_BINDIR} = "$gl_home/gitolite/bin";
 # If in doubt take a look at ~/.ssh/authorized_keys; at least one of the lines
 # might contain something like:
 #       command="/home/git/.gitolite/src/gl-auth-command

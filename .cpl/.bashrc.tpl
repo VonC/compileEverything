@@ -56,7 +56,7 @@ export HISTTIMEFORMAT='%Y-%m-%d %H:%M:%S - '
 export HISTIGNORE="&:[ \t]*:exit:history:h:l"
 
 # first override the $PATH, making sure to use *local* paths:
-export PATH="${H}/sbin:${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin"
+export PATH="${H}/sbin:${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin:${H}/gitolite/bin"
 # then add the applications paths
 #export PATH="$PATH:$HULA/gcc/bin"
 #export PATH="$PATH:$HULA/git/bin:$HULA/svn/bin:$HULA/apache/bin"

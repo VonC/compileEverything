@@ -14,7 +14,7 @@ my $request_uri=$ENV{"REQUEST_URI"};
 
 my $gl_home = $ENV{HOME} = "@H@";
 $ENV{GL_RC} = "$gl_home/.gitolite.rc";
-$ENV{GL_BINDIR} = "$gl_home/bin";
+$ENV{GL_BINDIR} = "$gl_home/gitolite/bin";
 $ENV{GL_USER} = $remote_user;
 # now get gitolite stuff in...
 unshift @INC, $ENV{GL_BINDIR};

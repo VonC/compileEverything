@@ -642,4 +642,37 @@ ahostname:55 gbl03097 /home/auser/openldap #strace -efile ldapsearch -d 1 -x -H 
 /home/auser/ldaprc
 /home/auser/.ldaprc
 ldaprc
-~
+~~~~~~~~~~~~~~~~~~~
+man doesn't work, but
+auser:15 ahostname /home/auser #/usr/bin/zsoelim usr/local/share/man/man1/groffer.1  | /usr/bin/tbl | /usr/bin/groff -mandoc -Tutf8
+debug man: man --debug -a -S1:5 locale 2>&1
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=158752
+ERROR: /usr/bin/zsoelim /usr/share/man/man5/locale.5 | /usr/bin/tbl | /usr/bin/nroff -mandocdb -rLL=167n -rLT=167n -Tutf8 | less 
+iconv: conversion from utf8 unsupported
+iconv: try 'iconv -l' to get the list of supported encodings
+
+troff: fatal error: can't find macro file andocdb
+
+auser:21 ahostname /home/auser #mandb -u
+0 man subdirectories contained newer manual pages.
+0 manual pages were added.
+0 stray cats were added.
+0 old database entries were purged.
+~~~~~~~~~~~~~~
+git status without states:
+auser:08 ahostname /home/auser #git status -s | grep '?' | cut -b 4-
+.manpath
+gitolite/check_commits.sh
+gitolite_rc.pm
+
+Only "untracked":
+auser:23 ahostname /home/auser #git status -s | cut -b 4-
+[34;47mVonC,vonc@laposte.net for github.com ]
+.cpl/.bashrc.tpl
+cgit/cgit.pl.tpl
+gitolite/install_or_update_gitolite.sh
+gitweb/gitweb.conf.pl.tpl
+.manpath
+gitolite/check_commits.sh
+gitolite_rc.pm
+
