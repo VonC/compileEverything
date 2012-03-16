@@ -1,5 +1,5 @@
 ServerName vonc-VirtualBox
-Listen 8090
+Listen @PORT_HTTP_STATUS@
 Include conf/extra/httpd-manual.conf
 <IfModule mod_status.c>
 #
@@ -35,7 +35,7 @@ SSLMutex  "file:@H@/apache/ssl_mutex"
 <AuthnProviderAlias ldap myldap>
   AuthLDAPBindDN cn=Manager,dc=example,dc=com
   AuthLDAPBindPassword secret
-  AuthLDAPURL ldap://localhost:9011/dc=example,dc=com?uid?sub?(objectClass=*)
+  AuthLDAPURL ldap://localhost:@LDAP_TEST_PORT@/dc=example,dc=com?uid?sub?(objectClass=*)
 </AuthnProviderAlias>
 
 <AuthnProviderAlias ldap companyldap>
@@ -44,9 +44,9 @@ SSLMutex  "file:@H@/apache/ssl_mutex"
   AuthLDAPURL ldaps://company.co.comp:4269/OU=CompanyPeople,DC=Prod,DC=company?employeeID
 </AuthnProviderAlias>
 
-# GitWeb on 8443
-Listen 8443
-<VirtualHost @FQN@:8443>
+# GitWeb on @PORT_HTTP_GITWEB@
+Listen @PORT_HTTP_GITWEB@
+<VirtualHost @FQN@:@PORT_HTTP_GITWEB@>
     ServerName @FQN@
     ServerAlias @HOSTNAME@
     SSLCertificateFile "@H@/apache/crt"
@@ -90,9 +90,9 @@ Listen 8443
     TransferLog "@H@/apache/gitweb_access_log"
 </VirtualHost>
 
-# GitHttp on 8453
-Listen 8453
-<VirtualHost @FQN@:8453>
+# GitHttp on @PORT_HTTP_HGIT@
+Listen @PORT_HTTP_HGIT@
+<VirtualHost @FQN@:@PORT_HTTP_HGIT@>
     ServerName @FQN@
     ServerAlias @HOSTNAME@
     SSLCertificateFile "@H@/apache/crt"
@@ -130,9 +130,9 @@ Listen 8453
 </VirtualHost>
 
 
-# CGit on 8463
-Listen 8463
-<VirtualHost @FQN@:8463>
+# CGit on @PORT_HTTP_CGIT@
+Listen @PORT_HTTP_CGIT@
+<VirtualHost @FQN@:@PORT_HTTP_CGIT@>
     ServerName @FQN@
     ServerAlias @HOSTNAME@
     SSLCertificateFile "@H@/apache/crt"

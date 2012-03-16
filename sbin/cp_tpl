@@ -1,0 +1,26 @@
+#!/bin/bash
+fullFilePathOri="$1"
+fullPathDst="$2"
+fileOri="${fullFilePathOri##*/}"
+fullPathOri="${fullFilePathOri%/*}"
+if [[ "${fullPathOri}" == "${fullFilePathOri}" ]] ; then fullPathOri="." ; fi 
+echo "-------"
+#echo "fullFilePathOri='${fullFilePathOri}',"
+#echo "fullPathDst='${fullPathDst}'"
+#echo "fullPathOri='${fullPathOri}',"
+#echo "fileOri='${fileOri}'"
+
+fileDst="${fileOri%.tpl}"
+if [[  "${fileDst}" == "${fileOri}" ]] ; then echo "name '${fileOri} MUST end with '.tpl'" ; exit 1 ; fi
+#echo "fileDst='${fileDst}'"
+
+fullFilePathDst="${fullPathDst}/${fileDst}"
+echo cp -f "${fullFilePathOri}" "${fullFilePathDst}"
+cp -f "${fullFilePathOri}" "${fullFilePathDst}"
+
+gen_sed -i "s;@H@;${H};g" "${fullFilePathDst}"
+gen_sed -i "s/@HOSTNAME@/$(hostname -s)/g" "${fullFilePathDst}"
+fqn=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*}
+gen_sed -i "s/@FQN@/${fqn}/g" "${fullFilePathDst}"
+fqnemail=${fqn/./@}
+gen_sed -i "s/@EMAIL@/${fqnemail}/g" "${fullFilePathDst}"

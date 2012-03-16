@@ -10,7 +10,7 @@
 # possible, but leave them commented.  Uncommented options override the
 # default value.
 
-Port 2200
+Port @PORT_SSHD@
 #AddressFamily any
 #ListenAddress 0.0.0.0
 #ListenAddress ::
