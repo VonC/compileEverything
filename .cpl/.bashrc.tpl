@@ -114,8 +114,10 @@ fi
 
 export GIT_SSL_CAINFO="${H}/.ssh/curl-ca-bundle.crt"
 if [[ ! -e "${H}/.gitconfig" ]] ; then
-  cp "${H}/.cpl/.gitconfig.tpl" "${H}/.gitconfig"
+  "${H}/sbin/cp_tpl" "${H}/.cpl/.gitconfig.tpl" "${H}"
 fi
 if [[ ! -e "${H}/.bashrc_aliases_git" ]] ; then cp "$H/.cpl/.bashrc_aliases_git.tpl" "$H/.bashrc_aliases_git" ; fi
 
 export EDITOR=vim
+
+findg() { find . -name '*' |  xargs grep -nHr "$1" ; }
