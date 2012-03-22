@@ -36,7 +36,7 @@ bin/
 *.args
 *.pid
 /.ssh/svc
-/projects.list
+/gitolite/projects.list
 /repositories/
 /cgit/cgit.cgi
 /cgit/cgit.css

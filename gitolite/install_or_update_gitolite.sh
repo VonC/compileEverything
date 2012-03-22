@@ -10,6 +10,7 @@ else
 fi
 "${github}/src/gl-system-install" "${H}/gitolite/bin" "${gtl}/conf" "${gtl}/hooks"
 gen_sed -i "s,\$ENV{HOME} = \$ENV,\$ENV{HOME} = '${H}' ; # \$ENV{HOME} = \$ENV,g" "${gtl}/bin/gitolite_rc.pm"
+gen_sed -i "s,\"/projects.list\",\"/gitolite/projects.list\",g" "${H}/.gitolite.rc"
 if [[ ! -e "${H}/.ssh/gitoliteadm" ]]; then
   ssh-keygen -t rsa -f "${H}/.ssh/gitoliteadm" -C "Gitolite Admin access (not interactive)" -q -P ""
 fi
