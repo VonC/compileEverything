@@ -24,3 +24,10 @@ fqn=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*}
 gen_sed -i "s/@FQN@/${fqn}/g" "${fullFilePathDst}"
 fqnemail=${fqn/./@}
 gen_sed -i "s/@EMAIL@/${fqnemail}/g" "${fullFilePathDst}"
+
+while read line; do 
+  port=(${line#*=})
+  name=(${line%=*})
+  # echo "${name} - ${port}"
+  gen_sed -i "s;${name};${port};g" "${fullFilePathDst}"
+done < "${H}/.ports.ini"

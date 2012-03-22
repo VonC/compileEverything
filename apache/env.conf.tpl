@@ -35,7 +35,7 @@ SSLMutex  "file:@H@/apache/ssl_mutex"
 <AuthnProviderAlias ldap myldap>
   AuthLDAPBindDN cn=Manager,dc=example,dc=com
   AuthLDAPBindPassword secret
-  AuthLDAPURL ldap://localhost:@LDAP_TEST_PORT@/dc=example,dc=com?uid?sub?(objectClass=*)
+  AuthLDAPURL ldap://localhost:@PORT_LDAP_TEST@/dc=example,dc=com?uid?sub?(objectClass=*)
 </AuthnProviderAlias>
 
 <AuthnProviderAlias ldap companyldap>
