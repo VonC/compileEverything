@@ -91,6 +91,8 @@ export PERL5LIB="${HULA}/perl/lib/site_perl/current:${HULA}/perl/lib/current"
 
 export SSL_CERT_FILE="${H}/openssl/cert.pem"
 
+export LYNX_CFG="${H}/lynx/lynx.cfg"
+
 alias a=alias
 alias l='ls -alrt'
 alias h=history
