@@ -15,4 +15,4 @@ configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-lib=${HULL} --with-ope
 premake=gen_sed -i "s/^EXTLIBS =/EXTLIBS = -lintl /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile"
 makecmd=gmake
 makeinstcmd=gmake install
-post=cp_tpl "${H}/gitweb/gitweb.conf.pl.tpl" "${H}/gitweb"
+post=cp_tpl "${H}/gitweb/gitweb.conf.pl.tpl" "${H}/gitweb" ; "${H}/gitolite/install_or_update_gitolite.sh"

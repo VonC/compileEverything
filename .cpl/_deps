@@ -49,4 +49,7 @@ app cpanm none
 mod termreadkey cpanm
 mod error cpanm
 app cgit git,zlib,libgcrypt,openssl
+app ant jdk
+app junit ant,jdk
+app tomcat ant,jdk
 __no_deps__

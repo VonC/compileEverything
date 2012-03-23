@@ -1,0 +1,9 @@
+nameurl=apache-ant
+nameact=apache-ant
+page=http://ant.apache.org/srcdownload.cgi
+url=http://apache.cict.fr/ant/source/
+pre=gen_sed -i "s/jars,test-jar/jars/g" ${H}/.cpl/src/@@NAMEVER@@/build.xml
+configcmd=none
+makefile=none
+makecmd="${H}/.cpl/src/@@NAMEVER@@/build.sh"
+makeinstcmd=cp -R "${H}/.cpl/src/@@NAMEVER@@/dist" "${H}/usr/local/apps/@@NAMEVER@@"

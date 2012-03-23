@@ -69,6 +69,11 @@ if [[ -e "${HUL}/jdk6" ]] ; then
 else
   export JAVA_HOME=""
 fi
+if [[ -e "${HUL}/apps/ant" ]] ; then 
+  export ANT_HOME="${HUL}/apps/ant"
+else
+  export -n ANT_HOME
+fi
 #export GITOLITE_HTTP_HOME=${H}
 export GITOLITE_HOME="${H}/gitolite"
 export PATH="${PATH}":"${GITOLITE_HOME}/bin"

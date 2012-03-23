@@ -228,8 +228,8 @@ function get_sources() {
     #echo local asrcline wget -q -O - "${page}" grep "${nameurl}" grep "${ext}"
     local asrcline=$(wget -q -O - "${page}" | grep "${nameurl}" | grep "${ext}")
   fi
-   #echo "line0 source! from page ${page}, nameurl ${nameurl}, ext _${ext}_, exturl _${exturl}_"
-   #echo "line00 ${asrcline}"
+   #echo "D: line0 source! from page ${page}, nameurl ${nameurl}, ext _${ext}_, exturl _${exturl}_"
+   #echo "D: line00 ${asrcline}"
   get_param $name verexclude ""
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
   get_param $name verinclude ""
@@ -243,7 +243,7 @@ function get_sources() {
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\'\>*}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\' *}" ; fi
   source="${source}${exturl}"
-  # echo "sour0 ${source}"
+  #echo "D: sour0 ${source}"
   local source0="${source}"
   source="${source0##*\"}"
   if [[ "${source}" == "${source0}" ]] ; then source="${source0##*\'}" ; fi
@@ -264,15 +264,18 @@ function get_sources() {
   if [[ -e "${_pkgs}/$targz" ]] && [[ "${ss}" == "0" ]] ; then
     rm -f "${_pkgs}/$targz"
   fi
+  # echo "YYY anamever ${anamever} vs. name ${name} and nameact ${nameact}"
+  local aver=${anamever#${nameact}-}
+  aver=${aver%-src}
+  # echo "get sources final: anamever ${anamever}, aver ${aver}"
+  if [[ "${aver}" == "${anamever}" ]] ; then aver=${anamever#${nameact}} ; fi
+  ver=${ver##*~}
+  #echo "D: get sources final: anamever ${anamever}, aver ${aver}, source ${source}"
   if [[ ! -e "${_pkgs}/$targz" ]] && [[ ! -e "$HUL/._linked/${anamever}" ]]; then
     echolog "get sources for $name in ${_hpkgs}/$targz"
     loge "wget $source -O ${_pkgs}/$targz" "wget_sources_$targz"
   fi
-  # echo "YYY anamever ${anamever} vs. name ${name}"
-  local aver=${anamever#${nameact}-}
-  if [[ "${aver}" == "${anamever}" ]] ; then aver=${anamever#${nameact}} ; fi
   update_cache "${name}" "${anamever}" "${aver}"
-  # echo "get sources final: anamever ${anamever}, aver ${aver}"
   eval $_namever="'${anamever}'"
   eval $_ver="'${aver}'"
 }
@@ -288,7 +291,7 @@ function get_sources_from_cache() {
     if [[ "${aline}" != "" ]] ; then
       acachenamever=${aline##*#}
       acachenamever=${acachenamever%%~*}
-      acachever=${aline%%*~}
+      acachever=${aline##*~}
     else
       get_sources $name acachenamever acachever
       # echo "cache no line: get_sources $name, acachenamever $acachenamever, acachever $acachever"
@@ -454,7 +457,11 @@ function configure() {
   local name=$1
   local namever=$2
   get_param $name makefile Makefile
-  if [[ "${name}" != "${namever}" ]] && [[ ! -e $makefile || ! -e ._config ]]; then
+  local makefileExist=false
+  if [[ -e "${_src}/${namever}/$makefile" || "${makefile}" == "none" ]] ; then makefileExist=true ; fi
+  # echo "makefileExist ${makefileExist}"
+  # if [[ "${makefileExist}" == "false" ]] ; then echo "ee" ; fi
+  if [[ "${name}" != "${namever}" ]] && [[ ! -e "${_src}/${namever}/._config" || "${makefileExist}" == "false" ]]; then
     local haspre="false"; if [[ -e "${_src}/${namever}/._pre" ]] ; then haspre=true ; fi
     rm -f "${_src}/${namever}"/._*
     if [[ "$haspre" == "true" ]] ; then echo "done" > "${_src}/${namever}/._pre" ; fi
@@ -612,7 +619,9 @@ function build_item() {
       echo -ne "\e[1;32m" ; echolog "$type $namever already installed" ; echo -ne "\e[m" ;
       donelist="${donelist}@${name}@" ;
     fi
-    if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
+    local appCreateSymlink=false
+    if [[ ! -e "${HULA}/${name}" || -h "${HULA}/${name}" ]] ; then appCreateSymlink=true ; fi
+    if [[ "$type" == "APP" && "${appCreateSymlink}" == "true" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
   else
     local asrc="${_src}/${namever}"
     if [[ "${type}" == "MOD" ]] ; then mkdir -p "${asrc}" ; fi
@@ -689,6 +698,4 @@ function build_line() {
 main $*
 trap - EXIT
 echo -e "\e[00;32mAll Done.\e[00m"
-echo "Gitolite installation/update"
-"${H}/gitolite/install_or_update_gitolite.sh"
 exit 0

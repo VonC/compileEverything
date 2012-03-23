@@ -1,0 +1,9 @@
+nameurl=apache-tomcat
+nameact=apache-tomcat
+verinclude=src
+verexclude=bin
+page=http://tomcat.apache.org/download-70.cgi
+url=http://mirror.speednetwork.de/apache/tomcat/tomcat-7/v@@VER@@/src/
+configcmd=none
+premake=f="${H}/.cpl/src/@@NAMEVER@@/build.properties" ; echo "base.path=${H}/.cpl/src/@@NAMEVER@@/share" > "$f" ; http_proxy=$(env|grep -i "http_proxy") ; if [[ "${http_proxy}" != "" ]] ; then http_port="${http_proxy##*:}" ; http_proxy="${http_proxy%:*}" ; http_proxy="${http_proxy#*://}" ; echo "proxy.host=${http_proxy}" >> "$f" ; echo "proxy.port=${http_port}" >> $f ; echo "proxy.use=on" >> "$f" ; fi
+makecmd=ant

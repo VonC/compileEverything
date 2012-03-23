@@ -1,0 +1,12 @@
+page=https://github.com/KentBeck/junit/tags
+url=https://github.com/KentBeck/junit/tarball/
+verexclude=sign|manpages|htmldocs|-rc|nofollow
+nameurl=r
+nameact=junit
+ext=zip
+exturl=none
+extact=tar.gz
+configcmd=none
+makefile=none
+makecmd=ant dist
+makeinstcmd=cp -R "${H}/.cpl/src/@@NAMEVER@@/junit@@VER@@" "${H}/usr/local/apps/@@NAMEVER@@"
