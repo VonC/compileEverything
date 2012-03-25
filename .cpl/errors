@@ -2053,4 +2053,14 @@ http://oreilly.com/catalog/sshtdg/chapter/ch08.html
 auser:52 ahostname /home/auser/compileEverything #ssh -F $H/.ssh/gitoliteadm.config gitolitesrv ls
 bad command: ls
 ~~~~~~~------------
+groff configure
+Checking whether we are using the GNU C++ compiler... no
+checking whether g++ accepts -g... no
+checking that C++ compiler can compile simple program... no
+configure: error: a working C++ compiler is required
 
+configure:4425: g++ -o conftest  -I/home/git/ce/ce4/usr/local/include -I/home/git/ce/ce4/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -L/home/git/ce/ce4/usr/local/lib -L/home/git/ce/ce4/usr/local/ssl/lib -L/home/git/ce/ce4/usr/local/apps/python/lib -Wl,-rpath=/home/git/ce/ce4/usr/local/lib:/home/git/ce/ce4/usr/local/ssl/lib:/home/git/ce/ce4/usr/local/apps/svn/lib:/home/git/ce/ce4/usr/local/apps/python/lib:/home/git/ce/ce4/usr/local/apps/gcc/lib -lintl conftest.cpp  >&5
+./configure: line 1757: g++: command not found
+
+=> First compile gcc
+~~~~~~~~~~~~~~~

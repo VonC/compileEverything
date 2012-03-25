@@ -73,3 +73,5 @@ gitolite/github
 /.mm
 /.manpath
 /lynx/lynx.cfg
+/apache/ctl
+/apache/ctld

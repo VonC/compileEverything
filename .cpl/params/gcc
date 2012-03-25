@@ -1,4 +1,4 @@
-precond=mkdir -p ${H}/.cpl/src/@@NAMEVER@@/objdir ; anos=$(uname -r) ; if [[ "${anos#*Ubuntu}" != "${anos}" && ! -e /usr/include/asm ]] ; then echo "you need to install gcc-multilib first for gcc to compile" ; precond_failed ; fi
+precond=mkdir -p ${H}/.cpl/src/@@NAMEVER@@/objdir ; mkdir -p "${H}/.cpl/src/@@NAMEVER@@/objdir/lib/gcc/i686-pc-linux-gnu" ; ln -fs /usr/lib/i386-linux-gnu "${H}/.cpl/src/@@NAMEVER@@/objdir/lib/gcc/i686-pc-linux-gnu/3.4.6" ; anos=$(uname -r) ; if [[ "${anos#*Ubuntu}" != "${anos}" && ! -e /usr/include/asm ]] ; then echo "you need to install gcc-multilib first for gcc to compile" ; precond_failed ; fi
 cdpath=${H}/.cpl/src/@@NAMEVER@@/objdir
 configcmd=../configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --disable-multilib --enable-languages=c,c++ --with-as=@@PATH_AS@@ --with-ld=@@PATH_LD@@ --disable-libstdcxx-pch
-post=find "${H}/.cpl/src/@@NAMEVER@@" -name "libstdc++.so" -exec rm {} \;
+post=find "${H}/.cpl/src/@@NAMEVER@@" -name "libstdc++.so" -exec rm {} \; mkdir -p "${H}/usr/local/apps/gcc-3.4.6/i686-pc-linux-gnu" ; ln -fs /usr/lib/i386-linux-gnu "${H}/usr/local/apps/gcc-3.4.6/i686-pc-linux-gnu/lib"

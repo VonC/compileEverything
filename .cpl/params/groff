@@ -1,3 +1,3 @@
 pre=gen_sed -i "s/\$LDFLAGS conftest/\$LDFLAGS -lintl conftest/g" ${H}/.cpl/src/@@NAMEVER@@/configure ;
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --with-libiconv-prefix=${HUL} @@WITH_GNU_LD@@
-premake=gen_sed -i "s/^LDFLAGS=/LDFLAGSi=lintl /g" ${H}/.cpl/src/@@NAMEVER@@/Makefile
+premake=gen_sed -i "s/^LDFLAGS=/LDFLAGS=lintl /g" ${H}/.cpl/src/@@NAMEVER@@/Makefile; gen_sed -i "s/^LIBM=-lm/LIBM=-liconv -lm/g" ${H}/.cpl/src/@@NAMEVER@@/Makefile;

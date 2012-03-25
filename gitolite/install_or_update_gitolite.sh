@@ -16,3 +16,9 @@ if [[ ! -e "${H}/.ssh/gitoliteadm" ]]; then
 fi
 ln -fs ../../../gitolite/check_commits_strict.sh "${H}/.gitolite/hooks/common/pre-receive"
 GITOLITE_HTTP_HOME= gl-setup -q -q "${H}/.ssh/gitoliteadm.pub"
+gen_sed -i "s,\"/projects.list\",\"/gitolite/projects.list\",g" "${H}/.gitolite.rc"
+if [[ ! -e "${H}/gitolite/projects.list" ]] ; then
+  mv "${H}/projects.list" "${H}/gitolite/"
+else
+  rm -f "${H}/projects.list"
+fi
