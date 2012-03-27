@@ -98,11 +98,16 @@ export SSL_CERT_FILE="${H}/openssl/cert.pem"
 
 export LYNX_CFG="${H}/lynx/lynx.cfg"
 
+export CATALINA_HOME="${H}/usr/local/apps/tomcat"
+export CATALINA_BASE="${H}/tomcat"
+
 alias a=alias
 alias l='ls -alrt'
 alias h=history
 alias vi=vim
 alias t='tail --follow=name'
+alias tl='tail -F "${H}/.lastlog"'
+
 if [[ -e /usr/local/bin/vim ]] ; then vimp="/usr/local/bin/vim" ; else vimp="$(which vim)" ; fi
 alias vim='"${vimp}" -u "${H}/.vimrc"'
 
@@ -128,3 +133,5 @@ if [[ ! -e "${H}/.bashrc_aliases_git" ]] ; then cp "$H/.cpl/.bashrc_aliases_git.
 export EDITOR=vim
 
 findg() { find . -name '*' |  xargs grep -nHr "$1" ; }
+
+if [[ -e "${H}/.proxy" ]] ; then source "${H}/.proxy" ; fi

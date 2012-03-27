@@ -75,3 +75,13 @@ gitolite/github
 /lynx/lynx.cfg
 /apache/ctl
 /apache/ctld
+/.proxy
+/gitblit/*.war
+/gitblit/groovy
+/gitblit/users.conf
+/gitblit/web.*
+/tomcat/RUN*
+/tomcat/lib/
+/tomcat/webapps/
+/tomcat/work/
+/tomcat/conf/*

@@ -1,9 +1,10 @@
 nameurl=apache-tomcat
 nameact=apache-tomcat
-verinclude=src
-verexclude=bin
+verinclude=bin
+verexclude=src
 page=http://tomcat.apache.org/download-70.cgi
 url=http://mirror.speednetwork.de/apache/tomcat/tomcat-7/v@@VER@@/src/
 configcmd=none
-premake=f="${H}/.cpl/src/@@NAMEVER@@/build.properties" ; echo "base.path=${H}/.cpl/src/@@NAMEVER@@/share" > "$f" ; http_proxy=$(env|grep -i "http_proxy") ; if [[ "${http_proxy}" != "" ]] ; then http_port="${http_proxy##*:}" ; http_proxy="${http_proxy%:*}" ; http_proxy="${http_proxy#*://}" ; user_passwd="${http_proxy%%@*}" ; http_proxy="${http_proxy##*@}" ; echo "proxy.host=${http_proxy}" >> "$f" ; echo "proxy.port=${http_port}" >> $f ; echo "proxy.use=on" >> "$f" ; fi ; if [[ "${user_passwd}" != "" ]] ; then username="${user_passwd%%:*}" ; userpasswd="${user_passwd##*:}" ; echo "user.name=${username}" >> $f ; echo "user.password=${userpasswd}" >> $f ; fi
-makecmd=ant
+makecmd=none
+makeinstcmd=cp -R "${H}/.cpl/src/@@NAMEVER@@" "${H}/usr/local/apps/@@NAMEVER@@"
+post=cp -f "${H}/usr/local/apps/tomcat/bin/tomcat-juli.jar" "${H}/tomcat/bin" ; mkdir -p logs ; cp -Rf "${H}/usr/local/apps/tomcat/lib" "${H}/tomcat/lib" ; cp -Rf "${H}/usr/local/apps/tomcat/webapps" "${H}/tomcat/webapps" ; mkdir -p "${H}/tomcat/work" ; mkdir -p "${H}/tomcat/temp" 
