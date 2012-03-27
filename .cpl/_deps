@@ -4,7 +4,7 @@ lib expat none
 lib gettext libiconv,expat
 lib libiconv none
 lib groff gettext,libiconv
-app git gcc,openssl,libssh2,curl,libiconv,expat,libidn,zlib,perl,apache,python,subversion,openssh
+app git gcc,openssl,libssh2,curl,libiconv,expat,libidn,zlib,nginx,perl,apache,python,subversion,openssh
 lib openssl zlib,perl
 lib zlib gcc
 app perl db,gdbm
@@ -52,4 +52,5 @@ app cgit git,zlib,libgcrypt,openssl
 app ant jdk
 app junit ant,jdk
 app tomcat ant,jdk
+lib tomcat-native tomcat
 __no_deps__

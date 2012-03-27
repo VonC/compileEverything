@@ -243,7 +243,7 @@ function get_sources() {
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\'\>*}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\' *}" ; fi
   source="${source}${exturl}"
-  #echo "D: sour0 ${source}"
+  # echo "D: sour0 ${source}"
   local source0="${source}"
   source="${source0##*\"}"
   if [[ "${source}" == "${source0}" ]] ; then source="${source0##*\'}" ; fi
@@ -264,13 +264,16 @@ function get_sources() {
   if [[ -e "${_pkgs}/$targz" ]] && [[ "${ss}" == "0" ]] ; then
     rm -f "${_pkgs}/$targz"
   fi
-  # echo "YYY anamever ${anamever} vs. name ${name} and nameact ${nameact}"
+  # echo "D: YYY anamever ${anamever} vs. name ${name} and nameact ${nameact}"
   local aver=${anamever#${nameact}-}
   aver=${aver%-src}
   # echo "get sources final: anamever ${anamever}, aver ${aver}"
   if [[ "${aver}" == "${anamever}" ]] ; then aver=${anamever#${nameact}} ; fi
   ver=${ver##*~}
-  #echo "D: get sources final: anamever ${anamever}, aver ${aver}, source ${source}"
+  # echo "D: get sources final: anamever ${anamever}, aver ${aver} for source ${source}"
+  source=${source//@@VER@@/${aver}}
+  # echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}"
+  # echo "D: get sources final: anamever ${anamever}, aver ${aver}, source ${source}"
   if [[ ! -e "${_pkgs}/$targz" ]] && [[ ! -e "$HUL/._linked/${anamever}" ]]; then
     echolog "get sources for $name in ${_hpkgs}/$targz"
     loge "wget $source -O ${_pkgs}/$targz" "wget_sources_$targz"
@@ -399,7 +402,6 @@ function get_param() {
   if [[ "$aparam" == "" ]] || [[ "$aparam" == "none" ]] ; then eval $_param="'$aparam'" ; return 0 ; fi
   if [[ "$aparam" == "##mandatory##" ]]; then echolog "unable to find $_param for $name" ; find2 ; fi
   aparam=${aparam//@@NAMEVER@@/${namever}}
-  aparam=${aparam//@@VER@@/${ver}}
   if [[ "${aparam%@@USERNAME@@*}" != "${aparam}" ]] ; then
     getusername ausername
     aparam=${aparam//@@USERNAME@@/${ausername}}
@@ -648,7 +650,15 @@ function build_item() {
     if [[ ! -e "${asrc}"/._installed ]] ; then
       get_param $name makeinstcmd "make install"
       echo "makeinstcmd ${makeinstcmd}"
-      if [[ "${makeinstcmd}" != "none" ]] ; then loge "eval ${makeinstcmd}" "make_install_$namever"; fi
+      if [[ "${makeinstcmd}" != "none" ]] ; then 
+        if [[ "${makeinstcmd#@@}" != "${makeinstcmd}" ]] ; then
+          makeinstcmd="${makeinstcmd#@@}"
+          echo "${makeinstcmd}" > ./makeinstcmd
+          chmod 755 ./makeinstcmd
+          makeinstcmd="./makeinstcmd"
+        fi
+        loge "eval ${makeinstcmd}" "make_install_$namever"; 
+      fi
       echo done > "${asrc}"/._installed
     fi
     action $name $namever post "${asrc}"

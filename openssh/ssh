@@ -1,0 +1,2 @@
+#!/bin/bash
+"${H}/usr/local/bin/ssh" -F "${H}/.ssh/config" $1 $2

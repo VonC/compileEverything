@@ -53,7 +53,7 @@ export HISTSIZE=3000
 export HISTFILE="${H}/.bash_history"
 export HISTFILESIZE=2000
 export HISTTIMEFORMAT='%Y-%m-%d %H:%M:%S - '
-export HISTIGNORE="&:[ \t]*:exit:history:h:l"
+export HISTIGNORE="&:[ ]*:exit:history:h:l"
 
 # first override the $PATH, making sure to use *local* paths:
 export PATH="${H}/sbin:${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin:${H}/gitolite/bin"
