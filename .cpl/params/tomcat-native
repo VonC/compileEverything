@@ -3,5 +3,6 @@ verexclude=binaries
 page=http://tomcat.apache.org/native-doc/
 url=http://www.apache.org/dist/tomcat/tomcat-connectors/native/@@VER@@/source/
 configcmd=@@cd "${H}/.cpl/src/@@NAMEVER@@/jni/native" ; ./configure --with-apr=${HULB}/apr-1-config --with-java-home=$JAVA_HOME --with-ssl=${HUL}/ssl --prefix=$CATALINA_HOME ; cd ../..
+makefile=jni/native/Makefile
 makecmd=@@cd "${H}/.cpl/src/@@NAMEVER@@/jni/native" ; make ; cd ../..
 makeinstcmd=@@cd "${H}/.cpl/src/@@NAMEVER@@/jni/native" ; make install ; cd ../..

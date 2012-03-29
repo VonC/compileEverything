@@ -21,6 +21,7 @@ export JAVA_HOME="${H}/usr/local/jdk6"
 export JAVA_OPTS="-Dfile.encoding=UTF-8 \
   -Dcatalina.logbase=\"${H}/tomcat/logs\" \
   -Dnet.sf.ehcache.skipUpdateCheck=true \
+  -Djava.library.path=\"${CATALINA_HOME}/lib\" \
   -XX:+DoEscapeAnalysis \
   -XX:+UseConcMarkSweepGC \
   -XX:+CMSClassUnloadingEnabled \

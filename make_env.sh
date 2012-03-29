@@ -6,7 +6,7 @@ function scriptpath() {
   local asp="$(dirname $0)"
   if [[ "$asp" == "." ]] ; then asp=$(pwd) ;
   else
-    # echo "asp '$asp', ascript '$ascript'"
+    # echo "D: asp '$asp', ascript '$ascript'"
     if [[ "${ascript#/}" != "$ascript" ]]; then asp=$asp ;
     elif [[ "${ascript#../}" != "$ascript" ]]; then
       asp=$(pwd)
@@ -649,6 +649,7 @@ function build_item() {
     fi
     if [[ ! -e "${asrc}"/._installed ]] ; then
       get_param $name makeinstcmd "make install"
+      makeinstcmd=${makeinstcmd//@@VER@@/${ver}}
       echo "makeinstcmd ${makeinstcmd}"
       if [[ "${makeinstcmd}" != "none" ]] ; then 
         if [[ "${makeinstcmd#@@}" != "${makeinstcmd}" ]] ; then

@@ -3,8 +3,8 @@ app make expat,gettext
 lib expat none
 lib gettext libiconv,expat
 lib libiconv none
-lib groff gettext,libiconv
 app git gcc,openssl,libssh2,curl,libiconv,expat,libidn,zlib,nginx,perl,apache,python,subversion,openssh
+mod gitolite git
 lib openssl zlib,perl
 lib zlib gcc
 app perl db,gdbm

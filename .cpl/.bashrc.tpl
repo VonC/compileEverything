@@ -9,7 +9,7 @@ function bashscriptpath() {
   local _sp=$1
   local ascript="$0"
   local asp="$(dirname $0)"
-  #echo "b1 asp '$asp', b1 ascript '$ascript'"
+  #echo "D: b1 asp '$asp', b1 ascript '$ascript'"
   if [[ "$asp" == "." && "$ascript" != "bash" && "$ascript" != "./.bashrc" ]] ; then asp="${BASH_SOURCE[0]%/*}"
   elif [[ "$asp" == "." && "$ascript" == "./.bashrc" ]] ; then asp=$(pwd)
   else
@@ -17,9 +17,9 @@ function bashscriptpath() {
       ascript=${BASH_SOURCE[0]}
       asp="$(dirname $ascript)"
       if [[ "$asp" == "." ]] ; then asp=$(pwd) ; fi
-      #echo "bb asp '$asp', b1 ascript '$ascript'"
+      #echo "D: bb asp '$asp', b1 ascript '$ascript'"
     fi
-    #echo "b2 asp '$asp', b2 ascript '$ascript'"
+    #echo "D: b2 asp '$asp', b2 ascript '$ascript'"
     if [[ "${ascript#/}" != "$ascript" ]]; then asp=$asp ;
     elif [[ "${ascript#../}" != "$ascript" ]]; then
       asp=$(pwd)
@@ -135,3 +135,5 @@ export EDITOR=vim
 findg() { find . -name '*' |  xargs grep -nHr "$1" ; }
 
 if [[ -e "${H}/.proxy" ]] ; then source "${H}/.proxy" ; fi
+
+alias gr='git update-index --assume-unchanged "${H}/README.md"'
