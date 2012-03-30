@@ -93,8 +93,11 @@ function getJDK {
     ajdk=${ajdk#*f=\"}
     ajdk="http://www.oracle.com${ajdk%%\"*}"
     echo $ajdk
+    local ajdkgrep="linux-i586.bin"
+    if [[ "${longbit}" == "64" ]]; then ajdkgrep="linux-x64.bin" ; fi
+    # echo "D: longbit = ${longbit}, ajdkgrep = ${ajdkgrep}"
     local ajdk2=$(wget -q -O - ${ajdk} | grep "http://download.oracle.com/otn-pub/java/jdk" | \
-      grep "linux-i586.bin")
+      grep "${ajdkgrep}")
     ajdk2=${ajdk2##*:\"}
     ajdk2=${ajdk2%%\"*}
     local ajdkn=${ajdk2##*/}
@@ -122,6 +125,7 @@ function main {
     shift
   done
   set -o nounset
+  get_arc longbit
   if [[ -e "$H/.bashrc_aliases_git" ]] ; then cp "$H/.cpl/.bashrc_aliases_git.tpl" "$H/.bashrc_aliases_git" ; fi
   if [[ ! -e "$H/.bashrc" ]]; then
     if [[ "${title}" == "" ]] ; then echolog "When there is no .bashrc, make_env.sh needs a title for that .bashrc as first parameter. Not needed after that" ; miss_bashrc_title ; fi
@@ -201,7 +205,6 @@ function build_bashrc() {
   cp "$H/.cpl/.bashrc.tpl" "$H/.bashrc"
   export PATH=$H/bin:$PATH
   "${H}/sbin/gen_sed" -i "s/@@TITLE@@/${title}/g" "$H/.bashrc"
-  get_arc longbit
   if [[ "${unameo}" == "Cygwin" ]] ; then
     "${H}/sbin/gen_sed" -i 's/ @@CYGWIN@@/ -DHAVE_STRSIGNAL/g' "$H/.bashrc" ;
     "${H}/sbin/gen_sed" -i 's/ -fPIC//g' "$H/.bashrc" ;

@@ -107,6 +107,7 @@ alias h=history
 alias vi=vim
 alias t='tail --follow=name'
 alias tl='tail -F "${H}/.lastlog"'
+alias psw='ps auxwww|grep "${H}"|grep -v grep|grep'
 
 if [[ -e /usr/local/bin/vim ]] ; then vimp="/usr/local/bin/vim" ; else vimp="$(which vim)" ; fi
 alias vim='"${vimp}" -u "${H}/.vimrc"'
