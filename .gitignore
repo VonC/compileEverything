@@ -86,3 +86,4 @@ gitolite/github
 /tomcat/work/
 /tomcat/conf/server.xml
 /tomcat/conf/tomcat-users.xml
+/jdk/.cookies

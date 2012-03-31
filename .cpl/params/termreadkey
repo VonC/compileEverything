@@ -1,3 +1,3 @@
 configcmd=none
-makecmd=@@cpanm --look Term::ReadKey ;  initdir="$(pwd)" ; cpanmwork="$HOME/.cpanm/work/"$(ls -t1 "$HOME/.cpanm/work/" | head -n1) ; echo "  TERM::READKEY: cpanmwork ${cpanmwork}" ; ls -1 "$cpanmwork"/. ; cpanmbuild=$(ls -1d "$cpanmwork"/*/ | head -1) ; echo "  TERM::READKEY: cpanmbuild ${cpanmbuild}" ; cd "${cpanmbuild}" ; pwd ; ls -alrt ; gen_sed -i "s/^LDFLAGS =  -L@/LDFLAGS = -lm -L@/g" Makefile ; cpanm -v . ; cd "${initdir}"
+makecmd=@@cpanm --look Term::ReadKey ;  initdir="$(pwd)" ; cpanmwork="$HOME/.cpanm/work/"$(ls -t1 "$HOME/.cpanm/work/" | head -n1) ; echo "  TERM::READKEY: cpanmwork ${cpanmwork}" ; ls -1 "$cpanmwork"/. ; cpanmbuild=$(ls -1d "$cpanmwork"/*/ | head -1) ; echo "  TERM::READKEY: cpanmbuild ${cpanmbuild}" ; cd "${cpanmbuild}" ; pwd ; ls -alrt ; cpanm -v . ; gen_sed -i "s/^LDFLAGS = \+-L/LDFLAGS = -lm -L/g" Makefile.aperl ; cpanm -v . ; cd "${initdir}"
 makeinstcmd=none

@@ -103,7 +103,8 @@ function getJDK {
     local ajdkn=${ajdk2##*/}
     echo $ajdk2 $ajdkn
     if [[ ! -e "${_pkgs}/${ajdkn}" ]]; then
-      loge "wget $ajdk2 -O ${_pkgs}/$ajdkn" "wget_sources_${ajdkn}"
+      cp_tpl "${H}/jdk/.cookies.tpl" "${H}/jdk"
+      loge "wget --cookies=on --load-cookies=${H}/jdk/.cookies --keep-session-cookies $ajdk2 -O ${_pkgs}/$ajdkn" "wget_sources_${ajdkn}"
     fi
     chmod 755 "${_pkgs}/$ajdkn"
     cd "${H}/usr/local"
@@ -228,7 +229,7 @@ function get_sources() {
   if [[ -e "${page}" ]] ; then
     local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
   else
-    #echo local asrcline wget -q -O - "${page}" grep "${nameurl}" grep "${ext}"
+    #echo "D: local asrcline wget -q -O - ${page} grep ${nameurl} grep ${ext}"
     local asrcline=$(wget -q -O - "${page}" | grep "${nameurl}" | grep "${ext}")
   fi
    #echo "D: line0 source! from page ${page}, nameurl ${nameurl}, ext _${ext}_, exturl _${exturl}_"
@@ -241,7 +242,7 @@ function get_sources() {
   #if [[ $name == "cyrus-sasl" ]] ; then echo line source! $asrcline ; fffg ; fi
   # echo "line1 source! $asrcline"
   local source="${asrcline%%${exturl}\"\>*}"
-  # echo "line2 source! $asrcline"
+   echo "line2 source! $asrcline"
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\" *}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\'\>*}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\' *}" ; fi
@@ -252,13 +253,13 @@ function get_sources() {
   if [[ "${source}" == "${source0}" ]] ; then source="${source0##*\'}" ; fi
   # echo "source1 ${source}"
   get_param $name url ""
-  # echo "url0 ${url}"
+  # echo "D: url0 ${url}"
   local targz="${source##*/}"
   if [[ "$url" != "" ]] ; then
-    #echo "IIIII url ${url} AAAAA targz ${targz}"
+    #echo "D: IIIII url ${url} AAAAA targz ${targz}"
     source="${url}${targz}"
   fi
-  # echo sources for $name: $targz from $source
+  # echo "D: sources for $name: $targz from $source"
   if [[ "${exturl}" == "" ]] ; then targz="${targz}.${extact}" ; fi 
   if [[  "${nameurl}" != "${nameact}" ]] ; then targz="${nameact}-${targz#${nameurl}}" ; echo "new targz ${targz}" ; fi
   local anamever="${targz%.${extact}}"
@@ -270,13 +271,12 @@ function get_sources() {
   # echo "D: YYY anamever ${anamever} vs. name ${name} and nameact ${nameact}"
   local aver=${anamever#${nameact}-}
   aver=${aver%-src}
-  # echo "get sources final: anamever ${anamever}, aver ${aver}"
+  # echo "D: get sources final: anamever ${anamever}, aver ${aver}"
   if [[ "${aver}" == "${anamever}" ]] ; then aver=${anamever#${nameact}} ; fi
   ver=${ver##*~}
   # echo "D: get sources final: anamever ${anamever}, aver ${aver} for source ${source}"
   source=${source//@@VER@@/${aver}}
   # echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}"
-  # echo "D: get sources final: anamever ${anamever}, aver ${aver}, source ${source}"
   if [[ ! -e "${_pkgs}/$targz" ]] && [[ ! -e "$HUL/._linked/${anamever}" ]]; then
     echolog "get sources for $name in ${_hpkgs}/$targz"
     loge "wget $source -O ${_pkgs}/$targz" "wget_sources_$targz"
@@ -567,18 +567,27 @@ function action() {
   local namever=$2
   local actionname=$3
   local actionpath=$4
-  if [[ ! -e "${actionpath}/._${actionname}" ]]; then
-     get_param $name ${actionname} ""
+  local actionstep=$5
+  local actiondefault=$6
+  if [[ ! -e "${actionpath}/._${actionstep}" ]]; then
+     get_param $name ${actionname} ${actiondefault}
      local actioncmd=${!actionname}
-     #if [[ "$name" == "perl" && "$actionname" == "pre" ]] ; then echo eval xx ${actioncmd} xx ; fi
-     #echo actioname ${actionname} gives actioncmd ${actioncmd}; eee
-     if [[ $actioncmd != "" ]]; then
-       #echo pre $pre ; jj
-       loge "eval ${actioncmd}" "${actionname}_${namever}"
+     actioncmd=${actioncmd//@@VER@@/${ver}}
+     if [[ "${actioncmd}" != "none" ]] && [[ "${actioncmd}" != "" ]] ; then 
+       #if [[ "$name" == "perl" && "$actionname" == "pre" ]] ; then echo eval xx ${actioncmd} xx ; fi
+       #echo actioname ${actionname} gives actioncmd ${actioncmd}; eee
+       if [[ "${actioncmd#@@}" != "${actioncmd}" ]] ; then
+          actioncmd="${actioncmd#@@}"
+          echo "${actioncmd}" > "./${actionname}"
+          chmod 755 "./${actionname}"
+          actioncmd="./${actionname}"
+        fi
+        #echo pre $pre ; jj
+        loge "eval ${actioncmd}" "${actionname}_${namever}"
      fi
-     echo done > "${actionpath}/._${actionname}"
+     echo done > "${actionpath}/._${actionstep}"
      #if [[ "$name" == "perl" && "$actionname" == "pre" ]] ; then echo "---- done" ; eee ; fi
-  fi
+  fi    
 }
 function isItDone() {
   local name="$1"
@@ -632,40 +641,14 @@ function build_item() {
     if [[ "${type}" == "MOD" ]] ; then mkdir -p "${asrc}" ; fi
     sc
     if [[ "${type}" != "MOD" ]] ; then untar $name $namever ; fi
-    action $name $namever precond "${asrc}"
+    action $name $namever precond "${asrc}" precond "none"
     gocd $name $namever
-    action $name $namever pre "${asrc}"
+    action $name $namever pre "${asrc}" pre "none"
     configure $name $namever
-    action $name $namever premake "${asrc}"
-    if [[ ! -e "${asrc}"/._build ]] ; then
-      get_param $name makecmd "make" ;
-      if [[ "${makecmd}" != "none" ]] ; then
-        if [[ "${makecmd#@@}" != "${makecmd}" ]] ; then
-          makecmd="${makecmd#@@}"
-          echo "${makecmd}" > ./makecmd
-          chmod 755 ./makecmd
-          makecmd="./makecmd"
-        fi
-        loge "eval ${makecmd}" "make_$namever";
-      fi
-      echo done > "${asrc}"/._build
-    fi
-    if [[ ! -e "${asrc}"/._installed ]] ; then
-      get_param $name makeinstcmd "make install"
-      makeinstcmd=${makeinstcmd//@@VER@@/${ver}}
-      echo "makeinstcmd ${makeinstcmd}"
-      if [[ "${makeinstcmd}" != "none" ]] ; then 
-        if [[ "${makeinstcmd#@@}" != "${makeinstcmd}" ]] ; then
-          makeinstcmd="${makeinstcmd#@@}"
-          echo "${makeinstcmd}" > ./makeinstcmd
-          chmod 755 ./makeinstcmd
-          makeinstcmd="./makeinstcmd"
-        fi
-        loge "eval ${makeinstcmd}" "make_install_$namever"; 
-      fi
-      echo done > "${asrc}"/._installed
-    fi
-    action $name $namever post "${asrc}"
+    action $name $namever premake "${asrc}" premake "none"
+    action $name $namever make "${asrc}" build "make"
+    action $name $namever makeinstcmd "${asrc}" installed  "make install"
+    action $name $namever post "${asrc}" post "none"
     if [[ "${type}" != "MOD" ]] ; then
       if [[ "$type" == "APP" ]] ; then linksrcdef="$HULA/$namever/bin" ; linkdstdef="$H/bin" ; fi
       if [[ "$type" == "LIB" ]] ; then linksrcdef="$HULS/$namever" ; linkdstdef="$HUL" ; fi

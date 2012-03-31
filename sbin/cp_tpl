@@ -20,7 +20,9 @@ cp -f "${fullFilePathOri}" "${fullFilePathDst}"
 
 gen_sed -i "s;@H@;${H};g" "${fullFilePathDst}"
 gen_sed -i "s/@HOSTNAME@/$(hostname -s)/g" "${fullFilePathDst}"
-fqn=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*}
+
+#fqn=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*}
+fqn=$(host -TtA $(hostname -s)|grep "has address"|awk '{print $1}') ; if [[ "${fqn}" == "" ]] ; then fqn=$(hostname -s) ; fi
 gen_sed -i "s/@FQN@/${fqn}/g" "${fullFilePathDst}"
 fqnemail=${fqn/./@}
 gen_sed -i "s/@EMAIL@/${fqnemail}/g" "${fullFilePathDst}"
@@ -31,3 +33,7 @@ while read line; do
   # echo "${name} - ${port}"
   gen_sed -i "s;${name};${port};g" "${fullFilePathDst}"
 done < "${H}/.ports.ini"
+
+epoch=$(date +%s)
+epoch=$((epoch+1000))
+gen_sed -i "s/@EPOCH@/${epoch}/g" "${fullFilePathDst}"

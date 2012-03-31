@@ -1,3 +1,5 @@
 verexclude=0.25.
-url=http://www.webdav.org/neon/
+u_rl=http://www.webdav.org/neon/ # down March, 31st ding it!
+page=http://fossies.org/unix/www/
+url=http://fossies.org/unix/www/
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-libs=${HUL} --with-ssl=openssl --with-libxml2 --with-expat @@WITHOUT_GNU_LD@@
