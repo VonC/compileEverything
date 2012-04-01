@@ -1,4 +1,4 @@
-wget https://github.com/VonC/compileEverthing/tarball/master
+wget https://github.com/VonC/compileEverything/tarball/master
 tar xpvf master
 mv Von* ce1
 cd ce1

@@ -646,7 +646,7 @@ function build_item() {
     action $name $namever pre "${asrc}" pre "none"
     configure $name $namever
     action $name $namever premake "${asrc}" premake "none"
-    action $name $namever make "${asrc}" build "make"
+    action $name $namever makecmd "${asrc}" build "make"
     action $name $namever makeinstcmd "${asrc}" installed  "make install"
     action $name $namever post "${asrc}" post "none"
     if [[ "${type}" != "MOD" ]] ; then
