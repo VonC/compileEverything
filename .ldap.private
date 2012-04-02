@@ -1,0 +1,3 @@
+@LDAP_BINDDN@=CN=A-Binding-Account,OU=Service-Accounts,DC=Prod,DC=company
+@LDAP_PASSWORD@=binDN-password
+@LDAP_URL@=ldaps://company.co.comp:4269/OU=CompanyPeople,DC=Prod,DC=company?employeeID

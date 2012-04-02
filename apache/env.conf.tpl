@@ -38,11 +38,13 @@ SSLMutex  "file:@H@/apache/ssl_mutex"
   AuthLDAPURL ldap://localhost:@PORT_LDAP_TEST@/dc=example,dc=com?uid?sub?(objectClass=*)
 </AuthnProviderAlias>
 
+<!-- LDAP_START
 <AuthnProviderAlias ldap companyldap>
-  AuthLDAPBindDN "CN=A-Binding-Account,OU=Service-Accounts,DC=Prod,DC=company"
-  AuthLDAPBindPassword binDN-password
-  AuthLDAPURL ldaps://company.co.comp:4269/OU=CompanyPeople,DC=Prod,DC=company?employeeID
+  AuthLDAPBindDN "@LDAP_BINDDN@"
+  AuthLDAPBindPassword @LDAP_PASSWORD@
+  AuthLDAPURL @LDAP_URL@
 </AuthnProviderAlias>
+LDAP_END -->
 
 # GitWeb on @PORT_HTTP_GITWEB@
 Listen @PORT_HTTP_GITWEB@
@@ -102,7 +104,7 @@ Listen @PORT_HTTP_HGIT@
     SetEnv GIT_PROJECT_ROOT @H@/repositories
     SetEnv GIT_HTTP_EXPORT_ALL
     SetEnv GITOLITE_HTTP_HOME @H@
-    ScriptAlias /hgit/ @H@/bin/gl-auth-command/
+    ScriptAlias /hgit/ @H@/gitolite/bin/gl-auth-command/
     SetEnv GIT_HTTP_BACKEND "@H@/usr/local/apps/git/libexec/git-core/git-http-backend"
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars
@@ -145,7 +147,6 @@ Listen @PORT_HTTP_CGIT@
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars
     </FilesMatch>
-    ScriptAlias /gitolite/ @H@/bin/gl-auth-command/
     <Directory @H@/cgit>
         SSLOptions +StdEnvVars
         Options ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch

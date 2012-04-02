@@ -37,3 +37,18 @@ done < "${H}/.ports.ini"
 epoch=$(date +%s)
 epoch=$((epoch+1000))
 gen_sed -i "s/@EPOCH@/${epoch}/g" "${fullFilePathDst}"
+
+ldapg=$(grep "@LDAP_" "${fullFilePathDst}")
+# echo "ldapg ${ldapg}"
+if [[ "${ldapg}" != "" ]] ; then
+  if [[ -e "${H}/.ldap" ]] ; then
+    gen_sed -i "s;<!-- LDAP_START;;g" "${fullFilePathDst}"
+    gen_sed -i "s;LDAP_END -->;;g" "${fullFilePathDst}"
+    while read line; do
+      ldapp=("${line#*=}")
+      ldapn=(${line%%=*})
+      # echo "ldap: ${ldapn} - ${ldapp}"
+      gen_sed -i "s;${ldapn};${ldapp};g" "${fullFilePathDst}"
+    done < "${H}/.ldap"
+  fi
+fi

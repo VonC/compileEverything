@@ -10,7 +10,7 @@ cnf="${apache}/o.cnf"
 if [[ ! -e "${passphrasekey}" ]]; then
   openssl genrsa -des3 -passout pass:${fqnpassword} -out "${passphrasekey}" 1024
   openssl rsa -passin pass:${fqnpassword} -in "${passphrasekey}" -out "${key}"
-  openssl req -new -config "${cnf}" -extensions v3_req -x509 -days 730 -key "${key}" -out "${cert}"
+  openssl req -new -config "${cnf}" -extensions v3_ca -x509 -days 730 -key "${key}" -out "${cert}"
   cat "${cert}" >> "${H}/.ssh/curl-ca-bundle.crt"
 fi
 ln -fs "${fqn}.key" "${apache}/key"

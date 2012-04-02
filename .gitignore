@@ -87,3 +87,7 @@ gitolite/github
 /tomcat/conf/server.xml
 /tomcat/conf/tomcat-users.xml
 /jdk/.cookies
+/repositories
+/repositories.ori/
+*.ori
+.ldap

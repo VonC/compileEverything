@@ -242,7 +242,7 @@ function get_sources() {
   #if [[ $name == "cyrus-sasl" ]] ; then echo line source! $asrcline ; fffg ; fi
   # echo "line1 source! $asrcline"
   local source="${asrcline%%${exturl}\"\>*}"
-   echo "line2 source! $asrcline"
+  # echo "D: line2 source! $asrcline"
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\" *}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\'\>*}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\' *}" ; fi
@@ -568,9 +568,9 @@ function action() {
   local actionname=$3
   local actionpath=$4
   local actionstep=$5
-  local actiondefault=$6
+  local actiondefault="$6"
   if [[ ! -e "${actionpath}/._${actionstep}" ]]; then
-     get_param $name ${actionname} ${actiondefault}
+     get_param $name ${actionname} "${actiondefault}"
      local actioncmd=${!actionname}
      actioncmd=${actioncmd//@@VER@@/${ver}}
      if [[ "${actioncmd}" != "none" ]] && [[ "${actioncmd}" != "" ]] ; then 
