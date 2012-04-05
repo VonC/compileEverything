@@ -112,7 +112,10 @@ alias psw='ps auxwww|grep "${H}"|grep -v grep|grep'
 if [[ -e /usr/local/bin/vim ]] ; then vimp="/usr/local/bin/vim" ; else vimp="$(which vim)" ; fi
 alias vim='"${vimp}" -u "${H}/.vimrc"'
 
-alias git="${H}/sbin/wgit"
+oag=$(a git| grep "${H}" | grep " u ")
+if [[ "${oag}" == "" ]] ; then
+  alias git="${H}/sbin/wgit"
+fi
 
 if [[ -e "${H}/.bashrc_aliases_git" ]] ; then source "${H}/.bashrc_aliases_git" ]] ; fi
 
