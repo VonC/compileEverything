@@ -112,7 +112,9 @@ alias psw='ps auxwww|grep "${H}"|grep -v grep|grep'
 if [[ -e /usr/local/bin/vim ]] ; then vimp="/usr/local/bin/vim" ; else vimp="$(which vim)" ; fi
 alias vim='"${vimp}" -u "${H}/.vimrc"'
 
-oag=$(a git| grep "${H}" | grep " u ")
+set +e
+oag=$(alias git 2>/dev/null| grep "${H}" | grep " u ")
+set -e
 if [[ "${oag}" == "" ]] ; then
   alias git="${H}/sbin/wgit"
 fi
