@@ -91,3 +91,6 @@ gitolite/github
 /repositories.ori/
 *.ori
 .ldap
+tomcat/key*
+*.p12
+*.pem

@@ -86,6 +86,10 @@
                maxThreads="150" scheme="https" secure="true"
                clientAuth="false" sslProtocol="TLS" />
     -->
+    <Connector port="@PORT_TOMCAT_CATALINA_REDIRECT@" protocol="HTTP/1.1" SSLEnabled="true"
+               maxThreads="150" scheme="https" secure="true"
+               clientAuth="false" sslProtocol="TLS"
+               keystoreFile="${catalina.base}/keystore.jks" />
 
     <!-- Define an AJP 1.3 Connector on port @PORT_TOMCAT_AJP@ -->
     <Connector port="@PORT_TOMCAT_AJP@" protocol="AJP/1.3" redirectPort="@PORT_TOMCAT_CATALINA_REDIRECT@" />

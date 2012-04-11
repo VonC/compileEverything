@@ -193,7 +193,9 @@ function loge() { echo -ne "\e[1;33m" ; f=$(_fdate).$2.log ; _log "$1" $f ; _ech
 function mrf() { ls -t1 "$1"/$2 | head -n1 ; }
 
 function sc() {
+  set +e
   source "$H/.bashrc" -force
+  set -e
 }
 function get_arc(){
   local _longbit=$1
@@ -395,12 +397,14 @@ function get_param() {
   local name="$1"
   local _param="$2"
   local default="$3"
-  #echo "name $name, _param $_param, default $default, namever='${namever}', ver='${ver}'"
+  #echo ":D name $name, _param $_param, default $default, namever='${namever}', ver='${ver}'"
   if [[ ! -e "$H/.cpl/params/$name" ]] ; then echolog "unable to find param for $name" ; no_param ; fi
-  local aparam=$(grep "$_param=" "$H/.cpl/params/$name"|head -1)
-  if [[ "$aparam" != "" && "${aparam##$_param=}" != "$aparam" ]] ; then
-    aparam=${aparam##$_param=}
+  local aparam=$(grep -e "^${_param}=" "$H/.cpl/params/${name}"|head -1)
+  local aparamname="${aparam%%=*}"
+  if [[ "${aparam}" != "" && "${aparam##${_param}=}" != "${aparam}" ]] ; then
+    aparam=${aparam##${_param}=}
   else aparam="" ; fi
+  if [[ "${aparamname}" != "${_param}" ]] ; then aparam="" ; fi
   if [[ "$aparam" == "" ]]; then aparam="$default" ; fi
   if [[ "$aparam" == "" ]] || [[ "$aparam" == "none" ]] ; then eval $_param="'$aparam'" ; return 0 ; fi
   if [[ "$aparam" == "##mandatory##" ]]; then echolog "unable to find $_param for $name" ; find2 ; fi

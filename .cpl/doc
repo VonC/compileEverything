@@ -675,4 +675,39 @@ gitweb/gitweb.conf.pl.tpl
 .manpath
 gitolite/check_commits.sh
 gitolite_rc.pm
+~~~~~~~~~~~~~~~~~~
+http://www.herongyang.com/Cryptography/Certificate-Format-keytool-Import-in-DER-and-PEM.html
+keytool -importcert -noprompt -file "${H}/apache/crt" -keystore "${H}/tomcat/keystore.ssl" -storepass tomcatpass -alias openssl_crt_pem
+keytool -importcert -trustcacerts -noprompt -file "${H}/apache/crt" -keystore "${H}/tomcat/keystore.ssl" -storepass tomcatpass -alias openssl_crt_pem
+Certificate was added to keystore
+
+keytool -list -keystore "${H}/tomcat/keystore.ssl" -storepass tomcatpass
+
+
+Keystore type: JKS
+Keystore provider: SUN
+
+Your keystore contains 1 entry
+
+openssl_crt_pem, 10-Apr-2012, trustedCertEntry,
+Certificate fingerprint (MD5): 04:39:54:75:CC:5E:39:77:AB:9A:26:44:65:B7:3C:03
+
+See also http://stackoverflow.com/questions/1180397/tomcat-server-client-self-signed-ssl-certificate
+
+Which works:
+
+http://quakology.blogspot.fr/2009/06/how-to-use-ssl-with-client-certificate.html
+
+openssl pkcs12 -export -in "${H}/apache/crt" -inkey "${H}/apache/key" -out mycert.p12 -name tomcat -CAfile myCA.crt -caname root
+Enter Export Password: <changeit>
+Verifying - Enter Export Password:  <changeit>
+
+keytool -importkeystore -srckeystore mycert.p12 -srcstoretype PKCS12 -destkeystore keystore.jks
+Enter destination keystore password:
+Re-enter new password: <changeit>
+Enter source keystore password: <changeit>
+Entry for alias tomcat successfully imported.
+Import command completed:  1 entries successfully imported, 0 entries failed or cancelled
+
+~~~~~~~~~~~
 
