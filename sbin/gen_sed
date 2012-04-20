@@ -35,6 +35,21 @@ if [[ "$1" == "-i" && "$(uname)" == "SunOS" ]] ; then
   #echo "achmodcmd ${achmodcmd}"
   eval "${achmodcmd}"
 else
+  ok="false"
   #echo "/bin/sed \"$*\""
-  /bin/sed "$1" "$2" "$3"
+  if [[ -e "$3" ]] ; then
+    /bin/sed "$1" "$2" "$3"
+    ok="true"
+  fi
+  if [[ -e "$4" ]] ; then
+    /bin/sed "$1" "$2" "$3" "$4"
+    o="true"
+  fi
+  if [[ -e "$5" ]] ; then
+    /bin/sed "$1" "$2" "$3" "$4" "$5"
+    ok="true"
+  fi
+  if [[ "${ok}" == "false" ]] ; then
+    echo "WARN: SED NOT DONE /bin/sed \"$*\""
+  fi
 fi

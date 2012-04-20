@@ -38,13 +38,13 @@ SSLMutex  "file:@H@/apache/ssl_mutex"
   AuthLDAPURL ldap://localhost:@PORT_LDAP_TEST@/dc=example,dc=com?uid?sub?(objectClass=*)
 </AuthnProviderAlias>
 
-<!-- LDAP_START
+# LDAP_START
 <AuthnProviderAlias ldap companyldap>
   AuthLDAPBindDN "@LDAP_BINDDN@"
   AuthLDAPBindPassword @LDAP_PASSWORD@
   AuthLDAPURL @LDAP_URL@
 </AuthnProviderAlias>
-LDAP_END -->
+# LDAP_END
 
 # GitWeb on @PORT_HTTP_GITWEB@
 Listen @PORT_HTTP_GITWEB@

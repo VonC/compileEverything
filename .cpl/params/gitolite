@@ -1,4 +1,5 @@
 configcmd=none
 makefile=none
 makecmd=none
-makeinstcmd="${H}/gitolite/install_or_update_gitolite.sh"
+# makeinstcmd=aaa;"${H}/gitolite/install_or_update_gitolite.sh"
+makeinstcmd=none

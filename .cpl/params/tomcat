@@ -7,4 +7,4 @@ url=http://mirror.speednetwork.de/apache/tomcat/tomcat-7/v@@VER@@/src/
 configcmd=none
 makecmd=none
 makeinstcmd=cp -R "${H}/.cpl/src/@@NAMEVER@@" "${H}/usr/local/apps/@@NAMEVER@@" ; rm -f "${H}/usr/local/apps/tomcat" ; ln -fs @@NAMEVER@@ "${H}/usr/local/apps/tomcat"
-post=mkdir -p "${H}/tomcat/logs" ; cp -Rf "${H}/usr/local/apps/tomcat/webapps" "${H}/tomcat" ; mkdir -p "${H}/tomcat/work" ; mkdir -p "${H}/tomcat/temp" ; cp_tpl "${H}/tomcat/conf/server.xml.tpl" "${H}/tomcat/conf" ; if [[ ! -e "${H}/tomcat/conf/tomcat-users.xml" ]] ; then cp_tpl "${H}/tomcat/conf/tomcat-users.xml.tpl" "${H}/tomcat/conf" ; fi
+post=mkdir -p "${H}/tomcat/logs" ; cp -Rf "${H}/usr/local/apps/tomcat/webapps" "${H}/tomcat" ; mkdir -p "${H}/tomcat/work" ; mkdir -p "${H}/tomcat/temp" ; cp_tpl "${H}/tomcat/conf/server.xml.tpl" "${H}/tomcat/conf" ; if [[ ! -e "${H}/tomcat/conf/tomcat-users.xml" ]] ; then cp_tpl "${H}/tomcat/conf/tomcat-users.xml.tpl" "${H}/tomcat/conf" ; fi ; "${H}/tomcat/gen_keystore"

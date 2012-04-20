@@ -92,5 +92,6 @@ gitolite/github
 *.ori
 .ldap
 tomcat/key*
-*.p12
+*.p12*
 *.pem
+*.pkcs12
