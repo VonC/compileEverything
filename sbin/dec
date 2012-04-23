@@ -1,0 +1,24 @@
+#!/bin/bash
+
+function usage() {
+ echo
+ echo "Usage: dec <filename>"
+ echo "will look for a '$H/.crypt/${ce_iv}/<filename>.enc' with the encoded string to decode on stdout"
+ echo
+exit
+}
+
+if [ $# -lt 1 ]
+then
+  usage
+  exit 1
+fi
+
+if [[ ! ${ce_key128} || ! ${ce_iv} ]] ; then
+  echo "ce_key128 or ce_iv global environment variable missing. No decoding possible."
+  exit 1
+fi
+
+file="$1"
+mkdir -p "$H/.crypt/${ce_iv}"
+openssl enc -aes-128-cbc -d -K ${ce_key128} -iv ${ce_iv} -base64 -in "$H/.crypt/${ce_iv}/${file}.enc" 2>/dev/null

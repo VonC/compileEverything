@@ -90,10 +90,15 @@ then
    #echo NEXT $nextcmd
    if [[ ( $nextcmd == "push" || $nextcmd == "clone" || $nextcmd == "fetch" ) && ! -f $HOME/.netrc ]]; then
      authen=1
+     passwordvarname="${username}_${machine}"
+     if [[ ! $password ]] ; then
+       password=$(dec ${passwordvarname})
+     fi
      if [[ ! $password ]] ; then
        stty -echo
        read -p "Enter your Windows password: " apasswd
        stty echo
+       enc ${apasswd} "${passwordvarname}" 
      else
        apasswd="${password}"
      fi
