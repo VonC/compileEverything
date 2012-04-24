@@ -146,16 +146,15 @@ if [[ ! ${ce_key128} ]] ; then
   ce_key128=$(echo "key-$RANDOM-$$-$(date)" | md5sum | md5sum)
   ce_key128=${ce_key128:0:32}
   export ce_key128=${ce_key128}
-#  echo "ce_key128=${ce_key128}"
-#else
-#  echo "ce_key128i=${ce_key128}"
 fi
 if [[ ! ${ce_iv} ]] ; then
   ce_iv=$(echo "iv-$RANDOM-$$-$(date)" | md5sum | md5sum)
   ce_iv=${ce_iv:0:32}
   export ce_iv=${ce_iv}
-  mkdir -p /.env/${ce_iv}
-#  echo "ce_iv=${ce_iv}"
-#else
-#  echo "ce_ivi=${ce_iv}"
+fi
+if [[ ! ${ce_session} ]] ; then
+  ce_session=$(echo "session-$RANDOM-$$-$(date)" | md5sum | md5sum)
+  ce_session=${ce_session:0:32}
+  export ce_session=${ce_session}
+  mkdir -p "${H}/.crypt/${ce_session}
 fi
