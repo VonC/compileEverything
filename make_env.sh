@@ -225,26 +225,28 @@ function get_sources() {
   get_param $name page "${_vers}"
   if [[ "$page" == "none" ]] ; then eval $_namever="'${name}'" ; return 0 ; fi
   get_param $name ext "tar.gz"
+  if [[ "${nameurl}" == "none" ]] ; then nameurl="" ; fi
+  if [[ "${ext}" == "none" ]] ; then ext="" ; fi
   get_param $name exturl "${ext}"
   if [[ "${exturl}" == "none" ]] ; then exturl="" ; fi
   get_param $name extact "${ext}"
   if [[ -e "${page}" ]] ; then
     local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
   else
-    #echo "D: local asrcline wget -q -O - ${page} grep ${nameurl} grep ${ext}"
-    local asrcline=$(wget -q -O - "${page}" | grep "${nameurl}" | grep "${ext}")
+  # echo "D: local asrcline wget -q -O - ${page} grep -e ${nameurl} grep ${ext}"
+    local asrcline=$(wget -q -O - "${page}" | grep -e "${nameurl}" | grep -e "${ext}")
   fi
-   #echo "D: line0 source! from page ${page}, nameurl ${nameurl}, ext _${ext}_, exturl _${exturl}_"
-   #echo "D: line00 ${asrcline}"
   get_param $name verexclude ""
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
   get_param $name verinclude ""
   if [[ "${verinclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -e "${verinclude}") ; fi
+  # echo "D: line0 source! from page ${page}, nameurl ${nameurl}, ext _${ext}_, exturl _${exturl}_"
+  # echo "D: line00 ${asrcline}"
   if [[ "${asrcline}" == "" ]]; then echolog "unable to get source version for ${name} with nameact ${nameact}, nameurl ${nameurl}, verinclude ${verinclude}, verexclude ${verexclude}, ext _${ext}_, exturl _${exturl}_" ; get_sources_failed ; fi
   #if [[ $name == "cyrus-sasl" ]] ; then echo line source! $asrcline ; fffg ; fi
-  # echo "line1 source! $asrcline"
+  # echo "D: line1 source! $asrcline"
   local source="${asrcline%%${exturl}\"\>*}"
-  # echo "D: line2 source! $asrcline"
+  # echo "D: line2 source! $source"
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\" *}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\'\>*}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\' *}" ; fi
@@ -253,17 +255,31 @@ function get_sources() {
   local source0="${source}"
   source="${source0##*\"}"
   if [[ "${source}" == "${source0}" ]] ; then source="${source0##*\'}" ; fi
-  # echo "source1 ${source}"
+   echo "source1 ${source}"
   get_param $name url ""
   # echo "D: url0 ${url}"
+  # echo "D: source ${source}"
   local targz="${source##*/}"
+  local aver=""
+  if [[ "${targz}" == "" ]] ; then
+    aver="${source%%/*}"
+  fi
   if [[ "$url" != "" ]] ; then
     #echo "D: IIIII url ${url} AAAAA targz ${targz}"
     source="${url}${targz}"
   fi
-  # echo "D: sources for $name: $targz from $source"
+  # echo "D: sources for $name: $targz from $source, with aver ${aver}"
   if [[ "${exturl}" == "" ]] ; then targz="${targz}.${extact}" ; fi 
   if [[  "${nameurl}" != "${nameact}" ]] ; then targz="${nameact}-${targz#${nameurl}}" ; echo "new targz ${targz}" ; fi
+  targz="${targz%-}"
+  # echo "D: targz2 ${targz}"
+  local aver_="${aver//\./_}"
+  # echo "D: aver_ ${aver_}"
+  source="${source//@@VER@@/${aver}}"
+  source="${source//@@VER_@@/${aver_}}"
+  targz="${targz//@@VER@@/${aver}}"
+  targz="${targz//@@VER_@@/${aver_}}"
+  # echo "D: source ${source}, with targz ${targz}"
   local anamever="${targz%.${extact}}"
   local ss="xx"
   if [[ -e "${_pkgs}/$targz" ]] ; then ss=$(stat -c%s "${_pkgs}/$targz") ; fi
@@ -271,12 +287,14 @@ function get_sources() {
     rm -f "${_pkgs}/$targz"
   fi
   # echo "D: YYY anamever ${anamever} vs. name ${name} and nameact ${nameact}"
-  local aver=${anamever#${nameact}-}
-  aver=${aver%-src}
+  if [[ "${aver}" == "" ]] ; then
+    aver=${anamever#${nameact}-}
+    aver=${aver%-src}
+  fi
   # echo "D: get sources final: anamever ${anamever}, aver ${aver}"
   if [[ "${aver}" == "${anamever}" ]] ; then aver=${anamever#${nameact}} ; fi
   ver=${ver##*~}
-  # echo "D: get sources final: anamever ${anamever}, aver ${aver} for source ${source}"
+  # echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}"
   source=${source//@@VER@@/${aver}}
   # echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}"
   if [[ ! -e "${_pkgs}/$targz" ]] && [[ ! -e "$HUL/._linked/${anamever}" ]]; then

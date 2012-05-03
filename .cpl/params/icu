@@ -1,0 +1,12 @@
+page=http://download.icu-project.org/files/icu4c/?C%3DM%3BO%3DD
+url=http://download.icu-project.org/files/icu4c/@@VER@@/icu4c-@@VER_@@-src.tgz
+nameurl=\"[0-9][0-9][^rcm/]*/
+nameact=icu4c-@@VER_@@-src.tgz
+ext=none
+exturl=/
+extact=tgz
+makefile=source/Makefile
+pre=gen_sed -i '\''s/^DUAL/LIBS=\"-lintl\";DUAL/'\'' ${H}/.cpl/src/@@NAMEVER@@/source/configure
+configcmd=@@cd source;./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static;cd ..
+makecmd=@@cd source;make;cd ..
+makeinstcmd=@@cd source;make install;cd ..
