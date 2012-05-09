@@ -1,0 +1,5 @@
+page=none
+configcmd=none
+makecmd=gem install charlock_holmes -- --with-icu-dir=${HUL}
+makeinstcmd=none
+# post=svngit=$(find "${HULA}/ruby/lib/ruby/" -name "svn2git" -type f -print); ln -fs "${svngit}" "${HB}/svn2git"

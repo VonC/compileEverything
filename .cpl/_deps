@@ -53,5 +53,6 @@ app ant jdk
 app tomcat ant,jdk,junit
 lib tomcat-native tomcat
 app junit ant,jdk
+mod charlock_holmes icu
 lib icu none
 __no_deps__
