@@ -58,4 +58,6 @@ lib icu none
 app setuptools python
 app pip setuptools
 mod pygments pip
+mod mysql_sandbox cpanm,perl
+mod gitlab charlock_holmes,pygments,mysql_sandbox
 __no_deps__

@@ -1,0 +1,3 @@
+configcmd=none
+makecmd=cpanm MySQL::Sandbox
+makeinstcmd=none
