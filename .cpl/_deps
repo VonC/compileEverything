@@ -57,4 +57,5 @@ mod charlock_holmes icu
 lib icu none
 app setuptools python
 app pip setuptools
+mod pygments pip
 __no_deps__
