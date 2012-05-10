@@ -1,0 +1,7 @@
+page=http://pypi.python.org/pypi/setuptools
+url=http://pypi.python.org/packages/source/s/setuptools/
+configcmd=none
+makefile=none
+makecmd=python setup.py build
+makeinstcmd=python setup.py install
+post=easyinstall=$(find "${HULA}/python/bin/" -name "easy_install" -type f -print); ln -fs "${easyinstall}" "${HB}/easy_install"
