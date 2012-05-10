@@ -4,4 +4,4 @@ configcmd=none
 makefile=none
 makecmd=python setup.py build
 makeinstcmd=python setup.py install
-post=pip=$(find "${HULA}/python/bin/" -name "pip" -type f -print); ln -fs "${pip}" "${HB}/pip"
+post=pip=$(find "${HULA}/python/bin/" -name "pip" -type f -print); pip="${pip##${H}/}" ; ln -fs "../${pip}" "${HB}/pip"

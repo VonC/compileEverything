@@ -4,4 +4,4 @@ configcmd=none
 makefile=none
 makecmd=python setup.py build
 makeinstcmd=python setup.py install
-post=easyinstall=$(find "${HULA}/python/bin/" -name "easy_install" -type f -print); ln -fs "${easyinstall}" "${HB}/easy_install"
+post=easyinstall=$(find "${HULA}/python/bin/" -name "easy_install" -type f -print); easyinstall="${easyinstall##${H}/}" ; ln -fs "../${easyinstall}" "${HB}/easy_install"

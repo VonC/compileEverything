@@ -1,3 +1,4 @@
 configcmd=none
 makecmd=cpanm MySQL::Sandbox
 makeinstcmd=none
+post=for file in $(ls -1 "${HULA}/perl/bin/sb"*); do a=${file##*/} ; ln -fs "../usr/local/apps/perl/bin/${a}" "${HB}/${a}"; done ; for file in $(ls -1 "${HULA}/perl/bin/"*sandbox*); do a=${file##*/} ; ln -fs "../usr/local/apps/perl/bin/${a}" "${HB}/${a}"; done 

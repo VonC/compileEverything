@@ -2,4 +2,4 @@ page=none
 configcmd=none
 makecmd=pip install pygments
 makeinstcmd=none
-post=pygments=$(find "${HULA}/python/bin/" -name "pygmentize" -type f -print); ln -fs "${pygments}" "${HB}/pygmentize"
+post=pygments=$(find "${HULA}/python/bin/" -name "pygmentize" -type f -print); pygments="${pygments##${H}/}" ; ln -fs "../${pygments}" "${HB}/pygmentize"
