@@ -1,0 +1,7 @@
+page=http://pypi.python.org/pypi/pip/
+url=http://pypi.python.org/packages/source/p/pip/
+configcmd=none
+makefile=none
+makecmd=python setup.py build
+makeinstcmd=python setup.py install
+post=pip=$(find "${HULA}/python/bin/" -name "pip" -type f -print); ln -fs "${pip}" "${HB}/pip"

@@ -56,4 +56,5 @@ app junit ant,jdk
 mod charlock_holmes icu
 lib icu none
 app setuptools python
+app pip setuptools
 __no_deps__
