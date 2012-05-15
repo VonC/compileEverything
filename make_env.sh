@@ -194,8 +194,10 @@ function mrf() { ls -t1 "$1"/$2 | head -n1 ; }
 
 function sc() {
   set +e
+  set +u
   source "$H/.bashrc" -force
   set -e
+  set -u
 }
 function get_arc(){
   local _longbit=$1
@@ -233,7 +235,9 @@ function get_sources() {
   if [[ -e "${page}" ]] ; then
     local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
   else
-  # echo "D: local asrcline wget -q -O - ${page} grep -e ${nameurl} grep ${ext}"
+    # echo "D: local asrcline wget -q -O - ${page} grep -e ${nameurl} grep ${ext}"
+    #local asrcpage=$(wget -q -O - "${page}")
+    # echo "D: local page: ${asrcpage}"
     local asrcline=$(wget -q -O - "${page}" | grep -e "${nameurl}" | grep -e "${ext}")
   fi
   get_param $name verexclude ""
@@ -256,7 +260,7 @@ function get_sources() {
   local source0="${source}"
   source="${source0##*\"}"
   if [[ "${source}" == "${source0}" ]] ; then source="${source0##*\'}" ; fi
-   echo "source1 ${source}"
+  # echo "D: source1 ${source}"
   get_param $name url ""
   # echo "D: url0 ${url}"
   # echo "D: source ${source}"
@@ -354,9 +358,10 @@ function gen_which()
   local acmd="$1"
   local _res="$2"
   if [[ "$isSolaris" == true ]] ; then
-    local ares=$(which "${acmd}" | tail -1)
+    
+    local ares=$(which "${acmd}" 2> /dev/null | tail -1)
   else
-    local ares=$(which "${acmd}")
+    local ares=$(which "${acmd}" 2> /dev/null)
   fi
   eval $_res="'${ares}'"
 }

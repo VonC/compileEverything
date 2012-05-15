@@ -1,0 +1,4 @@
+page=http://ftp.gnu.org/pub/gnu/bison/?O=D;C=M
+url=http://ftp.gnu.org/pub/gnu/bison/
+makefile=Makefile
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-libiconv-prefix=${HUL} --with-libintl-prefix=${HUL} @@WITH_GNU_LD@@

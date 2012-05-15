@@ -37,13 +37,17 @@ if [[ "$1" == "-i" && "$(uname)" == "SunOS" ]] ; then
 else
   ok="false"
   #echo "/bin/sed \"$*\""
+  if [[ -e "$2" ]] ; then
+    /bin/sed "$1" "$2"
+    ok="true"
+  fi
   if [[ -e "$3" ]] ; then
     /bin/sed "$1" "$2" "$3"
     ok="true"
   fi
   if [[ -e "$4" ]] ; then
     /bin/sed "$1" "$2" "$3" "$4"
-    o="true"
+    ok="true"
   fi
   if [[ -e "$5" ]] ; then
     /bin/sed "$1" "$2" "$3" "$4" "$5"

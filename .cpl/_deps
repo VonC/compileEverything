@@ -60,4 +60,7 @@ app pip setuptools
 mod pygments pip
 mod mysql_sandbox cpanm,perl
 mod gitlab charlock_holmes,pygments,mysql_sandbox
+app bison libiconv,gcc
+app cmake ncurses,gcc
+app mysql cmake,bison
 __no_deps__

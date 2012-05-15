@@ -1,0 +1,5 @@
+page=http://mirrors.ircam.fr/pub/mysql/Downloads/MySQL-5.5/
+url=http://mirrors.ircam.fr/pub/mysql/Downloads/MySQL-5.5/
+verexclude=free|386|686|x86|64bit
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared
+makecmd=aaa

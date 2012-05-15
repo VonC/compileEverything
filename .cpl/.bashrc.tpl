@@ -156,5 +156,5 @@ if [[ ! ${ce_session} ]] ; then
   ce_session=$(echo "session-$RANDOM-$$-$(date)" | md5sum | md5sum)
   ce_session=${ce_session:0:32}
   export ce_session=${ce_session}
-  mkdir -p "${H}/.crypt/${ce_session}
+  mkdir -p "${H}/.crypt/${ce_session}"
 fi
