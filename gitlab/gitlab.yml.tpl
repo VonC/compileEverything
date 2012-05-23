@@ -13,11 +13,11 @@ email:
 # Git Hosting congiguration
 git_host:
   system: gitolite
-  admin_uri: git@localhost:gitolite-admin
-  base_path: /home/git/repositories/
+  admin_uri: gitolitesrv:gitolite-admin
+  base_path: @H@/repositories/
   host: localhost
   git_user: git
-  # port: 22
+  port: @PORT_SSHD@
 
 # Git settings
 # Use default values unless you understand it

@@ -97,3 +97,5 @@ tomcat/key*
 *.pkcs12
 /.crypt/
 /gitlab/github/
+/gitlab/*.yml
+/mysql/sandboxes/

@@ -158,3 +158,6 @@ if [[ ! ${ce_session} ]] ; then
   export ce_session=${ce_session}
   mkdir -p "${H}/.crypt/${ce_session}"
 fi
+
+export SANDBOX_HOME="${H}/mysql/sandboxes"
+export SANDBOX_BINARY="${H}/usr/local/apps/mysql"

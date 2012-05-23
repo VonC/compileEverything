@@ -1,5 +1,7 @@
 page=http://mirrors.ircam.fr/pub/mysql/Downloads/MySQL-5.5/
 url=http://mirrors.ircam.fr/pub/mysql/Downloads/MySQL-5.5/
 verexclude=free|386|686|x86|64bit
-configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared
-makecmd=aaa
+precond=mkdir -p ${H}/.cpl/src/@@NAMEVER@@/bld
+cdpath=${H}/.cpl/src/@@NAMEVER@@/bld
+configcmd=cmake -DCMAKE_INSTALL_PREFIX=${HULA}/@@NAMEVER@@ -DMYSQL_DATADIR=${H}/mysql/data -DCURSES_LIBRARY=${HULL}/libcurses.so -DCURSES_INCLUDE_PATH=${HULI} ..
+post=ln -fs @@VER@@ "${HULA}/@@NAMEVER@@" ; cp -f "${HULA}/@@NAMEVER@@/bin/mysql" "${H}/bin/mysql"
