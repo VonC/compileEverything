@@ -8,9 +8,7 @@ if [[ ! -e "${github}" ]] ; then
 else
   xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" pull
 fi
-if [[ ! -e "${gtl}/bin" ]] ; then
-  "${github}/install" -to "${gtl}/bin"
-fi
+mkdir -p "${gtl}/bin"
 "${github}/install" -to "${gtl}/bin"
 gen_sed -i "s,\$ENV{HOME} = \$ENV,\$ENV{HOME} = '${H}' ; } # \$ENV{HOME} = \$ENV,g" "${gtl}/bin/gitolite-shell"
 # gen_sed -i "s,\"/projects.list\",\"/gitolite/projects.list\",g" "${H}/.gitolite.rc"

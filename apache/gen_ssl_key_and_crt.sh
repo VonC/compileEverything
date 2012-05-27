@@ -1,6 +1,6 @@
 #! /bin/bash
 
-fqn=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*} 
+fqn=$(host -TtA $(hostname -s)|grep "has address"|awk '{print $1}') ; if [[ "${fqn}" == "" ]] ; then fqn=$(hostname -s) ; fi
 fqnpassword="${fqn}1";
 apache="${H}/apache"
 passphrasekey="${apache}/${fqn}.passphrase.key"

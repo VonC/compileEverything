@@ -19,8 +19,8 @@ ExtendedStatus On
 
 </IfModule>
 
-SSLCACertificateFile "@H@/.ssh/curl-ca-bundle.crt"
-LDAPTrustedGlobalCert CA_BASE64 "@H@/apache/global_ca.crt"
+SSLCACertificateFile "@H@/apache/global_ca.crt"
+LDAPTrustedGlobalCert CA_BASE64 "@H@/openldap/global_ca.crt"
 #LDAPVerifyServerCert off
 
 SSLRandomSeed startup file:/dev/urandom 512
@@ -104,7 +104,7 @@ Listen @PORT_HTTP_HGIT@
     SetEnv GIT_PROJECT_ROOT @H@/repositories
     SetEnv GIT_HTTP_EXPORT_ALL
     SetEnv GITOLITE_HTTP_HOME @H@
-    ScriptAlias /hgit/ @H@/gitolite/bin/gl-auth-command/
+    ScriptAlias /hgit/ @H@/gitolite/bin/gitolite-shell/
     SetEnv GIT_HTTP_BACKEND "@H@/usr/local/apps/git/libexec/git-core/git-http-backend"
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars
