@@ -99,3 +99,4 @@ tomcat/key*
 /gitlab/github/
 /gitlab/*.yml
 /mysql/sandboxes/
+/.bundle/

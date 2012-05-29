@@ -236,7 +236,7 @@ function get_sources() {
     local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
   else
     # echo "D: local asrcline wget -q -O - ${page} grep -e ${nameurl} grep ${ext}"
-    #local asrcpage=$(wget -q -O - "${page}")
+    # local asrcpage=$(wget -U Mozilla -q -O - "${page}")
     # echo "D: local page: ${asrcpage}"
     local asrcline=$(wget -q -O - "${page}" | grep -e "${nameurl}" | grep -e "${ext}")
   fi
@@ -270,7 +270,7 @@ function get_sources() {
     aver="${source%%/*}"
   fi
   if [[ "$url" != "" ]] ; then
-    #echo "D: IIIII url ${url} AAAAA targz ${targz}"
+    # echo "D: IIIII url ${url} AAAAA targz ${targz}"
     source="${url}${targz}"
   fi
   # echo "D: sources for $name: $targz from $source, with aver ${aver}"

@@ -6,6 +6,9 @@ mysqlgtl="${H}/mysql/sandboxes/gitlab"
 
 if [[ ! -e "${github}" ]] ; then
   xxgit=1 git clone https://github.com/gitlabhq/gitlabhq "${github}"
+  bundle config build.charlock_holmes --with-icu-dir="${HUL}"
+  bundle config build.raindrops --with-atomic_ops-dir="${HUL}"
+  bundle config build.sqlite3 --with-sqlite3-dir="${HUL}"
 else
   xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" pull
 fi

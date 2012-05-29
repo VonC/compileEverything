@@ -1,0 +1,5 @@
+page=none
+configcmd=none
+makecmd=gem install bundler -- --with-icu-dir=${HUL}
+makeinstcmd=none
+post=bundle=$(find "${HULA}/ruby/lib/ruby/" -name "bundle" -type f -print|grep bin); ln -fs "${bundle}" "${HB}/bundle"

@@ -6,7 +6,7 @@ development:
   pool: 5
   username: root
   password: "secure password"
-  # socket: /tmp/mysql.sock
+  socket: @H@/gitlab/mysql.sock
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -19,7 +19,7 @@ test:
   pool: 5
   username: root
   password: "secure password"
-  # socket: /tmp/mysql.sock
+  socket: @H@/gitlab/mysql.sock
 
 production:
   adapter: mysql2
@@ -29,4 +29,4 @@ production:
   pool: 5
   username: root
   password: "secure password"
-  # socket: /tmp/mysql.sock
+  socket: @H@/gitlab/mysql.sock

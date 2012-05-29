@@ -1,6 +1,13 @@
 #!/bin/bash
 fullFilePathOri="$1"
 fullPathDst="$2"
+if [[ ! -d "${fullPathDst}" ]] ; then
+  if [[ "${fullPathDst}" == "" ]] ; then
+    fullPathDst="."
+  else
+    echo "cp_tpl: there is no directory at '${fullPathDst}'" ; exit 1
+  fi
+fi
 fileOri="${fullFilePathOri##*/}"
 fullPathOri="${fullFilePathOri%/*}"
 if [[ "${fullPathOri}" == "${fullFilePathOri}" ]] ; then fullPathOri="." ; fi 
@@ -21,8 +28,16 @@ function get_param_file() {
 }
 
 fileDst="${fileOri%.tpl}"
-if [[  "${fileDst}" == "${fileOri}" ]] ; then echo "name '${fileOri} MUST end with '.tpl'" ; exit 1 ; fi
-#echo "fileDst='${fileDst}'"
+if [[  "${fileDst}" == "${fileOri}" ]] ; then 
+  if [[ -f "${fileOri}.tpl" ]] ; then
+    fileDst="${fileOri}"
+    fileOri="${fileOri}.tpl"
+    fullFilePathOri="${fullFilePathOri}.tpl"
+  else
+    echo "cp_tpl: name '${fileOri}' MUST end with '.tpl' or ''${fileOri}.tpl' MUST exist." ; exit 1 
+  fi
+fi
+#echo "fileDst='${fileDst}', fileOri='${fileOri}'"
 
 fullFilePathDst="${fullPathDst}/${fileDst}"
 echo cp -f "${fullFilePathOri}" "${fullFilePathDst}"
@@ -30,6 +45,7 @@ cp -f "${fullFilePathOri}" "${fullFilePathDst}"
 
 gen_sed -i "s;@H@;${H};g" "${fullFilePathDst}"
 gen_sed -i "s/@HOSTNAME@/$(hostname -s)/g" "${fullFilePathDst}"
+gen_sed -i "s/@USERNAME@/$(id -un)/g" "${fullFilePathDst}"
 
 #fqn=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*}
 fqn=$(host -TtA $(hostname -s)|grep "has address"|awk '{print $1}') ; if [[ "${fqn}" == "" ]] ; then fqn=$(hostname -s) ; fi

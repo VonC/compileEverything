@@ -1,0 +1,4 @@
+page=http://www.hpl.hp.com/research/linux/atomic_ops/download.php4
+url=http://www.hpl.hp.com/research/linux/atomic_ops/download/
+verexclude=gc\.|b\.|alpha
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@

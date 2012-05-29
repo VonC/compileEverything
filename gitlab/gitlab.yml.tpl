@@ -16,7 +16,7 @@ git_host:
   admin_uri: gitolitesrv:gitolite-admin
   base_path: @H@/repositories/
   host: localhost
-  git_user: git
+  git_user: @USERNAME@
   port: @PORT_SSHD@
 
 # Git settings

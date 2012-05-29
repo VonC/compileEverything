@@ -1,0 +1,4 @@
+page=http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/?O=D&C=M
+url=http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/
+verexclude=gc\.|b\.|alpha
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ @@WITH_GNU_LD@@ --enable-shared --enable-static
