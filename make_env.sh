@@ -685,6 +685,16 @@ function build_item() {
     fi
     if [[ ! -e "${HUL}"/._linked/$namever ]] ; then
       if [[ "${type}" != "MOD" ]] ; then echolog "checking links of $type $namever"; links "$linkdst" "$linksrc" ; fi
+      if [[ "$type" == "APP" ]] ; then 
+        local l=$(ls "${HULA}/$namever"/lib/*.so 2>/dev/null)
+        local l64=$(ls "${HULA}/$namever"/lib64/*.so 2>/dev/null)
+        if [[ "${l}" != "" ]] ; then 
+          echolog "checking links lib of $type $namever"; links "${HUL}" "$HULA/$namever/lib" ;
+        fi
+        if [[ "${l64}" != "" ]] ; then 
+          echolog "checking links lib64 of $type $namever"; links "${HUL}" "$HULA/$namever/lib64" ;
+        fi
+      fi
       echo done > "${HUL}"/._linked/$namever ;
     fi
     if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi

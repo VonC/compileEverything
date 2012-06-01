@@ -100,3 +100,4 @@ tomcat/key*
 /gitlab/*.yml
 /mysql/sandboxes/
 /.bundle/
+/.gnupg/

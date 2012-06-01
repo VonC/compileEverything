@@ -1,0 +1,4 @@
+page=http://download.savannah.gnu.org/releases/libpipeline/?O=D&C=M
+url=http://download.savannah.gnu.org/releases/libpipeline/
+# TO TEST: --with-sysroot=HUL
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ @@WITH_GNU_LD@@
