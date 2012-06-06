@@ -101,3 +101,5 @@ tomcat/key*
 /mysql/sandboxes/
 /.bundle/
 /.gnupg/
+/.cache/
+/.cpl/src

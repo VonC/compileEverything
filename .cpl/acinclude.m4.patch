@@ -1,0 +1,55 @@
+Index: acinclude.m4
+===================================================================
+RCS file: /cvsroot/gcc/gcc/libstdc++-v3/acinclude.m4,v
+retrieving revision 1.280.4.7
+diff -u -u -p -d -r1.280.4.7 acinclude.m4
+--- acinclude.m4	28 Oct 2004 21:52:33 -0000	1.280.4.7
++++ acinclude.m4	20 Apr 2005 08:10:36 -0000
+@@ -1165,9 +1165,45 @@ AC_DEFUN([GLIBCXX_ENABLE_CLOCALE], [
+   AC_SUBST(glibcxx_localedir)
+ 
+   # A standalone libintl (e.g., GNU libintl) may be in use.
++  # Note that we use AC_LINK_IFELSE and not AC_SEARCH_LIBS, as a
++  # standalone libintl's header may redefine gettext & co to avoid
++  # symbol name conflicts (e.g. GNU libintl redefines them to
++  # libintl_gettext() etc. on systems where the C library has a
++  # gettext() of its own).
+   if test $USE_NLS = yes; then
+-    AC_CHECK_HEADERS([libintl.h], [], USE_NLS=no)
+-    AC_SEARCH_LIBS(gettext, intl, [], USE_NLS=no)
++    AC_CHECK_HEADERS([libintl.h], [], [USE_NLS=no])
++    if test $USE_NLS = yes; then
++      AC_MSG_CHECKING([whether gettext requires additional libraries])
++      save_LIBS=$LIBS
++      LIBS=
++      gettext_link_ok=no
++      AC_LINK_IFELSE(AC_LANG_PROGRAM([@%:@include <libintl.h>],
++                                     [gettext("foo")]),
++                     [gettext_link_ok=yes], [])
++      if test $gettext_link_ok = no; then
++         LIBS="-lintl"
++         AC_LINK_IFELSE(AC_LANG_PROGRAM([@%:@include <libintl.h>],
++                                        [gettext("foo")]),
++                        [gettext_link_ok=yes], [])
++      fi
++      if test $gettext_link_ok = no; then
++         LIBS="-lintl -liconv"
++         AC_LINK_IFELSE(AC_LANG_PROGRAM([@%:@include <libintl.h>],
++                                        [gettext("foo")]),
++                        [gettext_link_ok=yes], [])
++      fi
++      if test $gettext_link_ok = no; then
++        AC_MSG_RESULT([*cannot link* (NLS disabled)])
++        USE_NLS=no
++        LIBS=$save_LIBS
++      elif test -z "$LIBS"; then
++        AC_MSG_RESULT([no])
++        LIBS=$save_LIBS
++      else
++        AC_MSG_RESULT([yes ($LIBS)])
++        LIBS="$save_LIBS $LIBS"
++      fi
++    fi
+   fi
+   if test $USE_NLS = yes; then
+     AC_DEFINE(_GLIBCXX_USE_NLS)

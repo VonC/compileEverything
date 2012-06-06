@@ -15,6 +15,19 @@ userapp@vonc-VirtualBox:~$ ifconfig|grep inet|grep -v '::'|grep -v ':10'|grep -v
 last changed 5 minutes or more:
 userapp@vonc-VirtualBox:~$ find . -mmin -60 -print
 ~~~~~~~~~~~~~~
+Find in files: grep -nHIrF string *
+
+-n, --line-number
+              Prefix each line of output with the 1-based line number within its input file.  (-n is specified by POSIX.)
+-H, --with-filename
+              Print the file name for each match.  This is the default when there is more than one file to search.
+-I     Process a binary file as if it did not contain matching data; this is equivalent to the --binary-files=without-match option.
+-r, -R, --recursive
+              Read all files under each directory, recursively; this is equivalent to the -d recurse option.
+-F, --fixed-strings
+              Interpret PATTERN as a list of fixed strings, separated by newlines, any of which is to be matched.  (-F is specified by POSIX.)
+
+~~~~~~~~~~~~~~
 ssh   SSH connections (like telnet:) and  IETF Draft  ssh://[<user>[;fingerprint=<host-key fingerprint>]@]<host>[:<port>]
 
 foo://username:password@example.com:8042/over/there/index.dtb?type=animal&name=narwhal#nose

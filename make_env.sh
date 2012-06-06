@@ -41,6 +41,22 @@ _src="${_cpl}/src"
 _pkgs="${_src}/_pkgs"
 _hsrc="${_hcpl}/src"
 _hpkgs="${_hsrc}/_pkgs"
+if [[ -d "${H}/../src" ]] ; then
+  if [[ -d "${_src}" ]] ; then rm -Rf "${_src}" ; fi
+  _src="${H}/../src"
+  _hsrc="../src"
+  ln -fs ../../src "${_cpl}"
+fi
+if [[ -d "${H}/../_pkgs" ]] ; then
+  if [[ -d "${_pkgs}" ]] ; then 
+    rm -Rf "${_pkgs}" ; 
+    ln -fs ../../../_pkgs "${_src}"
+  else
+    ln -fs ../_pkgs "${_src}"  
+  fi
+  _pkgs="${H}/../_pkgs"
+  _hpkgs="../_pkgs"
+fi
 echo $H
 mkdir -p "${_logs}"
 mkdir -p "${_pkgs}"
