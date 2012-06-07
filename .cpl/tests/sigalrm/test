@@ -1,0 +1,10 @@
+#!/bin/bash
+MY_DIR=$(dirname $(readlink -f $0))
+#echo "MY_DIR='${MY_DIR}'"
+echo "compiling test_sleep.c"
+gcc "${MY_DIR}/test_sleep.c" -o "${MY_DIR}/bin/test_sleep"
+echo "running test_sleep"
+mkdir -p "${MY_DIR}/bin"
+"${MY_DIR}/bin/test_sleep"
+res=$(echo $?)
+echo "result test_sleep: ${res}"

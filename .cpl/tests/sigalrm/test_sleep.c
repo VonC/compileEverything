@@ -353,7 +353,7 @@ main ()
 
     /* Failure to compile this test due to missing alarm is okay,
        since all such platforms (mingw) also lack sleep.  */
-    unsigned int pentecost = 5;
+    unsigned int pentecost = 30;
     unsigned int remaining;
     signal (SIGALRM, handle_alarm);
     alarm (1);
