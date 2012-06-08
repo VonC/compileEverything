@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "On Ubuntu, you need to have gcc-multilib installed"
+sudo echo "enter sudo password"
+sudo apt-get -y -q install gcc-multilib
+if [[ ! -e /usr/include/gnu/stubs-32.h ]] && [[ -d /usr/include/i386-linux-gnu/gnu ]] ; then
+  cp -f /usr/include/i386-linux-gnu/gnu/stubs-32.h /usr/include/gnu
+fi

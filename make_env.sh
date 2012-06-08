@@ -48,8 +48,8 @@ if [[ -d "${H}/../src" ]] ; then
   ln -fs ../../src "${_cpl}"
 fi
 if [[ -d "${H}/../_pkgs" ]] ; then
-  if [[ -d "${_pkgs}" ]] ; then 
-    rm -Rf "${_pkgs}" ; 
+  if [[ -d "${H}/.cpl/src/_pkgs}" ]] ; then 
+    rm -Rf "${H}/.cpl/src/_pkgs}" ; 
     ln -fs ../../../_pkgs "${_src}"
   else
     ln -fs ../_pkgs "${_src}"  
