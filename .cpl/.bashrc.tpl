@@ -161,3 +161,7 @@ fi
 
 export SANDBOX_HOME="${H}/mysql/sandboxes"
 export SANDBOX_BINARY="${H}/usr/local/apps/mysql"
+
+if [[ -e "${HULA}/pkgconfig" ]] ; then
+  export PKG_CONFIG_PATH="${HULL}/pkgconfig"
+fi

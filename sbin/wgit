@@ -123,8 +123,16 @@ then
 elif [[ ${!xxgit[@]} ]] ; then
    #echo rest "$@"
    if [[ "$1" == "u" ]] ; then shift ; shift ; fi
-   "${ahome}/bin/git" "$@"
+   agit="${ahome}/bin/git"
+   if [[ ! -e "${agit}" ]] ; then agit="/usr/bin/git" ; fi
+   if [[ ! -e "${agit}" ]] ; then echo "/usr/bin/git is unavailable" ; exit 1 ; fi
+   "${agit}" "$@"
 else
-   echo git is unavailable
-   exit 1
+   if [[ ! -e ${ahome}/bin/git ]] && [[ -e "/usr/bin/git" ]] ; then
+     if [[ "$1" == "u" ]] ; then shift ; shift ; fi
+     "/usr/bin/git" "$@"
+   else
+     echo git is unavailable
+     exit 1
+   fi
 fi

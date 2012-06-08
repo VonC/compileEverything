@@ -1,1 +1,1 @@
-configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static
