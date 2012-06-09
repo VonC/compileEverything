@@ -1,2 +1,2 @@
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-gpg-error-prefix=${HUL} @@WITH_GNU_LD@@
-premake=if [[ "$(uname)" == "SunOS" ]] ; then gen_sed -i '\''s/CCLD = \$(CC)/CCLD = \$(CC) ..\/cipher\/.libs\/ac.o/g'\'' "${H}/.cpl/src/@@NAMEVER@@/tests/Makefile" ; fi
+premake=if [[ "$(uname)" == "SunOS" ]] ; then gen_sed -i '\''s/CCLD = \$(CC)/CCLD = \$(CC) ..\/cipher\/.libs\/ac.o/g'\'' "${H}/.cpl/src/@@NAMEVER@@/tests/Makefile" ; fi ; gen_sed -i "s/^LDFLAGS = \+-L/LDFLAGS = -lgpg-error -L/g" tests/Makefile 

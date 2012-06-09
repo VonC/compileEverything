@@ -2064,3 +2064,43 @@ configure:4425: g++ -o conftest  -I/home/git/ce/ce4/usr/local/include -I/home/gi
 
 => First compile gcc
 ~~~~~~~~~~~~~~~
+Ubuntu man-db make:
+
+configure:40571: checking for db.h
+configure:40571: result: yes
+configure:40590: checking for dbopen from <db.h> in -ldb
+configure:40606: gcc -std=gnu99 -o conftest -I/home/vonc/ces/ce1/usr/local/include -I/home/vonc/ces/ce1/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -Wall -W -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Wshadow -Wformat-security -Wredundant-decls -I/home/vonc/ces/ce1/usr/local/include -I/home/vonc/ces/ce1/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -L/home/vonc/ces/ce1/usr/local/lib -L/home/vonc/ces/ce1/usr/local/ssl/lib -L/home/vonc/ces/ce1/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/ces/ce1/usr/local/lib:/home/vonc/ces/ce1/usr/local/ssl/lib:/home/vonc/ces/ce1/usr/local/apps/svn/lib:/home/vonc/ces/ce1/usr/local/apps/python/lib:/home/vonc/ces/ce1/usr/local/apps/gcc/lib conftest.c  -ldb >&5
+conftest.c:514: warning: function declaration isn't a prototype
+conftest.c: In function `main':
+conftest.c:515: warning: implicit declaration of function `dbopen'
+/tmp/ccILcNng.o: In function `main':
+conftest.c:(.text+0x42): undefined reference to `dbopen'
+collect2: ld returned 1 exit status
+
+find .. -name "*.so" | xargs nm -A | grep dbopen | grep T
+find .. -name "*.o" | xargs nm -A | grep dbopen | grep T
+yields nothing...
+
+db (Berkley-db) needs to be build with '--enable-compat185' for dbopen to be defined
+~~~~~~~~~~~~~~~~
+libgcrypt make
+
+/usr/bin/ld: register.o: undefined reference to symbol 'gpg_strerror'
+/usr/bin/ld: note: 'gpg_strerror' is defined in DSO /home/vonc/ces/ce1/usr/local/lib/libgpg-error.so.0 so try adding it to the linker command line
+/home/vonc/ces/ce1/usr/local/lib/libgpg-error.so.0: could not read symbols: Invalid operation
+collect2: ld returned 1 exit status
+make[2]: *** [register] Error 1
+make[2]: Leaving directory `/home/vonc/ces/src/libgcrypt-1.4.6/tests'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/home/vonc/ces/src/libgcrypt-1.4.6'
+make: *** [all] Error 2
+
+
+http://forum.videolan.org/viewtopic.php?f=13&t=33860#p121003
+
+I ran into this same problem, and found that the easier way to fix this is to add gpg-error to the dependencies for these files.
+To do this, go into extra/contrib/src/libgcrypt/tests and open the file Makefile.in
+Find the line "basic_LDADD = $(LDADD)" and add "-lgpg-error" to the end of it. Do this for tsexp, keygen, and benchmark too.
+Now when you run make everything should work. It's possible that the configure script will overwrite your changes, so simple move it someplace and make a new one that is empty except for the line "#! /bin/sh". It is also possible that you will need to do a make install in extra/contrib/src/libgpg-error first (passing the full path to extra/contrib/ to "./configure --prefix" if you don't want libgpg-error installed permanently).
+While I'm sure that their is a cleaner way of fixing this (such as adding gpg-error to LDADD) these changes should do the trick to make it work.
+

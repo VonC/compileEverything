@@ -4,7 +4,7 @@ lib expat none
 lib gettext libiconv,expat
 lib libiconv none
 app git gcc,man-db,openssl,libssh2,curl,libiconv,expat,libidn,zlib,nginx,perl,apache,python,subversion,openssh
-app man-db gcc,groff,libpipeline,pkgconfig
+app man-db gcc,groff,libpipeline,pkgconfig,db
 lib groff libiconv
 mod gitolite git
 lib libpipeline groff

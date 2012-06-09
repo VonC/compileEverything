@@ -49,8 +49,9 @@ if [[ -d "${H}/../src" ]] ; then
 fi
 if [[ -d "${H}/../_pkgs" ]] ; then
   if [[ -d "${H}/.cpl/src/_pkgs}" ]] ; then 
-    rm -Rf "${H}/.cpl/src/_pkgs}" ; 
     ln -fs ../../../_pkgs "${_src}"
+    cp "${H}/.cpl/src/_pkgs/.readme" "${_src}/_pkgs" 
+    rm -Rf "${H}/.cpl/src/_pkgs}" ; 
   else
     ln -fs ../_pkgs "${_src}"  
   fi

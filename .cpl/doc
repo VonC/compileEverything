@@ -723,4 +723,5 @@ Entry for alias tomcat successfully imported.
 Import command completed:  1 entries successfully imported, 0 entries failed or cancelled
 
 ~~~~~~~~~~~
-
+Ubuntu time synchronization as VirtualBox or VMware guest: sudo ntpdate ntp.ubuntu.com
+~~~~~~~~~~~
