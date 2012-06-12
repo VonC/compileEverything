@@ -1,0 +1,11 @@
+#!/bin/bash
+sudo echo "setup ntp"
+if [[ ! -e /etc/cron.hourly/BOUNCE-NTP ]] ; then
+  cp -f $MYHOME/.cpl/scripts/BOUNCE-NTP $1
+  sudo ln -s $1/BOUNCE-NTP /etc/cron.hourly/BOUNCE-NTP
+fi
+  
+if [[ ! -e /etc/cron.daily/ntpdate ]] ; then
+  cp -f $MYHOME/.cpl/scripts/ntpdate $1
+  sudo ln -s $1/ntpdate /etc/cron.daily/ntpdate
+fi

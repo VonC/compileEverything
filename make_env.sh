@@ -269,13 +269,16 @@ function get_sources() {
   local source="${asrcline%%${exturl}\"\>*}"
   # echo "D: line2 source! $source"
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\" *}" ; fi
+  # "
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\'\>*}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\' *}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\#*}" ; fi
+  # "
   source="${source}${exturl}"
   # echo "D: sour0 ${source}"
   local source0="${source}"
   source="${source0##*\"}"
+  # "
   if [[ "${source}" == "${source0}" ]] ; then source="${source0##*\'}" ; fi
   # echo "D: source1 ${source}"
   get_param $name url ""
@@ -294,7 +297,13 @@ function get_sources() {
   if [[ "${exturl}" == "" ]] ; then targz="${targz}.${extact}" ; fi 
   if [[  "${nameurl}" != "${nameact}" ]] ; then targz="${nameact}-${targz#${nameurl}}" ; echo "new targz ${targz}" ; fi
   targz="${targz%-}"
+  if [[ "${aver}" == "" ]] ; then
+    local anamever="${targz%.${extact}}"
+    aver=${anamever#${nameact}-}
+    aver=${aver%-src}
+  fi
   # echo "D: targz2 ${targz}"
+  # echo "D: aver_b ${aver}"
   local aver_="${aver//\./_}"
   # echo "D: aver_ ${aver_}"
   source="${source//@@VER@@/${aver}}"

@@ -764,6 +764,8 @@ ERROR:  Loading command: install (LoadError)
     no such file to load -- zlib
 ERROR:  While executing gem ... (NameError)
     uninitialized constant Gem::Commands::InstallCommand
+
+Extension ext/zlib wasn't compiled: need '--with-ext' option alone (compile all extensions)
 ---------------
 Tinycore configure subversion
 checking for Apache module support via DSO through APXS... /home/tc/compileEverything/usr/local/apps/httpd-2.2.19/bin/httpd: error while loading shared libraries: libssl.so.1.0.0: cannot open shared object file: No such file or directory
@@ -2103,4 +2105,79 @@ To do this, go into extra/contrib/src/libgcrypt/tests and open the file Makefile
 Find the line "basic_LDADD = $(LDADD)" and add "-lgpg-error" to the end of it. Do this for tsexp, keygen, and benchmark too.
 Now when you run make everything should work. It's possible that the configure script will overwrite your changes, so simple move it someplace and make a new one that is empty except for the line "#! /bin/sh". It is also possible that you will need to do a make install in extra/contrib/src/libgpg-error first (passing the full path to extra/contrib/ to "./configure --prefix" if you don't want libgpg-error installed permanently).
 While I'm sure that their is a cleaner way of fixing this (such as adding gpg-error to LDADD) these changes should do the trick to make it work.
+
+~~~~~~~~~~~~~~~~
+vonc@vonc-VirtualBox:~/.cpl/src/autoconf-2.68/tests$ ./autom4te 
+XSLoader::load('Your::Module', $Your::Module::VERSION) at /home/vonc/ces/ce1/usr/local/apps/perl/lib/current/XSLoader.pm line 25.
+Compilation failed in require at /home/vonc/ces/ce1/usr/local/apps/perl/lib/current/File/stat.pm line 30.
+BEGIN failed--compilation aborted at /home/vonc/ces/ce1/usr/local/apps/perl/lib/current/File/stat.pm line 30.
+Compilation failed in require at /home/vonc/ces/src/autoconf-2.68/lib/Autom4te/FileUtils.pm line 40.
+BEGIN failed--compilation aborted at /home/vonc/ces/src/autoconf-2.68/lib/Autom4te/FileUtils.pm line 40.
+Compilation failed in require at /home/vonc/ces/src/autoconf-2.68/bin/autom4te line 41.
+BEGIN failed--compilation aborted at /home/vonc/ces/src/autoconf-2.68/bin/autom4te line 41.
+
++ SHELL=/bin/sh
++ export SHELL
++ CLICOLOR_FORCE=
++ GREP_OPTIONS=
++ unset CLICOLOR_FORCE GREP_OPTIONS
++ as_unset=as_fn_unset
++ testdir=/home/vonc/ces/src/autoconf-2.68/tests
++ PATH=/home/vonc/ces/src/autoconf-2.68/tests:/home/vonc/ces/ce1/sbin:/home/vonc/ces/ce1/bin:/home/vonc/ces/ce1/usr/local/bin:/home/vonc/ces/ce1/usr/local/sbin:/home/vonc/ces/ce1/usr/local/ssl/bin:/home/vonc/ces/ce1/gitolite/bin:/home/vonc/ces/ce1/gitolite/bin:/usr/local/bin:/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
++ AUTOCONF=autoconf
++ AUTOHEADER=autoheader
++ AUTOM4TE=autom4te
++ AUTOM4TE_CFG=/home/vonc/ces/src/autoconf-2.68/lib/autom4te.cfg
++ autom4te_perllibdir=/home/vonc/ces/src/autoconf-2.68/lib
++ export AUTOCONF AUTOHEADER AUTOM4TE AUTOM4TE_CFG autom4te_perllibdir
++ case 'autom4te' in
++ exec /home/vonc/ces/src/autoconf-2.68/bin/autom4te -B /home/vonc/ces/src/autoconf-2.68/lib -B /home/vonc/ces/src/autoconf-2.68/lib
+
+vonc@vonc-VirtualBox:/home/vonc/ces/src/autoconf-2.68/bin$ vi /home/vonc/ces/ce1/usr/local/apps/perl/lib/current/File/stat.pm
+
+use Fcntl qw(S_IRUSR S_IWUSR S_IXUSR);
+
+That is because the #! directovie uses the wrong perl: /usr/bin/perl
+Note that a configure done from a $H/.bashrc session works.
+Check out vi .cpl/src/autoconf-2.68/bin/autom4te
+~~~~~~~~~~~~~~~~
+Ubuntu ruby make
+
+making ruby
+make[1]: Entering directory `/home/vonc/ces/src/ruby-1.9.2-p0'
+gcc -I/home/vonc/ces/ce1/usr/local/include -I/home/vonc/ces/ce1/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -fPIC -L. -L/home/vonc/ces/ce1/usr/local/lib  -rdynamic -Wl,-export-dynamic   main.o  -Wl,-R -Wl,/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib -L/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib -lruby -lpthread -lrt -ldl -lcrypt -lm   -o ruby
+make[1]: Leaving directory `/home/vonc/ces/src/ruby-1.9.2-p0'
+Generating RDoc documentation
+./miniruby -I./lib -I.ext/common -I./- -r./ext/purelib.rb  ./tool/runruby.rb --extout=.ext  -- "./bin/rdoc" --no-force-update --all --ri --op ".ext/rdoc"  "."
+<internal:lib/rubygems/custom_require>:29:in `require': no such file to load -- etc (LoadError)
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from /home/vonc/ces/src/ruby-1.9.2-p0/lib/rubygems.rb:17:in `<top (required)>'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from <internal:gem_prelude>:167:in `load_full_rubygems_library'
+    from <internal:gem_prelude>:217:in `try_activate'
+    from <internal:lib/rubygems/custom_require>:32:in `rescue in require'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from /home/vonc/ces/src/ruby-1.9.2-p0/lib/rdoc/markup/parser.rb:1:in `<top (required)>'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from /home/vonc/ces/src/ruby-1.9.2-p0/lib/rdoc/markup.rb:121:in `<top (required)>'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from /home/vonc/ces/src/ruby-1.9.2-p0/lib/rdoc/markup/preprocess.rb:1:in `<top (required)>'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from /home/vonc/ces/src/ruby-1.9.2-p0/lib/rdoc/parser.rb:3:in `<top (required)>'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from /home/vonc/ces/src/ruby-1.9.2-p0/lib/rdoc/rdoc.rb:3:in `<top (required)>'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from <internal:lib/rubygems/custom_require>:29:in `require'
+    from ./bin/rdoc:11:in `<main>'
+make: *** [rdoc] Error 1
+
+Again, an issue with an ext(ension) compilation: ext/etc/... wasn't compiled
+Was using '--with-ext' multiple times (wrong): needs only one '--with-ext' option
+to compile *all* the extensions
+~~~~~~~~~~~~~~~~~
 

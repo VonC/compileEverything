@@ -1,7 +1,6 @@
 nameurl=apache-tomcat
 nameact=apache-tomcat
-verinclude=bin
-verexclude=src
+verinclude=src
 page=http://tomcat.apache.org/download-70.cgi
 url=http://mirror.speednetwork.de/apache/tomcat/tomcat-7/v@@VER@@/src/
 configcmd=none

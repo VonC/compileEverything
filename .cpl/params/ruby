@@ -1,3 +1,2 @@
-#configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-out-ext=openssl --with-ext=zlib @@WITHOUT_GNU_LD@@ --with-opt-dir="${HUL}:${HUL}/ssl" --with-openssl-dir="${HUL}/ssl"
-configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-ext=openssl --with-ext=zlib --with-ext=strscan --with-ext=stringio @@WITHOUT_GNU_LD@@ --with-opt-dir=${HUL}/ssl --with-opt-dir=${HUL}
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-ext=openssl --with-ext @@WITHOUT_GNU_LD@@ --with-opt-dir=${HUL}/ssl --with-opt-dir=${HUL}
 premake=gen_sed -i "s/-L. /-L. -L${EHULL} /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile" ; cp -f ${HULL}/libz.* "${H}/.cpl/src/@@NAMEVER@@/ext/zlib"

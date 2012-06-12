@@ -724,4 +724,39 @@ Import command completed:  1 entries successfully imported, 0 entries failed or 
 
 ~~~~~~~~~~~
 Ubuntu time synchronization as VirtualBox or VMware guest: sudo ntpdate ntp.ubuntu.com
+
+https://help.ubuntu.com/community/UbuntuTime
+
+Command Line ntpdate
+
+Ubuntu comes with ntpdate as standard, and will run it once at boot time to set up your time according to Ubuntu's NTP server. However, a system's clock is likely to drift considerably between reboots if the time between reboots is long. In that case it makes sense to correct the time occasionally. The easiest way to do this is to get cron to run it every day. With your favorite editor, create (needs sudo) a file /etc/cron.daily/ntpdate containing:
+
+ #!/bin/sh
+ ntpdate ntp.ubuntu.com
+
+Make sure that you make this new file executable:
+
+sudo chmod 755 /etc/cron.daily/ntpdate
+
+Command Line ntpd
+
+ntpdate is a bit of a blunt instrument as it can only adjust the time once a day in one big correction. The ntp daemon ntpd is far more subtle as it calculates the drift of your system clock and continuously adjusts it in small increments. Using ntpd there are no large corrections that could lead to inconsistent logs for instance. The cost is a little processing power and memory, but for a modern system this is negligible.
+
+To setup ntpd in versions of Ubuntu 7.04 and higher
+
+sudo apt-get install ntp
+
+Is NTP running?
+
+NTP most commonly 'fails' if it cannot resolve the servers in its configuration file at startup (this can happen if DNS isn't available during boot). Also, if NTP is unable to keep the local clock reasonably accurate it gives up and terminates (see below).
+
+Try sudo /etc/init.d/ntp status to check if NTP is running, and sudo /etc/init.d/ntp restart to restart it if necessary.
+
+I have various systems on unreliable networks so I use a simple script to bounce NTP if needed:
+
+$ cat /etc/cron.hourly/BOUNCE-NTP
+#!/bin/sh
+
+/usr/bin/ntpq -np | /bin/grep '^\*' > /dev/null || ( /usr/bin/ntpq -np ; /etc/init.d/ntp restart )
 ~~~~~~~~~~~
+

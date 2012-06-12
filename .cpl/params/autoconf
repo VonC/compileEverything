@@ -1,1 +1,3 @@
-configcmd=./configure --prefix=${HULS}/@@NAMEVER@@
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@
+#configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --program-prefix=$H/bin
+#premake=gen_sed -i '\''s/$(DESTDIR)$(bindir)/$(DESTDIR)/g'\'' ${H}/.cpl/src/@@NAMEVER@@/bin/Makefile

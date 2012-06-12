@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/usr/bin/ntpq -np | /bin/grep '^\*' > /dev/null || ( /usr/bin/ntpq -np ; /etc/init.d/ntp restart )

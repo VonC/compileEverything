@@ -18,6 +18,7 @@ bin/
 /.gitconfig
 /.bash_history
 /.viminfo
+/.vim/
 /.lesshst
 .*.swp
 /.cpl/cache
@@ -43,6 +44,7 @@ bin/
 /cgit/cgit.png
 /.rnd
 .cpanm/
+.cpan/
 .bash_history
 .gem/
 .subversion/

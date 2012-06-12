@@ -3,7 +3,7 @@ app make expat,gettext
 lib expat none
 lib gettext libiconv,expat
 lib libiconv none
-app git gcc,man-db,openssl,libssh2,curl,libiconv,expat,libidn,zlib,nginx,perl,apache,python,subversion,openssh
+app git gcc,man-db,openssl,libssh2,curl,libiconv,expat,libidn,zlib,nginx,perl,apache,python,subversion,openssh,autoconf
 app man-db gcc,groff,libpipeline,pkgconfig,db
 lib groff libiconv
 mod gitolite git
@@ -13,7 +13,7 @@ lib zlib gcc
 app perl db,gdbm
 lib db tcl
 lib tcl autoconf
-lib autoconf pkgconfig,m4
+app autoconf pkgconfig,m4
 app pkgconfig libiconv
 lib m4 pkgconfig,libsigsegv
 lib libsigsegv gcc
