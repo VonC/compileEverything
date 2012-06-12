@@ -1,3 +1,2 @@
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@
-#configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --program-prefix=$H/bin
-#premake=gen_sed -i '\''s/$(DESTDIR)$(bindir)/$(DESTDIR)/g'\'' ${H}/.cpl/src/@@NAMEVER@@/bin/Makefile
+post=for file in $(ls -1 "${HULA}/@@NAMEVER@@/bin/"*); do gen_sed -i "s;/usr/bin//perl;${HB}/perl;g" "${file}";done

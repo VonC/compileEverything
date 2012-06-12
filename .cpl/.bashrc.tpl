@@ -106,7 +106,7 @@ alias l='ls -alrt'
 alias h=history
 alias vi=vim
 alias t='tail --follow=name'
-alias tl='tail -F "${H}/.lastlog"'
+alias tl='while ! tail --max-unchanged-stats=2 --follow=name "${H}/.lastlog" ; do sleep 2 ; done'
 alias psw='ps auxwww|grep "${H}"|grep -v grep|grep'
 
 if [[ -e /usr/local/bin/vim ]] ; then vimp="/usr/local/bin/vim" ; else vimp="$(which vim)" ; fi

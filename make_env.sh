@@ -93,7 +93,7 @@ trap "echo -e "\\\\e\\\[00\\\;31m!!!!_FAIL_!!!!\\\\e\\\[00m" | ftrap" EXIT ;
 function getJDK {
   local afrom="$1"
   local name="jdk"
-  #echo '$type ${donelist}' "$name : ${donelist}"
+  #echo 'JDK $type ${donelist}' "$name : ${donelist}"
   local isdone="false" ; isItDone "$name" isdone ${afrom}
   if [[ "$isdone" == "false" ]] ; then
     echolog "##### Getting JDK6 latest ####" ; echo -ne "\e[m"
@@ -106,8 +106,8 @@ function getJDK {
     # local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
     #  grep -e "(?ms)Java SE \d(?: Update \d+)?<.*?href=\"(/technetwork[^\"]+)\"><img")
     local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
-      grep "/technetwork/java/javase/downloads/jdk-6u")
-    ajdk=${ajdk#*f=\"}
+      grep "jdk6-downloads-")
+    ajdk=${ajdk#*releasenotes*f=\"}
     ajdk="http://www.oracle.com${ajdk%%\"*}"
     echo $ajdk
     local ajdkgrep="linux-i586.bin"

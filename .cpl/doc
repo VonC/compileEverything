@@ -3,7 +3,9 @@ tar xpvf master
 mv Von* ce1
 cd ce1
 ./make_env.sh -title="test"
-tail --follow=name .lastlog
+tail --follow=name --retry .lastlog or tail -F .lastlog
+except on Ubuntu (http://superuser.com/questions/392072/make-tail-wait-for-a-file-to-exist)
+while ! tail -f bar/somefile.log ; do sleep 1 ; done
 :1,$s$/home/auser/compileEverything$@H@$g (vi, vim, replace subst on all file)
 ~~~~~~~~~~~
 port:
