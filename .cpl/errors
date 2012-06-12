@@ -2180,4 +2180,57 @@ Again, an issue with an ext(ension) compilation: ext/etc/... wasn't compiled
 Was using '--with-ext' multiple times (wrong): needs only one '--with-ext' option
 to compile *all* the extensions
 ~~~~~~~~~~~~~~~~~
+Building native extensions.  This could take a while...
+ERROR:  Error installing charlock_holmes:
+    ERROR: Failed to build gem native extension.
 
+/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/bin/ruby extconf.rb --with-icu-dir=/home/vonc/ces/ce1/usr/local
+checking for main() in -licui18n... no
+checking for main() in -licui18n... no
+
+
+***************************************************************************************
+*********** icu required (brew install icu4c or apt-get install libicu-dev) ***********
+***************************************************************************************
+*** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of
+necessary libraries and/or headers.  Check the mkmf.log file for more
+details.  You may need configuration options.
+
+Gem files will remain installed in /home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib/ruby/gems/1.9.1/gems/charlock_holmes-0.6.8 for inspection.
+Results logged to /home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib/ruby/gems/1.9.1/gems/charlock_holmes-0.6.8/ext/charlock_holmes/gem_make.out
+
+vonc@vonc-VirtualBox:~$ ldd usr/local/lib/libicui18n.so
+	linux-gate.so.1 =>  (0x00dd5000)
+	libicuuc.so.49 => /home/vonc/ces/ce1/usr/local/lib/libicuuc.so.49 (0x008b9000)
+	libicudata.so.49 => /home/vonc/ces/ce1/usr/local/lib/libicudata.so.49 (0xb65ea000)
+	libpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0x007e7000)
+	libdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0x00457000)
+	libintl.so.8 => /home/vonc/ces/ce1/usr/local/lib/libintl.so.8 (0x00e5a000)
+	libstdc++.so.6 => /usr/lib/i386-linux-gnu/libstdc++.so.6 (0x005dc000)
+	libm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0x006c3000)
+	libgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0x0034b000)
+	libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0x00a24000)
+	/lib/ld-linux.so.2 (0x00dad000)
+	libiconv.so.2 => /home/vonc/ces/ce1/usr/local/libs/libiconv-1.14/lib/libiconv.so.2 (0x004a1000)
+
+Probably because all libraries didn't detect libs from gcc3.4.6, because said libs were improperly linked from $H/usr/local instead of $H/usr/local/lib !
+make_env.sh is fixed.
+
+(A bit like in http://gcc.gnu.org/ml/gcc-help/2008-08/msg00300.html)
+
+vonc@vonc-VirtualBox:~$ vi usr/local/apps/ruby-1.9.2p0/lib/ruby/gems/1.9.1/gems/charlock_holmes-0.6.8/ext/charlock_holmes/mkmf.log
+
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main() {return 0;} 
+/* end */
+
+"gcc -o conftest -I/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/include/ruby-1.9.1/i686-linux -I/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/include/ruby-1.9.1/ruby/backward -I/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/include/ruby-1.9.1 -I. -I/home/vonc/ces/ce1/usr/local/include -I/home/vonc/ces/ce1/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/vonc/ces/ce1/usr/local/include -I/home/vonc/ces/ce1/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -I/home/vonc/ces/ce1/usr/local/include -I/home/vonc/ces/ce1/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -fPIC conftest.c  -L. -L/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib -Wl,-R/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib -L/home/vonc/ces/ce1/usr/local/lib -Wl,-R/home/vonc/ces/ce1/usr/local/lib -L.  -rdynamic -Wl,-export-dynamic     -Wl,-R -Wl,/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib -L/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib -lruby-static -licui18n  -lpthread -lrt -ldl -lcrypt -lm   -lc"  
+/usr/lib/i386-linux-gnu/libstdc++.so.6: undefined reference to `_Unwind_GetIPInfo@GCC_4.2.0'
+collect2: ld returned 1 exit status
+
+
+~~~~~~~~~~~~

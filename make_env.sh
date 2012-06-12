@@ -715,10 +715,10 @@ function build_item() {
         local l=$(ls "${HULA}/$namever"/lib/*.so 2>/dev/null)
         local l64=$(ls "${HULA}/$namever"/lib64/*.so 2>/dev/null)
         if [[ "${l}" != "" ]] ; then 
-          echolog "checking links lib of $type $namever"; links "${HUL}" "$HULA/$namever/lib" ;
+          echolog "checking links lib of $type $namever"; links "${HULL}" "$HULA/$namever/lib" ;
         fi
         if [[ "${l64}" != "" ]] ; then 
-          echolog "checking links lib64 of $type $namever"; links "${HUL}" "$HULA/$namever/lib64" ;
+          echolog "checking links lib64 of $type $namever"; links "${HULL}" "$HULA/$namever/lib64" ;
         fi
       fi
       echo done > "${HUL}"/._linked/$namever ;
