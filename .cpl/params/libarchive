@@ -1,0 +1,4 @@
+page=http://libarchive.github.com/
+url=https://github.com/downloads/libarchive/libarchive/
+verinclude=2.8
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@

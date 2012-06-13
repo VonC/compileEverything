@@ -2,7 +2,8 @@ page=http://www.cmake.org/cmake/resources/software.html
 url=http://www.cmake.org/files/v2.8/
 precond=mkdir -p ${H}/.cpl/src/@@NAMEVER@@/bld
 cdpath=${H}/.cpl/src/@@NAMEVER@@/bld
-pre=gen_sed -i "s/cmake_cxx_flags=\${CXXFLAGS}/cmake_cxx_flags=\"\${CXXFLAGS} -L\${HULL} -lintl\"/g" ../bootstrap; gen_sed -i "s/cmake_ld_flags=\${LDFLAGS}/cmake_ld_flags=\"\${LDFLAGS} -lintl\"" ../bootstrap
-configcmd=../configure --prefix=${HULA}/@@NAMEVER@@
+makefile=bld/Makefile
+pre=gen_sed -i '\''s/cmake_cxx_flags=\${CXXFLAGS}/cmake_cxx_flags="\${CXXFLAGS} -L${EHULL} -lintl"/g'\'' ../bootstrap; gen_sed -i '\''s/cmake_ld_flags=\${LDFLAGS}/cmake_ld_flags="\${LDFLAGS} -L${EHULL} -lintl"/g'\'' ../bootstrap
+configcmd=../configure --prefix=${HULA}/@@NAMEVER@@ --system-libs --verbose
 makecmd=gmake
 makeinstcmd=gmake install

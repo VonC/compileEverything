@@ -56,17 +56,18 @@ app ant jdk
 app tomcat ant,jdk,junit
 lib tomcat-native tomcat
 app junit ant,jdk
+mod gitlab charlock_holmes,pygments,mysql_sandbox,libatomic_ops
 mod charlock_holmes gem,icu
 mod bundler gem
 lib icu none
 app setuptools python
 app pip setuptools
 mod pygments pip
-mod mysql_sandbox cpanm,perl
-mod gitlab charlock_holmes,pygments,mysql_sandbox,libatomic_ops
-app bison libiconv,gcc
-app cmake ncurses,gcc
 app mysql cmake,bison
+mod mysql_sandbox cpanm,perl,mysql
+app bison libiconv,gcc
+app cmake ncurses,gcc,curl,zlib,libarchive
+lib libarchive gcc,bzip2,libxml2,zlib,openssl
 lib gc gcc
 lib libatomic_ops gcc
 __no_deps__
