@@ -551,7 +551,7 @@ function configure() {
       loge "${configcmd}" "configure_${namever}"
     fi
   fi
-  echo "done" > ._config
+  echo "done" > "${_src}/${namever}/._config"
 }
 function cleanPath() {
   local path="$1"
@@ -623,6 +623,7 @@ function action() {
   local actionpath=$4
   local actionstep=$5
   local actiondefault="$6"
+  # echo "actionname='${actionname}', actionpath='${actionpath}', actionstep='${actionstep}'" 
   if [[ ! -e "${actionpath}/._${actionstep}" ]]; then
      get_param $name ${actionname} "${actiondefault}"
      local actioncmd=${!actionname}
@@ -639,7 +640,10 @@ function action() {
         #echo pre $pre ; jj
         loge "eval ${actioncmd}" "${actionname}_${namever}"
      fi
+     # pwd
+     # echo "done > ${actionpath}/._${actionstep}"
      echo done > "${actionpath}/._${actionstep}"
+     # ls -alrt "${actionpath}/._${actionstep}"
      #if [[ "$name" == "perl" && "$actionname" == "pre" ]] ; then echo "---- done" ; eee ; fi
   fi    
 }

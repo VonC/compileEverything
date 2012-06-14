@@ -166,5 +166,5 @@ if [[ -e "${HULA}/pkgconfig" ]] ; then
   export PKG_CONFIG_PATH="${HULL}/pkgconfig:${HUL}/ssl/lib/pkgconfig"
 fi
 
-export CMAKE_LIBRARY_PATH="${HULL}"
-export CMAKE_INCLUDE_PATH="${HULI}"
+export CMAKE_LIBRARY_PATH="${HULL}:${HUL}/ssl/lib"
+export CMAKE_INCLUDE_PATH="${HULI}:${HUL}/ssl/include"

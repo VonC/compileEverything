@@ -2286,6 +2286,24 @@ Scanning dependencies of target mysql
 make[2]: *** [client/CMakeFiles/mysql.dir/mysql.cc.o] Error 1
 make[1]: *** [client/CMakeFiles/mysql.dir/all] Error 2
 
+vonc@vonc-VirtualBox:~$ export VERBOSE=1
+vonc@vonc-VirtualBox:~$ ./make_env.sh 
+
+http://www.cmake.org/Wiki/CMake_2.8.5_Docs
+(works better than export CMAKE_VERBOSE_MAKEFILE=true, although -DCMAKE_VERBOSE_MAKEFILE=ON might h	ave worked, as illustrated by https://bugzilla.redhat.com/show_bug.cgi?id=474053)
+
+make[2]: Leaving directory `/home/vonc/ces/src/mysql-5.5.25/bld'
+make -f client/CMakeFiles/mysql.dir/build.make client/CMakeFiles/mysql.dir/build
+make[2]: Entering directory `/home/vonc/ces/src/mysql-5.5.25/bld'
+/home/vonc/ces/ce1/usr/local/apps/cmake-2.8.8/bin/cmake -E cmake_progress_report /home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/bld/CMakeFiles 
+[ 76%] Building CXX object client/CMakeFiles/mysql.dir/mysql.cc.o
+cd /home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/bld/client && /home/vonc/ces/ce1/bin/c++   -DDBUG_OFF -DHAVE_CONFIG_H -DHAVE_DLOPEN -Wall -Wno-unused-parameter -fno-implicit-templates -fno-exceptions -fno-rtti -I/home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/bld/include -I/home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/include -I/home/vonc/ces/ce1/usr/local/include -I/home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/libmysql -I/home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/regex -I/home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/sql -I/home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/strings -I/home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/cmd-line-utils/libedit -I/home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/bld/client    -I/home/vonc/ces/ce1/usr/local/include -I/home/vonc/ces/ce1/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -o CMakeFiles/mysql.dir/mysql.cc.o -c /home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/client/mysql.cc
+/home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/client/mysql.cc:1041: error: expected constructor, destructor, or type conversion before '*' token
+
+See ../src/mysql-5.5.25/Docs/mysql.info
+`WITH_READLINE'        Use bundled readline   `OFF'
+ 
+=> add -DWITH_READLINE=ON
 
 ~~~~~~~~~~~~~~
 @vonc-VirtualBox:~$ git diff .cpl/pabash: declare: `_git_[': not a valid identifier
@@ -2296,5 +2314,9 @@ http://stackoverflow.com/questions/7278796/bash-git-alias-tab-completion-error
 I'm guessing there's a custom completion function set up for git, and the error is in that setup. Try removing the custom completion first and see if the error disappears:
 
 complete -r git
+
+vonc@vonc-VirtualBox:~$ complete|grep git
+complete -o bashdefault -o default -o nospace -F _git git
+complete -o bashdefault -o default -o nospace -F _gitk gitk
 
 ~~~~~~~~~~~~~~
