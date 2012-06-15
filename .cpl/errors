@@ -2320,3 +2320,51 @@ complete -o bashdefault -o default -o nospace -F _git git
 complete -o bashdefault -o default -o nospace -F _gitk gitk
 
 ~~~~~~~~~~~~~~
+
+cd /home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/bld/libmysql && /home/vonc/ces/ce1/usr/local/apps/cmake-2.8.8/bin/cmake -E cmake_link_script CMakeFiles/libmysql.dir/link.txt --verbose=1
+/home/vonc/ces/ce1/bin/c++  -fPIC  -Wall -Wno-unused-parameter -fno-implicit-templates -fno-exceptions -fno-rtti  -Wl,--no-undefined  -L/home/vonc/ces/ce1/usr/local/lib -L/home/vonc/ces/ce1/usr/local/ssl/lib -L/home/vonc/ces/ce1/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/ces/ce1/usr/local/lib:/home/vonc/ces/ce1/usr/local/ssl/lib:/home/vonc/ces/ce1/usr/local/apps/svn/lib:/home/vonc/ces/ce1/usr/local/apps/python/lib:/home/vonc/ces/ce1/usr/local/apps/gcc/lib -shared -Wl,-soname,libmysqlclient.so.18 -o libmysqlclient.so.18.0.0 CMakeFiles/libmysql.dir/libmysql_exports_file.cc.o -lpthread libclientlib.a ../dbug/libdbug.a ../strings/libstrings.a ../vio/libvio.a ../mysys/libmysys.a -lz ../extra/yassl/libyassl.a ../extra/yassl/taocrypt/libtaocrypt.a -ldl ../dbug/libdbug.a ../mysys/libmysys.a ../strings/libstrings.a -lz -lm -lrt -lpthread 
+libclientlib.a(client.c.o): In function `mysql_ssl_free':
+client.c:(.text+0x1b55): undefined reference to `SSL_CTX_free'
+libclientlib.a(client.c.o): In function `mysql_get_ssl_cipher':
+client.c:(.text+0x1be6): undefined reference to `SSL_get_current_cipher'
+client.c:(.text+0x1bee): undefined reference to `SSL_CIPHER_get_name'
+libclientlib.a(client.c.o): In function `ssl_verify_server_cert':
+
+Seems to miss -lssl and -lcrypto:
+
+vonc@vonc-VirtualBox:~/.cpl/src/mysql-5.5.25$ cd /home/vonc/ces/ce1/.cpl/src/mysql-5.5.25/bld/libmysql
+vonc@vonc-VirtualBox:~/.cpl/src/mysql-5.5.25/bld/libmysql$ !700
+/home/vonc/ces/ce1/bin/c++  -fPIC  -Wall -Wno-unused-parameter -fno-implicit-templates -fno-exceptions -fno-rtti  -Wl,--no-undefined  -L/home/vonc/ces/ce1/usr/local/lib -L/home/vonc/ces/ce1/usr/local/ssl/lib -L/home/vonc/ces/ce1/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/ces/ce1/usr/local/lib:/home/vonc/ces/ce1/usr/local/ssl/lib:/home/vonc/ces/ce1/usr/local/apps/svn/lib:/home/vonc/ces/ce1/usr/local/apps/python/lib:/home/vonc/ces/ce1/usr/local/apps/gcc/lib -shared -Wl,-soname,libmysqlclient.so.18 -o libmysqlclient.so.18.0.0 CMakeFiles/libmysql.dir/libmysql_exports_file.cc.o -lpthread libclientlib.a ../dbug/libdbug.a ../strings/libstrings.a ../vio/libvio.a ../mysys/libmysys.a -lz ../extra/yassl/libyassl.a ../extra/yassl/taocrypt/libtaocrypt.a -ldl ../dbug/libdbug.a ../mysys/libmysys.a ../strings/libstrings.a -lz -lm -lrt -lpthread -lssl -lcrypto
+../vio/libvio.a(vio.c.o): In function `vio_end':
+vio.c:(.text+0x3ae): undefined reference to `yaSSL_CleanUp'
+collect2: ld returned 1 exit status
+
+
+vonc@vonc-VirtualBox:~/.cpl/src/mysql-5.5.25$ grep -nHIrF "yaSSL_CleanUp" *|grep -v yassl
+vio/vio.c:289:  yaSSL_CleanUp();
+
+281 /*
+282   Cleanup memory allocated by vio or the
+283   components below it when application finish
+284 
+285 */
+286 void vio_end(void)
+287 {
+288 #ifdef HAVE_YASSL
+289   yaSSL_CleanUp();
+290 #endif
+291 }
+
+=> make sure HAVE_YASSL is 0?
+No, add more CMAKE env variables:
+
+CMAKE_LIBRARY_PATH=/home/vonc/ces/ce1/usr/local/lib:/home/vonc/ces/ce1/usr/local/ssl/lib
+CMAKE_SYSTEM_IGNORE_PATH=/lib/i386-linux-gnu
+CMAKE_IGNORE_PATH=/lib/i386-linux-gnu
+CMAKE_PROGRAM_PATH=/home/vonc/ces/ce1/bin
+CMAKE_SYSTEM_LIBRARY_PATH=/lib:/usr/lib
+CMAKE_INCLUDE_PATH=/home/vonc/ces/ce1/usr/local/include:/home/vonc/ces/ce1/usr/local/ssl/include
+CMAKE_PREFIX_PATH=/home/vonc/ces/ce1/usr/local:/home/vonc/ces/ce1/usr/local/ssl
+
+The last one seemed important (CMAKE_PREFIX_PATH)
+~~~~~~~~~~~~~
