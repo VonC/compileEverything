@@ -1,5 +1,5 @@
 configcmd=none
 makefile=none
 makecmd=none
-# makeinstcmd="${H}/gitlab/install_or_update_gitlab.sh"
+makeinstcmd="${H}/gitlab/install_or_update_gitlab.sh"
 makeinstcmd=none

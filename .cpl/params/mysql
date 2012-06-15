@@ -4,5 +4,6 @@ verexclude=free|386|686|x86|64bit
 precond=mkdir -p ${H}/.cpl/src/@@NAMEVER@@/bld
 cdpath=${H}/.cpl/src/@@NAMEVER@@/bld
 makefile=bld/Makefile
-configcmd=cmake -DCMAKE_INSTALL_PREFIX=${HULA}/@@NAMEVER@@ -DMYSQL_DATADIR=${H}/mysql/data -DCURSES_LIBRARY=${HULL}/libcurses.so -DCURSES_INCLUDE_PATH=${HULI} -DWITH_READLINE=ON -DWITH_SSL=system ..
-post=ln -fs @@VER@@ "${HULA}/@@NAMEVER@@"
+configcmd=cmake -DCMAKE_INSTALL_PREFIX=${HULA}/@@NAMEVER@@ -DMYSQL_DATADIR=${H}/mysql/data -DCURSES_LIBRARY=${HULL}/libcurses.so -DCURSES_INCLUDE_PATH=${HULI} -DWITH_READLINE=ON -DWITH_SSL=system -DCMAKE_SKIP_RPATH=ON ..
+#post=ln -fs "${HULA}/@@NAMEVER@@" "${H}/mysql/@@VER@@"
+post=ln -fs . "${HULA}/mysql/@@VER@@"

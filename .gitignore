@@ -105,3 +105,4 @@ tomcat/key*
 /.gnupg/
 /.cache/
 /.cpl/src
+/mysql/5.5.25
