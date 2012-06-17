@@ -4,7 +4,10 @@ gtl="${H}/gitolite"
 github="${gtl}/github"
 
 if [[ ! -e "${github}" ]] ; then
-  xxgit=1 git clone https://github.com/sitaramc/gitolite "${github}"
+  xxgit=1 git clone -n https://github.com/sitaramc/gitolite "${github}"
+  cp "${gtl}/config" "${github}/.git/config"
+  cp "${gtl}/attributes" "${github}/.git/info/attributes"
+  xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" checkout master
 else
   xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" pull
 fi

@@ -691,9 +691,9 @@ function build_item() {
       echo -ne "\e[1;32m" ; echolog "$type $namever already installed" ; echo -ne "\e[m" ;
       donelist="${donelist}@${name}@" ;
     fi
-    local appCreateSymlink=false
-    if [[ ! -e "${HULA}/${name}" || -h "${HULA}/${name}" ]] ; then appCreateSymlink=true ; fi
-    if [[ "$type" == "APP" && "${appCreateSymlink}" == "true" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
+    if [[ ! -e "${HULA}/${name}" && -e "${HULA}/${namever}" ]] ; then ln -fs "${namever}" "${HULA}/${name}" ; fi
+    if [[ -h "${HULA}/${name}/${namever}" ]] ; then rm -f "${HULA}/${name}/${namever}" ; fi
+    if [[ -h "${HULA}/${name}" && ! -e "${HULA}/${namever}" ]] ; then rm -f "${HULA}/${name}" ; fi
   else
     local asrc="${_src}/${namever}"
     if [[ "${type}" == "MOD" ]] ; then mkdir -p "${asrc}" ; fi

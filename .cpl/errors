@@ -2367,4 +2367,38 @@ CMAKE_INCLUDE_PATH=/home/vonc/ces/ce1/usr/local/include:/home/vonc/ces/ce1/usr/l
 CMAKE_PREFIX_PATH=/home/vonc/ces/ce1/usr/local:/home/vonc/ces/ce1/usr/local/ssl
 
 The last one seemed important (CMAKE_PREFIX_PATH)
+~~~~~~~~~~~~~~~~
+vonc@vonc-VirtualBox:~/gitlab/github$ bundle exec rake gitlab:app:status RAILS_ENV=production
+rake aborted!
+/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib/ruby/1.9.1/i686-linux/openssl.so: undefined symbol: SSLv2_method - /home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib/ruby/1.9.1/i686-linux/openssl.so
+
+(See full trace by running task with --trace)
+
+
+auser@vonc-VirtualBox:~/@vonc-VirtualBox:~/gitlab/github$ ldd ./vendor/bundle/ruby/1.9.1/gems/ffi-1.0.11/lib/ffi_c.so   linux-gate.so.1 =>  (0x00385000)
+    libruby.so.1.9 => /home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib/libruby.so.1.9 (0x00d31000)
+    libpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0x00ad4000)
+    librt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0x00f8c000)
+    libdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0x00959000)
+    libcrypt.so.1 => /lib/i386-linux-gnu/libcrypt.so.1 (0x00110000)
+    libm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0x007d9000)
+    libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0x00141000)
+    /lib/ld-linux.so.2 (0x0069f000)
+
+vonc@vonc-VirtualBox:~/gitlab/github$ ldd /home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib/ruby/1.9.1/i686-linux/openssl.so
+    linux-gate.so.1 =>  (0x004e7000)
+    libruby.so.1.9 => /home/vonc/ces/ce1/usr/local/lib/libruby.so.1.9 (0x00bb8000)
+    libssl.so.1.0.0 => /lib/i386-linux-gnu/libssl.so.1.0.0 (0x00110000)
+    libcrypto.so.1.0.0 => /lib/i386-linux-gnu/libcrypto.so.1.0.0 (0x00166000)
+    libdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0x00311000)
+    libz.so.1 => /home/vonc/ces/ce1/usr/local/lib/libz.so.1 (0x00316000)
+    libpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0x00a8d000)
+    librt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0x006ef000)
+    libcrypt.so.1 => /lib/i386-linux-gnu/libcrypt.so.1 (0x00663000)
+    libm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0x006a3000)
+    libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0x00329000)
+    /lib/ld-linux.so.2 (0x008be000)
+
+
 ~~~~~~~~~~~~~
+

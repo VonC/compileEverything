@@ -22,6 +22,10 @@ function octalACL() {
   eval $_aSingleACLValue="'$aSingleACLValue'"
 }
 
+if [ ! -t 0 ]; then
+  /bin/sed -e "$2"
+  exit 0
+fi
 if [[ "$1" == "-i" && "$(uname)" == "SunOS" ]] ; then
   #echo "b"
   ased="$2"

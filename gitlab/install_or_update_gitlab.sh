@@ -11,6 +11,7 @@ if [[ ! -e "${github}" ]] ; then
   bundle config build.charlock_holmes --with-icu-dir="${HUL}"
   bundle config build.raindrops --with-atomic_ops-dir="${HUL}"
   bundle config build.sqlite3 --with-sqlite3-dir="${HUL}"
+  bundle config build.mysql2  --with-mysql-config="${HB}/mysql_config" --with-ssl-dir="${HUL}/ssl" 
   cd "${d}"
 else
   xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" pull
