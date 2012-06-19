@@ -728,6 +728,8 @@ function build_item() {
       echo done > "${HUL}"/._linked/$namever ;
     fi
     if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
+    if [[ "$type" == "LIB" && ! -e "${HULS}/${name}" ]] ; then  ln -fs "${namever}" "${HULS}/${name}" ; fi
+    if [[ "$type" == "LIB" && ! -e "${HULS}/${namevar}" ]] ; then  rm -f "${HULS}/${name}" ; fi
     donelist="${donelist}@${name}@"
   fi
 }

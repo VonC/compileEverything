@@ -1,0 +1,97 @@
+#!/bin/bash
+
+function oknok() {
+  local _str=$1
+  local astr="$2"
+  local val=$3
+  local msg=$4
+  # echo "astr '${_str}' before: '${astr}'"
+  if [[ "${val}" == "true" ]] ; then astr="${astr}\e[1;32m${msg}\n" ; fi  
+  if [[ "${val}" == "false" ]] ; then astr="${astr}\e[1;31m${msg}\n" ; fi  
+  if [[ "${val}" != "true" && "${val}" != "false" ]] ; then astr="${astr}\e[1;33m${msg}\n" ; fi
+  # echo "astr '${_str}' after: '${astr}'"
+  eval $_str="'${astr}'"
+}
+
+debug=""
+if [[ "$1" == "-d" ]] ; then debug="${debug}_lib_" ; shift ; fi
+if [[ "$1" == "-dd" ]] ; then debug="${debug}_lib_all_" ; shift ; fi
+root="${H}/usr/local/apps"
+if [[ ! -e "${root}/$1" ]] ; then root="${H}/usr/local/libs" ; fi
+if [[ ! -e "${root}/$1" ]] ; then root="${H}/usr/local" ; fi
+if [[ ! -e "${root}/$1" ]] ; then 
+  echo -e "\e[01;31m === ERRORS: $1 doesn't exist in ${HULS} or ${HULA} === \e[0m"
+  exit 1
+fi
+overallok="true"
+msg_root=""
+function findexe() {
+find "${root}/$1/" -executable -type f -print0 | while read -d $'\0' file
+do
+  msg_root=""
+  # echo "msg_root do '${msg_root}'"
+  lfile="${file#${root}/$1/}"
+  if [[ "${lfile}" == "" ]] ; then exit 0 ; fi
+  if [[ "${lfile}" != "${lfile#*bin*}" ]] ; then
+    #echo "${lfile} (${file})"
+    #echo -e "$(ldd "${file}" 2>/dev/null)"
+    ldd=$(ldd "${file}" 2>/dev/null|grep "=>")
+    #IFS=$'\n'; for line in "$(echo -e "${ldd}" | grep "=>")"; do
+    allok="true"
+    # echo "msg_root line before '${msg_root}'"
+    # msg_root="${msg_root}${lfile} (${file})\n"
+    # echo "msg_root line after '${msg_root}'"
+    msg_details=""
+    #echo -ne "${msg_root}" ; exit 0
+    while read line; do
+      name="${line% =>*}"
+      value="${line#*=> }"
+      value="${value% (*}"
+      ok="false"
+      if [[ "${name}" == "" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${value#${HUL}/}" != "${value}" ]] ; then ok="true" ; fi
+
+      if [[ "${ok}" == "false" && "${name#linux-gate.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#libm.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#libresolv.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#libpthread.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#libcrypt.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#libc.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#librt.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#libdl.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#libutil.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#libnsl.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#libgomp.so}" != "${name}" ]] ; then ok="true" ; fi
+
+      if [[ "${ok}" == "false" || "${debug#*all}" != "${debug}" ]] ; then
+        #echo "${debug#*all} != ${debug}"
+        if [[ "${name}" != "" ]] ; then
+          # oknok msg_details "${msg_details}" "${ok}" "OK='${ok}'\e[0m name='${name}', value='${value}'"
+          oknok msg_details "${msg_details}" "${ok}" "  OK='${ok}'\e[0m, name='${name}', value='${value}'."
+        fi
+      fi
+      if [[ "${ok}" == "false" ]] ; then allok="false" ; fi 
+      # echo -ne "${msg_root}${msg_details}" ; exit 0
+    done < <(echo "${ldd}")
+
+    if [[ "${ldd}" != "" ]] ; then
+      if [[ "${allok}" == "false" || "${debug#*lib}" != "${debug}" ]] ; then
+        # echo "${debug#*lib} != ${debug}"
+        # echo "msg_root before '${msg_root}'"
+        oknok msg_root "${msg_root}" "${allok}" "${lfile}='${allok}'\e[0m (${file})."
+        # echo -ne "${msg_root}${msg_details}------\n"
+        msg_root="${msg_root}${msg_details}"
+      fi
+    fi
+  fi
+  if [[ "${allok}" == "false" ]] ; then overallok="false" ; fi 
+  echo -ne "${msg_root}"
+done
+}
+
+msg_root=$(findexe $1)
+if [[ "$(echo -n "${msg_root}" | grep "false")" != "" ]] ; then overallok="false" ; fi 
+if [[ "${msg_root}" != "" ]] ; then msg_root="${msg_root}\n-----\n" ; fi 
+res=""
+oknok res "${res}" "${overallok}" "${root}/$1/='${overallok}'\e[0m."
+echo -ne "${res}-----\n${msg_root}"
