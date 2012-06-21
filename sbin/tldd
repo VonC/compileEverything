@@ -19,8 +19,9 @@ if [[ "$1" == "-dd" ]] ; then debug="${debug}_lib_all_" ; shift ; fi
 root="${H}/usr/local/apps"
 if [[ ! -e "${root}/$1" ]] ; then root="${H}/usr/local/libs" ; fi
 if [[ ! -e "${root}/$1" ]] ; then root="${H}/usr/local" ; fi
+if [[ ! -e "${root}/$1" ]] ; then root="$(pwd)" ; fi
 if [[ ! -e "${root}/$1" ]] ; then 
-  echo -e "\e[01;31m === ERRORS: $1 doesn't exist in ${HULS} or ${HULA} === \e[0m"
+  echo -e "\e[01;31m === ERRORS: $1 doesn't exist in ${HULS} or ${HULA} or $(pwd) === \e[0m"
   exit 1
 fi
 overallok="true"
@@ -32,7 +33,7 @@ do
   # echo "msg_root do '${msg_root}'"
   lfile="${file#${root}/$1/}"
   if [[ "${lfile}" == "" ]] ; then exit 0 ; fi
-  if [[ "${lfile}" != "${lfile#*bin*}" ]] ; then
+  if [[ "${lfile}" != "${lfile#*bin*}"  || "${lfile}" != "${lfile#*lib*}" ]] ; then
     #echo "${lfile} (${file})"
     #echo -e "$(ldd "${file}" 2>/dev/null)"
     ldd=$(ldd "${file}" 2>/dev/null|grep "=>")

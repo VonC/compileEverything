@@ -14,6 +14,8 @@ app perl db,gdbm
 lib db tcl
 lib tcl autoconf
 app autoconf pkgconfig,m4
+app automake none
+app patchelf automake
 app pkgconfig libiconv
 lib m4 pkgconfig,libsigsegv
 lib libsigsegv gcc

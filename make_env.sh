@@ -327,6 +327,12 @@ function get_sources() {
   ver=${ver##*~}
   # echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}"
   source=${source//@@VER@@/${aver}}
+  if [[ "${nameurl}" == "master" ]] ; then
+    source=${source%/*}/master
+    targz="${name}-master.tar.gz"
+    anamever="${name}-master"
+	aver="master"
+  fi
   # echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}"
   if [[ ! -e "${_pkgs}/$targz" ]] && [[ ! -e "$HUL/._linked/${anamever}" ]]; then
     echolog "get sources for $name in ${_hpkgs}/$targz"

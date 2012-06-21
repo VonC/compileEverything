@@ -1,0 +1,9 @@
+page=https://github.com/NixOS/patchelf/downloads
+url=https://github.com/NixOS/patchelf/tarball/
+verexclude=sign|manpages|htmldocs|-rc|nofollow
+nameurl=master
+nameact=patchelf
+ext=none
+exturl=none
+extact=tar.gz
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@

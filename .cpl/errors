@@ -2399,6 +2399,90 @@ vonc@vonc-VirtualBox:~/gitlab/github$ ldd /home/vonc/ces/ce1/usr/local/apps/ruby
     libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0x00329000)
     /lib/ld-linux.so.2 (0x008be000)
 
+see vonc@vonc-VirtualBox:/home/vonc/ces/src/ruby-1.9.2p0/ext/openssl$ vi Makefile
+
+
+vonc@vonc-VirtualBox:~/gitlab/github$ tldd ../github
+/home/vonc/ces/ce1/gitlab/github/../github/=false.
+-----
+vendor/bundle/ruby/1.9.1/gems/eventmachine-0.12.10/lib/rubyeventmachine.so=false (/home/vonc/ces/ce1/gitlab/github/../github/vendor/bundle/ruby/1.9.1/gems/eventmachine-0.12.10/lib/rubyeventmachine.so).
+  OK=false, name=libssl.so.1.0.0, value=/lib/i386-linux-gnu/libssl.so.1.0.0.
+  OK=false, name=libcrypto.so.1.0.0, value=/lib/i386-linux-gnu/libcrypto.so.1.0.0.
+vendor/bundle/ruby/1.9.1/gems/mysql2-0.3.11/lib/mysql2/mysql2.so=false (/home/vonc/ces/ce1/gitlab/github/../github/vendor/bundle/ruby/1.9.1/gems/mysql2-0.3.11/lib/mysql2/mysql2.so).
+  OK=false, name=libssl.so.1.0.0, value=/lib/i386-linux-gnu/libssl.so.1.0.0.
+  OK=false, name=libcrypto.so.1.0.0, value=/lib/i386-linux-gnu/libcrypto.so.1.0.0.
+
+
+vonc@vonc-VirtualBox:~/gitlab/github$ patchelf  --print-rpath vendor/bundle/ruby/1.9.1/gems/mysql2-0.3.11/lib/mysql2/mysql2.so
+/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib:/home/vonc/ces/ce1/usr/local/lib:/home/vonc/ces/ce1/usr/local/apps/mysql-5.5.25/lib
+vonc@vonc-VirtualBox:~/gitlab/github$ ldd vendor/bundle/ruby/1.9.1/gems/mysql2-0.3.11/lib/mysql2/mysql2.so        linux-gate.so.1 =>  (0x00928000)
+	libruby.so.1.9 => /home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib/libruby.so.1.9 (0x00706000)
+	libmysqlclient.so.18 => /home/vonc/ces/ce1/usr/local/lib/libmysqlclient.so.18 (0x00150000)
+	libpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0x00f84000)
+	libz.so.1 => /home/vonc/ces/ce1/usr/local/lib/libz.so.1 (0x00110000)
+	libm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0x009b2000)
+	librt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0x00de1000)
+	libssl.so.1.0.0 => /lib/i386-linux-gnu/libssl.so.1.0.0 (0x00414000)
+	libcrypto.so.1.0.0 => /lib/i386-linux-gnu/libcrypto.so.1.0.0 (0x0046a000)
+	libdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0x00123000)
+	libcrypt.so.1 => /lib/i386-linux-gnu/libcrypt.so.1 (0x00615000)
+	libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0x009de000)
+	/lib/ld-linux.so.2 (0x0012e000)
+	libstdc++.so.6 => /home/vonc/ces/ce1/usr/local/lib/libstdc++.so.6 (0x00b83000)
+	libgcc_s.so.1 => /home/vonc/ces/ce1/usr/local/lib/libgcc_s.so.1 (0x00d58000)
+vonc@vonc-VirtualBox:~/gitlab/github$ patchelf  --set-rpath /home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib:/home/vonc/ces/ce1/usr/local/lib:/home/vonc/ces/ce1/usr/local/ssl/lib:/home/vonc/ces/ce1/usr/local/apps/mysql-5.5.25/lib vendor/bundle/ruby/1.9.1/gems/mysql2-0.3.11/lib/mysql2/mysql2.so
+vonc@vonc-VirtualBox:~/gitlab/github$ patchelf  --print-rpath vendor/bundle/ruby/1.9.1/gems/mysql2-0.3.11/lib/mysql2/mysql2.so
+/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib:/home/vonc/ces/ce1/usr/local/lib:/home/vonc/ces/ce1/usr/local/ssl/lib:/home/vonc/ces/ce1/usr/local/apps/mysql-5.5.25/lib
+
+vonc@vonc-VirtualBox:~/gitlab/github$ ldd vendor/bundle/ruby/1.9.1/gems/mysql2-0.3.11/lib/mysql2/mysql2.so	linux-gate.so.1 =>  (0x0017c000)
+	libruby.so.1.9 => /home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib/libruby.so.1.9 (0x0022c000)
+	libmysqlclient.so.18 => /home/vonc/ces/ce1/usr/local/lib/libmysqlclient.so.18 (0x00912000)
+	libpthread.so.0 => /lib/i386-linux-gnu/libpthread.so.0 (0x00bdc000)
+	libz.so.1 => /home/vonc/ces/ce1/usr/local/lib/libz.so.1 (0x00c87000)
+	libm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0x006c3000)
+	librt.so.1 => /lib/i386-linux-gnu/librt.so.1 (0x00110000)
+	libssl.so.1.0.0 => /home/vonc/ces/ce1/usr/local/ssl/lib/libssl.so.1.0.0 (0x00119000)
+	libcrypto.so.1.0.0 => /home/vonc/ces/ce1/usr/local/ssl/lib/libcrypto.so.1.0.0 (0x003e9000)
+	libdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0x00168000)
+	libcrypt.so.1 => /lib/i386-linux-gnu/libcrypt.so.1 (0x00733000)
+	libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0x00764000)
+	/lib/ld-linux.so.2 (0x00f65000)
+	libstdc++.so.6 => /home/vonc/ces/ce1/usr/local/lib/libstdc++.so.6 (0x00543000)
+	libgcc_s.so.1 => /home/vonc/ces/ce1/usr/local/lib/libgcc_s.so.1 (0x0016d000)
+
+
+
+vonc@vonc-VirtualBox:~/gitlab/github$ tldd ../github
+/home/vonc/ces/ce1/gitlab/github/../github/=false.
+-----
+vendor/bundle/ruby/1.9.1/gems/eventmachine-0.12.10/lib/rubyeventmachine.so=false (/home/vonc/ces/ce1/gitlab/github/../github/vendor/bundle/ruby/1.9.1/gems/eventmachine-0.12.10/lib/rubyeventmachine.so).
+  OK=false, name=libssl.so.1.0.0, value=/lib/i386-linux-gnu/libssl.so.1.0.0.
+  OK=false, name=libcrypto.so.1.0.0, value=/lib/i386-linux-gnu/libcrypto.so.1.0.0.
+-----
+vonc@vonc-VirtualBox:~/gitlab/github$ patchelf  --print-rpath vendor/bundle/ruby/1.9.1/gems/eventmachine-0.12.10/lib/rubyeventmachine.so 
+/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib:/home/vonc/ces/ce1/usr/local/lib
+vonc@vonc-VirtualBox:~/gitlab/github$ patchelf  --set-rpath /home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib:/home/vonc/ces/ce1/usr/local/lib:/home/vonc/ces/ce1/usr/local/ssl/lib vendor/bundle/ruby/1.9.1/gems/eventmachine-0.12.10/lib/rubyeventmachine.so 
+vonc@vonc-VirtualBox:~/gitlab/github$ patchelf  --print-rpath vendor/bundle/ruby/1.9.1/gems/eventmachine-0.12.10/lib/rubyeventmachine.so 
+/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib:/home/vonc/ces/ce1/usr/local/lib:/home/vonc/ces/ce1/usr/local/ssl/lib
+vonc@vonc-VirtualBox:~/gitlab/github$ tldd ../github
+/home/vonc/ces/ce1/gitlab/github/../github/=true.
+
+
+vonc@vonc-VirtualBox:~/gitlab/github$ tldd ruby
+/home/vonc/ces/ce1/usr/local/apps/ruby/=false.
+-----
+lib/ruby/1.9.1/i686-linux/openssl.so=false (/home/vonc/ces/ce1/usr/local/apps/ruby/lib/ruby/1.9.1/i686-linux/openssl.so).
+  OK=false, name=libssl.so.1.0.0, value=/lib/i386-linux-gnu/libssl.so.1.0.0.
+  OK=false, name=libcrypto.so.1.0.0, value=/lib/i386-linux-gnu/libcrypto.so.1.0.0.
+
+vonc@vonc-VirtualBox:~/gitlab/github$ cd
+vonc@vonc-VirtualBox:~$ cd usr/local/apps/ruby
+vonc@vonc-VirtualBox:~/usr/local/apps/ruby$ patchelf --print-rpath lib/ruby/1.9.1/i686-linux/openssl.so
+/home/vonc/ces/ce1/usr/local/lib:/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib
+vonc@vonc-VirtualBox:~/usr/local/apps/ruby$ patchelf --set-rpath /home/vonc/ces/ce1/usr/local/lib:/home/vonc/ces/ce1/usr/local/ssl/lib:/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib lib/ruby/1.9.1/i686-linux/openssl.so
+vonc@vonc-VirtualBox:~/usr/local/apps/ruby$ patchelf --print-rpath lib/ruby/1.9.1/i686-linux/openssl.so/home/vonc/ces/ce1/usr/local/lib:/home/vonc/ces/ce1/usr/local/ssl/lib:/home/vonc/ces/ce1/usr/local/apps/ruby-1.9.2p0/lib
+vonc@vonc-VirtualBox:~/usr/local/apps/ruby$ tldd ruby
+/home/vonc/ces/ce1/usr/local/apps/ruby/=true.
 
 ~~~~~~~~~~~~~
 
