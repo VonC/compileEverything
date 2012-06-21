@@ -58,7 +58,7 @@ app ant jdk
 app tomcat ant,jdk,junit
 lib tomcat-native tomcat
 app junit ant,jdk
-mod gitlab charlock_holmes,pygments,mysql_sandbox,libatomic_ops
+mod gitlab charlock_holmes,pygments,mysql_sandbox,libatomic_ops,redis
 mod charlock_holmes gem,icu
 mod bundler gem
 lib icu none
@@ -72,4 +72,5 @@ app cmake ncurses,gcc,curl,zlib,libarchive
 lib libarchive gcc,bzip2,libxml2,zlib,openssl
 lib gc gcc
 lib libatomic_ops gcc
+app redis gcc
 __no_deps__

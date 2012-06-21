@@ -1,0 +1,6 @@
+page=http://redis.io/download
+url=http://redis.googlecode.com/files/
+configcmd=none
+makecmd=PREFIX=${HULA}/@@NAMEVER@@ make
+makeinstcmd=PREFIX=${HULA}/@@NAMEVER@@ make install
+post=cp -f $H/.cpl/src/@@NAMEVER@@/redis.conf ${H}/redis/redis.conf.ori ; cp_tpl "${H}/redis/redis.conf" "${H}/redis"

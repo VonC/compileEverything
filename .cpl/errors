@@ -2486,3 +2486,26 @@ vonc@vonc-VirtualBox:~/usr/local/apps/ruby$ tldd ruby
 
 ~~~~~~~~~~~~~
 
+vonc@vonc-VirtualBox:~/gitlab/github$ bundle exec rake gitlab:app:status RAILS_ENV=production
+https://github.com/gitlabhq/grit.git (at 7f35cb9) is not checked out. Please run `bundle install`
+
+vonc@vonc-VirtualBox:~/gitlab/github$ bundle install --without development test --deployment
+...
+Using git (1.2.5) 
+Using posix-spawn (0.3.6) 
+Using grit (2.5.0) from https://github.com/gitlabhq/grit.git (at 7f35cb9) 
+Using hashery (1.4.0) 
+...
+Using unicorn (4.3.1) 
+Using yaml_db (0.2.2) from https://github.com/gitlabhq/yaml_db.git (at master) 
+Your bundle is complete! It was installed into ./vendor/bundle
+vonc@vonc-VirtualBox:~/gitlab/github$ bundle exec rake gitlab:app:status RAILS_ENV=production
+rake aborted!
+Connection refused - Unable to connect to Redis on 127.0.0.1:6379
+
+Tasks: TOP => gitlab:app:status => environment
+(See full trace by running task with --trace)
+
+=> compile, install and run redis (redis-server, daemonized)
+~~~~~~~~~~~~~
+

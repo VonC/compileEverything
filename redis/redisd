@@ -1,0 +1,52 @@
+#! /bin/bash
+
+REDISD="${H}/bin/redis-server"
+REDIS="${H}/redis"
+REDIS_PID="${REDIS}/redis.pid"
+auser=$(id -nu)
+aps=$(ps -ef|grep ${auser}|grep "${REDISD}"|grep -v grep|awk '{print $2}')
+afps=""
+if [[ -e "${REDIS_PID}" ]] ; then 
+  afps=$(cat "${REDIS_PID}")
+fi
+
+# echo "aps ${aps}, afps ${afps}"
+
+case "$1" in
+
+'start')
+  if [[ "$aps" == "" ]] ; then
+    echo "starting redisd (redis-server)"
+    "${H}/bin/redis-server" "${REDIS}/redis.conf"
+  else
+    echo "redisd already started, process ${aps}"
+  fi
+  ;;
+'stop')
+  if [[ "$aps" != "" ]] ; then
+    echo "stopping redisd (redis-server)"
+    kill -9 "${aps}"
+    rm -f "${REDIS_PID}"
+  else
+    echo "redisd already stopped"
+  fi
+  ;;
+'restart')
+  sshd stop
+  sshd start
+;;
+'status')
+  if [[ "${aps}" == "" ]] ; then
+    echo "redisd is stopped"
+  else
+    echo "redisd running, process ${aps}"
+  fi
+  if [[ "${afps}" != "${aps}" ]] ; then
+    echo "Warning, the redis pid recorded ${REDIS_PID} _${afps}_ is not the same than the running one: ${aps}"
+  fi
+  ;;
+*)
+  echo "usage: ${H}/sbin/sshd {start|stop|restart|status}"
+  ;;
+esac
+
