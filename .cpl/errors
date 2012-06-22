@@ -2509,3 +2509,84 @@ Tasks: TOP => gitlab:app:status => environment
 => compile, install and run redis (redis-server, daemonized)
 ~~~~~~~~~~~~~
 
+vonc@vonc-VirtualBox:~/gitlab/github$ bundle exec rake gitlab:app:status --trace RAILS_ENV=production
+** Invoke gitlab:app:status (first_time)
+** Invoke environment (first_time)
+** Execute environment
+rake aborted!
+Can't connect to local MySQL server through socket '/home/vonc/ces/ce1/gitlab/mysql.sock' (2)
+/home/vonc/ces/ce1/gitlab/github/vendor/bundle/ruby/1.9.1/gems/mysql2-0.3.11/lib/mysql2/client.rb:44:in `connect'
+/home/vonc/ces/ce1/gitlab/github/vendor/bundle/ruby/1.9.1/gems/mysql2-0.3.11/lib/mysql2/client.rb:44:in `initialize'
+/home/vonc/ces/ce1/gitlab/github/vendor/bundle/ruby/1.9.1/gems/activerecord-3.2.5/lib/active_record/connection_adapters/mysql2_adapter.rb:16:in `new'
+
+Sandboxes launches with /tmp/mysql_sandbox5525.sock => modify database.yml.tpl
+
+-------------
+
+vonc@vonc-VirtualBox:~/gitlab/github$ bundle exec rake gitlab:app:setup RAILS_ENV=production
+Access denied for user 'root'@'localhost' (using password: YES). 
+Please provide the root password for your mysql installation
+
+(sandbox) vonc@vonc-VirtualBox:~/mysql/sandboxes/gitlab$ sbtool -o info
+$ports = {
+           '5525' => 1
+         };
+$all_info = {
+              '5525' => {
+                          'opt' => {
+                                     'tmpdir' => '/home/vonc/ces/ce1/mysql/sandboxes/gitlab/tmp',
+                                     'datadir' => '/home/vonc/ces/ce1/mysql/sandboxes/gitlab/data',
+                                     'port' => '5525',
+                                     'basedir' => '/home/vonc/ces/ce1/usr/local/apps/mysql/5.5.25',
+                                     'socket' => '/tmp/mysql_sandbox5525.sock',
+                                     'prompt' => '\'mysql [\\h] {\\u} (\\d) > \'',
+                                     'pid_file' => '/home/vonc/ces/ce1/mysql/sandboxes/gitlab/data/mysql_sandbox5525.pid',
+                                     'password' => 'msandbox',
+                                     'user' => 'vonc',
+                                     'log_error' => 'msandbox.err'
+                                   },
+                          'conf' => undef
+                        }
+            };
+	
+-- assume_migrated_upto_version(20120413135904, ["/home/vonc/ces/ce1/gitlab/github/db/migrate"])
+   -> 0.2138s
+
+== Seed from /home/vonc/ces/ce1/gitlab/github/db/fixtures/production/001_admin.rb
+
+Administrator account created:
+
+login.........admin@local.host
+password......5iveL!fe
+rake aborted!
+gitolite timeout
+
+Tasks: TOP => gitlab:app:setup => gitlab:app:enable_automerge
+(See full trace by running task with --trace)
+
+vonc@vonc-VirtualBox:~/mysql/sandboxes/gitlab$ find ~/ -name "*.err"
+/home/vonc/ces/ce1/mysql/sandboxes/gitlab/data/msandbox.err
+
+~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vonc@vonc-VirtualBox:~/gitlab/github$ bundle exec rake gitlab:app:status RAILS_ENV=production
+Starting diagnostic
+config/database.yml............exists
+config/gitlab.yml............exists
+/home/git/repositories/............exists
+/home/git/repositories/ is writable?............YES
+ssh: connect to host localhost port 2200: Connection refused
+fatal: The remote end hung up unexpectedly
+Can clone gitolite-admin?............YES
+UMASK for .gitolite.rc is 0007? ............NO
+rake aborted!
+unexpected return
+
+vonc@vonc-VirtualBox:~/gitlab/github$ grep -nrHIF UMASK *
+doc/installation.md:181:    UMASK for .gitolite.rc is 0007? ............YES
+lib/tasks/gitlab/status.rake:51:      print "UMASK for .gitolite.rc is 0007? ............"
+lib/tasks/gitlab/status.rake:52:      unless open("#{GIT_HOST['base_path']}/../.gitolite.rc").grep(/REPO_UMASK = 0007/).empty?
+
+(still g2 syntax, not g3) => add 'REPO_UMASK = 0007' to a comment!
+~~~~~~~~~~~~~~~~

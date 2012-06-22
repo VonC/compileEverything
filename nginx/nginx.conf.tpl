@@ -33,15 +33,15 @@ http {
     #proxy_redirect     http://itsvc/git/  /git/;
 
     server {
-        listen       443;
-        server_name  itsvc.world.company itsvc;
+        listen       @PORT_NGINX_HTTPS@;
+        server_name  @FQN@ @HOSTNAME@;
         # default max client body size was 1m! => Error code is 413
         # here: max 10Go
         client_max_body_size 10000m;
 
         ssl                  on;
-        ssl_certificate      /home/auser/compileEverything/nginx/itsvc.world.company.crt;
-        ssl_certificate_key  /home/auser/compileEverything/nginx/itsvc.world.company.key;
+        ssl_certificate      @H@/nginx/itsvc.world.company.crt;
+        ssl_certificate_key  @H@/nginx/itsvc.world.company.key;
         ssl_session_timeout  5m;
         #ssl_protocols SSLv2 SSLv3 TLSv1; # NO: SSLv2 prohibited
         ssl_protocols  SSLv3 TLSv1;
@@ -49,31 +49,63 @@ http {
         ssl_prefer_server_ciphers   on;
 
         location /git/ {
-          proxy_pass https://itsvcprdgit.world.company:8443/git/;
+          proxy_pass https://@FQN@:@PORT_HTTP_GITWEB@/git/;
         }
         location /hgit/ {
-          proxy_pass https://itsvcprdgit.world.company:8453/hgit/;
+          proxy_pass https://@FQN@:@PORT_HTTP_HGIT@/hgit/;
         }
         location /cgit/ {
-          proxy_pass https://itsvcprdgit.world.company:8463/cgit/;
+          proxy_pass https://@FQN@:@PORT_HTTP_CGIT@/cgit/;
         }
     
-        root /home/auser/compileEverything/nginx/html;
+        root @H@/nginx/html;
         location = / {
             index  index.html index.htm;
         }
     }
     server {
-        listen               80;
-        server_name  itsvc.world.company itsvc;
+        listen       @PORT_NGINX_HTTP@;
+        server_name  @FQN@ @HOSTNAME@;
         # default max client body size was 1m! => Error code is 413
         # here: max 10Go
         client_max_body_size 10000m;
 
-        root /home/auser/compileEverything/nginx/html;        
+        root @H@/nginx/html;        
         location = / {
             index  index.html index.htm;
         }
     }
  
+    upstream gitlab {
+        server unix:@H@/gitlab/github/tmp/sockets/gitlab.socket;
+    }
+
+    server {
+        listen       @PORT_HTTP_GITLAB@;
+        server_name  @FQN@ @HOSTNAME@;
+        root @H@/gitlab/github/public;
+
+        # individual nginx logs for this gitlab vhost
+        access_log  @H@/gitlab/nginx_gitlab_access.log;
+        error_log   @H@/gitlab/nginx_gitlab_error.log;
+
+        location / {
+            # serve static files from defined root folder;.
+            # @gitlab is a named location for the upstream fallback, see below
+            try_files $uri $uri/index.html $uri.html @gitlab;
+        }
+
+        # if a file, which is not found in the root folder is requested, 
+        # then the proxy pass the request to the upsteam (gitlab unicorn)
+        location @gitlab {
+            proxy_redirect     off;
+            # you need to change this to "https", if you set "ssl" directive to "on"
+            proxy_set_header   X-FORWARDED_PROTO http;
+            proxy_set_header   Host              @FQN@:@PORT_HTTP_GITLAB@;
+            proxy_set_header   X-Real-IP         $remote_addr;
+
+            proxy_pass http://gitlab;
+        }
+
+    }
 }

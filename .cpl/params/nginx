@@ -3,6 +3,7 @@ url=http://nginx.org/download/
 pre=gen_sed -i "s/\([\"'\'' IRL]\)\/usr\/local/\1\${EHUL}/g" "${H}/.cpl/src/@@NAMEVER@@/auto/lib/libxslt/conf" ; gen_sed -i "s/\([\"'\'' IRL]\)\/usr\/include/\1\${EHULI}/g" "${H}/.cpl/src/@@NAMEVER@@/auto/lib/libxslt/conf" ; gen_sed -i "s/\([\"'\'' IRL]\)\/usr\/local\/include/\1\${EHULI}/g" "${H}/.cpl/src/@@NAMEVER@@/auto/lib/libxslt/conf" ; gen_sed -i "s/-lexslt/-lexslt -lgcrypt -lgpg-error -lxml2 -lxslt -lintl -lgettextpo/g" "${H}/.cpl/src/@@NAMEVER@@/auto/lib/libxslt/conf"
 configcmd=@@if [[ "$(uname)" == "SunOS" ]] ; then export -n CFLAGS CPPFLAGS LDFLAGS ; fi ; ./configure --prefix=${HULA}/@@NAMEVER@@ --user=@@USERNAME@@ --group="@@USERGROUP@@" --with-rtsig_module --with-select_module --with-poll_module --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_stub_status_module --with-http_perl_module  --with-debug --with-mail --with-mail_ssl_module --with-perl=${HULA}/perl/bin/perl --with-ld-opt='\''-Bstatic -L${HULL} -L${HUL}/ssl/lib'\'' --with-cc-opt='\''-I${HULI} -I${HUL}/ssl/include'\''
 linksrc=${HULA}/@@NAMEVER@@/sbin
-m_akeinstcmd=none
-p_ost=rm -Rf "${H}/.cpl/src/"perl* ; rm -f "${H}/usr/local/._linked/"perl*
+post=cp_tpl "${H}/nginx/nginx.conf.tpl" "${H}/nginx"
+# m_akeinstcmd=none
+# p_ost=rm -Rf "${H}/.cpl/src/"perl* ; rm -f "${H}/usr/local/._linked/"perl*
 # http://stackoverflow.com/questions/790195/rm-fails-to-delete-files-by-wildcard-from-a-script-but-works-from-a-shell-promp

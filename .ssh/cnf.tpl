@@ -3,7 +3,7 @@
 # This is the sshd server system-wide configuration file.  See
 # sshd_config(5) for more information.
 
-# This sshd was compiled with PATH=/home/auser/sbin:/home/auser/bin:/home/auser/usr/local/bin:/home/auser/usr/local/sbin:/home/auser/usr/local/ssl/bin:/home/auser/usr/local/jdk6/bin:/home/auser/gitolite/bin:/usr/local/bin:/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
+# This sshd was compiled with PATH=@H@/sbin:@H@/bin:@H@/usr/local/bin:@H@/usr/local/sbin:@H@/usr/local/ssl/bin:@H@/usr/local/jdk6/bin:@H@/gitolite/bin:/usr/local/bin:/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
 
 # The strategy used for options in the default sshd_config shipped with
 # OpenSSH is to specify options with their default value where

@@ -762,3 +762,11 @@ $ cat /etc/cron.hourly/BOUNCE-NTP
 /usr/bin/ntpq -np | /bin/grep '^\*' > /dev/null || ( /usr/bin/ntpq -np ; /etc/init.d/ntp restart )
 ~~~~~~~~~~~
 
+gitlab
+
+http://vonc-virtualbox:9880/
+user: admin@local.host
+pass: 5iveL!fe
+
+~~~~~~~~~~~~
+
