@@ -1,0 +1,10 @@
+#! /bin/bash
+asrcline=$(wget -q -O - "http://developer.gnome.org/glib/stable/index.html" | grep -e "for GLib")
+# echo "asrcline='${asrcline}'"
+majver="${asrcline%%.*}"
+majver="${majver##* }"
+minver="${asrcline#*.}"
+minver="${minver%%.*}"
+# echo "majver='${majver}'"
+# echo "minver='${minver}'"
+echo "http://ftp.gnome.org/pub/gnome/sources/glib/${majver}.${minver}/"

@@ -1,1 +1,1 @@
-configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static
+configcmd=@@GLIB_CFLAGS="-I${HULI}/glib-2.0 -I${HULL}/glib-2.0/include" GLIB_LIBS="-L${HULL} -lglib-2.0 -lintl" ./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static

@@ -14,9 +14,11 @@ app perl db,gdbm
 lib db tcl
 lib tcl autoconf
 app autoconf pkgconfig,m4
+lib glib gettext,pcre,libiconv,zlib,gcc,libffi
+lib libffi gcc
 app automake none
 app patchelf automake
-app pkgconfig libiconv
+app pkgconfig libiconv,glib
 lib m4 pkgconfig,libsigsegv
 lib libsigsegv gcc
 lib gdbm texinfo

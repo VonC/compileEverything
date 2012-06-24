@@ -1,0 +1,7 @@
+page=get_page_glib
+url=get_url_glib
+ext=tar.xz
+configcmd=@@LIBFFI_CFLAGS="-I${HULI}" LIBFFI_LIBS="-L${HULL} -lffi" ./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
+#configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@ -with-libiconv=gnu
+premake=gen_sed -i "s;^ICONV_LIBS =.*$;ICONV_LIBS = -liconv;g" Makefile ; gen_sed -i "s;^/\* #undef USE_LIBICONV_NATIVE \*/;#define USE_LIBICONV_GNU 1;g" config.h
+

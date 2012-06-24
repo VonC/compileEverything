@@ -243,6 +243,7 @@ function get_sources() {
   get_param $name nameact "${nameurl}"
   get_param $name page "${_vers}"
   if [[ "$page" == "none" ]] ; then eval $_namever="'${name}'" ; return 0 ; fi
+  if [[ "${page#http}" == "${page}" && "${page#/}" == "${page}" ]] ; then page=$("${H}/.cpl/scripts/${page}") ; fi
   get_param $name ext "tar.gz"
   if [[ "${nameurl}" == "none" ]] ; then nameurl="" ; fi
   if [[ "${ext}" == "none" ]] ; then ext="" ; fi
@@ -257,6 +258,7 @@ function get_sources() {
     # echo "D: local page: ${asrcpage}"
     local asrcline=$(wget -q -O - "${page}" | grep -e "${nameurl}" | grep -e "${ext}")
   fi
+  
   get_param $name verexclude ""
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
   get_param $name verinclude ""
@@ -282,6 +284,7 @@ function get_sources() {
   if [[ "${source}" == "${source0}" ]] ; then source="${source0##*\'}" ; fi
   # echo "D: source1 ${source}"
   get_param $name url ""
+  if [[ "${url}" != "" && "${url#http}" == "${url}" ]] ; then url=$("${H}/.cpl/scripts/${url}") ; fi
   # echo "D: url0 ${url}"
   # echo "D: source ${source}"
   local targz="${source##*/}"
@@ -735,7 +738,7 @@ function build_item() {
     fi
     if [[ "$type" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
     if [[ "$type" == "LIB" && ! -e "${HULS}/${name}" ]] ; then  ln -fs "${namever}" "${HULS}/${name}" ; fi
-    if [[ "$type" == "LIB" && ! -e "${HULS}/${namevar}" ]] ; then  rm -f "${HULS}/${name}" ; fi
+    if [[ "$type" == "LIB" && ! -e "${HULS}/${namever}" ]] ; then  rm -f "${HULS}/${name}" ; fi
     donelist="${donelist}@${name}@"
   fi
 }

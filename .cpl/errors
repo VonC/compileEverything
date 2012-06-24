@@ -2590,3 +2590,81 @@ lib/tasks/gitlab/status.rake:52:      unless open("#{GIT_HOST['base_path']}/../.
 
 (still g2 syntax, not g3) => add 'REPO_UMASK = 0007' to a comment!
 ~~~~~~~~~~~~~~~~
+Ubuntu: make pkgconfig
+
+2012/06/24-00:18:14 ~ ln do to: ln -fs pkg-config-0.26 /home/git/ces/ce1/../src/pkgconfig-0.26
+2012/06/24-00:18:15 ~ cd /home/git/ces/ce1/../src/pkgconfig-0.26
+configcmd=./configure --prefix=/home/git/ces/ce1/usr/local/apps/pkgconfig-0.26 --enable-shared --enable-static
+2012/06/24-00:18:16 ~~~ ./configure --prefix=/home/git/ces/ce1/usr/local/apps/pkgconfig-0.26 --enable-shared --enable-static
+2012/06/24-00:18:16 ~ (see /home/git/ces/ce1/.cpl/logs/20120624.001815.configure_pkgconfig-0.26.log or simply tail -f /home/git/ces/ce1/.cpl/logs/l)
+!!!!_FAIL_!!!!
+2012/06/24-00:18:15 ~ cd /home/git/ces/ce1/../src/pkgconfig-0.26
+2012/06/24-00:18:16 ~ (see /home/git/ces/ce1/.cpl/logs/20120624.001815.configure_pkgconfig-0.26.log or simply tail -f /home/git/ces/ce1/.cpl/logs/l)
+!!!!_FAIL_!!!!
+checking for --with-system-library-path... /usr/lib
+checking whether to list both direct and indirect dependencies... no
+checking for Win32... no
+checking for pkg-config... pkg-config
+configure: error: pkg-config and glib-2.0 not found, please set GLIB_CFLAGS and GLIB_LIBS to the correct values
+
+http://comments.gmane.org/gmane.comp.package-management.pkg-config/620
+Drop embedded glib
+
+Actually you don't need pkg-config, if you set all the variables...
+
+  ZLIB_CFLAGS C compiler flags for ZLIB, overriding pkg-config
+  
+  For pkg-config 0.25 it would build a static glib automatically,
+but for pkg-config 0.26 you need to build one yourself first...
+And then set GLIB_CFLAGS and GLIB_LIBS to where you built it,
+including the libiconv and libintl dependencies that it needs.
+
+You'll end up with something like this, for pkg-config itself:
+
+PKG_CONFIG_PATH="$PWD/glib-$GLIB_VER:$PKG_CONFIG_PATH" \
+PKG_CONFIG=false \
+GLIB_CFLAGS="-I$PWD/glib-$GLIB_VER -I$PWD/glib-$GLIB_VER/glib" \
+GLIB_LIBS="$PWD/glib-$GLIB_VER/glib/libglib-2.0.la" \
+./configure
+
+=> GLIB_CFLAGS="-I${HULI}/glib-2.0 -I${HULL}/glib-2.0/include" GLIB_LIBS="-L${HULL} -lglib-2.0 -lintl"
+
+~~~~~~~~~~~~~~
+
+Ubuntu make glib
+
+make[4]: Entering directory `/home/git/ces/src/glib-2.32.3/glib'
+  CC     gallocator.lo
+  CC     gcache.lo
+  CC     gcompletion.lo
+  CC     grel.lo
+  CC     gthread-deprecated.lo
+  CC     garray.lo
+  CC     gasyncqueue.lo
+  CC     gatomic.lo
+  CC     gbacktrace.lo
+  CC     gbase64.lo
+  CC     gbitlock.lo
+  CC     gbookmarkfile.lo
+  CC     gbytes.lo
+  CC     gcharset.lo
+  CC     gchecksum.lo
+  CC     gconvert.lo
+gconvert.c:66:2: #error GNU libiconv not in use but included iconv.h is from libiconv
+make[4]: *** [gconvert.lo] Error 1
+make[4]: Leaving directory `/home/git/ces/src/glib-2.32.3/glib'
+make[3]: *** [all-recursive] Error 1
+make[3]: Leaving directory `/home/git/ces/src/glib-2.32.3/glib'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory `/home/git/ces/src/glib-2.32.3/glib'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/home/git/ces/src/glib-2.32.3'
+make: *** [all] Error 2
+
+Has to make sure '#define USE_LIBICONV_GNU 1' is in there somehow.
+An elusive confdefs.h should help, but in the end, for now, modif existing config.h file:
+
+gen_sed -i "s;^ICONV_LIBS =.*$;ICONV_LIBS = -liconv;g" Makefile ; 
+gen_sed -i "s;^/\* #undef USE_LIBICONV_NATIVE \*/;#define USE_LIBICONV_GNU 1;g" config.h
+
+~~~~~~~~~~~~~~~~~
