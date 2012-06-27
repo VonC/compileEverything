@@ -114,3 +114,4 @@ tomcat/key*
 /redis/dump.rdb
 /redis/redis.conf
 /redis/redis.conf.ori
+/build/

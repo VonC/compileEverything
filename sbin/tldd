@@ -27,7 +27,7 @@ fi
 overallok="true"
 msg_root=""
 function findexe() {
-find "${root}/$1/" -executable -type f -print0 | while read -d $'\0' file
+find "${root}/$1/" -perm /111 -type f -print0 | while read -d $'\0' file
 do
   msg_root=""
   # echo "msg_root do '${msg_root}'"
@@ -53,6 +53,7 @@ do
       if [[ "${ok}" == "false" && "${value#${HUL}/}" != "${value}" ]] ; then ok="true" ; fi
 
       if [[ "${ok}" == "false" && "${name#linux-gate.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#linux-vdso.so}" != "${name}" ]] ; then ok="true" ; fi
       if [[ "${ok}" == "false" && "${name#libm.so}" != "${name}" ]] ; then ok="true" ; fi
       if [[ "${ok}" == "false" && "${name#libresolv.so}" != "${name}" ]] ; then ok="true" ; fi
       if [[ "${ok}" == "false" && "${name#libpthread.so}" != "${name}" ]] ; then ok="true" ; fi
@@ -63,6 +64,7 @@ do
       if [[ "${ok}" == "false" && "${name#libutil.so}" != "${name}" ]] ; then ok="true" ; fi
       if [[ "${ok}" == "false" && "${name#libnsl.so}" != "${name}" ]] ; then ok="true" ; fi
       if [[ "${ok}" == "false" && "${name#libgomp.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#libaio.so}" != "${name}" ]] ; then ok="true" ; fi
 
       if [[ "${ok}" == "false" || "${debug#*all}" != "${debug}" ]] ; then
         #echo "${debug#*all} != ${debug}"

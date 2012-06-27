@@ -1,0 +1,3 @@
+page=http://www.mr511.de/software/
+url=http://www.mr511.de/software/
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared

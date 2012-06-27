@@ -6,4 +6,5 @@ nameact=patchelf
 ext=none
 exturl=none
 extact=tar.gz
-configcmd=./configure --prefix=${HULA}/@@NAMEVER@@
+pre=./bootstrap.sh
+configcmd=@@LIBS=" -lintl" ./configure --prefix=${HULA}/@@NAMEVER@@

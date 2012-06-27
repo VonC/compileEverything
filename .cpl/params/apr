@@ -1,2 +1,4 @@
+page=http://apr.apache.org/download.cgi
+url=http://mirror.ibcp.fr/pub/apache/apr/
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
-post=ln -s libapr-1.a ${HULL}/libapr.a
+post=ln -fs libapr-1.a ${HULL}/libapr.a

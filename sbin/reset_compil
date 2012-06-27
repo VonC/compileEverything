@@ -1,0 +1,4 @@
+#! /bin/bash
+
+rm -f "${H}/usr/local/._linked/$1-*"
+gen_sed -i "/\#$1\#/ d" "${H}/.cpl/cache"

@@ -1,3 +1,3 @@
 configcmd=./config --openssldir=${HULS}/@@NAMEVER@@ zlib shared --with-zlib-include=${HULI} --with-zlib-lib=${HULL}
 linkdst=${HUL}/ssl
-post=ln -fs ../openssl ${HULS}/@@NAMEVER@@/include/openssl/include ; ln -fs ../ssl/lib/libssl.so "${HULL}" ; ln -fs ../ssl/lib/libcrypto.so "${HULL}"
+post=ln -fs ../openssl ${HULS}/@@NAMEVER@@/include/openssl/include ; ln -fs ../ssl/lib/libssl.so "${HULL}" ; ln -fs ../ssl/lib/libcrypto.so "${HULL}" ; ln -fs ../openssl ${HULS}/@@NAMEVER@@/include/openssl/include ; ln -fs ../ssl/lib/libssl.so.1.0.0 "${HULL}" ; ln -fs ../ssl/lib/libcrypto.so.1.0.0 "${HULL}"

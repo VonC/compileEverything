@@ -19,11 +19,11 @@ Port @PORT_SSHD@
 Protocol 2
 
 # HostKey for protocol version 1
-#HostKey @H@/usr/local/libs/openssh-5.9p1/etc/ssh_host_key
+#HostKey @H@/usr/local/libs/openssh/etc/ssh_host_key
 # HostKeys for protocol version 2
-#HostKey @H@/usr/local/libs/openssh-5.9p1/etc/ssh_host_rsa_key
-#HostKey @H@/usr/local/libs/openssh-5.9p1/etc/ssh_host_dsa_key
-#HostKey @H@/usr/local/libs/openssh-5.9p1/etc/ssh_host_ecdsa_key
+#HostKey @H@/usr/local/libs/openssh/etc/ssh_host_rsa_key
+#HostKey @H@/usr/local/libs/openssh/etc/ssh_host_dsa_key
+#HostKey @H@/usr/local/libs/openssh/etc/ssh_host_ecdsa_key
 
 # Lifetime and size of ephemeral version 1 server key
 #KeyRegenerationInterval 1h
@@ -49,7 +49,7 @@ LogLevel VERBOSE
 # but this is overridden so installations will only check .ssh/authorized_keys
 AuthorizedKeysFile	@H@/.ssh/authorized_keys
 
-# For this to work you will also need host keys in @H@/usr/local/libs/openssh-5.9p1/etc/ssh_known_hosts
+# For this to work you will also need host keys in @H@/usr/local/libs/openssh/etc/ssh_known_hosts
 #RhostsRSAAuthentication no
 # similar for protocol version 2
 #HostbasedAuthentication no
@@ -112,7 +112,7 @@ UsePrivilegeSeparation no
 #Banner none
 
 # override default of no subsystems
-Subsystem	sftp	@H@/usr/local/libs/openssh-5.9p1/libexec/sftp-server
+Subsystem	sftp	@H@/usr/local/libs/openssh/libexec/sftp-server
 
 # Example of overriding settings on a per-user basis
 #Match User anoncvs

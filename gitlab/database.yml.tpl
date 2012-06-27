@@ -5,7 +5,7 @@ development:
   database: gitlabhq_development
   pool: 5
   username: root
-  password: "secure password"
+  password: msandbox
   socket: /tmp/mysql_sandbox5525.sock
 
 # Warning: The database defined as "test" will be erased and
@@ -18,7 +18,7 @@ test:
   database: gitlabhq_test
   pool: 5
   username: root
-  password: "secure password"
+  password: msandbox
   socket: /tmp/mysql_sandbox5525.sock
 
 production:
@@ -28,5 +28,5 @@ production:
   database: gitlabhq_production
   pool: 5
   username: root
-  password: "secure password"
+  password: msandbox
   socket: /tmp/mysql_sandbox5525.sock

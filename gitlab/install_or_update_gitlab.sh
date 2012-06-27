@@ -26,3 +26,17 @@ if [[ ! -e "${mysqlgtl}" ]] ; then
   mysqlv=$(mysql -V); mysqlv=${mysqlv%%,*} ; mysqlv=${mysqlv##* }
   make_sandbox ${mysqlv} -- -d gitlab 
 fi
+if [[ ! "$(ls -A ${github}/vendor/bundle/ruby/1.9.1/gems)" ]] ; then 
+  d=$(pwd) ; cd "${github}"
+  bundle install --without development test --deployment
+  cd "${d}"
+fi
+if [[ "1" == "2" ]] ; then
+  d=$(pwd) ; cd "${github}"
+  bundle exec rake gitlab:app:setup RAILS_ENV=production
+  cd "${d}"
+fi
+fix=$(grep "Syc" -nrlHIF "${github}/vendor/bundle/ruby/1.9.1/specifications/")
+while read line; do
+  gen_sed -i "s/\"#<Syck::DefaultKey:.*>/\"~>/g" "${line}"
+done < <(echo "${fix}") 

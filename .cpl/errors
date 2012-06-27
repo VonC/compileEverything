@@ -2668,3 +2668,230 @@ gen_sed -i "s;^ICONV_LIBS =.*$;ICONV_LIBS = -liconv;g" Makefile ;
 gen_sed -i "s;^/\* #undef USE_LIBICONV_NATIVE \*/;#define USE_LIBICONV_GNU 1;g" config.h
 
 ~~~~~~~~~~~~~~~~~
+
+Redhat configure groff 
+
+
+
+configure:4407: checking that C++ compiler can compile simple program
+configure:4425: g++ -o conftest -g -O2 -I/home/auser/ce8/usr/local/include -I/home/auser/ce8/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -L/home/auser/ce8/usr/local/lib -L/home/auser/ce8/usr/local/ssl/lib -L/home/auser/ce8/usr/local/apps/python/lib -Wl,-rpath=/home/auser/ce8/usr/local/lib:/home/auser/ce8/usr/local/ssl/lib:/home/auser/ce8/usr/local/apps/svn/lib:/home/auser/ce8/usr/local/apps/python/lib:/home/auser/ce8/usr/local/apps/gcc/lib conftest.cpp  >&5
+/home/auser/ce8/usr/local/lib/libstdc++.so: undefined reference to `libintl_bindtextdomain'
+/home/auser/ce8/usr/local/lib/libstdc++.so: undefined reference to `libintl_textdomain'
+collect2: ld returned 1 exit status
+configure:4425: $? = 1
+
+Probably miss an -lintl
+=> LIBS=" -lintl" ./configure ...: modify params for groff
+~~~~~~~~~~~~~~~~~~
+RedHat: make glib
+
+  CCLD   gdbus
+    CC     gresource-gresource-tool.o
+    gresource-tool.c:34:20: libelf.h: No such file or directory
+    gresource-tool.c:35:18: gelf.h: No such file or directory
+    gresource-tool.c:136: error: syntax error before '*' token
+    gresource-tool.c:139: warning: return type defaults to `int'
+    gresource-tool.c: In function `get_elf':
+    gresource-tool.c:140: error: `Elf' undeclared (first use in this function)
+    
+=> add libelf from http://www.mr511.de/software/
+~~~~~~~~~~~~~~~~
+Redhat make glib
+
+make[4]: Leaving directory `/home/auser/ce8/.cpl/src/glib-2.32.3/gio'
+Making all in tests
+make[4]: Entering directory `/home/auser/ce8/.cpl/src/glib-2.32.3/gio/tests'
+  GEN    gdbus-test-codegen-generated.c
+/usr/bin/env: python2.5: No such file or directory
+make[4]: *** [gdbus-test-codegen-generated.c] Error 127
+make[4]: Leaving directory `/home/auser/ce8/.cpl/src/glib-2.32.3/gio/tests'
+
+http://mail-index.netbsd.org/pkgsrc-users/2012/01/30/msg015619.html
+
+>  gdbus-codegen is used to generate code and/or documentation for one
+>  or more D-Bus interfaces. The tool reads Introspection XML files and
+>  generates output files. The tool currently supports generating C code
+>  and Docbook XML.
+>
+> So basically, if we want gdbus-codegen, we need to add the python 
+> dependency...
+
+auser01:50 ahostname /home/auser/ce8/.cpl/src/glib-2.32.3/gio/ #vi Makefile
+remove SUBDIRS tests value, to avoid gio/tests compilation
+
+auser01:50 ahostname /home/auser/ce8/.cpl/src/glib-2.32.3/gio/gdbus-2.0/codegen #vi Makefile
+remove bin_scripts value to avoid gio/gdbus-2.0/codegen installation
+
+~~~~~~~~~~~~~~~~~~
+RedHat: make apache
+
+
+/home/auser/ce8/usr/local/libs/apr-1.2.2/build-1/libtool --silent --mode=link gcc -pthread  -I/home/auser/ce8/usr/local/include -I/home/auser/ce8/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64   -L/home/auser/ce8/usr/local/libs/openssl-1.0.0j/lib  -L/home/auser/ce8/usr/local/lib -L/home/auser/ce8/usr/local/ssl/lib -L/home/auser/ce8/usr/local/apps/python/lib -Wl,-rpath=/home/auser/ce8/usr/local/lib:/home/auser/ce8/usr/local/ssl/lib:/home/auser/ce8/usr/local/apps/svn/lib:/home/auser/ce8/usr/local/apps/python/lib:/home/auser/ce8/usr/local/apps/gcc/lib -o httpd  modules.lo buildmark.o -export-dynamic server/libmain.la modules/http/libmod_http.la modules/mappers/libmod_so.la server/mpm/prefork/libprefork.la os/unix/libos.la -lm /home/auser/ce8/.cpl/src/httpd-2.2.22/srclib/pcre/libpcre.la /home/auser/ce8/usr/local/libs/aprutil-1.2.2/lib/libaprutil-1.la -lldap -llber -lgdbm -ldb -lsqlite3 -lexpat -liconv /home/auser/ce8/usr/local/libs/apr-1.2.2/lib/libapr-1.la -lrt -lcrypt -lpthread -ldl
+modules/http/.libs/libmod_http.a(byterange_filter.o): In function `ap_set_byterange':
+byterange_filter.c:(.text+0xb44): undefined reference to `apr_array_clear'
+collect2: ld returned 1 exit status
+make[1]: *** [httpd] Error 1
+make[1]: Leaving directory `/home/auser/ce8/.cpl/src/httpd-2.2.22'
+make: *** [all-recursive] Error 1
+
+https://issues.apache.org/bugzilla/show_bug.cgi?id=53162#c6
+
+It seems apr_array_clear has been introduced in apr 1.3.x. I guess you are trying to compile with apr 1.2.x. You can use --with-included-apr as a work-around.
+
+Not sure if we should just document the apr 1.3 dependency or try to restore apr 1.2 compatibility in 2.2.23.
+
+=> upgrade apr (and apr-util) libs
+~~~~~~~~~~~~~~~~~~
+Redhat cmake configure
+
+  /home/auser/ce8/.cpl/src/cmake-2.8.8/bld/Bootstrap.cmk/cmake
+  -E cmake_progress_report
+  /home/auser/ce8/.cpl/src/cmake-2.8.8/bld/CMakeFiles/CMakeTmp/CMakeFiles
+  1
+
+  Building CXX object
+  CMakeFiles/cmTryCompileExec547914482.dir/testCXXCompiler.cxx.o
+
+  /home/auser/ce8/bin/g++ -o
+  CMakeFiles/cmTryCompileExec547914482.dir/testCXXCompiler.cxx.o -c
+  /home/auser/ce8/.cpl/src/cmake-2.8.8/bld/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+
+
+  Linking CXX executable cmTryCompileExec547914482
+
+
+  /home/auser/ce8/.cpl/src/cmake-2.8.8/bld/Bootstrap.cmk/cmake
+  -E cmake_link_script CMakeFiles/cmTryCompileExec547914482.dir/link.txt
+  --verbose=1
+
+  /home/auser/ce8/bin/g++
+  -L/home/auser/ce8/usr/local/lib
+  -L/home/auser/ce8/usr/local/ssl/lib
+  -L/home/auser/ce8/usr/local/apps/python/lib
+  -Wl,-rpath=/home/auser/ce8/usr/local/lib:/home/auser/ce8/usr/local/ssl/lib:/home/auser/ce8/usr/local/apps/svn/lib:/home/auser/ce8/usr/local/apps/python/lib:/home/auser/ce8/usr/local/apps/gcc/lib
+  CMakeFiles/cmTryCompileExec547914482.dir/testCXXCompiler.cxx.o -o
+  cmTryCompileExec547914482 -rdynamic
+
+  /home/auser/ce8/usr/local/lib/libstdc++.so: undefined
+  reference to `libintl_bindtextdomain'
+
+  /home/auser/ce8/usr/local/lib/libstdc++.so: undefined
+  reference to `libintl_textdomain'
+
+  collect2: ld returned 1 exit status
+
+  gmake[1]: *** [cmTryCompileExec547914482] Error 1
+
+  gmake[1]: Leaving directory
+  `/home/auser/ce8/.cpl/src/cmake-2.8.8/bld/CMakeFiles/CMakeTmp'
+
+
+  gmake: *** [cmTryCompileExec547914482/fast] Error 2
+
+=> HUGE HACK OF DEATH
+g++ calls gpp (the actual g++) with ' -lintl $*' in order to always pass '-lintl'...
+
+See next section for a more detailed analysis of this issue
+~~~~~~~~~~~~~~~~~~~~
+
+auser04:17 ahostname /home/auser/ce8/.cpl/src/mysql-5.5.25/bld #cmake --trace .
+
+/home/auser/ce8/usr/local/apps/cmake-2.8.8/share/cmake-2.8/Modules/CMakeTestCXXCompiler.cmake(32):  SET(CXX_TEST_WAS_RUN 1 )
+/home/auser/ce8/usr/local/apps/cmake-2.8.8/share/cmake-2.8/Modules/CMakeTestCXXCompiler.cmake(35):  IF(NOT CMAKE_CXX_COMPILER_WORKS )
+/home/auser/ce8/usr/local/apps/cmake-2.8.8/share/cmake-2.8/Modules/CMakeTestCXXCompiler.cmake(36):  PrintTestCompilerStatus(CXX  -- broken )
+/home/auser/ce8/usr/local/apps/cmake-2.8.8/share/cmake-2.8/Modules/CMakeTestCompilerCommon.cmake(16):  IF(CMAKE_GENERATOR MATCHES Make )
+/home/auser/ce8/usr/local/apps/cmake-2.8.8/share/cmake-2.8/Modules/CMakeTestCompilerCommon.cmake(17):  MESSAGE(STATUS Check for working ${LANG} compiler: ${CMAKE_${LANG}_COMPILER}${MSG} )
+-- Check for working CXX compiler: /home/auser/ce8/bin/c++ -- broken
+/home/auser/ce8/usr/local/apps/cmake-2.8.8/share/cmake-2.8/Modules/CMakeTestCXXCompiler.cmake(40):  FILE(REMOVE ${CMAKE_PLATFORM_ROOT_BIN}/CMakeCPlatform.cmake )
+/home/auser/ce8/usr/local/apps/cmake-2.8.8/share/cmake-2.8/Modules/CMakeTestCXXCompiler.cmake(41):  FILE(REMOVE ${CMAKE_PLATFORM_ROOT_BIN}/CMakeCXXPlatform.cmake )
+/home/auser/ce8/usr/local/apps/cmake-2.8.8/share/cmake-2.8/Modules/CMakeTestCXXCompiler.cmake(42):  FILE(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log Determining if the CXX compiler works failed with  the following output:\n${__CMAKE_CXX_COMPILER_OUTPUT}\n\n )
+/home/auser/ce8/usr/local/apps/cmake-2.8.8/share/cmake-2.8/Modules/CMakeTestCXXCompiler.cmake(45):  MESSAGE(FATAL_ERROR The C++ compiler \"${CMAKE_CXX_COMPILER}\"  is not able to compile a simple test program.\nIt fails  with the following output:\n ${__CMAKE_CXX_COMPILER_OUTPUT}\n\n CMake will not be able to correctly generate this project. )
+CMake Error at /home/auser/ce8/usr/local/apps/cmake-2.8.8/share/cmake-2.8/Modules/CMakeTestCXXCompiler.cmake:45 (MESSAGE):
+
+http://gcc.gnu.org/bugzilla/show_bug.cgi?id=11074 tals about patch of acinclude.m4
+
+~~~~~~~~~~~~~~~~~~~~
+
+auser10:47 ahostname /home/auser/ce8/gitlab/github #bundle install --without development test --deployment
+Unfortunately, a fatal error has occurred. Please see the Bundler
+troubleshooting documentation at http://bit.ly/bundler-issues. Thanks!
+<internal:lib/rubygems/custom_require>:29:in `require': libcrypto.so.1.0.0: cannot open shared object file: No such file or directory - /home/auser/ce8/usr/local/apps/ruby-1.9.2p0/lib/ruby/1.9.1/x86_64-linux/digest/sha1.so (LoadError)
+        from <internal:lib/rubygems/custom_require>:29:in `require'
+        from /home/auser/ce8/usr/local/apps/ruby-1.9.2p0/lib/ruby/gems/1.9.1/gems/bundler-1.1.4/lib/bundler/definition.rb:1:in `<top (required)>'
+
+
+auser10:47 ahostname /home/auser/ce8/gitlab/github #ldd /home/auser/ce8/usr/local/apps/ruby-1.9.2p0/lib/ruby/1.9.1/x86_64-linux/digest/sha1.so
+        linux-vdso.so.1 =>  (0x00007fff522e0000)
+        libruby.so.1.9 => /home/auser/ce8/usr/local/lib/libruby.so.1.9 (0x00002ba62611d000)
+        libcrypto.so.1.0.0 => not found
+        libpthread.so.0 => /lib64/libpthread.so.0 (0x00002ba626416000)
+        librt.so.1 => /lib64/librt.so.1 (0x00002ba62652f000)
+        libdl.so.2 => /lib64/libdl.so.2 (0x00002ba626639000)
+        libcrypt.so.1 => /lib64/libcrypt.so.1 (0x00002ba62673d000)
+        libm.so.6 => /lib64/libm.so.6 (0x00002ba626876000)
+        libc.so.6 => /lib64/libc.so.6 (0x00002ba6269cc000)
+        /lib64/ld-linux-x86-64.so.2 (0x0000555555554000)
+auser11:25 ahostname /home/auser/ce8/gitlab/github #find /home/auser/ce8/usr/local/ -name "libcrypto.so*"
+/home/auser/ce8/usr/local/ssl/lib/libcrypto.so.1.0.0
+/home/auser/ce8/usr/local/ssl/lib/libcrypto.so
+/home/auser/ce8/usr/local/libs/openssl-1.0.0j/lib/libcrypto.so
+/home/auser/ce8/usr/local/libs/openssl-1.0.0j/lib/libcrypto.so.1.0.0
+/home/auser/ce8/usr/local/lib/libcrypto.so
+auser11:26 ahostname /home/auser/ce8/gitlab/github #l /home/auser/ce8/usr/local/lib/libcrypto.so
+lrwxrwxrwx 1 auser dev_user 23 2012-06-25 14:20 /home/auser/ce8/usr/local/lib/libcrypto.so -> ../ssl/lib/libcrypto.so
+auser11:26 ahostname /home/auser/ce8/gitlab/github #ln -s ../ssl/lib/libcrypto.so.1.0.0 /home/auser/ce8/usr/local/lib
+auser11:27 ahostname /home/auser/ce8/gitlab/github #l /home/auser/ce8/usr/local/lib/libcrypto.so.1.0.0
+lrwxrwxrwx 1 auser dev_user 29 2012-06-27 11:27 /home/auser/ce8/usr/local/lib/libcrypto.so.1.0.0 -> ../ssl/lib/libcrypto.so.1.0.0
+auser11:27 ahostname /home/auser/ce8/gitlab/github #ldd /home/auser/ce8/usr/local/apps/ruby-1.9.2p0/lib/ruby/1.9.1/x86_64-linux/digest/sha1.so
+        linux-vdso.so.1 =>  (0x00007fff1ef8c000)
+        libruby.so.1.9 => /home/auser/ce8/usr/local/lib/libruby.so.1.9 (0x00002b3f23cf7000)
+        libcrypto.so.1.0.0 => /home/auser/ce8/usr/local/lib/libcrypto.so.1.0.0 (0x00002b3f23fe0000)
+~~~~~~~~~~~~~~~~
+Gitlab setup (https://github.com/gitlabhq/gitlabhq/blob/master/doc/installation.md): Setup DB
+
+auser11:41 ahostname /home/auser/ce8/gitlab/github #bundle exec rake gitlab:app:setup RAILS_ENV=production
+WARNING:  #<ArgumentError: Illformed requirement ["#<Syck::DefaultKey:0x000000020d1068> 1.1.4"]>
+# -*- encoding: utf-8 -*-
+
+Gem::Specification.new do |s|
+  s.name = %q{carrierwave}
+  s.version = "0.6.2"
+
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.authors = ["Jonas Nicklas"]
+  s.date = %q{2012-04-12}
+  s.description = %q{Upload files in your Ruby applications, map them to a range of ORMs, store them on different backends.}
+  s.email = ["jonas.nicklas@gmail.com"]
+  s.extra_rdoc_files = ["README.md"]
+  s.files = ["lib/carrierwave/compatibility/paperclip.rb", "lib/carrierwave/locale/en.yml", "lib/carrierwave/mount.rb", "lib/carrierwave/orm/activerecord.rb", "lib/carrierwave/processing/mime_types.rb", "lib/carrierwave/processing/mini_magick.rb", "lib/carrierwave/processing/rmagick.rb", "lib/carrierwave/sanitized_file.rb", "lib/carrierwave/storage/abstract.rb", "lib/carrierwave/storage/file.rb", "lib/carrierwave/storage/fog.rb", "lib/carrierwave/test/matchers.rb", "lib/carrierwave/uploader/cache.rb", "lib/carrierwave/uploader/callbacks.rb", "lib/carrierwave/uploader/configuration.rb", "lib/carrierwave/uploader/default_url.rb", "lib/carrierwave/uploader/download.rb", "lib/carrierwave/uploader/extension_whitelist.rb", "lib/carrierwave/uploader/mountable.rb", "lib/carrierwave/uploader/processing.rb", "lib/carrierwave/uploader/proxy.rb", "lib/carrierwave/uploader/remove.rb", "lib/carrierwave/uploader/serialization.rb", "lib/carrierwave/uploader/store.rb", "lib/carrierwave/uploader/url.rb", "lib/carrierwave/uploader/versions.rb", "lib/carrierwave/uploader.rb", "lib/carrierwave/validations/active_model.rb", "lib/carrierwave/version.rb", "lib/carrierwave.rb", "lib/generators/templates/uploader.rb", "lib/generators/uploader_generator.rb", "README.md"]
+  s.homepage = %q{https://github.com/jnicklas/carrierwave}
+  s.rdoc_options = ["--main"]
+  s.require_paths = ["lib"]
+  s.rubyforge_project = %q{carrierwave}
+  s.rubygems_version = %q{1.3.7}
+  s.summary = %q{Ruby file upload library}
+
+  if s.respond_to? :specification_version then
+    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
+    s.specification_version = 3
+
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<activesupport>, [">= 3.2.0"])
+      s.add_runtime_dependency(%q<activemodel>, [">= 3.2.0"])
+      s.add_development_dependency(%q<mysql2>, [">= 0"])
+      s.add_development_dependency(%q<rails>, [">= 3.2.0"])
+      s.add_development_dependency(%q<cucumber>, ["#<Syck::DefaultKey:0x000000020d1068> 1.1.4"])
+      s.add_development_dependency(%q<json>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, ["~> 2.0"])
+
+
+~
+~~~~~~~~~~~~~~~~~~~~
+
+auser12:45 ahostname /home/auser/ce8/gitlab/github #bundle exec rake gitlab:app:setup RAILS_ENV=production
+Access denied for user 'root'@'localhost' (using password: YES).
+Please provide the root password for your mysql installation
+
+(password is 'msandbox', so change 'gitlab/database.yml.tpl, keeping user 'root')
+~~~~~~~~~~~~~~~~~~
+
