@@ -1,7 +1,7 @@
 #! /bin/bash
 
 auser=$(id -nu)
-aps=$(ps -ef|grep ${auser}|grep "${H}/usr/local/apps/nginx/sbin/nginx"|grep -v grep|awk '{print $2}')
+aps=$(ps -wef|grep ${auser}|grep "${H}/usr/local/apps/nginx/sbin/"|grep -v grep|awk '{print $2}')
 afps=""
 afpid="${H}/usr/local/apps/nginx/logs/nginx.pid"
 cnf="${H}/nginx/cnf"

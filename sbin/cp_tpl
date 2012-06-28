@@ -1,5 +1,5 @@
 #!/bin/bash
-fullFilePathOri="$1"
+fullFilePathOri="$(readlink -f $1)"
 fullPathDst="$2"
 if [[ ! -d "${fullPathDst}" ]] ; then
   if [[ "${fullPathDst}" == "" ]] ; then

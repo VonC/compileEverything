@@ -19,9 +19,11 @@ fi
 cp_tpl "${gtl}/gitlab.yml.tpl" "${gtl}"
 cp_tpl "${gtl}/database.yml.tpl" "${gtl}"
 cp_tpl "${gtl}/unicorn.rb.tpl" "${gtl}"
+cp_tpl "${gtl}/omniauth.rb.tpl" "${gtl}"
 ln -fs ../../gitlab.yml "${github}/config/gitlab.yml"
 ln -fs ../../database.yml "${github}/config/database.yml"
 ln -fs ../../unicorn.rb "${github}/config/unicorn.rb"
+ln -fs ../../../omniauth.rb "${github}/config/initializers/omniauth.rb"
 if [[ ! -e "${mysqlgtl}" ]] ; then
   mysqlv=$(mysql -V); mysqlv=${mysqlv%%,*} ; mysqlv=${mysqlv##* }
   make_sandbox ${mysqlv} -- -d gitlab 

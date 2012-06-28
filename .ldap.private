@@ -1,3 +1,8 @@
 @LDAP_BINDDN@=CN=A-Binding-Account,OU=Service-Accounts,DC=Prod,DC=company
 @LDAP_PASSWORD@=binDN-password
-@LDAP_URL@=ldaps://company.co.comp:4269/OU=CompanyPeople,DC=Prod,DC=company?employeeID
+@LDAP_URL@=ldaps://company.co.comp:4269/OU=CompanyPeople,DC=Prod,DC=company?anIDField
+@LDAP_PORT@=4269
+@LDAP_HOSTNAME@=company.co.comp
+@LDAP_BASE@=OU=CompanyPeople,DC=Prod,DC=company
+@LDAP_UID@=anIDField
+@LDAP_METHOD@=:plain (or :ssl if using ldaps://)

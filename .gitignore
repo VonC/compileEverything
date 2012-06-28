@@ -115,3 +115,5 @@ tomcat/key*
 /redis/redis.conf
 /redis/redis.conf.ori
 /build/
+/.ldap
+/gitlab/omniauth.rb

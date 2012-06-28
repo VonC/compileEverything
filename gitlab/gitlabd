@@ -22,7 +22,7 @@ case "$1" in
         START_RESQUE_PROCESS="./resque.sh"
 
         echo -n "Starting $DESC: "
-        $CD_TO_APP_DIR > /dev/null 2>&1 && $START_DAEMON_PROCESS && $START_RESQUE_PROCESS
+        $CD_TO_APP_DIR > "${H}/gitlab/logs/start.log" 2>&1 && $START_DAEMON_PROCESS && $START_RESQUE_PROCESS
         echo "$NAME."
         ;;
   stop)

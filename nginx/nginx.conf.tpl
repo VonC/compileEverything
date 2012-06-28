@@ -81,13 +81,21 @@ http {
     }
 
     server {
-        listen       @PORT_HTTP_GITLAB@;
+        listen       @PORT_HTTPS_GITLAB@;
         server_name  @FQN@ @HOSTNAME@;
         root @H@/gitlab/github/public;
 
+        ssl                  on;
+        ssl_certificate      @H@/nginx/itsvc.world.company.crt;
+        ssl_certificate_key  @H@/nginx/itsvc.world.company.key;
+        ssl_session_timeout  5m;
+        ssl_protocols  SSLv3 TLSv1;
+        ssl_ciphers  ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+        ssl_prefer_server_ciphers   on;
+
         # individual nginx logs for this gitlab vhost
-        access_log  @H@/gitlab/nginx_gitlab_access.log;
-        error_log   @H@/gitlab/nginx_gitlab_error.log;
+        access_log  @H@/gitlab/logs/nginx_gitlab_access.log;
+        error_log   @H@/gitlab/logs/nginx_gitlab_error.log;
 
         location / {
             # serve static files from defined root folder;.
@@ -100,8 +108,8 @@ http {
         location @gitlab {
             proxy_redirect     off;
             # you need to change this to "https", if you set "ssl" directive to "on"
-            proxy_set_header   X-FORWARDED_PROTO http;
-            proxy_set_header   Host              @FQN@:@PORT_HTTP_GITLAB@;
+            proxy_set_header   X-FORWARDED_PROTO https;
+            proxy_set_header   Host              @FQN@:@PORT_HTTPS_GITLAB@;
             proxy_set_header   X-Real-IP         $remote_addr;
 
             proxy_pass http://gitlab;
