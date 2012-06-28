@@ -22,8 +22,11 @@ fi
 if [[ ! -e "${H}/gitolite/projects.list" ]] ; then
   GITOLITE_HTTP_HOME= gitolite setup -pk "${H}/.ssh/gitoliteadm.pub"
   gen_sed -i "s,\"/projects.list\",\"/gitolite/projects.list\",g" "${H}/.gitolite.rc"
+  gen_sed -i "22a\    GITWEB_PROJECTS_LIST        => '$HOME/gitolite/projects.list'," "${H}/.gitolite.rc"
   gen_sed -i "s,0077,0007,g" "${H}/.gitolite.rc"
-  mv "${H}/projects.list" "${H}/gitolite/"
+  if [[ -e "${H}/projects.list" ]] ; then
+    mv "${H}/projects.list" "${H}/gitolite/"
+  fi
   echo "# REPO_UMASK = 0007" >> "${H}/.gitolite.rc"
 else
   GITOLITE_HTTP_HOME= gitolite setup
