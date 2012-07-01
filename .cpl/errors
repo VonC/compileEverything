@@ -2895,3 +2895,15 @@ Please provide the root password for your mysql installation
 (password is 'msandbox', so change 'gitlab/database.yml.tpl, keeping user 'root')
 ~~~~~~~~~~~~~~~~~~
 
+git@vonc-VirtualBox:~/ces/ce2$ git push
+error: Problem with the SSL CA cert (path? access rights?) while accessing https://github.com/VonC/compileEverything/info/refs
+fatal: HTTP request failed
+
+git@vonc-VirtualBox:~/ces/ce2$ git config --global -l
+http.sslcainfo=/home/git/ce/ce5/.ssh/curl-ca-bundle.crt
+
+wrong path => 
+git@vonc-VirtualBox:~/ces/ce2$ git config --global http.sslcainfo /home/git/ces/ce2/.ssh/curl-ca-bundle.crt
+
+~~~~~~~~~~~~~
+

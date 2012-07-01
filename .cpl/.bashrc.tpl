@@ -1,9 +1,9 @@
 #!/bin/bash
-if [[ "$1" != "-force" ]]; then
-  echo $0 not executed for @@TITLE@@ unles called with -force
+if [[ "$1" != "--force" ]]; then
+  echo ${0} not executed for @@TITLE@@ unles called with --force
   return 0
 fi
-echo $0 executed for @@TITLE@@
+echo ${0} executed for @@TITLE@@
 
 function bashscriptpath() {
   local _sp=$1
@@ -40,6 +40,7 @@ export HOME=${H}
 echo "bashrc set local home to '${H}'"
 export HB="$H"/bin
 export HS="$H"/sbin
+export HSU="$HS"/usrcmd
 export HU="$H"/usr
 export HUL="${HU}"/local
 export HULL="${HUL}"/lib
@@ -47,7 +48,7 @@ export HULI="${HUL}"/include
 export HULB="${HUL}"/bin
 export HULA="${HUL}"/apps
 export HULS="${HUL}"/libs
-alias sc='source $H/.bashrc -force'
+alias sc='source $H/.bashrc --force'
 
 export HISTSIZE=3000
 export HISTFILE="${H}/.bash_history"
@@ -77,7 +78,7 @@ fi
 #export GITOLITE_HTTP_HOME=${H}
 export GITOLITE_HOME="${H}/gitolite"
 export PATH="${PATH}":"${GITOLITE_HOME}/bin"
-export PATH="${PATH}":/usr/local/bin:/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
+export PATH="${PATH}":/sbin:/bin
 
 export -n NGX_PM_CFLAGS
 export -n CC

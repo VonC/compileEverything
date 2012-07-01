@@ -1,0 +1,8 @@
+#! /bin/bash
+
+cmd="${1}"
+
+cp -f "${HSU}/expr" "${HSU}/${cmd}"
+gen_sed -i "s/expr/${cmd}/g" "${HSU}/${cmd}"
+chmod 775 "${HSU}/${cmd}"
+ln -fs "usrcmd/${cmd}" "${HS}/${cmd}"

@@ -35,7 +35,7 @@ if [[ -e "${HUL}/jdk6" ]] ; then
 else
   export JAVA_HOME=""
 fi
-export PATH="${PATH}":/usr/local/bin:/bin:/usr/bin/:/usr/sbin:/usr/ccs/bin:/usr/sfw/bin
+export PATH="${PATH}":/sbin:/bin
 
 export -n NGX_PM_CFLAGS
 export -n CC
