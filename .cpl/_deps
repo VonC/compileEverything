@@ -31,7 +31,7 @@ lib texinfo libiconv,ncurses,gettext
 lib ncurses gcc
 lib libssh2 openssl,zlib,cyrus-sasl
 lib cyrus-sasl db,openssl
-lib curl gcc,openssl,zlib,libssh2,libiconv,libidn
+lib curl gcc,openssl,zlib,libssh2,libiconv,libidn,openldap
 lib libidn gcc,libiconv
 app lynx gcc,bzip2,zlib
 app apache gcc,expat,libiconv,gdbm,zlib,db,openssl,apr,aprutil,lynx
@@ -61,7 +61,7 @@ mod error cpanm
 app cgit git,zlib,libgcrypt,openssl
 app ant jdk
 app tomcat ant,jdk,junit
-lib tomcat-native tomcat
+mod tomcat-native tomcat
 app junit ant,jdk
 mod gitlab charlock_holmes,pygments,mysql_sandbox,libatomic_ops,redis,bundler
 mod charlock_holmes gem,icu

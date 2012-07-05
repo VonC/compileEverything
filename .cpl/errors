@@ -2948,3 +2948,47 @@ auser08:21 ahostname /home/auser/gitpoc/ce9/.cpl/src/openssl-1.0.0g/apps #ldd op
 	libc.so.6 => /lib64/libc.so.6 (0x00002b1213419000)
 	/lib64/ld-linux-x86-64.so.2 (0x00002b1212ce0000)
 
+~~~~~~~~~~~~~~~~~~~~~~
+RedHat: curl make
+
+/home/auser/gitpoc/ce9/usr/local/libs/curl/=false.
+-----
+lib/libcurl.so.4.2.0=false (/home/auser/gitpoc/ce9/usr/local/libs/curl/lib/libcurl.so.4.2.0).
+  OK=false, name=libldap-2.3.so.0, value=/usr/lib64/libldap-2.3.so.0.
+  OK=false, name=liblber-2.3.so.0, value=/usr/lib64/liblber-2.3.so.0.
+  OK=false, name=libsasl2.so.2, value=/usr/lib64/libsasl2.so.2.
+  OK=false, name=libssl.so.0.9.8, value=/usr/lib64/libssl.so.0.9.8.
+  OK=false, name=libcrypto.so.0.9.8, value=/usr/lib64/libcrypto.so.0.9.8.
+bin/curl=false (/home/auser/gitpoc/ce9/usr/local/libs/curl/bin/curl).
+  OK=false, name=libldap-2.3.so.0, value=/usr/lib64/libldap-2.3.so.0.
+  OK=false, name=liblber-2.3.so.0, value=/usr/lib64/liblber-2.3.so.0.
+  OK=false, name=libsasl2.so.2, value=/usr/lib64/libsasl2.so.2.
+  OK=false, name=libssl.so.0.9.8, value=/usr/lib64/libssl.so.0.9.8.
+  OK=false, name=libcrypto.so.0.9.8, value=/usr/lib64/libcrypto.so.0.9.8.
+
+
+auser01:13 ahostname /home/auser/gitpoc/ce9/.cpl/src/curl/lib #gcc -shared  -fPIC -DPIC  .libs/file.o .libs/timeval.o .libs/base64.o .libs/hostip.o .libs/progress.o .libs/formdata.o .libs/cookie.o .libs/http.o .libs/sendf.o .libs/ftp.o .libs/url.o .libs/dict.o .libs/if2ip.o .libs/speedcheck.o .libs/ldap.o .libs/ssluse.o .libs/version.o .libs/getenv.o .libs/escape.o .libs/mprintf.o .libs/telnet.o .libs/netrc.o .libs/getinfo.o .libs/transfer.o .libs/strequal.o .libs/easy.o .libs/security.o .libs/krb4.o .libs/curl_fnmatch.o .libs/fileinfo.o .libs/ftplistparser.o .libs/wildcard.o .libs/krb5.o .libs/memdebug.o .libs/http_chunks.o .libs/strtok.o .libs/connect.o .libs/llist.o .libs/hash.o .libs/multi.o .libs/content_encoding.o .libs/share.o .libs/http_digest.o .libs/md4.o .libs/md5.o .libs/curl_rand.o .libs/http_negotiate.o .libs/inet_pton.o .libs/strtoofft.o .libs/strerror.o .libs/hostasyn.o .libs/hostip4.o .libs/hostip6.o .libs/hostsyn.o .libs/inet_ntop.o .libs/parsedate.o .libs/select.o .libs/gtls.o .libs/sslgen.o .libs/tftp.o .libs/splay.o .libs/strdup.o .libs/socks.o .libs/ssh.o .libs/nss.o .libs/qssl.o .libs/rawstr.o .libs/curl_addrinfo.o .libs/socks_gssapi.o .libs/socks_sspi.o .libs/curl_sspi.o .libs/slist.o .libs/nonblock.o .libs/curl_memrchr.o .libs/imap.o .libs/pop3.o .libs/smtp.o .libs/pingpong.o .libs/rtsp.o .libs/curl_threads.o .libs/warnless.o .libs/hmac.o .libs/polarssl.o .libs/curl_rtmp.o .libs/openldap.o .libs/curl_gethostname.o .libs/gopher.o .libs/axtls.o .libs/idn_win32.o .libs/http_negotiate_sspi.o .libs/cyassl.o .libs/http_proxy.o .libs/non-ascii.o .libs/asyn-ares.o .libs/asyn-thread.o .libs/curl_gssapi.o .libs/curl_ntlm.o .libs/curl_ntlm_wb.o .libs/curl_ntlm_core.o .libs/curl_ntlm_msgs.o   -Wl,-rpath -Wl,/home/auser/gitpoc/ce9/usr/local/libs/libidn-1.24/lib -Wl,-rpath -Wl,/home/auser/gitpoc/ce9/usr/local/libs/libssh2-1.2.9/lib -Wl,-rpath -Wl,/home/auser/gitpoc/ce9/usr/local/libs/libidn-1.24/lib -Wl,-rpath -Wl,/home/auser/gitpoc/ce9/usr/local/libs/libssh2-1.2.9/lib -Wl,-rpath -Wl,/home/auser/gitpoc/ce9/usr/local/lib -Wl,-rpath -Wl,/home/auser/gitpoc/ce9/usr/local/ssl/lib -L/home/auser/gitpoc/ce9/usr/local/libs/libidn-1.24/lib -L/home/auser/gitpoc/ce9/usr/local/lib -L/home/auser/gitpoc/ce9/usr/local/ssl/lib -L/home/auser/gitpoc/ce9/usr/local/apps/python/lib -L/home/auser/gitpoc/ce9/usr/local/libs/openssl-1.0.0g/lib /home/auser/gitpoc/ce9/usr/local/libs/libidn-1.24/lib/libidn.so -lldap -lrt -lssl -lcrypto -ldl -lz /home/auser/gitpoc/ce9/usr/local/libs/libssh2-1.2.9/lib/libssh2.so  -O -m64 -Wl,-rpath=/home/auser/gitpoc/ce9/usr/local/lib:/home/auser/gitpoc/ce9/usr/local/ssl/lib:/home/auser/gitpoc/ce9/usr/local/apps/svn/lib:/home/auser/gitpoc/ce9/usr/local/apps/python/lib:/home/auser/gitpoc/ce9/usr/local/apps/gcc/lib   -Wl,-soname -Wl,libcurl.so.4 -o .libs/libcurl.so.4.2.0
+auser01:13 ahostname /home/auser/gitpoc/ce9/.cpl/src/curl/lib #l .libs/libcurl.so.4.2.0
+-rwxrwxr-x 1 auser dev_user 470910 2012-07-05 13:13 .libs/libcurl.so.4.2.0
+auser01:14 ahostname /home/auser/gitpoc/ce9/.cpl/src/curl/lib #ldd .libs/libcurl.so.4.2.0
+        linux-vdso.so.1 =>  (0x00007fff15bfd000)
+        libidn.so.11 => /home/auser/gitpoc/ce9/usr/local/libs/libidn-1.24/lib/libidn.so.11 (0x00002af5d92ea000)
+        libldap-2.3.so.0 => /usr/lib64/libldap-2.3.so.0 (0x00002af5d942c000)
+        librt.so.1 => /lib64/librt.so.1 (0x00002af5d9567000)
+        libssl.so.1.0.0 => /home/auser/gitpoc/ce9/usr/local/lib/libssl.so.1.0.0 (0x00002af5d9670000)
+        libcrypto.so.1.0.0 => /home/auser/gitpoc/ce9/usr/local/lib/libcrypto.so.1.0.0 (0x00002af5d97cb000)
+        libdl.so.2 => /lib64/libdl.so.2 (0x00002af5d9a65000)
+        libz.so.1 => /home/auser/gitpoc/ce9/usr/local/lib/libz.so.1 (0x00002af5d9b69000)
+        libssh2.so.1 => /home/auser/gitpoc/ce9/usr/local/libs/libssh2-1.2.9/lib/libssh2.so.1 (0x00002af5d9c7e000)
+        libc.so.6 => /lib64/libc.so.6 (0x00002af5d9da4000)
+        libintl.so.8 => /home/auser/gitpoc/ce9/usr/local/libs/gettext-0.18.1.1/lib/libintl.so.8 (0x00002af5d9fe5000)
+        libiconv.so.2 => /home/auser/gitpoc/ce9/usr/local/libs/libiconv-1.14/lib/libiconv.so.2 (0x00002af5da0f0000)
+	    liblber-2.3.so.0 => /usr/lib64/liblber-2.3.so.0 (0x00002af5da2d3000)
+	    libresolv.so.2 => /lib64/libresolv.so.2 (0x00002af5da3e2000)
+		libsasl2.so.2 => /usr/lib64/libsasl2.so.2 (0x00002af5da4f6000)
+		libssl.so.0.9.8 => /usr/lib64/libssl.so.0.9.8 (0x00002af5da60e000)
+		libcrypto.so.0.9.8 => /usr/lib64/libcrypto.so.0.9.8 (0x00002af5da757000)
+		libpthread.so.0 => /lib64/libpthread.so.0 (0x00002af5da9ba000)
+		/lib64/ld-linux-x86-64.so.2 (0x0000555555554000)
+
+miss openldap dependency => add in .cpl/_deps

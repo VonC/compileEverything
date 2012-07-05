@@ -274,6 +274,7 @@ function get_sources() {
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\'\>*}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\' *}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\#*}" ; fi
+  if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\"*}" ; fi
   # "
   source="${source}${exturl}"
   # echo "D: sour0 ${source}"
