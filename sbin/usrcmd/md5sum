@@ -1,3 +1,0 @@
-#! /bin/bash
-
-"${HSU}/cmd" md5sum "$@"

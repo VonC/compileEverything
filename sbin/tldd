@@ -98,3 +98,4 @@ if [[ "${msg_root}" != "" ]] ; then msg_root="${msg_root}\n-----\n" ; fi
 res=""
 oknok res "${res}" "${overallok}" "${root}/$1/='${overallok}'\e[0m."
 echo -ne "${res}-----\n${msg_root}"
+if [[ "${overallok}" == "false" ]] ; then false ; else true ; fi

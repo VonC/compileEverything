@@ -1,4 +1,151 @@
 #! /bin/bash
 
-rm -f "${H}/usr/local/._linked/$1-*"
-gen_sed -i "/\#$1\#/ d" "${H}/.cpl/cache"
+source "${H}/.cpl/scripts/links.sh"
+source "${H}/.cpl/scripts/get_param.sh"
+
+if [[ "$#" == "0" || $# > 2 ]] ; then 
+  echo "reset_compil [--soft/-s (default)|--mixed/-m|--full/-f|--delete/-d|--help/-h] lib/app_name"
+  exit 0
+fi
+
+option=""
+if [[ "$2" == "" ]] ; then name="${1}" ; else name="$2" ; option="$1" ; fi
+if [[ "${name}" == "-h" || "${name}" == "--help" ]] ; then
+  name=""
+  option="-h"
+fi
+if [[ "${name#-}" != "${name}" ]] ; then option="${name}" ; name="" ; fi
+
+invalid=false
+mixed=false
+full=false
+delete=false
+
+if [[ "${option}" != "" ]] ; then
+
+  case "${option}" in
+    --soft|-s)
+      ;;
+    --mixed|-m)
+      mixed=true
+      ;;
+    --full|-f)
+      full=true
+      mixed=true
+      ;;
+    --delete|-d)
+      full=true
+      mixed=true
+      delete=true
+      ;;
+    --help|-h)
+      echo "-s/--soft    : (default) remove from cache and from '${HUL}/._linked'"
+      echo "-m/--mixed   : soft + remove all installed links in '${HUL}'"
+      echo "-f/--full    : mixed + remove all 'src/._*' => redo all compilation:s"
+      echo "-d/--delete  : full + delete source => 'tar xpvf' again"
+      echo "-h/--help    : displays this message"
+      exit 0
+      ;;
+    *)
+      invalid=true
+      ;;
+  esac
+
+fi
+
+if [[ "${invalid}" == "true" ]] ; then
+  echo  -e "\e[1;31m! Invalid option: --soft/-s (default)|--mixed/-m|--hard/-h|--full/-f|--help/-h\e[0m" 1>&2
+fi
+if [[ "${name}" == "" ]] ; then
+  echo  -e "\e[1;31m! A app or lib name must be provided\e[0m" 1>&2
+fi
+
+if [[ "${invalid}" == "true" || "${name}" == "" ]] ; then
+  exit 1
+fi 
+
+echo "D: option='${option}', mixed='${mixed}', full='${full}', delete='${delete}'"
+
+root=""
+namever=""
+src="${H}/.cpl/src"
+
+echo "D: src/name='${src}/${name}'"
+if [[ -e "${src}/${name}" ]] ; then
+  namever=$(readlink "${src}/${name}")
+fi
+echo "D: namever from src='${namever}'"
+
+if [[   -e "${HULS}/${name}" ]] ; then
+  root="${HULS}"
+  type="LIB"
+elif [[ -e "${HULA}/${name}" ]] ; then
+  root="${HULA}"
+  type="APP"
+fi
+
+if [[ "${namever}" == "" ]] ; then
+  namever=$(readlink "${root}/${name}")
+  if [[ "${namever}" != "" ]] ; then 
+    ln -s "${namever}" "${src}/${name}"
+  fi
+fi
+
+rm -f "${H}/usr/local/._linked/${name}-"*
+gen_sed -i "/\#${name}\#/ d" "${H}/.cpl/cache"
+
+if [[ "${namever}" == "" ]] ; then
+  echo  -e "\e[1;31m! ${name} doesn't exist in ${HUL}/libs or /apps\e[0m" 1>&2
+  exit 1
+fi
+
+if [[ "${root}" != "" ]] ; then
+  echo "D: readlink '${root}/${name}'"
+  nameverFromRoot=$(readlink "${root}/${name}")
+  echo "D: root='${root}',  nameverFromRoot '${nameverFromRoot}'"
+  if [[ "${namever}" != "${nameverFromRoot}" ]] ; then
+    echo  -e "\e[1;31m! Inconsistent namever between src '${namever}' and root '${root}': '${nameverFromRoot}'\e[0m" 1>&2
+    exit 1
+  fi
+fi
+
+if [[ "${mixed}" == "true" ]] ; then
+  echo "D: mixed"
+  if [[ ${root} != "" ]] ; then
+    if [[ "${type}" == "APP" ]] ; then linksrcdef="${HULA}/${namever}/bin" ; linkdstdef="${H}/bin" ; fi
+    if [[ "${type}" == "LIB" ]] ; then linksrcdef="${HULS}/${namever}" ; linkdstdef="${HUL}" ; fi
+    get_param ${name} linksrc ${linksrcdef}; linksrc=$(echo "${linksrc}") ; # echo "linksrc ${linksrc}"
+    get_param ${name} linkdst ${linkdstdef}; linkdst=$(echo "${linkdst}") ; # echo "linkdst ${linkdst}"
+    echo "D: Check linkdst='${linkdst}', linksrc='${linksrc}'"
+    echo "Removing links of ${type} ${namever}"; links "${linkdst}" "${linksrc}" false;
+    if [[ "${type}" == "APP" ]] ; then
+      local l=$(ls "${HULA}/${namever}"/lib/*.so 2>/dev/null)
+      local l64=$(ls "${HULA}/${namever}"/lib64/*.so 2>/dev/null)
+      if [[ "${l}" != "" ]] ; then
+        echo "Removing links lib of ${type} ${namever}"; links "${HULL}" "${HULA}/${namever}/lib" false;
+      fi
+      if [[ "${l64}" != "" ]] ; then
+        echo "Removing links lib64 of ${type} ${namever}"; links "${HULL}" "${HULA}/${namever}/lib64" false;
+      fi
+    fi
+  fi
+  rm -Rf "${root}/${namever}"
+  rm -f "${root}/${name}"
+fi
+if [[ "${full}" == "true" ]] ; then
+  echo "D: full"
+  if [[ -e "${src}/${namever}" ]] ; then
+    rm -f "${src}/${namever}/._"*
+  fi 
+fi
+if [[ "${delete}" == "true" ]] ; then
+  echo "D: delete"
+  actualnamever=$(readlink "${src}/${namever}")
+  if [[ "${actualnamever}" == "" ]] ; then
+    rm -Rf "${src}/${namever}"
+  else
+    rm -Rf "${src}/${actualnamever}"
+    rm -f "${src}/${namever}"
+  fi
+  rm -f "${src}/${name}"
+fi

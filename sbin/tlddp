@@ -6,7 +6,7 @@ if [[ ! -d "$1" ]] ; then
   echo -e "\e[01;31m === ERRORS: $1 directory doesn't exist === \e[0m"
   exit 1
 fi
-find "$1/" -maxdepth 1 -type l -print0 | while read -d $'\0' file
+find "$1/" -type l -print0 | while read -d $'\0' file
 do
   lfile="${file#$1/}"
   if [[ "${lfile}" != "" ]] ; then 

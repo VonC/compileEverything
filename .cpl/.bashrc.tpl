@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ "$1" != "--force" ]]; then
+if [[ "${1}" != "--force" || "${1}" == "-f" ]]; then
   echo ${0} not executed for @@TITLE@@ unles called with --force
   return 0
 fi
@@ -78,7 +78,7 @@ fi
 #export GITOLITE_HTTP_HOME=${H}
 export GITOLITE_HOME="${H}/gitolite"
 export PATH="${PATH}":"${GITOLITE_HOME}/bin"
-export PATH="${PATH}":/sbin:/bin
+export PATH="${PATH}":/sbin:/bin:/usr/sbin:/usr/bin
 
 export -n NGX_PM_CFLAGS
 export -n CC
@@ -110,9 +110,6 @@ alias t='tail --follow=name'
 alias tl='while ! tail --max-unchanged-stats=2 --follow=name "${H}/.lastlog" ; do sleep 2 ; done'
 alias psw='ps auxwww|grep "${H}"|grep -v grep|grep'
 
-if [[ -e /usr/local/bin/vim ]] ; then vimp="/usr/local/bin/vim" ; else vimp="$(which vim)" ; fi
-alias vim='"${vimp}" -u "${H}/.vimrc"'
-
 oag=$(alias git 2>/dev/null| grep "${H}" | grep " u ")
 if [[ "${oag}" == "" ]] ; then
   alias git="${H}/sbin/wgit"
@@ -139,7 +136,8 @@ export EDITOR=vim
 
 findg() { find . -name '*' |  xargs grep -nHr "$1" ; }
 
-if [[ -e "${H}/.proxy" ]] ; then source "${H}/.proxy" ; fi
+if [[ -e "${H}/.proxy" ]] ; then source "${H}/.proxy" ; 
+elif [[ -e "${H}/../.proxy" ]] ; then source "${H}/../.proxy" ; fi
 
 alias gr='git update-index --assume-unchanged "${H}/README.md"'
 

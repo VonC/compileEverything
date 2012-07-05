@@ -3,7 +3,7 @@
 function scriptpath() {
   local _sp=${1}
   local ascript="${0}"
-  local asp="$(/usr/bin/dirname ${0})"
+  local asp="$(dirname ${0})"
   if [[ "${asp}" == "." ]] ; then asp=$(pwd) ;
   else
     # echo "D: asp '${asp}', ascript '${ascript}'"
@@ -43,15 +43,17 @@ _hsrc="${_hcpl}/src"
 _hpkgs="${_hsrc}/_pkgs"
 mkdir -p "${_pkgs}"
 if [[ -d "${H}/../src" ]] ; then
-  if [[ -d "${_src}" ]] ; then rm -Rf "${_src}" ; fi
+  if [[ -d "${_src}" && ! -h "${_src}" ]] ; then rm -Rf "${_src}" ; fi
   _src="${H}/../src"
   _hsrc="../src"
   ln -fs ../../src "${_cpl}"
 fi
 if [[ -d "${H}/../_pkgs" ]] ; then
-  if [[ -d "${H}/.cpl/src/_pkgs}" ]] ; then 
-    ln -fs ../../../_pkgs "${_src}"
-    rm -Rf "${H}/.cpl/src/_pkgs}" ; 
+  if [[ -d "${H}/.cpl/src/_pkgs" ]] ; then 
+    if [[ ! -h "${H}/.cpl/src/_pkgs" ]] ; then
+      rm -Rf "${H}/.cpl/src/_pkgs" ; 
+      ln -fs ../../../_pkgs "${_src}"
+    fi
   else
     ln -fs ../_pkgs "${_src}"  
   fi
@@ -72,10 +74,10 @@ set -o errexit
 set -o nounset
 
 function ftrap {
-  /usr/bin/tee -a "${_log}";
-  /usr/bin/tail -3 "${_log}"
+  tee -a "${_log}";
+  tail -3 "${_log}"
   if [[ -e "${_logs}"/l ]]; then
-    /usr/bin/tail -5 "${_logs}"/l
+    tail -5 "${_logs}"/l
   rm "${_logs}"/l;
   fi
   if [[ "${unameo}" == "Cygwin" ]] ; then
@@ -102,9 +104,9 @@ function getJDK {
        echo "Java detected, version: ${ajvv}"
        if [[ ! -z "${ajvv}" ]] && [[ "${ajvv#*1.6.}" != "${ajvv}" ]] ; then donelist="${donelist}@${name}@" ; return 0;  fi
     fi
-    # local ajdk=$(/usr/bin/wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
+    # local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
     #  grep -e "(?ms)Java SE \d(?: Update \d+)?<.*?href=\"(/technetwork[^\"]+)\"><img")
-    local ajdk=$(/usr/bin/wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
+    local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
       grep "jdk6-downloads-")
     ajdk=${ajdk#*releasenotes*f=\"}
     ajdk="http://www.oracle.com${ajdk%%\"*}"
@@ -112,7 +114,7 @@ function getJDK {
     local ajdkgrep="linux-i586.bin"
     if [[ "${longbit}" == "64" ]]; then ajdkgrep="linux-x64.bin" ; fi
     # echo "D: longbit = ${longbit}, ajdkgrep = ${ajdkgrep}"
-    local ajdk2=$(/usr/bin/wget -q -O - ${ajdk} | grep "http://download.oracle.com/otn-pub/java/jdk" | \
+    local ajdk2=$(wget -q -O - ${ajdk} | grep "http://download.oracle.com/otn-pub/java/jdk" | \
       grep "${ajdkgrep}")
     ajdk2=${ajdk2##*:\"}
     ajdk2=${ajdk2%%\"*}
@@ -120,7 +122,7 @@ function getJDK {
     echo $ajdk2 ${ajdkn}
     if [[ ! -e "${_pkgs}/${ajdkn}" ]]; then
       cp_tpl "${H}/jdk/.cookies.tpl" "${H}/jdk"
-      loge "/usr/bin/wget --cookies=on --load-cookies=${H}/jdk/.cookies --keep-session-cookies $ajdk2 -O ${_pkgs}/${ajdkn}" "wget_sources_${ajdkn}"
+      loge "wget --cookies=on --load-cookies=${H}/jdk/.cookies --keep-session-cookies $ajdk2 -O ${_pkgs}/${ajdkn}" "wget_sources_${ajdkn}"
     fi
     chmod 755 "${_pkgs}/${ajdkn}"
     cd "${H}/usr/local"
@@ -157,7 +159,7 @@ function main {
   if [[ ! -e "${_vers}" ]]; then
     echolog "#### VERS ####"
     echolog "download compatible versions from SunFreeware"
-    loge "/usr/bin/wget http://www.sunfreeware.com/programlistsparc10.html -O ${_vers}$(Ymd)" "wget_vers_sunfreeware"
+    loge "wget http://www.sunfreeware.com/programlistsparc10.html -O ${_vers}$(Ymd)" "wget_vers_sunfreeware"
     log "ln -fs ${_vers}$(Ymd) ${_vers}" ln_vers
     gen_sed -i 's/ftp:\/\/ftp.sunfreeware.com/http:\/\/ftp.sunfreeware.com\/ftp/g' ${_vers}$(Ymd)
     gen_sed -i 's/\/SOURCES\//http:\/\/www.sunfreeware.com\/SOURCES\//g' ${_vers}$(Ymd)
@@ -198,13 +200,13 @@ function Ymd() { date +"%Y%m%d"; }
 function _ldate() { date +"%Y/%m/%d-%H:%M:%S"; }
 function _fdate() { date +"%Y%m%d.%H%M%S"; }
 function _echod() { echo "$(_ldate) $1$2" ; }
-function _echolog() { _echod "$1" "$2" | /usr/bin/tee -a "$3"; if [[ $4 != "" ]]; then echo $4 >> "$3"; fi; }
+function _echolog() { _echod "$1" "$2" | tee -a "$3"; if [[ $4 != "" ]]; then echo $4 >> "$3"; fi; }
 function echolog() { _echolog "~ " "$1" "${_log}" ""; }
 function _echologcmd() { _echolog "~~~ $1" "$2" "${_logs}/$3" "~~~~~~~~~~~~~~~~~~~"; }
-function _log() { f=$2; rm -f "${_logs}"/l; ln -s ${f} "${_logs}"/l;rm -f "${H}"/.lastlog; sleep 1 ; ln -s "${_hlogs}/${f}" "${H}"/.lastlog; _echologcmd "" "$1" ${f} ; echolog "(see ${_logs}/${f} or simply /usr/bin/tail -f ${_logs}/l)"; $( $1 >> "${_logs}"/${f} 2>&1 ) ; }
+function _log() { f=$2; rm -f "${_logs}"/l; ln -s ${f} "${_logs}"/l;rm -f "${H}"/.lastlog; sleep 1 ; ln -s "${_hlogs}/${f}" "${H}"/.lastlog; _echologcmd "" "$1" ${f} ; echolog "(see ${_logs}/${f} or simply tail -f ${_logs}/l)"; $( $1 >> "${_logs}"/${f} 2>&1 ) ; }
 function log() { f=$(_fdate).$2 ; _log "$1" ${f} ; }
 function loge() { echo -ne "\e[1;33m" ; f=$(_fdate).$2.log ; _log "$1" ${f} ; _echologcmd "DONE ~~~ " "$1" ${f}; echo -ne "\e[m" ; true ;}
-function mrf() { ls -t1 "$1"/$2 | /usr/bin/head -n1 ; }
+function mrf() { ls -t1 "$1"/$2 | head -n1 ; }
 
 function sc() {
   set +e
@@ -250,10 +252,10 @@ function get_sources() {
   if [[ -e "${page}" ]] ; then
     local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
   else
-    # echo "D: local asrcline /usr/bin/wget -q -O - ${page} grep -e ${nameurl} grep ${ext}"
-    # local asrcpage=$(/usr/bin/wget -U Mozilla -q -O - "${page}")
+    # echo "D: local asrcline wget -q -O - ${page} grep -e ${nameurl} grep ${ext}"
+    # local asrcpage=$(wget -U Mozilla -q -O - "${page}")
     # echo "D: local page: ${asrcpage}"
-    local asrcline=$(/usr/bin/wget -q -O - "${page}" | grep -e "${nameurl}" | grep -e "${ext}")
+    local asrcline=$(wget -q -O - "${page}" | grep -e "${nameurl}" | grep -e "${ext}")
   fi
   
   get_param ${name} verexclude ""
@@ -313,7 +315,7 @@ function get_sources() {
   # echo "D: source ${source}, with targz ${targz}"
   local anamever="${targz%.${extact}}"
   local ss="xx"
-  if [[ -e "${_pkgs}/${targz}" ]] ; then ss=$(/usr/bin/stat -c%s "${_pkgs}/${targz}") ; fi
+  if [[ -e "${_pkgs}/${targz}" ]] ; then ss=$(stat -c%s "${_pkgs}/${targz}") ; fi
   if [[ -e "${_pkgs}/${targz}" ]] && [[ "${ss}" == "0" ]] ; then
     rm -f "${_pkgs}/${targz}"
   fi
@@ -334,9 +336,9 @@ function get_sources() {
 	aver="master"
   fi
   # echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}"
-  if [[ ! -e "${_pkgs}/${targz}" ]] && [[ ! -e "${H}UL/._linked/${anamever}" ]]; then
+  if [[ ! -e "${_pkgs}/${targz}" ]] && [[ ! -e "${HUL}/._linked/${anamever}" ]]; then
     echolog "get sources for ${name} in ${_hpkgs}/${targz}"
-    loge "/usr/bin/wget ${source} -O ${_pkgs}/${targz}" "wget_sources_${targz}"
+    loge "wget ${source} -O ${_pkgs}/${targz}" "wget_sources_${targz}"
   fi
   update_cache "${name}" "${anamever}" "${aver}"
   eval ${_namever}="'${anamever}'"
@@ -391,12 +393,12 @@ function gen_which()
   local _res="$2"
   if [[ "${isSolaris}" == true ]] ; then
     
-    local ares=$(which "${acmd}" 2> /dev/null | /usr/bin/tail -1)
+    local ares=$(which "${acmd}" 2> /dev/null | tail -1)
   else
     local ares=$(which "${acmd}" 2> /dev/null)
   fi
   if [[ "${ares}" == "" ]] ; then 
-    if [[ -e "/usr/bin/${acmd}" ]] ; then ares="/usr/bin/${acmd}" ; fi
+    if [[ -e "${acmd}" ]] ; then ares="${acmd}" ; fi
     if [[ -e "/usr/sbin/${acmd}" ]] ; then ares="/usr/sbin/${acmd}" ; fi
   fi
   eval ${_res}="'${ares}'"
@@ -453,7 +455,7 @@ function untar() {
     if [[ "${extact}" == "zip" ]] ; then dirext="-d" ; fi
     loge "${tarname} ${_pkgs}/${namever}.${extact} ${dirext} ${_src}" "tar_xpvf_namever.${extact}"
     local lastlog=$(mrf "${_logs}" "*tar_xpvf*")
-    local actualname=$(/usr/bin/head -3 "${lastlog}"|/usr/bin/tail -1)
+    local actualname=$(head -3 "${lastlog}"|tail -1)
     local anactualname=${actualname}
     #echo "anactualname=${anactualname}";
     actualname=${actualname%%/*}
@@ -462,6 +464,8 @@ function untar() {
       echolog "ln do to: ln -fs ${actualname} ${_src}/${namever}"
       ln -fs "${actualname}" "${_src}/${namever}"
     fi
+    # echo "D: ln -fs '${namever} ${_src}/${name}'"
+    ln -fs "${namever}" "${_src}/${name}"
     echo "${H} > ${_src}/${namever}/.cmp"
     echo "${H}" > "${_src}/${namever}/.cmp"
     echo "${H}" > "${_src}/${namever}/.lck"
@@ -477,61 +481,9 @@ function getusergroup() {
   local _ausergroup=$(id) ; _ausergroup=${_ausergroup#*(} ; _ausergroup=${_ausergroup#*(} ; _ausergroup=${_ausergroup%%)*}
   eval ${_usergroup}="'${_ausergroup}'"
 }
-function get_param() {
-  local name="$1"
-  local _param="$2"
-  local default="$3"
-  #echo ":D name ${name}, _param ${_param}, default ${default}, namever='${namever}', ver='${ver}'"
-  if [[ ! -e "${H}/.cpl/params/${name}" ]] ; then echolog "unable to find param for ${name}" ; no_param ; fi
-  local aparam=$(grep -e "^${_param}=" "${H}/.cpl/params/${name}"|/usr/bin/head -1)
-  local aparamname="${aparam%%=*}"
-  if [[ "${aparam}" != "" && "${aparam##${_param}=}" != "${aparam}" ]] ; then
-    aparam=${aparam##${_param}=}
-  else aparam="" ; fi
-  if [[ "${aparamname}" != "${_param}" ]] ; then aparam="" ; fi
-  if [[ "${aparam}" == "" ]]; then aparam="${default}" ; fi
-  if [[ "${aparam}" == "" ]] || [[ "${aparam}" == "none" ]] ; then eval ${_param}="'${aparam}'" ; return 0 ; fi
-  if [[ "${aparam}" == "##mandatory##" ]]; then echolog "unable to find ${_param} for ${name}" ; find2 ; fi
-  aparam=${aparam//@@NAMEVER@@/${namever}}
-  if [[ "${aparam%@@USERNAME@@*}" != "${aparam}" ]] ; then
-    getusername ausername
-    aparam=${aparam//@@USERNAME@@/${ausername}}
-  fi
-  if [[ "${aparam%@@USERGROUP@@*}" != "${aparam}" ]] ; then
-    getusergroup ausergroup;
-    aparam=${aparam/@@USERGROUP@@/${ausergroup}}
-  fi;
-  aparam=${aparam//\$H\//${H}/}
-  aparam=${aparam//\$\{H\}/${H}}
-  aparam=${aparam//\$\{HB\}/${HB}}
-  aparam=${aparam//\$\{HU\}/${HU}}
-  aparam=${aparam//\$\{HUL\}/${HUL}}
-  aparam=${aparam//\$\{HULL\}/${HULL}}
-  aparam=${aparam//\$\{HULI\}/${HULI}}
-  aparam=${aparam//\$\{HULB\}/${HULB}}
-  aparam=${aparam//\$\{HULA\}/${HULA}}
-  aparam=${aparam//\$\{HULS\}/${HULS}}
 
-  aparam=${aparam//\$EH\//${H//\//\\/}/}
-  aparam=${aparam//\$\{EH\}/${H//\//\\/}}
-  aparam=${aparam//\$\{EHB\}/${HB//\//\\/}}
-  aparam=${aparam//\$\{EHU\}/${HU//\//\\/}}
-  aparam=${aparam//\$\{EHUL\}/${HUL//\//\\/}}
-  aparam=${aparam//\$\{EHULL\}/${HULL//\//\\/}}
-  aparam=${aparam//\$\{EHULI\}/${HULI//\//\\/}}
-  aparam=${aparam//\$\{EHULB\}/${HULB//\//\\/}}
-  aparam=${aparam//\$\{EHULA\}/${HULA//\//\\/}}
-  aparam=${aparam//\$\{EHULS\}/${HULS//\//\\/}}
-  if [[ "${aparam%@@HULifnotCygwin@@*}" != "${aparam}" ]] ; then
-    if [[ "${unameo}" == "Cygwin" ]] ; then
-        aparam=${aparam/@@HULifnotCygwin@@/no}
-    else
-        aparam=${aparam/@@HULifnotCygwin@@/${HUL}}
-    fi
-  fi;
-  #if [[ "${_param}" == "pre" && "${name}" == "perl" ]] ; then echo ${name} ${_param} xx${aparam}xx ; fi
-  eval ${_param}="'${aparam}'"
-}
+source "${H}/.cpl/scripts/get_param.sh"
+
 function get_gnu_cmd() {
   local acmd=$1
   local _path=$2
@@ -587,69 +539,9 @@ function configure() {
   fi
   echo "done" > "${_src}/${namever}/._config"
 }
-function cleanPath() {
-  local path="$1"
-  local _path="$2"
-  while [[ "${path%/.}" != "${path}" ]] ; do path="${path%/.}"; done
-  while [[ "${path#./}" != "${path}" ]] ; do path="${path#./}"; done
-  #echo '${palibssh2th%/./*}' ${path%/./*}
-  while [[ "${path%/./*}" != "${path}" ]] ; do path="${path/\/.\///}"; done
-  eval ${_path}="'${path}'"
-}
-function relpath() {
-  local source="$1"; cleanPath "${source}" source
-  local target="$2"; cleanPath "${target}" target
-  local _relp="$3"
-  local common_part="${source}"
-  local back=
-  #echo target ${target} common_part $common_part
-  #echo '${target#$common_part/}' ${target#$common_part/}
-  while [ "${target#$common_part/}" == "${target}" ]; do
-    if [[ -d "${common_part}" ]] ; then back="../${back}" ; fi
-    common_part=${common_part%/*}
-    #echo common_part ${common_part} back $back
-  done
-  #echo '${back}${target#$common_part/}' ${back}${target#$common_part/}
-  eval ${_relp}="'${back}${target#$common_part/}'";
-}
-function onelink() {
-  local dest="$1"
-  local src="$2"
-  local line="$3"
-  local apath=${line%/*}; apath=${apath#*/}
-  local afile=${line##*/}
-  #echo check ${apath} $afile
-  mkdir -p "${dest}/${apath}"
-  #ln -fs "${src}/$apath/${afile}" "${dest}/$apath/${afile}"
-  #echo src "${src}/$apath/${afile}" dest "${dest}/$apath/${afile}"
-  #relpath "${src}/$apath/${afile}" "${dest}/$apath/${afile}" relp
-  relpath "${dest}/$apath/${afile}" "${src}/$apath/${afile}" relp
-  #echo relp $relp
-  #echo "{unameo} ${unameo} {apath%/bin} ${apath%/bin} {afile%.dll} ${afile%.dll}"
-  if [[ "${unameo}" == "Cygwin" ]] && [[ "${afile%.dll}" != "${afile}" || "${afile%.a}" != "${afile}" ]] ; then
-    #echo rm -f then cp -f "${src}/$apath/${afile}" "${dest}/$apath/${afile}"
-    rm -f "${dest}/$apath/${afile}"
-    cp -f "${src}/$apath/${afile}" "${dest}/$apath/${afile}"
-  else
-    #echo ln -fs "${relp}" "${dest}/$apath/${afile}"
-    ln -fs "${relp}" "${dest}/$apath/${afile}"
-  fi
-}
-function links() {
-  local dest="$1"
-  local src="$2"
-  if [[ -d "${src}" ]] ; then
-    cd "${src}"
-    find . -type f -print | while read line; do
-      # echo check ${line}
-      onelink "${dest}" "${src}" "${line}"
-    done
-    find . -type l -print | while read line; do
-      # echo check ${line}
-      onelink "${dest}" "${src}" "${line}"
-    done
-  fi
-}
+
+source "${H}/.cpl/scripts/links.sh"
+
 function action() {
   local name=$1
   local namever=$2
@@ -666,13 +558,13 @@ function action() {
        #if [[ "${name}" == "perl" && "${actionname}" == "pre" ]] ; then echo eval xx ${actioncmd} xx ; fi
        #echo actioname ${actionname} gives actioncmd ${actioncmd}; eee
        if [[ "${actioncmd#@@}" != "${actioncmd}" ]] ; then
-          actioncmd="${actioncmd#@@}"
-          echo "${actioncmd}" > "./${actionname}"
-          chmod 755 "./${actionname}"
-          actioncmd="./${actionname}"
-        fi
-        #echo pre ${pre} ; jj
-        loge "eval ${actioncmd}" "${actionname}_${namever}"
+         actioncmd="${actioncmd#@@}"
+         echo "${actioncmd}" > "./${actionname}"
+         chmod 755 "./${actionname}"
+         actioncmd="./${actionname}"
+       fi
+       #echo pre ${pre} ; jj
+       loge "eval ${actioncmd}" "${actionname}_${namever}"
      fi
      # pwd
      # echo "done > ${actionpath}/._${actionstep}"
@@ -720,7 +612,7 @@ function build_item() {
   fi
   # ver=${${namever}#${name}-}
   #echo "XXX ver ${ver}, namever ${namever} name ${name}"
-  if [[ -e "${H}UL/._linked/${namever}" ]]; then
+  if [[ -e "${HUL}/._linked/${namever}" ]]; then
     if [[ "${isdone}" == "false" ]] ; then
       echo -ne "\e[1;32m" ; echolog "${type} ${namever} already installed" ; echo -ne "\e[m" ;
       donelist="${donelist}@${name}@" ;
@@ -742,21 +634,26 @@ function build_item() {
     action ${name} ${namever} makeinstcmd "${asrc}" installed  "make install"
     action ${name} ${namever} post "${asrc}" post "none"
     if [[ "${type}" != "MOD" ]] ; then
-      if [[ "${type}" == "APP" ]] ; then linksrcdef="${H}ULA/${namever}/bin" ; linkdstdef="${H}/bin" ; fi
-      if [[ "${type}" == "LIB" ]] ; then linksrcdef="${H}ULS/${namever}" ; linkdstdef="${H}UL" ; fi
+      if [[ "${type}" == "APP" ]] ; then linksrcdef="${HULA}/${namever}/bin" ; linkdstdef="${H}/bin" ; fi
+      if [[ "${type}" == "LIB" ]] ; then linksrcdef="${HULS}/${namever}" ; linkdstdef="${HUL}" ; fi
       get_param ${name} linksrc ${linksrcdef}; linksrc=$(echo "${linksrc}") ; # echo "linksrc ${linksrc}"
       get_param ${name} linkdst ${linkdstdef}; linkdst=$(echo "${linkdst}") ; # echo "linkdst ${linkdst}"
     fi
     if [[ ! -e "${HUL}"/._linked/${namever} ]] ; then
-      if [[ "${type}" != "MOD" ]] ; then echolog "checking links of ${type} ${namever}"; links "${linkdst}" "${linksrc}" ; fi
-      if [[ "${type}" == "APP" ]] ; then 
-        local l=$(ls "${HULA}/${namever}"/lib/*.so 2>/dev/null)
-        local l64=$(ls "${HULA}/${namever}"/lib64/*.so 2>/dev/null)
-        if [[ "${l}" != "" ]] ; then 
-          echolog "checking links lib of ${type} ${namever}"; links "${HULL}" "${H}ULA/${namever}/lib" ;
-        fi
-        if [[ "${l64}" != "" ]] ; then 
-          echolog "checking links lib64 of ${type} ${namever}"; links "${HULL}" "${H}ULA/${namever}/lib64" ;
+      if [[ "${type}" != "MOD" ]] ; then 
+        if [[ ! -e "${asrc}/._links" ]] ; then
+          echolog "checking links of ${type} ${namever}"; links "${linkdst}" "${linksrc}" true; 
+          if [[ "${type}" == "APP" ]] ; then 
+            local l=$(ls "${HULA}/${namever}"/lib/*.so 2>/dev/null)
+            local l64=$(ls "${HULA}/${namever}"/lib64/*.so 2>/dev/null)
+            if [[ "${l}" != "" ]] ; then 
+              echolog "checking links lib of ${type} ${namever}"; links "${HULL}" "${HULA}/${namever}/lib" true;
+            fi
+            if [[ "${l64}" != "" ]] ; then 
+              echolog "checking links lib64 of ${type} ${namever}"; links "${HULL}" "${HULA}/${namever}/lib64" true;
+            fi
+          fi
+          echo "done" > "${asrc}/._links"
         fi
       fi
       echo done > "${HUL}"/._linked/${namever} ;
@@ -765,9 +662,17 @@ function build_item() {
     if [[ "${type}" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
     if [[ "${type}" == "LIB" && ! -e "${HULS}/${name}" ]] ; then  ln -fs "${namever}" "${HULS}/${name}" ; fi
     if [[ "${type}" == "LIB" && ! -e "${HULS}/${namever}" ]] ; then  rm -f "${HULS}/${name}" ; fi
+    if [[ "${type}" == "APP" || "${type}" == "LIB" ]] ; then
+      set +e
+      tldd "${name}"
+      local atlddres="$?"
+      set -e
+      if [[ "${atlddres}" != "0" ]] ; then  echolog "${namever} has improper libs" ; reset_compil "${name}" ; tldd_failed ; fi
+    fi
     donelist="${donelist}@${name}@"
   fi
 }
+
 function build_line() {
   local line="$1"
   local lineori="$1"
