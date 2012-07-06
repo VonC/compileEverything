@@ -3,18 +3,26 @@
 source "${H}/.cpl/scripts/links.sh"
 source "${H}/.cpl/scripts/get_param.sh"
 
-if [[ "$#" == "0" || $# > 2 ]] ; then 
-  echo "reset_compil [--soft/-s (default)|--mixed/-m|--full/-f|--delete/-d|--help/-h] lib/app_name"
-  exit 0
+if [[ "$#" == "0" || $# > 3 ]] ; then 
+  echo "reset_compil [--soft/-s (default)|--mixed/-m|--full/-f|--delete/-d|--help/-h] lib/app_name [step]" 1>&2
+  exit 1
 fi
 
 option=""
-if [[ "$2" == "" ]] ; then name="${1}" ; else name="$2" ; option="$1" ; fi
+if [[ "$2" == "" ]] ; then
+  name="${1}"
+  step="${2}"
+else 
+  option="$1" ; 
+  name="$2" ; 
+  step="$3" ; 
+fi
 if [[ "${name}" == "-h" || "${name}" == "--help" ]] ; then
   name=""
   option="-h"
 fi
 if [[ "${name#-}" != "${name}" ]] ; then option="${name}" ; name="" ; fi
+if [[ "${option#-}" == "${option}" ]] ; then option="" ; name="$1" ; step="$2" ; fi
 
 invalid=false
 mixed=false
@@ -64,7 +72,7 @@ if [[ "${invalid}" == "true" || "${name}" == "" ]] ; then
   exit 1
 fi 
 
-echo "D: option='${option}', mixed='${mixed}', full='${full}', delete='${delete}'"
+echo "D: option='${option}', mixed='${mixed}', full='${full}', delete='${delete}', =>step='${step}'"
 
 root=""
 namever=""
@@ -93,6 +101,7 @@ fi
 
 rm -f "${H}/usr/local/._linked/${name}-"*
 gen_sed -i "/\#${name}\#/ d" "${H}/.cpl/cache"
+rm -f "${src}/${name}/._${step}"
 
 if [[ "${namever}" == "" ]] ; then
   echo  -e "\e[1;31m! ${name} doesn't exist in ${HUL}/libs or /apps\e[0m" 1>&2

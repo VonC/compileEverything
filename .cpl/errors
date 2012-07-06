@@ -2791,6 +2791,8 @@ Redhat cmake configure
 => HUGE HACK OF DEATH
 g++ calls gpp (the actual g++) with ' -lintl $*' in order to always pass '-lintl'...
 
+Better hack: add '-lintl' to 'LFDLAGS' in '.bashrc'
+
 See next section for a more detailed analysis of this issue
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -2810,6 +2812,7 @@ CMake Error at /home/auser/ce8/usr/local/apps/cmake-2.8.8/share/cmake-2.8/Module
 
 http://gcc.gnu.org/bugzilla/show_bug.cgi?id=11074 tals about patch of acinclude.m4
 
+I have modified that acinclude.m4 to always consider 'lintl', and have added '-lintl' to 'LDFLAGS' in the '.bashrc'
 ~~~~~~~~~~~~~~~~~~~~
 
 auser10:47 ahostname /home/auser/ce8/gitlab/github #bundle install --without development test --deployment
@@ -2992,3 +2995,7 @@ auser01:14 ahostname /home/auser/gitpoc/ce9/.cpl/src/curl/lib #ldd .libs/libcurl
 		/lib64/ld-linux-x86-64.so.2 (0x0000555555554000)
 
 miss openldap dependency => add in .cpl/_deps
+~~~~~~~~~~~~~~~~~~~~~~
+ln -fs errors?
+Check if the target doesn't exist already and points to ..//: that would make any link goes to the parent directory!
+~~~~~~~~~~~~~~~~~~~~

@@ -6,3 +6,4 @@ shift
 if [[ ! -e "${HB}/${cmd}" ]] ; then
   echo -e "\e[1;31mCommand unavailable '${cmd}'\e[0m"; exit 1
 fi
+"${HB}/${cmd}" "$@"

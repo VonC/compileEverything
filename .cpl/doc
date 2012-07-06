@@ -17,6 +17,8 @@ userapp@vonc-VirtualBox:~$ ifconfig|grep inet|grep -v '::'|grep -v ':10'|grep -v
 last changed 5 minutes or more:
 userapp@vonc-VirtualBox:~$ find . -mmin -60 -print
 ~~~~~~~~~~~~~~
+echo on stderr, in red: echo  -e "\e[1;31mMY ERROR MESSAGE\e[0m" 1>&2
+~~~~~~~~~~~~~~
 Find in files: grep -nHIrF string *
 
 -n, --line-number

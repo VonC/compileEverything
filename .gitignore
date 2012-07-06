@@ -117,3 +117,4 @@ tomcat/key*
 /build/
 /.ldap
 /gitlab/omniauth.rb
+/.pyhistory
