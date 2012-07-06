@@ -85,3 +85,24 @@ if [[ "${ldapg}" != "" ]] ; then
   gen_sed -i "s;# LDAP_START;;g" "${fullFilePathDst}"
   gen_sed -i "s;# LDAP_END;;g" "${fullFilePathDst}"
 fi
+
+while [[ $(grep -m 1 "@MYSQL_" "${fullFilePathDst}") != "" ]] ; do
+mysql==$(grep -m 1 "@MYSQL_" "${fullFilePathDst}")
+if [[ "${mysql}" != "" ]] ; then
+  mysql="@MYSQL_${mysql#*@MYSQL_}"
+  mysql="${mysql%@*}@"
+  mysql_base="${mysql#*_}"
+  mysql_base="${mysql_base%%_*}"
+  if [[ -e "${H}/mysql/sandboxes/${mysql_base}" ]] ; then
+    mysql_param="${mysql##*_}"
+    mysql_param="${mysql_param%@*}"
+    if [[ "${mysql_param}" != "" ]] ; then
+      mysql_grep=$(grep "${mysql_param}" "${H}/mysql/sandboxes/${mysql_base}/my.sandbox.cnf")
+      if [[ "${mysql_grep}" != "" ]] ; then
+        mysql_val=${mysql_grep##*= }
+        gen_sed -i "s;${mysql};${mysql_val};g" "${fullFilePathDst}"
+      fi
+    fi
+  fi
+fi
+done

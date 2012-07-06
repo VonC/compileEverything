@@ -105,7 +105,7 @@ tomcat/key*
 /.gnupg/
 /.cache/
 /.cpl/src
-/mysql/5.5.25
+/mysql/5.*
 /bredis/redis.conf
 /gitlab/unicorn.rb
 /nginx/nginx.conf
@@ -118,3 +118,4 @@ tomcat/key*
 /.ldap
 /gitlab/omniauth.rb
 /.pyhistory
+/dump.rdb

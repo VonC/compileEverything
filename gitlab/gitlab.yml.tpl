@@ -1,14 +1,31 @@
-# Gitlab application config file
+# # # # # # # # # # # # # # # # # # 
+# Gitlab application config file  #
+# # # # # # # # # # # # # # # # # #
+
+#
+# 1. Common settings
+# ==========================
+
+# Web application specific settings
+web:
+  host: localhost
+  port: @PORT_HTTPS_GITLAB@
+  https: true
 
 # Email used for notification
 # about new issues, comments
 email:
-  from: notify@gitlabhq.com
-  host: gitlabhq.com
+  from: notify@localhost
 
-  # Protocol used for links in email letters
-  # Value can be http or https
-  protocol: http # or https
+# Application specific settings
+# Like default project limit for user etc
+app: 
+  default_projects_limit: 10 
+
+
+# 
+# 2. Advanced settings: 
+# ==========================
 
 # Git Hosting congiguration
 git_host:

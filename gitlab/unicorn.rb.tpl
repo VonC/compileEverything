@@ -1,4 +1,4 @@
-app_dir = "@H@/gitlab/github/"
+app_dir = "@H@/gitlab/github"
 worker_processes 2
 working_directory app_dir
 

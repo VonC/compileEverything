@@ -3,6 +3,7 @@
 gtl="${H}/gitlab"
 github="${gtl}/github"
 mysqlgtl="${H}/mysql/sandboxes/gitlab"
+mkdir -p "${gtl}/logs"
 
 if [[ ! -e "${github}" ]] ; then
   xxgit=1 git clone https://github.com/gitlabhq/gitlabhq "${github}"
@@ -33,12 +34,15 @@ if [[ ! "$(ls -A ${github}/vendor/bundle/ruby/1.9.1/gems)" ]] ; then
   bundle install --without development test --deployment
   cd "${d}"
 fi
-if [[ "1" == "2" ]] ; then
-  d=$(pwd) ; cd "${github}"
-  bundle exec rake gitlab:app:setup RAILS_ENV=production
-  cd "${d}"
-fi
+sshd start
+redisd start
+d=$(pwd) ; cd "${github}"
+bundle exec rake gitlab:app:setup RAILS_ENV=production
 fix=$(grep "Syc" -nrlHIF "${github}/vendor/bundle/ruby/1.9.1/specifications/")
 while read line; do
   gen_sed -i "s/\"#<Syck::DefaultKey:.*>/\"~>/g" "${line}"
 done < <(echo "${fix}") 
+
+bundle exec rake gitlab:app:status RAILS_ENV=production
+
+cd "${d}"
