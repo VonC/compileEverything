@@ -64,7 +64,7 @@ function links() {
     echo  -e "\e[1;31m! incorrect create_links parameter for links\e[0m" 1>&2
     exit 1
   fi
-  echo "D: links dest '$1', src '$2'"
+  # echo "D: links dest '$1', src '$2'"
   if [[ -d "${src}" ]] ; then
     cd "${src}"
     find . -type f -print | while read line; do

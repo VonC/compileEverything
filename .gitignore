@@ -111,11 +111,10 @@ tomcat/key*
 /nginx/nginx.conf
 /nginx/nginx.conf.old
 /projects.list
-/redis/dump.rdb
+dump.rdb
 /redis/redis.conf
 /redis/redis.conf.ori
 /build/
 /.ldap
 /gitlab/omniauth.rb
 /.pyhistory
-/dump.rdb

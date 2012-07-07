@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ "${1}" != "--force" || "${1}" != "-f" ]]; then
+if [[ "${1}" != "--force" && "${1}" != "-f" ]]; then
   echo ${0} not executed for @@TITLE@@ unles called with --force
   return 0
 fi
@@ -90,7 +90,8 @@ export -n PERL_LIB
 export -n NGX_AUX
 
 export LD_RUN_PATH="${HULL}:${HUL}/ssl/lib:${HULA}/svn/lib:${HULA}/python/lib:${HULA}/gcc/lib"
-export LDFLAGS="-lintl -L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib -Wl,-rpath=${LD_RUN_PATH}"
+export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib -Wl,-rpath=${LD_RUN_PATH}"
+if [[ -e "${HULS}/gettext" ]] ; then export LDFLAGS="-lintl ${LDFLAGS}" ; fi
 export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE @@M64@@ @@CYGWIN@@"
 export CPPFLAGS="$CFLAGS"
 export PERL5LIB="${HULA}/perl/lib/site_perl/current:${HULA}/perl/lib/current"

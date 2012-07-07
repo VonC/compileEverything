@@ -2999,3 +2999,139 @@ miss openldap dependency => add in .cpl/_deps
 ln -fs errors?
 Check if the target doesn't exist already and points to ..//: that would make any link goes to the parent directory!
 ~~~~~~~~~~~~~~~~~~~~
+Ubuntu MMOD error make
+
+==> Found dependencies: version
+--> Working on version
+Fetching http://www.cpan.org/authors/id/J/JP/JPEACOCK/version-0.99.tar.gz ... OK
+Configuring version-0.99 ... OK
+Building and testing version-0.99 ... FAIL
+! Installing version failed. See /home/git/ces/ce3/.cpanm/build.log for details.
+! Bailing out the installation for Module-Metadata-1.000009. Retry with --prompt or --force.
+--> Working on CPAN::Meta
+Fetching http://www.cpan.org/authors/id/D/DA/DAGOLDEN/CPAN-Meta-2.120921.tar.gz ... OK
+Configuring CPAN-Meta-2.120921 ... OK
+==> Found dependencies: version, CPAN::Meta::Requirements
+--> Working on CPAN::Meta::Requirements
+Fetching http://www.cpan.org/authors/id/D/DA/DAGOLDEN/CPAN-Meta-Requirements-2.122.tar.gz ... OK
+Configuring CPAN-Meta-Requirements-2.122 ... OK
+Building and testing CPAN-Meta-Requirements-2.122 ... OK
+Successfully installed CPAN-Meta-Requirements-2.122
+Building and testing CPAN-Meta-2.120921 ... FAIL
+! Installing CPAN::Meta failed. See /home/git/ces/ce3/.cpanm/build.log for details.
+--> Working on Perl::OSType
+Fetching http://www.cpan.org/authors/id/D/DA/DAGOLDEN/Perl-OSType-1.002.tar.gz ... OK
+Configuring Perl-OSType-1.002 ... OK
+Building and testing Perl-OSType-1.002 ... OK
+Successfully installed Perl-OSType-1.002
+! Bailing out the installation for Module-Build-0.4001. Retry with --prompt or --force.
+! Bailing out the installation for Error-0.17018. Retry with --prompt or --force.
+5 distributions installed
+
+
+
+/home/git/ces/ce3/.cpanm/work/1341659222.5126/version-0.99/blib/arch/auto/version/vxs/vxs.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/CORE/libperl.a `cat blib/arch/auto/version/extralibs.all` 
+/home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/site_perl/5.12.3/i686-linux/auto/nginx/nginx.a(nginx.o): In function `ngx_http_perl_sv2str':
+/home/git/ces/src/nginx-1.2.2/objs/src/http/modules/perl/nginx.xs:46: undefined reference to `ngx_log_error_core'
+/home/git/ces/src/nginx-1.2.2/objs/src/http/modules/perl/nginx.xs:52: undefined reference to `ngx_pnalloc'
+
+
+git@vonc-VirtualBox:~/ces/ce3$ find ../src/ -name "*" | xargs nm -A 2>/dev/null | grep ngx_log_error_core | grep T
+../src/nginx-1.2.1/objs/nginx:08053850 T ngx_log_error_core
+../src/nginx-1.2.1/objs/src/core/ngx_log.o:00000000 T ngx_log_error_core
+
+git@vonc-VirtualBox:~/ces/ce3$ l usr/local/apps/nginx
+lrwxrwxrwx 1 git git 11 Jul  7 11:11 usr/local/apps/nginx -> nginx-1.2.2
+
+git@vonc-VirtualBox:~/ces/ce3$ find ../src/ -name "nginx.a"
+../src/nginx-1.2.1/objs/src/http/modules/perl/blib/arch/auto/nginx/nginx.a
+../src/nginx-1.2.2/objs/src/http/modules/perl/blib/arch/auto/nginx/nginx.a
+git@vonc-VirtualBox:~/ces/ce3$ find ../src/ -name "ngx_log.o"
+../src/nginx-1.2.1/objs/src/core/ngx_log.o
+../src/nginx-1.2.2/objs/src/core/ngx_log.o
+
+git@vonc-VirtualBox:~/.cpanm/work/1341659222.5126/version-0.99$ find /home/git/ces/src/nginx/ -name "*" | xargs nm -A 2>/dev/null | grep ngx_pnalloc | grep T
+/home/git/ces/src/nginx/objs/nginx:08054365 T ngx_pnalloc
+/home/git/ces/src/nginx/objs/src/core/ngx_palloc.o:0000025d T ngx_pnalloc
+
+
+
+
+
+gcc -L/home/git/ces/ce3/usr/local/lib -o perl -O2 ./perlmain.o  /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/site_perl/5.12.3/i686-linux/auto/nginx/nginx.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/threads/threads.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/threads/shared/shared.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/re/re.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/mro/mro.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/attributes/attributes.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Unicode/Normalize/Normalize.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Time/Piece/Piece.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Time/HiRes/HiRes.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Text/Soundex/Soundex.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Sys/Syslog/Syslog.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Sys/Hostname/Hostname.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Storable/Storable.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Socket/Socket.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/SDBM_File/SDBM_File.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/PerlIO/via/via.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/PerlIO/scalar/scalar.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/PerlIO/encoding/encoding.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/POSIX/POSIX.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Opcode/Opcode.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Math/BigInt/FastCalc/FastCalc.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/MIME/Base64/Base64.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/List/Util/Util.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/IPC/SysV/SysV.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/IO/IO.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/I18N/Langinfo/Langinfo.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Hash/Util/Util.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Hash/Util/FieldHash/FieldHash.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Filter/Util/Call/Call.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/File/Glob/Glob.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Fcntl/Fcntl.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/Unicode/Unicode.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/TW/TW.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/Symbol/Symbol.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/KR/KR.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/JP/JP.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/Encode.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/EBCDIC/EBCDIC.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/CN/CN.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/Byte/Byte.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Digest/SHA/SHA.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Digest/MD5/MD5.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Devel/Peek/Peek.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Devel/PPPort/PPPort.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Devel/DProf/DProf.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Data/Dumper/Dumper.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Cwd/Cwd.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Compress/Raw/Zlib/Zlib.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Compress/Raw/Bzip2/Bzip2.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/B/B.a /home/git/ces/ce3/.cpanm/work/1341659222.5126/version-0.99/blib/arch/auto/version/vxs/vxs.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/CORE/libperl.a `cat blib/arch/auto/version/extralibs.all` 
+
+
+cp -p src/http/modules/perl/nginx.* objs/src/http/modules/perl/
+cp -p src/http/modules/perl/typemap objs/src/http/modules/perl/
+cp -p src/http/modules/perl/Makefile.PL objs/src/http/modules/perl/
+cd objs/src/http/modules/perl						&& NGX_PM_CFLAGS="-fno-strict-aliasing -pipe -I/home/git/ces/ce3/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/CORE -g -I/home/git/ces/ce3/usr/local/include -I/home/git/ces/ce3/usr/local/ssl/include"				NGX_PCRE=YES								NGX_OBJS=objs							NGX_OPENSSL=YES						/home/git/ces/ce3/usr/local/apps/perl/bin/perl Makefile.PL								LIB=							INSTALLSITEMAN3DIR=
+Have /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux
+Want /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux
+Your perl and your Config.pm seem to have different ideas about the 
+architecture they are running on.
+Perl thinks: [i686-linux]
+Config says: [i686-linux]
+This may or may not cause problems. Please check your installation of perl 
+if you have problems building this extension.
+Writing Makefile for nginx
+cp -p src/http/modules/perl/nginx.* objs/src/http/modules/perl/
+cd objs/src/http/modules/perl && make
+make[2]: Entering directory `/home/git/ces/src/nginx-1.2.2/objs/src/http/modules/perl'
+cp nginx.pm blib/lib/nginx.pm
+/home/git/ces/ce3/usr/local/apps/perl-5.12.3/bin/perl /home/git/ces/ce3/usr/local/apps/perl/lib/current/ExtUtils/xsubpp  -typemap /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/ExtUtils/typemap -typemap typemap  nginx.xs > nginx.xsc && mv nginx.xsc nginx.c
+Please specify prototyping behavior for nginx.xs (see perlxs manual)
+gcc -c  -I ../../../../../src/core -I ../../../../../src/event -I ../../../../../src/os/unix -I ../../../../../src/http -I ../../../../../src/http/modules -I ../../../../../src/http/modules/perl -I ../../../../../objs  -fno-strict-aliasing -pipe -I/home/git/ces/ce3/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/CORE -g -I/home/git/ces/ce3/usr/local/include -I/home/git/ces/ce3/usr/local/ssl/include -O   -DVERSION=\"1.2.2\" -DXS_VERSION=\"1.2.2\"  "-I/home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/CORE"   nginx.c
+rm -rf blib/arch/auto/nginx/nginx.a
+/usr/bin/ar cr blib/arch/auto/nginx/nginx.a nginx.o && : blib/arch/auto/nginx/nginx.a
+chmod 755 blib/arch/auto/nginx/nginx.a
+
+
+
+
+
+git@vonc-VirtualBox:~/.cpl/src/nginx/src/http/modules/perl$ perl -MExtUtils::Embed -e ldopts
+  -L/home/git/ces/ce3/usr/local/lib /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/B/B.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Compress/Raw/Bzip2/Bzip2.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Compress/Raw/Zlib/Zlib.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Cwd/Cwd.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Data/Dumper/Dumper.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Devel/DProf/DProf.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Devel/PPPort/PPPort.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Devel/Peek/Peek.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Digest/MD5/MD5.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Digest/SHA/SHA.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Encode/Encode.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Fcntl/Fcntl.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/File/Glob/Glob.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Filter/Util/Call/Call.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Hash/Util/Util.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Hash/Util/FieldHash/FieldHash.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/I18N/Langinfo/Langinfo.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/IO/IO.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/IPC/SysV/SysV.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/List/Util/Util.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/MIME/Base64/Base64.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Math/BigInt/FastCalc/FastCalc.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Opcode/Opcode.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/POSIX/POSIX.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/PerlIO/encoding/encoding.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/PerlIO/scalar/scalar.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/PerlIO/via/via.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/SDBM_File/SDBM_File.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Socket/Socket.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Storable/Storable.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Sys/Hostname/Hostname.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Sys/Syslog/Syslog.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Text/Soundex/Soundex.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Time/HiRes/HiRes.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Time/Piece/Piece.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/Unicode/Normalize/Normalize.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/attributes/attributes.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/mro/mro.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/re/re.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/threads/threads.a /home/git/ces/ce3/usr/local/apps/perl/lib/current/i686-linux/auto/threads/shared/shared.a -L/home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/CORE -lperl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+git@vonc-VirtualBox:~/.cpanm/work/1341659222.5126/version-0.99$ find /home/git/ces/src/nginx/ -name "*" | xargs nm -A 2>/dev/null | grep ngx_pnalloc | grep T
+/home/git/ces/src/nginx/objs/nginx:08054365 T ngx_pnalloc
+/home/git/ces/src/nginx/objs/src/core/ngx_palloc.o:0000025d T ngx_pnalloc
+
+
+
+
+
+
+
+
+git@vonc-VirtualBox:~/.cpanm/work/1341659222.5126/version-0.99$ gcc -L/home/git/ces/ce3/usr/local/lib -o perl -O2 ./perlmain.o  /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/site_perl/5.12.3/i686-linux/auto/nginx/nginx.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/threads/threads.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/threads/shared/shared.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/re/re.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/mro/mro.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/attributes/attributes.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Unicode/Normalize/Normalize.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Time/Piece/Piece.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Time/HiRes/HiRes.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Text/Soundex/Soundex.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Sys/Syslog/Syslog.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Sys/Hostname/Hostname.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Storable/Storable.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Socket/Socket.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/SDBM_File/SDBM_File.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/PerlIO/via/via.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/PerlIO/scalar/scalar.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/PerlIO/encoding/encoding.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/POSIX/POSIX.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Opcode/Opcode.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Math/BigInt/FastCalc/FastCalc.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/MIME/Base64/Base64.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/List/Util/Util.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/IPC/SysV/SysV.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/IO/IO.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/I18N/Langinfo/Langinfo.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Hash/Util/Util.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Hash/Util/FieldHash/FieldHash.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Filter/Util/Call/Call.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/File/Glob/Glob.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Fcntl/Fcntl.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/Unicode/Unicode.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/TW/TW.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/Symbol/Symbol.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/KR/KR.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/JP/JP.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/Encode.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/EBCDIC/EBCDIC.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/CN/CN.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Encode/Byte/Byte.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Digest/SHA/SHA.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Digest/MD5/MD5.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Devel/Peek/Peek.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Devel/PPPort/PPPort.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Devel/DProf/DProf.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Data/Dumper/Dumper.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Cwd/Cwd.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Compress/Raw/Zlib/Zlib.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/Compress/Raw/Bzip2/Bzip2.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/auto/B/B.a /home/git/ces/ce3/.cpanm/work/1341659222.5126/version-0.99/blib/arch/auto/version/vxs/vxs.a /home/git/ces/ce3/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux/CORE/libperl.a `cat blib/arch/auto/version/extralibs.all` -lm /home/git/ces/src/nginx/objs/src/core/ngx_log.o /home/git/ces/src/nginx/objs/src/core/ngx_array.o /home/git/ces/src/nginx/objs/src/core/ngx_palloc.o 
+
+
+=> put all nginx obj files in one
+
+git@vonc-VirtualBox:~/.cpanm/work/1341659222.5126/version-0.99$ for i in $(find /home/git/ces/src/nginx/objs -name "*.o"); do echo " $i" >> e ; done
+
+ -lm -lexslt -lgcrypt -lgpg-error -lxml2 -lxslt -lintl -lgettextpo -lssl -lcrypto -lrt -lpcre -lcrypt /home/git/ces/src/nginx-1.2.1/objs/nginx
+ 
+=> remove http://search.cpan.org/~shlomif/Error-0.17018/lib/Error.pm : pain in the crack, and not maintained anymore
+
+Must debug svn2git Alien::SVN to check if it is *really* needed
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+

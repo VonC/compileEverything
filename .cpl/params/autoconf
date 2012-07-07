@@ -1,2 +1,2 @@
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@
-post=for file in $(ls -1 "${HULA}/@@NAMEVER@@/bin/"*); do gen_sed -i "s;/usr/bin//perl;${HB}/perl;g" "${file}";done
+post=for file in $(ls -1 "${HULA}/@@NAMEVER@@/bin/"*); do gen_sed -i "s;/usr/bin//perl;${HB}/perl;g" "${file}" ; gen_sed -i "s;/usr/bin/perl;${HB}/perl;g" "${file}" ; done

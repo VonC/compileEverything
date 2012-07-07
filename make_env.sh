@@ -425,6 +425,7 @@ function get_tar() {
   eval ${_tarname}="'${atarname}'";
 }
 function rmIfNeeded() {
+  removing=false
   if [[ -e "${_src}/${namever}/.lck" ]]; then
     local lock=$(cat "${_src}/${namever}/.lck")
     if [[ "${lock}" != "${H}" ]] ; then
@@ -435,11 +436,21 @@ function rmIfNeeded() {
     local cmp=$(cat "${_src}/${namever}/.cmp")
     if [[ "${cmp}" != "${H}" ]] ; then
       echolog "${_src}/${namever}/.cmp for '${cmp}' instead of '${H}': Removing"
-      rm -Rf "${_src}/${namever}"
+      removing=true
     fi
   else
     echolog "${_src}/${namever} for unknown home: Removing"
-    rm -Rf "${_src}/${namever}"
+    removing=true
+  fi
+  if [[ "${removing}" == "true" ]] ; then
+    set +e
+    rmdst="${_src}/"$(readlink "${_src}/${namever}")
+    set -e
+    if [[ "${rmdst}" == "${_src}/" ]] ; then rmdst="${_src}/${namever}" ; fi
+    # echo "D: rm -Rf ${rmdst}"
+    rm -Rf "${rmdst}"
+    rm -f "${_src}/${namever}"
+    rm -f "${_src}/${name}"
   fi
 }
 function untar() {
@@ -467,7 +478,7 @@ function untar() {
     fi
     # echo "D: ln -fs '${namever} ${_src}/${name}'"
     ln -fs "${namever}" "${_src}/${name}"
-    echo "${H} > ${_src}/${namever}/.cmp"
+    # echo "D: ${H} > ${_src}/${namever}/.cmp"
     echo "${H}" > "${_src}/${namever}/.cmp"
     echo "${H}" > "${_src}/${namever}/.lck"
   fi
@@ -527,7 +538,7 @@ function configure() {
       configcmd=${configcmd/@@WITH_GNU_AS@@/${with_gnu_as}}
       if [[ "${longbit}" == "64" ]] ; then configcmd=${configcmd/@@ENABLE_64BIT@@/--enable-64bit} ;
       else configcmd=${configcmd/@@ENABLE_64BIT@@/} ; fi
-      echo "configcmd=${configcmd}"
+      # echo "D: configcmd=${configcmd}"
       if [[ "${configcmd#@@}" != "${configcmd}" ]] ; then
         configcmd="${configcmd#@@}"
         echo "${configcmd}" > ./configurecmd
@@ -658,8 +669,8 @@ function build_item() {
         fi
       fi
       echo done > "${HUL}"/._linked/${namever} ;
-      rm -f "${_src}/${namever}/.lck"
     fi
+    rm -f "${_src}/${namever}/.lck"
     if [[ "${type}" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
     if [[ "${type}" == "LIB" && ! -e "${HULS}/${name}" ]] ; then  ln -fs "${namever}" "${HULS}/${name}" ; fi
     if [[ "${type}" == "LIB" && ! -e "${HULS}/${namever}" ]] ; then  rm -f "${HULS}/${name}" ; fi

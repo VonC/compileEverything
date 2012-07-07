@@ -20,7 +20,7 @@ lib glib gettext,pcre,libiconv,zlib,libffi,tar,libelf
 app tar libiconv,gettext,bzip2,xz
 app xz gettext,libiconv
 lib libelf none
-lib libffi none
+lib libffi gettext,libiconv
 app automake none
 app patchelf automake
 app pkgconfig libiconv,glib
@@ -54,14 +54,12 @@ lib libgpgerror gcc,libiconv
 app ruby gcc,openssl,gdbm,libiconv,ncurses,tcl,zlib,db,expat
 app gem ruby
 mod svn2git gem,aliensvn
-mod aliensvn cpanm,termreadkey,error 
+mod aliensvn cpanm,termreadkey
 app cpanm none
 mod termreadkey cpanm
-mod error cpanm
 app cgit git,zlib,libgcrypt,openssl
 app ant jdk
 app tomcat ant,jdk,junit
-mod tomcat-native tomcat
 app junit ant,jdk
 mod gitlab charlock_holmes,pygments,mysql_sandbox,libatomic_ops,redis,bundler
 mod charlock_holmes gem,icu

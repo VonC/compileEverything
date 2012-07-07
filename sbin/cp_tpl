@@ -88,21 +88,29 @@ fi
 
 while [[ $(grep -m 1 "@MYSQL_" "${fullFilePathDst}") != "" ]] ; do
 mysql==$(grep -m 1 "@MYSQL_" "${fullFilePathDst}")
+# echo "D: mysql='${mysql}'"
 if [[ "${mysql}" != "" ]] ; then
+  replace=false
   mysql="@MYSQL_${mysql#*@MYSQL_}"
   mysql="${mysql%@*}@"
   mysql_base="${mysql#*_}"
   mysql_base="${mysql_base%%_*}"
+  # echo "D: mysql_base='${mysql_base}'"
   if [[ -e "${H}/mysql/sandboxes/${mysql_base}" ]] ; then
     mysql_param="${mysql##*_}"
     mysql_param="${mysql_param%@*}"
+    # echo "D: mysql_param='${mysql_param}'"
     if [[ "${mysql_param}" != "" ]] ; then
       mysql_grep=$(grep "${mysql_param}" "${H}/mysql/sandboxes/${mysql_base}/my.sandbox.cnf")
       if [[ "${mysql_grep}" != "" ]] ; then
+        # echo "D: mysql_grep='${mysql_grep}'"
         mysql_val=${mysql_grep##*= }
+        # echo "D: gen_sed -i \"s;${mysql};${mysql_val};g\" \"${fullFilePathDst}\""
         gen_sed -i "s;${mysql};${mysql_val};g" "${fullFilePathDst}"
+        replace=true
       fi
     fi
   fi
+  if [[ "${replace}" == "false" ]] ; then exit 1 ; fi
 fi
 done
