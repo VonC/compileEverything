@@ -118,3 +118,4 @@ dump.rdb
 /.ldap
 /gitlab/omniauth.rb
 /.pyhistory
+/nxlog/nxlog.conf

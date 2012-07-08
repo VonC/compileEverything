@@ -45,7 +45,8 @@ lib openldap gcc,libtool,openssl,cyrus-sasl,db
 app subversion jdk,gcc,apache,apr,aprutil,neon,sqlite,zlib,python
 app jdk none
 lib neon gcc,openssl,expat,libxml2,zlib
-lib openssh gcc,openssl,zlib
+lib openssh gcc,openssl,zlib,nxlog
+app nxlog apr,gettext,libiconv,pcre,openssl,zlib
 app nginx gcc,openssl,zlib,pcre,libxslt
 lib pcre gcc,ncurses,libiconv,zlib
 lib libxslt gcc,libxml2,zlib,libiconv,libgcrypt,libgpgerror

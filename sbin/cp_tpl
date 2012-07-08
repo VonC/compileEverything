@@ -46,6 +46,7 @@ cp -f "${fullFilePathOri}" "${fullFilePathDst}"
 gen_sed -i "s;@H@;${H};g" "${fullFilePathDst}"
 gen_sed -i "s/@HOSTNAME@/$(hostname -s)/g" "${fullFilePathDst}"
 gen_sed -i "s/@USERNAME@/$(/usr/bin/id -un)/g" "${fullFilePathDst}"
+gen_sed -i "s/@GROUPNAME@/$(/usr/bin/id -un)/g" "${fullFilePathDst}"
 gen_sed -i "s;@@TITLE@@;${H};g" "${fullFilePathDst}"
 
 #fqn=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*}

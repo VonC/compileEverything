@@ -1,0 +1,1 @@
+nxlog.conf.tpl

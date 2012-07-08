@@ -1,0 +1,4 @@
+page=http://sourceforge.net/projects/nxlog-ce/files/
+url=http://en.sourceforge.jp/frs/g_redir.php?m=jaist&f=%2Fnxlog-ce%2F
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ @@WITH_GNU_LD@@ 
+post=mkdir -p ${HULA}/@@NAMEVER@@/etc/nxlog ; ln -fs ../../../../../../nxlog/nxlog.conf ${HULA}/@@NAMEVER@@/etc/nxlog/nxlog.conf ; cp_tpl "${H}/nxlog/nxlog.conf" "${H}/nxlog" ; mkdir -p ${HUL}/var/log/nxlog/ ; ln -fs ../../../../../nxlog/nxlog.log ${HUL}/var/log/nxlog/nxlog.log ; mkdir -p ${HULA}/@@NAMEVER@@/var/spool/nxlog
