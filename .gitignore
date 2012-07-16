@@ -119,3 +119,4 @@ dump.rdb
 /gitlab/omniauth.rb
 /.pyhistory
 /nxlog/nxlog.conf
+*.private

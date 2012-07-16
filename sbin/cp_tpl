@@ -70,7 +70,7 @@ gen_sed -i "s/@EPOCH@/${epoch}/g" "${fullFilePathDst}"
 ldapg=$(grep "@LDAP_" "${fullFilePathDst}")
 # echo "ldapg ${ldapg}"
 if [[ "${ldapg}" != "" ]] ; then
-  get_param_file ".ldap" ldap
+  get_param_file ".ldap.private" ldap
   if [[ -e "${ldap}" ]] ; then
     while read line; do
       ldapp=("${line#*=}")

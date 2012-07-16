@@ -137,8 +137,8 @@ export EDITOR=vim
 
 findg() { find . -name '*' |  xargs grep -nHr "$1" ; }
 
-if [[ -e "${H}/.proxy" ]] ; then source "${H}/.proxy" ; 
-elif [[ -e "${H}/../.proxy" ]] ; then source "${H}/../.proxy" ; fi
+if [[ -e "${H}/.proxy.private" ]] ; then source "${H}/.proxy.private" ; 
+elif [[ -e "${H}/../.proxy.private" ]] ; then source "${H}/../.proxy.private" ; fi
 
 alias gr='git update-index --assume-unchanged "${H}/README.md"'
 
