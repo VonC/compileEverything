@@ -128,6 +128,7 @@ function getJDK {
     cd "${H}/usr/local"
     if [[ ! -e jdk6 ]]; then
       loge "${_pkgs}/${ajdkn}" "wget_extract_${ajdkn}"
+      #loge "echo ${_pkgs}/${ajdkn}" "wget_extract_${ajdkn}" # TOCOMMENT
       ln -s jdk1.6* jdk6
     fi
     export JAVA_HOME="${HUL}/jdk6"
@@ -136,40 +137,56 @@ function getJDK {
   fi
 }
 
+gline="_"
+glastline=""
+
 function main {
-  checkOs
-  set +o nounset
-  until [ -z "$1" ] ; do # Until all parameters used up . . .
-    read_param "$1"
-    shift
-  done
-  set -o nounset
-  get_arc longbit
-  if [[ -e "${H}/.bashrc_aliases_git" ]] ; then cp "${H}/.cpl/.bashrc_aliases_git.tpl" "${H}/.bashrc_aliases_git" ; fi
-  if [[ ! -e "${H}/.bashrc" ]]; then
-    if [[ "${title}" == "" ]] ; then echolog "title should be set (to '${H}')" ; miss_bashrc_title ; fi
-    build_bashrc
-  fi
-  sc
-  mkdir -p "${HUL}/._linked"
-  mkdir -p "${HUL}/ssl/lib"
-  mkdir -p "${HULA}/svn/lib"
-  mkdir -p "${HULA}/python/lib"
-  mkdir -p "${HULA}/gcc/lib"
-  if [[ ! -e "${_vers}" ]]; then
-    echolog "#### VERS ####"
-    echolog "download compatible versions from SunFreeware"
-    loge "wget http://www.sunfreeware.com/programlistsparc10.html -O ${_vers}$(Ymd)" "wget_vers_sunfreeware"
-    log "ln -fs ${_vers}$(Ymd) ${_vers}" ln_vers
-    gen_sed -i 's/ftp:\/\/ftp.sunfreeware.com/http:\/\/ftp.sunfreeware.com\/ftp/g' ${_vers}$(Ymd)
-    gen_sed -i 's/\/SOURCES\//http:\/\/www.sunfreeware.com\/SOURCES\//g' ${_vers}$(Ymd)
-  fi
-  cat "${_deps}" | while read line; do
-    #echo ${line}
-    if [[ "${line}" != "__no_deps__" ]] ; then
-      build_line "${line}"
+  if [[ "${glastline}" == "" ]] ; then
+    checkOs
+    set +o nounset
+    until [ -z "$1" ] ; do # Until all parameters used up . . .
+      read_param "$1"
+      shift
+    done
+    set -o nounset
+    get_arc longbit
+    if [[ -e "${H}/.bashrc_aliases_git" ]] ; then cp "${H}/.cpl/.bashrc_aliases_git.tpl" "${H}/.bashrc_aliases_git" ; fi
+    if [[ ! -e "${H}/.bashrc" ]]; then
+      if [[ "${title}" == "" ]] ; then echolog "title should be set (to '${H}')" ; miss_bashrc_title ; fi
+      build_bashrc
     fi
-  done
+    sc
+    mkdir -p "${HUL}/._linked"
+    mkdir -p "${HUL}/ssl/lib"
+    mkdir -p "${HULA}/svn/lib"
+    mkdir -p "${HULA}/python/lib"
+    mkdir -p "${HULA}/gcc/lib"
+    if [[ ! -e "${_vers}" ]]; then
+      echolog "#### VERS ####"
+      echolog "download compatible versions from SunFreeware"
+      loge "wget http://www.sunfreeware.com/programlistsparc10.html -O ${_vers}$(Ymd)" "wget_vers_sunfreeware"
+      log "ln -fs ${_vers}$(Ymd) ${_vers}" ln_vers
+      gen_sed -i 's/ftp:\/\/ftp.sunfreeware.com/http:\/\/ftp.sunfreeware.com\/ftp/g' ${_vers}$(Ymd)
+      gen_sed -i 's/\/SOURCES\//http:\/\/www.sunfreeware.com\/SOURCES\//g' ${_vers}$(Ymd)
+    fi
+  fi
+  ldd=$(cat "${_deps}")
+  while read line; do
+    # echo "D: main line '${line}'"
+    gline="${line}"
+    if [[ "${line}" != "__no_deps__" ]] ; then
+      if [[ "${glastline}" == "" || "${line}" == "${glastline}" ]] ; then
+        glastline=""
+        build_line "${line}"
+      fi
+    fi
+  done < <(echo "${ldd}")
+  # echo "D: gline='${gline}', glastline='${glastline}'"
+  if [[ "${gline}" != "__no_deps__" ]] ; then
+    glastline="${gline}"
+    gline=""
+    # echo "D: fixed gline='${gline}', glastline='${glastline}'"
+  fi
 }
 
 function read_param {
@@ -466,6 +483,7 @@ function untar() {
     local dirext="-C"
     if [[ "${extact}" == "zip" ]] ; then dirext="-d" ; fi
     loge "${tarname} ${_pkgs}/${namever}.${extact} ${dirext} ${_src}" "tar_xpvf_namever.${extact}"
+    # loge "echo ${tarname} ${_pkgs}/${namever}.${extact} ${dirext} ${_src}" "tar_xpvf_namever.${extact}" # TOCOMMENT
     local lastlog=$(mrf "${_logs}" "*tar_xpvf*")
     local actualname=$(head -3 "${lastlog}"|tail -1)
     local anactualname=${actualname}
@@ -474,9 +492,11 @@ function untar() {
     # echo "namever ${namever} actualver %/* ${anactualname%/*} actualname%%/* ${anactualname%%/*}, actualname#*/ ${anactualname#*/}, actualname##*/ ${anactualname##*/}"
     if [[ "${namever}" != "${actualname}" ]] ; then
       echolog "ln do to: ln -fs ${actualname} ${_src}/${namever}"
+      # TOCOMMENT
       ln -fs "${actualname}" "${_src}/${namever}"
     fi
     # echo "D: ln -fs '${namever} ${_src}/${name}'"
+    # mkdir -p "${_src}/${namever}" # TOCOMMENT
     ln -fs "${namever}" "${_src}/${name}"
     # echo "D: ${H} > ${_src}/${namever}/.cmp"
     echo "${H}" > "${_src}/${namever}/.cmp"
@@ -547,6 +567,7 @@ function configure() {
       fi
       #pwd
       loge "${configcmd}" "configure_${namever}"
+      #loge "echo ${configcmd}" "configure_${namever}" # TOCOMMENT
     fi
   fi
   echo "done" > "${_src}/${namever}/._config"
@@ -570,13 +591,17 @@ function action() {
        #if [[ "${name}" == "perl" && "${actionname}" == "pre" ]] ; then echo eval xx ${actioncmd} xx ; fi
        #echo actioname ${actionname} gives actioncmd ${actioncmd}; eee
        if [[ "${actioncmd#@@}" != "${actioncmd}" ]] ; then
+       # if [[ "${actioncmd#@@}" == "${actioncmd}" ]] ; then # TOCOMMENT
          actioncmd="${actioncmd#@@}"
+         # TOCOMMENT 
          echo "${actioncmd}" > "./${actionname}"
+         # TOCOMMENT 
          chmod 755 "./${actionname}"
          actioncmd="./${actionname}"
        fi
        #echo pre ${pre} ; jj
        loge "eval ${actioncmd}" "${actionname}_${namever}"
+       # loge "echo ${actioncmd}" "${actionname}_${namever}" # TOCOMMENT
      fi
      # pwd
      # echo "done > ${actionpath}/._${actionstep}"
@@ -590,7 +615,7 @@ function isItDone() {
   local _isdone="$2"
   local aafrom="$3"
   local aisdone="false"
-  #echo "name ${name} from ${aafrom}: donelist ${donelist}"
+  # echo "D: isitdone name '${name}' from '${aafrom}': donelist '${donelist}'"
   if [[ "${donelist%@${name}@*}" != "${donelist}" ]] ; then aisdone="true" ; fi
   eval ${_isdone}="'${aisdone}'"
 }
@@ -600,6 +625,7 @@ function gocd() {
   get_param ${name} cdpath "${_src}/${namever}"
   cdpath=$(eval echo "${cdpath}")
   echolog "cd ${cdpath}"
+  # TOCOMMENT
   cd "${cdpath}"
 }
 
@@ -671,6 +697,8 @@ function build_item() {
       echo done > "${HUL}"/._linked/${namever} ;
     fi
     rm -f "${_src}/${namever}/.lck"
+    # if [[ "${type}" == "APP" ]] ; then mkdir -p "${HULA}/${namever}" ; fi # TOCOMMENT
+    # if [[ "${type}" == "LIB" ]] ; then mkdir -p "${HULS}/${namever}" ; fi # TOCOMMENT
     if [[ "${type}" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
     if [[ "${type}" == "LIB" && ! -e "${HULS}/${name}" ]] ; then  ln -fs "${namever}" "${HULS}/${name}" ; fi
     if [[ "${type}" == "LIB" && ! -e "${HULS}/${namever}" ]] ; then  rm -f "${HULS}/${name}" ; fi
@@ -682,39 +710,48 @@ function build_item() {
       if [[ "${atlddres}" != "0" ]] ; then  echolog "${namever} has improper libs" ; reset_compil "${name}" ; tldd_failed ; fi
     fi
     donelist="${donelist}@${name}@"
+    # echo "D: build_tem: donelist: '${donelist}'"
   fi
 }
 
 function build_line() {
   local line="$1"
   local lineori="$1"
-  #echo line ${line}
+  # echo "D: build_line line '${line}'"
   set -- junk ${line} ; shift
   local type=$1; local name=$2 ; local deps=${3//,/ }
   isItDone "${name}" aaisdone "${lineori}"
   if [[ "${aaisdone}" == "false" ]] ; then
-    #echo deps ${deps} for ${name} with ${type}
+    # echo "D: build_line not done: deps '${deps}' for '${name}' with '${type}'"
     declare -a Array=(${deps})
     for adep in "${Array[@]}"; do
-      #echo adep ${adep} for ${name} with ${type}
+      # echo "D: build_line adep '${adep}' for '${name}' with '${type}'"
       if [[ "${adep}" != "none" ]]; then
         adepline=$(egrep -e "((app|lib|mod) ${adep})|__no_deps__" "${_deps}")
-        #echo dep line: "xx${adepline}xx"
+        # echo "D: build_line: dep line: '${adepline}'"
         if [[ "${adepline}" == "__no_deps__" ]] ; then echolog "unable to find dependencies of ${adep}"; nodepfound ; fi
         adepline=$(echo "${adepline}" | egrep -e "${adep}")
+        # echo "D: build_line: dep line2: '${adepline}'"
         build_line "${adepline}"
       fi
     done
-    #echo done deps from ${name} with ${type}
+    # echo "D: build_line: done deps from ${name} with ${type}, now building '${name}'"
     if [[ ${type} == "app" ]] && [[ ${name} == "jdk" ]]; then getJDK "${lineori}";
     elif [[ ${type} == "app" ]]; then build_item "${name}" "APP" "${lineori}";
     elif [[ ${type} == "lib" ]] ; then build_item  "${name}" "LIB" "${lineori}";
     elif [[ ${type} == "mod" ]] ; then build_item "${name}" "MOD" "${lineori}"
     else echo "unknow type" ; exit 1 ; fi
+    # echo "D: build_line: done building '${name}'"
   fi
 }
 
-main $*
+while [[ "${gline}" != "__no_deps__" && "${gline}" != "${glastline}" ]] ; do 
+  if [[ "${gline}" == "_" ]] ; then gline="" ; fi
+  # echo "D: before main gline='${gline}', glastline='${glastline}'"
+  main $*
+  # echo "D: after main gline='${gline}', glastline='${glastline}'"
+done
+
 trap - EXIT
 echo -e "\e[00;32mAll Done.\e[00m"
 exit 0
