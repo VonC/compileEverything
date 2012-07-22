@@ -99,11 +99,16 @@ if [[ "${namever}" == "" ]] ; then
   fi
 fi
 
+if [[ "${namever}" == "" && -e "${H}/.cpl/src/${name}" ]] ; then
+  type="MOD"
+fi
+
 rm -f "${H}/usr/local/._linked/${name}-"*
+rm -f "${H}/usr/local/._linked/${name}"
 gen_sed -i "/\#${name}\#/ d" "${H}/.cpl/cache"
 rm -f "${src}/${name}/._${step}"
 
-if [[ "${namever}" == "" ]] ; then
+if [[ "${namever}" == ""  && "${type}" != "MOD" ]] ; then
   echo  -e "\e[1;31m! ${name} doesn't exist in ${HUL}/libs or /apps\e[0m" 1>&2
   exit 1
 fi
@@ -128,8 +133,8 @@ if [[ "${mixed}" == "true" ]] ; then
     echo "D: Check linkdst='${linkdst}', linksrc='${linksrc}'"
     echo "Removing links of ${type} ${namever}"; links "${linkdst}" "${linksrc}" false;
     if [[ "${type}" == "APP" ]] ; then
-      local l=$(ls "${HULA}/${namever}"/lib/*.so 2>/dev/null)
-      local l64=$(ls "${HULA}/${namever}"/lib64/*.so 2>/dev/null)
+      l=$(ls "${HULA}/${namever}"/lib/*.so 2>/dev/null)
+      l64=$(ls "${HULA}/${namever}"/lib64/*.so 2>/dev/null)
       if [[ "${l}" != "" ]] ; then
         echo "Removing links lib of ${type} ${namever}"; links "${HULL}" "${HULA}/${namever}/lib" false;
       fi
@@ -137,9 +142,9 @@ if [[ "${mixed}" == "true" ]] ; then
         echo "Removing links lib64 of ${type} ${namever}"; links "${HULL}" "${HULA}/${namever}/lib64" false;
       fi
     fi
+    rm -Rf "${root}/${namever}"
+    rm -f "${root}/${name}"
   fi
-  rm -Rf "${root}/${namever}"
-  rm -f "${root}/${name}"
 fi
 if [[ "${full}" == "true" ]] ; then
   echo "D: full"
@@ -156,5 +161,8 @@ if [[ "${delete}" == "true" ]] ; then
     rm -Rf "${src}/${actualnamever}"
     rm -f "${src}/${namever}"
   fi
-  rm -f "${src}/${name}"
+  if [[ "${type}" != "MOD" ]] ; then 
+    rm -f "${src}/${name}"
+  fi
+  rm -Rf "${src}/${name}" # true fro "MOD"
 fi

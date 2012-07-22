@@ -3130,8 +3130,50 @@ git@vonc-VirtualBox:~/.cpanm/work/1341659222.5126/version-0.99$ for i in $(find 
 
 Must debug svn2git Alien::SVN to check if it is *really* needed
 ~~~~~~~~~~~~~~~~~~~~~~
+Ubuntu: nginx runtime
+
+git@vonc-VirtualBox:~/.cpl$ nginx
+Can't load module nginx, dynamic loading not available in this perl.
+  (You may need to build a new perl executable which either supports
+  dynamic loading or has the nginx module statically linked into it.)
+ at -e line 0
+Compilation failed in require.
+BEGIN failed--compilation aborted.
+nginx: [alert] perl_parse() failed: 255
+
+If I redo perl:
+
+git@vonc-VirtualBox:~$ nginxd
+usage: /home/git/ces/ce5/sbin/nginxd {start|stop|restart|status|test|reload}
+git@vonc-VirtualBox:~$ nginxd test
+Can't locate nginx.pm in @INC (@INC contains: /home/git/ces/ce5/usr/local/apps/perl-5.12.3/lib/site_perl/5.12.3/i686-linux /home/git/ces/ce5/usr/local/apps/perl-5.12.3/lib/site_perl/5.12.3 /home/git/ces/ce5/usr/local/apps/perl-5.12.3/lib/5.12.3/i686-linux /home/git/ces/ce5/usr/local/apps/perl-5.12.3/lib/5.12.3 .).
+BEGIN failed--compilation aborted.
+nginx: [alert] perl_parse() failed: 2
+nginx: configuration file /home/git/ces/ce5/nginx/cnf test failed
+
+git@vonc-VirtualBox:~/usr/local$ find . -name "nginx.pm"
+./apps/perl-5.12.3/lib/site_perl/5.12.3/i686-linux/nginx.pm
+git@vonc-VirtualBox:~/usr/local$ vi ./apps/perl-5.12.3/lib/site_perl/5.12.3/i686-linux/nginx.pm
+
+require XSLoader;
+XSLoader::load('nginx', $VERSION);
+
+git@vonc-VirtualBox:~$ grep -nrHIF DynaLoader ../src/nginx/* 
+../src/nginx/objs/src/http/modules/perl/Makefile:449:# The DynaLoader only reads a non-empty file.
+../src/nginx/src/http/modules/perl/ngx_http_perl_module.h:60:extern void boot_DynaLoader(pTHX_ CV* cv);
+../src/nginx/src/http/modules/perl/ngx_http_perl_module.c:163:    newXS("DynaLoader::boot_DynaLoader", boot_DynaLoader, __FILE__);
 
 
+git@vonc-VirtualBox:~$ grep -nrHIF "ngx_http_perl_module.o" ../src/nginx/* 
+../src/nginx/objs/Makefile:232:	objs/src/http/modules/perl/ngx_http_perl_module.o \
+../src/nginx/objs/Makefile:373:	objs/src/http/modules/perl/ngx_http_perl_module.o \
+../src/nginx/objs/Makefile:1201:objs/src/http/modules/perl/ngx_http_perl_module.o:	$(CORE_DEPS) $(HTTP_DEPS) \
+../src/nginx/objs/Makefile:1204:		-o objs/src/http/modules/perl/ngx_http_perl_module.o \
+git@vonc-VirtualBox:~$ vi ../src/nginx/objs/Makefile
 
+objs/src/http/modules/perl/blib/arch/auto/nginx/nginx.so:               src/http/modules/perl/nginx.pm                      src/http/modules/perl/nginx     .xs                      src/http/modules/perl/ngx_http_perl_module.h                objs/src/http/modules/perl/Makefile
+1370     cp -p src/http/modules/perl/nginx.* objs/src/http/modules/perl/
+1371 
+1372     cd objs/src/http/modules/perl && make
 
 

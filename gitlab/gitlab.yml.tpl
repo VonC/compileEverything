@@ -29,7 +29,7 @@ app:
 # 2. Advanced settings: 
 # ==========================
 
-# Git Hosting congiguration
+# Git Hosting configuration
 git_host:
   admin_uri: gitolitesrv:gitolite-admin
   base_path: @H@/repositories/
