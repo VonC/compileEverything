@@ -34,10 +34,24 @@ if [[ ! -e "${H}/.ssh/known_hosts" ]] ; then
   touch "${H}/.ssh/known_hosts"
   chmod 644 "${H}/.ssh/known_hosts"
 fi
-k=$(ssh-keyscan -t rsa,dsa $(hostname) 2>&1 | sort -u - ~/.ssh/known_hosts)
-echo "k=$k"
+k=$(ssh-keyscan -t rsa,dsa $(hostname) 2>&1 | sort -u)
+# echo "k='${k}'"
 
 l=$(grep $(hostname) "${H}/.ssh/known_hosts")
+# echo "l='${l}'"
+if [[ "${k}" != "" && "${k}" != "${l}" ]] ; then
+  echo "${k}" >> "${H}/.ssh/known_hosts"
+fi
+
+sshd start
+l=$(grep "localhost" "${H}/.ssh/known_hosts")
+p=$(grep "@PORT_SSHD@" "${H}/.ports.ini")
+p=${p#*=}
+k=$(ssh-keyscan -t ecdsa -p ${p} localhost 2>&1 | grep ecdsa)
+# echo "k='${k}'"
+k="[localhost]:${p} ${k#* }"
+# echo "k='${k}'"
+# echo "l='${l}'"
 if [[ "${k}" != "" && "${k}" != "${l}" ]] ; then
   echo "${k}" >> "${H}/.ssh/known_hosts"
 fi

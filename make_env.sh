@@ -594,7 +594,8 @@ function action() {
        # if [[ "${actioncmd#@@}" == "${actioncmd}" ]] ; then # TOCOMMENT
          actioncmd="${actioncmd#@@}"
          # TOCOMMENT 
-         echo "${actioncmd}" > "./${actionname}"
+         echo "set -o errexit" > "./${actionname}"
+         echo "${actioncmd}" >> "./${actionname}"
          # TOCOMMENT 
          chmod 755 "./${actionname}"
          actioncmd="./${actionname}"

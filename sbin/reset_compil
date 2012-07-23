@@ -142,7 +142,7 @@ if [[ "${mixed}" == "true" ]] ; then
         echo "Removing links lib64 of ${type} ${namever}"; links "${HULL}" "${HULA}/${namever}/lib64" false;
       fi
     fi
-    rm -Rf "${root}/${namever}"
+    if [[ "${namever}" != "" ]] ; then rm -Rf "${root}/${namever}" ; fi
     rm -f "${root}/${name}"
   fi
 fi
@@ -155,14 +155,14 @@ fi
 if [[ "${delete}" == "true" ]] ; then
   echo "D: delete"
   actualnamever=$(readlink "${src}/${namever}")
-  if [[ "${actualnamever}" == "" ]] ; then
-    rm -Rf "${src}/${namever}"
-  else
-    rm -Rf "${src}/${actualnamever}"
-    rm -f "${src}/${namever}"
-  fi
   if [[ "${type}" != "MOD" ]] ; then 
+    if [[ "${actualnamever}" == "" ]] ; then
+      if [[ "${namever}" != "" ]] ; then rm -Rf "${src}/${namever}" ; fi
+    else
+      if [[ "${actualnamever}" != "" ]] ; then rm -Rf "${src}/${actualnamever}" ; fi
+      rm -f "${src}/${namever}"
+    fi
     rm -f "${src}/${name}"
   fi
-  rm -Rf "${src}/${name}" # true fro "MOD"
+  if [[ "${name}" != "" ]] ; then rm -Rf "${src}/${name}" ; fi # true from "MOD"
 fi
