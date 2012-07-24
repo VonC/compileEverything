@@ -6,24 +6,35 @@ case "$1" in
   "${H}/sbin/slapdd" start
   "${H}/sbin/ctld" start
   "${H}/sbin/nginxd" start
+  "${H}/mysql/sandboxes/gitlab/start"
+  "${H}/sbin/redisd" start
+  "${H}/sbin/gitlabd" start
   ;;
 'stop')
   "${H}/sbin/sshd" stop
   "${H}/sbin/slapdd" stop
   "${H}/sbin/ctld" stop
   "${H}/sbin/nginxd" stop
+  "${H}/sbin/gitlabd" stop
+  "${H}/sbin/redisd" stop
+  "${H}/mysql/sandboxes/gitlab/stop"
   ;;
 'restart')
   "${H}/sbin/sshd" restart
   "${H}/sbin/slapdd" restart
   "${H}/sbin/ctld" restart
   "${H}/sbin/nginxd" restart
+  "${H}/mysql/sandboxes/gitlab/restart"
+  "${H}/sbin/redisd" restart
+  "${H}/sbin/gitlabd" restart
 ;;
 'status')
   "${H}/sbin/ctld" status
   "${H}/sbin/sshd" status
   "${H}/sbin/slapdd" status
   "${H}/sbin/nginxd" status
+  "${H}/sbin/redisd" status
+  "${H}/mysql/sandboxes/gitlab/status"
   ;;
 'test')
   "${H}/sbin/ctld" test
@@ -32,6 +43,7 @@ case "$1" in
 'reload')
   "${H}/sbin/ctld" reload
   "${H}/sbin/nginxd" reload
+  "${H}/sbin/gitlabd" reload
   ;;
 *)
   echo "usage: ${H}/sbin/demod {start|stop|restart|status|test|reload}"

@@ -443,6 +443,7 @@ function get_tar() {
 }
 function rmIfNeeded() {
   removing=false
+  # echo "D: rmIfNeeded namever='${namever}'"
   if [[ -e "${_src}/${namever}/.lck" ]]; then
     local lock=$(cat "${_src}/${namever}/.lck")
     if [[ "${lock}" != "${H}" ]] ; then
@@ -468,6 +469,11 @@ function rmIfNeeded() {
     rm -Rf "${rmdst}"
     rm -f "${_src}/${namever}"
     rm -f "${_src}/${name}"
+    if [[ "${type}" == "MOD" ]] ; then
+      mkdir "${_src}/${namever}"
+      echo "${H}" > "${_src}/${namever}/.cmp"
+      echo "${H}" > "${_src}/${namever}/.lck"
+    fi
   fi
 }
 function untar() {
@@ -663,7 +669,10 @@ function build_item() {
     local asrc="${_src}/${namever}"
     if [[ "${type}" == "MOD" ]] ; then mkdir -p "${asrc}" ; fi
     sc
-    if [[ "${type}" != "MOD" ]] ; then untar ${name} ${namever} ; fi
+    if [[ "${type}" != "MOD" ]] ; then untar ${name} ${namever} ; else
+      # echo "D: MOD namever='${namever}'"
+      rmIfNeeded
+    fi
     action ${name} ${namever} precond "${asrc}" precond "none"
     gocd ${name} ${namever}
     action ${name} ${namever} pre "${asrc}" pre "none"
@@ -694,6 +703,7 @@ function build_item() {
           fi
           echo "done" > "${asrc}/._links"
         fi
+        action ${name} ${namever} postcheck "${asrc}" postcheck "none"
       fi
       echo done > "${HUL}"/._linked/${namever} ;
     fi

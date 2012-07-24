@@ -1,2 +1,2 @@
-configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-zlib=${HUL} --with-ssl-engine=${HUL}/ssl --without-privsep-user --with-pid-dir=${HUL}/var/run --with-default-path=@@PATH@@ --with-privsep-path=${HUL}/var/empty @@WITHOUT_GNU_LD@@
-post="${H}/openssh/post_install_ssh.sh"
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static --with-zlib=${HUL} --with-ssl-engine=${HUL}/ssl --without-privsep-user --with-pid-dir=${HUL}/var/run --with-default-path=@@PATH@@ --with-privsep-path=${HUL}/var/empty @@WITHOUT_GNU_LD@@
+postcheck="${H}/openssh/post_install_ssh.sh"

@@ -1,10 +1,16 @@
 #! /bin/bash
 
+if [[ ! -e "${HULA}/openssh" ]] ; then
+  aln=$(find "${HULA}" -maxdepth 1  -type d -name "openssh*")
+  aln=${aln##*/}
+  # echo "D: aln='${aln}'"
+  ln -fs "${aln}" "${HULA}/openssh"
+fi
 auser=$(id -nu)
-aps=$(ps -ef|grep ${auser}|grep "${H}/usr/local/sbin/sshd"|grep -v grep|awk '{print $2}')
+aps=$(ps -ef|grep ${auser}|grep "${H}/usr/local/apps/openssh/sbin/sshd"|grep -v grep|awk '{print $2}')
 afps=""
-if [[ -e "${H}/usr/local/var/run/sshd.pid" ]] ; then 
-  afps=$(cat "${H}/usr/local/var/run/sshd.pid")
+if [[ -e "${H}/usr/local/apps/openssh/var/run/sshd.pid" ]] ; then 
+  afps=$(cat "${H}/usr/local/apps/openssh/var/run/sshd.pid")
 fi
 
 # echo "aps ${aps}, afps ${afps}"
@@ -14,7 +20,7 @@ case "$1" in
 'start')
   if [[ "$aps" == "" ]] ; then
     echo starting sshd
-    "${H}/usr/local/sbin/sshd" -f "${H}/.ssh/cnf"
+    "${H}/usr/local/apps/openssh/sbin/sshd" -f "${H}/.ssh/cnf"
   else
     echo "sshd already started, process ${aps}"
   fi
@@ -23,7 +29,7 @@ case "$1" in
   if [[ "$aps" != "" ]] ; then
     echo stopping sshd
     kill -9 "${aps}"
-    rm -f "${H}/usr/local/var/run/sshd.pid"
+    rm -f "${H}/usr/local/apps/openssh/var/run/sshd.pid"
   else
     echo "sshd already stopped"
   fi
@@ -35,7 +41,7 @@ case "$1" in
 'debug')
   sshd stop
   echo "starting sshd in a one-shot debug session (logs on stdout)"
-  "${H}/usr/local/sbin/sshd" -d -f "${H}/.ssh/cnf"
+  "${H}/usr/local/apps/openssh/sbin/sshd" -d -f "${H}/.ssh/cnf"
 ;;
 'status')
   if [[ "${aps}" == "" ]] ; then
@@ -44,11 +50,11 @@ case "$1" in
     echo "sshd running, process ${aps}"
   fi
   if [[ "${afps}" != "${aps}" ]] ; then
-    echo "Warning, the sshd pid recorded ~/usr/local/var/run/sshd.pid _${afps}_ is not the same than the running one: ${aps}"
+    echo "Warning, the sshd pid recorded ~/usr/local/apps/openssh/var/run/sshd.pid _${afps}_ is not the same than the running one: ${aps}"
   fi
   ;;
 'test')
-  "${H}/usr/local/sbin/sshd" -T -f "${H}/.ssh/cnf"
+  "${H}/usr/local/apps/openssh/sbin/sshd" -T -f "${H}/.ssh/cnf"
 ;;
 *)
   echo "usage: ${H}/sbin/sshd {start|stop|restart|status|test|debug}"

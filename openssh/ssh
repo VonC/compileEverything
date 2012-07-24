@@ -1,2 +1,2 @@
 #!/bin/bash
-"${H}/usr/local/bin/ssh" -F "${H}/.ssh/config" "$@"
+"${H}/bin/ssh" -F "${H}/.ssh/config" "$@"
