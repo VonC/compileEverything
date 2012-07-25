@@ -3176,4 +3176,17 @@ objs/src/http/modules/perl/blib/arch/auto/nginx/nginx.so:               src/http
 1371 
 1372     cd objs/src/http/modules/perl && make
 
+=> CAUSED BY EMPTY .ld files in perl, supposed to list all the necessary .o!
+
+=> TODO find solution on Ubuntu (works fine on RedHat)
+
+~~~~~~~~~~~~~~~~~~~~~~~~
+ldap_sasl_bind(SIMPLE): Can't contact LDAP server (-1)
+(no amount of getting back the cert is enough)
+Caused by .ldaprc (which links to openldap/ldap.conf) #TLS_REQCERT demand request => comment for now
+Actually, TLS_REQCERT allow is more permissive, make it work for now
+
+The server certificate is requested. If no certificate is provided, the session proceeds normally. If a bad certificate is provided, it will be ignored and the session proceeds normally.
+~~~~~~~~~~~~~~~~~~~~~~~~
+
 

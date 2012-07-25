@@ -22,6 +22,8 @@ if [[ -e "${PIDFILE}" ]] ; then
   afps=$(cat "${PIDFILE}")
 fi
 
+if [[ ! -e "${H}/openldap/db.1.a" ]] ; then mkdir -p "${H}/openldap/db.1.a" ; fi
+
 # echo "aps ${aps}, afps ${afps}"
 
 case "$1" in

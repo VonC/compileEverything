@@ -60,6 +60,6 @@ if [[ "${k}" != "" ]]; then
   # echo "D: 1k='${k}'"
   # echo "D: 0l='${l}'"
   if [[ "${k}" != "" && "${k}" != "${l}" ]] ; then
-  # echo "${k}" >> "${H}/.ssh/known_hosts"
+    echo "${k}" >> "${H}/.ssh/known_hosts"
   fi
 fi

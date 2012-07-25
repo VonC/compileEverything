@@ -120,3 +120,5 @@ dump.rdb
 /.pyhistory
 /nxlog/nxlog.conf
 *.private
+/openldap/db.1.a/
+/openldap/ini_ldap_db.sh

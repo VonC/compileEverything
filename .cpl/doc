@@ -771,4 +771,12 @@ user: admin@local.host
 pass: 5iveL!fe
 
 ~~~~~~~~~~~~
+Creative use of read to simulate a pause in bash (bash pause or bash sleep like in DOS)
+http://stackoverflow.com/a/92813/6309
+
+If you are using bash, you can also specify a timeout with -t, which causes read to return a failure when a key isn't pressed. So for example:
+
+read -t5 -n1 -r -p "Press any key in the next five seconds..." key
+
+~~~~~~~~~~~~~~~~
 
