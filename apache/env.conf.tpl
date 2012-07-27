@@ -71,7 +71,7 @@ Listen @PORT_HTTP_GITWEB@
         AuthName "LDAP authentication for ITSVC Prod GitWeb repositories"
         AuthType Basic
         AuthBasicProvider myldap companyldap
-        AuthzLDAPAuthoritative On
+        AuthzLDAPAuthoritative Off
         Require valid-user
 
         AddHandler cgi-script cgi
@@ -118,7 +118,7 @@ Listen @PORT_HTTP_HGIT@
         AuthName "LDAP authentication for ITSVC Smart HTTP Git repositories"
         AuthType Basic
         AuthBasicProvider myldap companyldap
-        AuthzLDAPAuthoritative On
+        AuthzLDAPAuthoritative Off
         Require valid-user
         AddHandler cgi-script cgi
     </Location>
@@ -164,7 +164,7 @@ Listen @PORT_HTTP_CGIT@
         AuthName "LDAP authentication for ITSVC CGit repositories"
         AuthType Basic
         AuthBasicProvider myldap companyldap
-        AuthzLDAPAuthoritative On
+        AuthzLDAPAuthoritative Off
         Require valid-user
 
         #RewriteCond %{REQUEST_FILENAME} !-f

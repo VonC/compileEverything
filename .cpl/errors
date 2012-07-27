@@ -3187,6 +3187,18 @@ Caused by .ldaprc (which links to openldap/ldap.conf) #TLS_REQCERT demand reques
 Actually, TLS_REQCERT allow is more permissive, make it work for now
 
 The server certificate is requested. If no certificate is provided, the session proceeds normally. If a bad certificate is provided, it will be ignored and the session proceeds normally.
+
+However, true solution is to dig in order to get to the root CA:
+echo -n | openssl s_client -showcerts -connect your.ldap.server:xxx | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > ldapserver.pem
+or
+openssl s_client -showcerts -connect your.ldap.server:xxx | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > ldapserver.pem </dev/null
+then:
+openssl x509 -in ldapserver.pem -noout -text
+Extract first of 'Authority Information Access:'
+wget http://a.server/CertEnroll/Company%20Certificate.crt
+openssl x509 -inform der -in Company\ Certificate.crt -out Company\ Certificate.pem
+openssl x509 -in Company\ Certificate.pem -noout -text
+Repeat until get to root CA, which has no 'Authority Information Access:' in it
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 

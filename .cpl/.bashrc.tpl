@@ -173,3 +173,5 @@ export CMAKE_SYSTEM_IGNORE_PATH="/lib/i386-linux-gnu:/usr/lib64:/usr/lib"
 export CMAKE_IGNORE_PATH="/lib/i386-linux-gnu:/usr/lib64:/usr/lib"
 export CMAKE_SYSTEM_LIBRARY_PATH="/lib:/usr/lib"
 export CMAKE_PROGRAM_PATH="${HB}"
+
+if [[ -e "${H}/sbin/ssh" ]] ; then export GIT_SSH="${H}/sbin/ssh" ; fi
