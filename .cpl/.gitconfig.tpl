@@ -15,3 +15,7 @@
 
 [http]
 	sslcainfo = @H@/.ssh/curl-ca-bundle.crt
+[user]
+    name = gitoliteadm
+    email = gitoliteadm@mail.com
+
