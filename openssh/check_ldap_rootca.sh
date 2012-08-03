@@ -4,7 +4,7 @@ if [[ -e "${H}/.ldap.private" ]] ; then f="${H}/.ldap.private"  ;
 elif [[ -e "${H}/../.ldap.private" ]] ; then f="${H}/../.ldap.private" ; fi
 echo "f='${f}'"
 
-CAs="${H}/.ssh/curl-ca-bundle.crtb"
+CAs="${H}/.ssh/curl-ca-bundle.crt"
 e=$(openssl s_client -connect glue.systems.uk.hsbc:3269 -CAfile "${CAs}" 2>/dev/null < /dev/null | grep "unable to get local issuer certificate")
 if [[ "${e}" != "" ]] ; then
   echo "get root CA for"

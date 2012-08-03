@@ -51,6 +51,7 @@ do
       ok="false"
       if [[ "${name}" == "" ]] ; then ok="true" ; fi
       if [[ "${ok}" == "false" && "${value#${HUL}/}" != "${value}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${value#${H}/.cpanm/}" != "${value}" ]] ; then ok="true" ; fi
 
       if [[ "${ok}" == "false" && "${name#linux-gate.so}" != "${name}" ]] ; then ok="true" ; fi
       if [[ "${ok}" == "false" && "${name#linux-vdso.so}" != "${name}" ]] ; then ok="true" ; fi
