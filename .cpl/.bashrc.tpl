@@ -8,8 +8,10 @@ echo ${0} executed for @@TITLE@@
 function bashscriptpath() {
   local _sp=$1
   local ascript="$0"
-  local asp="$(dirname $0)"
-  #echo "D: b1 asp '$asp', b1 ascript '$ascript'"
+  if [[ "${ascript}" == "-bash" ]] ; then ascript="bash" ; fi
+  # echo "D: b0 ascript '$ascript'"
+  local asp="$(dirname ${ascript})"
+  # echo "D: b1 asp '$asp', b1 ascript '$ascript'"
   if [[ "$asp" == "." && "$ascript" != "bash" && "$ascript" != "./.bashrc" ]] ; then asp="${BASH_SOURCE[0]%/*}"
   elif [[ "$asp" == "." && "$ascript" == "./.bashrc" ]] ; then asp=$(pwd)
   else

@@ -43,14 +43,26 @@ fullFilePathDst="${fullPathDst}/${fileDst}"
 echo cp -f "${fullFilePathOri}" "${fullFilePathDst}"
 cp -f "${fullFilePathOri}" "${fullFilePathDst}"
 
+cptpl_uname=$(uname)
+hostnames="hostname -s"
+if [[ "${cptpl_uname#CYGWIN}" != "${cptpl_uname}" ]] ; then
+  echo "CYGWIN"
+  hostnames="hostname"
+  # echo $(${hostnames})
+fi
+
 gen_sed -i "s;@H@;${H};g" "${fullFilePathDst}"
-gen_sed -i "s/@HOSTNAME@/$(hostname -s)/g" "${fullFilePathDst}"
+gen_sed -i "s/@HOSTNAME@/$(${hostnames})/g" "${fullFilePathDst}"
 gen_sed -i "s/@USERNAME@/$(/usr/bin/id -un)/g" "${fullFilePathDst}"
 gen_sed -i "s/@GROUPNAME@/$(/usr/bin/id -un)/g" "${fullFilePathDst}"
 gen_sed -i "s;@@TITLE@@;${H};g" "${fullFilePathDst}"
 
 #fqn=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*}
-fqn=$(/usr/bin/host -TtA $(hostname -s)|grep "has address"|/usr/bin/awk '{print $1}') ; if [[ "${fqn}" == "" ]] ; then fqn=$(hostname -s) ; fi
+if [[ "${cptpl_uname#CYGWIN}" != "${cptpl_uname}" ]] ; then
+  fqn=$(${hostnames})
+else
+  fqn=$(/usr/bin/host -TtA $(hostname -s)|grep "has address"|/usr/bin/awk '{print $1}') ; if [[ "${fqn}" == "" ]] ; then fqn=$(hostname -s) ; fi
+fi
 gen_sed -i "s/@FQN@/${fqn}/g" "${fullFilePathDst}"
 fqnemail=${fqn/./@}
 gen_sed -i "s/@EMAIL@/${fqnemail}/g" "${fullFilePathDst}"
