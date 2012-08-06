@@ -122,3 +122,4 @@ dump.rdb
 *.private
 /openldap/db.1.a/
 /openldap/ini_ldap_db.sh
+/openssh/check_ldap_rootca.sh

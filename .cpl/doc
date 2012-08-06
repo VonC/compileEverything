@@ -779,4 +779,5 @@ If you are using bash, you can also specify a timeout with -t, which causes read
 read -t5 -n1 -r -p "Press any key in the next five seconds..." key
 
 ~~~~~~~~~~~~~~~~
-
+Remove sensible name:
+anhostname /home/auser/ce8 #git filter-branch -f --tree-filter "find . -type f -name "check_ldap_rootca.sh" -exec sed -i -e 's/ldapservername:port/@LDAP_HOSTNAME@:@LDAP_PORT@/g' {} \;" 7117962..HEAD
