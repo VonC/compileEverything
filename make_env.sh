@@ -479,7 +479,7 @@ function rmIfNeeded() {
 function untar() {
   local name=$1
   local namever=$2
-  if [[ -e "${_src}/${namever}" ]]; then
+  if [[ -d "${_src}/${namever}" || -h "${_src}/${namever}" ]]; then
     rmIfNeeded
   fi
   if [[ ! -e "${_src}/${namever}" ]]; then
