@@ -1,0 +1,7 @@
+page=http://ftp.gnu.org/gnu/glibc/?O=D;C=M
+url=http://ftp.gnu.org/gnu/glibc/
+verexclude=ports
+precond=set -e ; mkdir -p ${H}/.cpl/src/@@NAMEVER@@/glibc-build ; set +e
+cdpath=${H}/.cpl/src/@@NAMEVER@@/glibc-build
+makefile=glibc-build/Makefile
+configcmd=../configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared

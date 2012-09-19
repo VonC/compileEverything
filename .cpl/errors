@@ -1613,7 +1613,7 @@ ngx_http_perl_module.o
 ../../../core/ngx_array.o
 ../../../core/ngx_conf_file.o
 
-g++  --shared  -Wl,--enable-auto-import -Wl,--export-all-symbols -Wl,--stack,8388608 -Wl,--enable-auto-image-base -L/home/43640119/compileEverything/usr/local/lib nginx.o ../../../core/ngx_log.o ../../../core/ngx_palloc.o ngx_http_perl_module.o ../../../core/ngx_buf.o ../../ngx_http_core_module.o ../../../core/ngx_hash.o ../../../core/ngx_string.o ../../ngx_http_request_body.o ../../../core/ngx_list.o ../../../core/ngx_open_file_cache.o ../../ngx_http_variables.o ../../../core/ngx_array.o ../../../core/ngx_conf_file.o -o blib/arch/auto/nginx/nginx.dll /home/43640119/compileEverything/usr/local/apps/perl-5.12.3/lib/5.12.3/cygwin-thread-multi-64int/CORE/cygperl5_12_3.dll
+g++  --shared  -Wl,--enable-auto-import -Wl,--export-all-symbols -Wl,--stack,8388608 -Wl,--enable-auto-image-base -L/home/auser/compileEverything/usr/local/lib nginx.o ../../../core/ngx_log.o ../../../core/ngx_palloc.o ngx_http_perl_module.o ../../../core/ngx_buf.o ../../ngx_http_core_module.o ../../../core/ngx_hash.o ../../../core/ngx_string.o ../../ngx_http_request_body.o ../../../core/ngx_list.o ../../../core/ngx_open_file_cache.o ../../ngx_http_variables.o ../../../core/ngx_array.o ../../../core/ngx_conf_file.o -o blib/arch/auto/nginx/nginx.dll /home/auser/compileEverything/usr/local/apps/perl-5.12.3/lib/5.12.3/cygwin-thread-multi-64int/CORE/cygperl5_12_3.dll
 
 
 ~~~~~~~~~~~~~~~~
@@ -3200,5 +3200,74 @@ openssl x509 -inform der -in Company\ Certificate.crt -out Company\ Certificate.
 openssl x509 -in Company\ Certificate.pem -noout -text
 Repeat until get to root CA, which has no 'Authority Information Access:' in it
 ~~~~~~~~~~~~~~~~~~~~~~~~
+Cygwin make gettext
 
+gcc -std=gnu99 -DLOCALEDIR=\"/home/auser/ce1/usr/local/libs/gettext-0.18.1.1/share/locale\" -DBISON_LOCALEDIR=\"\"  -DLOCALE_ALIAS_PATH=\"/home/auser/ce1/usr/local/libs/gettext-0.18.1.1/share/locale\"  -DUSEJAVA=0  -DUSEJEXE=0  -DGETTEXTJEXEDIR=\"/home/auser/ce1/usr/local/libs/gettext-0.18.1.1/lib/gettext\"  -DGETTEXTJAR=\"/home/auser/ce1/usr/local/libs/gettext-0.18.1.1/share/gettext/gettext.jar\"  -DLIBDIR=\"/home/auser/ce1/usr/local/libs/gettext-0.18.1.1/lib\"  -DGETTEXTDATADIR=\"/home/auser/ce1/usr/local/libs/gettext-0.18.1.1/share/gettext\"  -DPROJECTSDIR=\"/home/auser/ce1/usr/local/libs/gettext-0.18.1.1/share/gettext/projects\" -DHAVE_CONFIG_H -I. -I..  -I. -I.  -I.. -I..  -I../libgrep  -I../gnulib-lib -I../gnulib-lib  -I../intl -I../../gettext-runtime/intl -DINSTALLDIR=\"/home/auser/ce1/usr/local/libs/gettext-0.18.1.1/bin\" -I/home/auser/ce1/usr/local/include -I/home/auser/ce1/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL  -I/home/auser/ce1/usr/local/include -I/home/auser/ce1/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -c -o msgcmp-msgl-fsearch.o `test -f 'msgl-fsearch.c' || echo './'`msgl-fsearch.cwindres `/bin/sh ../../windows/windres-options --escape 0.18.1` -i ../../windows/gettext.rc -o gettext.res --output-format=coff/bin/sh ../libtool  --tag=CC    --mode=link gcc -std=gnu99  -I/home/auser/ce1/usr/local/include -I/home/auser/ce1/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL   -L/home/auser/ce1/usr/local/lib -L/home/auser/ce1/usr/local/ssl/lib -L/home/auser/ce1/usr/local/apps/python/lib -Wl,-rpath=/home/auser/ce1/usr/local/lib:/home/auser/ce1/usr/local/ssl/lib:/home/auser/ce1/usr/local/apps/svn/lib:/home/auser/ce1/usr/local/apps/python/lib:/home/auser/ce1/usr/local/apps/gcc/lib -Wl,--disable-auto-import -o msgcmp.exe msgcmp-msgcmp.o  msgcmp-msgl-fsearch.o libgettextsrc.la   gettext.res
 
+libtool: link: gcc -std=gnu99 -I/home/auser/ce1/usr/local/include -I/home/auser/ce1/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -Wl,-rpath=/home/auser/ce1/usr/local/lib:/home/auser/ce1/usr/local/ssl/lib:/home/auser/ce1/usr/local/apps/svn/lib:/home/auser/ce1/usr/local/apps/python/lib:/home/auser/ce1/usr/local/apps/gcc/lib -Wl,--disable-auto-import -o msgcmp.exe msgcmp-msgcmp.o msgcmp-msgl-fsearch.o gettext.res  -L/home/auser/ce1/usr/local/lib -L/home/auser/ce1/usr/local/ssl/lib -L/home/auser/ce1/usr/local/apps/python/lib ./.libs/libgettextsrc.a /home/auser/src/gettext-0.18.1.1/gettext-tools/gnulib-lib/.libs/libgettextlib.a /home/auser/ce1/usr/local/libs/libxml2-2.8.0/lib/libxml2.dll.a -lz /home/auser/src/gettext-0.18.1.1/gettext-tools/intl/.libs/libintl.a /home/auser/ce1/usr/local/libs/libiconv-1.14/lib/libiconv.dll.a -L/home/auser/ce1/usr/local/libs/libxml2-2.8.0/lib -L/home/auser/ce1/usr/local/libs/libiconv-1.14/lib -L/home/auser/ce1/usr/local/libs/libxml2-2.8.0/lib -L/home/auser/ce1/usr/local/libs/libiconv-1.14/libmsgcmp-msgcmp.o:msgcmp.c:(.text+0x32): undefined reference to `_error_print_progname'
+
+msgcmp-msgcmp.o:msgcmp.c:(.text+0x6a1): undefined reference to `_error_message_count'
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/../../../../i686-pc-cygwin/bin/ld: msgcmp-msgcmp.o: bad reloc address 0x80 in section `.rdata'
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/../../../../i686-pc-cygwin/bin/ld: final link failed: Invalid operation
+collect2: ld returned 1 exit status
+Makefile:1979: recipe for target `msgcmp.exe' failed
+make[4]: *** [msgcmp.exe] Error 1
+make[4] : on quitte le répertoire « /home/auser/src/gettext-0.18.1.1/gettext-tools/src »
+Makefile:1832: recipe for target `all' failed
+make[3]: *** [all] Error 2
+make[3] : on quitte le répertoire « /home/auser/src/gettext-0.18.1.1/gettext-tools/src »
+Makefile:1408: recipe for target `all-recursive' failed
+make[2]: *** [all-recursive] Error 1
+make[2] : on quitte le répertoire « /home/auser/src/gettext-0.18.1.1/gettext-tools »
+Makefile:1273: recipe for target `all' failed
+make[1]: *** [all] Error 2
+make[1] : on quitte le répertoire « /home/auser/src/gettext-0.18.1.1/gettext-tools »
+Makefile:277: recipe for target `all-recursive' failed
+
+Potentially miss error_message_count from glic,... which cannot be recompiled (not supported on Cygwin, gcc 3.4.2 too old) => reset gettext to an older version)
+~~~~~~~~~~~~~~~~~~~~
+Cygwin issue on gcc-3.4.6 compilation
+
+ make[1] : on entre dans le répertoire « /home/auser/src/gcc-3.4.6/objdir/gcc »
+ make \
+   CFLAGS="-I/home/auser/ce1/usr/local/include -I/home/auser/ce1/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -W -Wall -Wwrite-strings -
+ Wstrict-prototypes -Wmissing-prototypes -pedantic -Wno-long-long  " \
+   CONFIG_H="tconfig.h ../../gcc/../include/ansidecl.h ../../gcc/config/i386/xm-cygwin.h" TM_H="tm.h      ../../gcc/config/i386/i386.h ../../gcc/config/i386/
+ unix.h ../../gcc/config/i386/bsd.h ../../gcc/config/i386/gas.h ../../gcc/config/dbxcoff.h ../../gcc/config/i386/cygming.h ../../gcc/config/i386/cygwin.h ../
+ ../gcc/defaults.h insn-constants.h insn-flags.h" \
+   INCLUDES="-I. -I. -I../../gcc -I../../gcc/. -I../../gcc/../include " \
+   MAKEOVERRIDES= \
+   -f libgcc.mk all
+ make[2] : on entre dans le répertoire « /home/auser/src/gcc-3.4.6/objdir/gcc »
+ for d in libgcc; do \
+   if [ -d $d ]; then true; else /bin/sh ../../gcc/mkinstalldirs $d; fi; \
+ done
+ if [ -f stmp-dirs ]; then true; else touch stmp-dirs; fi
+ make[2] : on quitte le répertoire « /home/auser/src/gcc-3.4.6/objdir/gcc »
+ make[1] : on quitte le répertoire « /home/auser/src/gcc-3.4.6/objdir/gcc »
+ Checking multilib configuration...
+ multilib.out is unchanged
+ make[1] : on entre dans le répertoire « /home/auser/src/gcc-3.4.6/objdir/i686-pc-cygwin/libiberty »
+ if [ x"" != x ]; then \
+   /home/auser/ce1/.cpl/src/gcc-3.4.6/objdir/gcc/xgcc -B/home/auser/ce1/.cpl/src/gcc-3.4.6/objdir/gcc/ -B/home/auser/ce1/usr/local/apps/gcc-3.4.6/i6
+ 86-pc-cygwin/bin/ -B/home/auser/ce1/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/lib/ -isystem /home/auser/ce1/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/incl
+ ude -isystem /home/auser/ce1/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/sys-include -c -DHAVE_CONFIG_H -O2 -I/home/auser/ce1/usr/local/include -I/home/43
+ 640119/ce1/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I. -I../../../libiberty/../include  -W -Wall -Wtraditional -pedantic  ../../../libib
+ erty/strsignal.c -o pic/strsignal.o; \
+ else true; fi
+ /home/auser/ce1/.cpl/src/gcc-3.4.6/objdir/gcc/xgcc -B/home/auser/ce1/.cpl/src/gcc-3.4.6/objdir/gcc/ -B/home/auser/ce1/usr/local/apps/gcc-3.4.6/i686
+ -pc-cygwin/bin/ -B/home/auser/ce1/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/lib/ -isystem /home/auser/ce1/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/includ
+ e -isystem /home/auser/ce1/usr/local/apps/gcc-3.4.6/i686-pc-cygwin/sys-include -c -DHAVE_CONFIG_H -O2 -I/home/auser/ce1/usr/local/include -I/home/4364
+ 0119/ce1/usr/local/ssl/include -O -U_FORTIFY_SOURCE -DHAVE_STRSIGNAL -I. -I../../../libiberty/../include  -W -Wall -Wtraditional -pedantic ../../../libibert
+ y/strsignal.c -o strsignal.o
+ ../../../libiberty/strsignal.c: In function `psignal':
+ ../../../libiberty/strsignal.c:563: error: argument "signo" doesn't match prototype
+ /usr/include/signal.h:27: error: prototype declaration
+ ../../../libiberty/strsignal.c:563: error: argument "message" doesn't match prototype
+ /usr/include/signal.h:27: error: prototype declaration
+ ../../../libiberty/strsignal.c:568: warning: comparison between signed and unsigned
+ make[1]: *** [strsignal.o] Erreur 1
+ make[1] : on quitte le répertoire « /home/auser/src/gcc-3.4.6/objdir/i686-pc-cygwin/libiberty »
+ make: *** [all-target-libiberty] Erreur 2
+ => to check
+ 
