@@ -781,3 +781,11 @@ read -t5 -n1 -r -p "Press any key in the next five seconds..." key
 ~~~~~~~~~~~~~~~~
 Remove sensible name:
 anhostname /home/auser/ce8 #git filter-branch -f --tree-filter "find . -type f -name "check_ldap_rootca.sh" -exec sed -i -e 's/ldapservername:port/@LDAP_HOSTNAME@:@LDAP_PORT@/g' {} \;" 7117962..HEAD
+~~~~~~~~~~~~~~~~
+How to remove vi or vim line numbers
+Sequence of keys: esc followed by: 
+ :set nonumber
+~~~~~~~~~~~~~~~~
+Undefined reference: search with error redirection:  /usr/lib #nm -Ap *.so 2>/dev/null | grep libintl_textdomain
+~~~~~~~~~~~~~~~~
+

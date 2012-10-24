@@ -1,0 +1,1 @@
+g++ -o conftest -L/devit_home/users/vobadm/gitpoc/ce1/usr/local/lib conftest.cpp -lintl

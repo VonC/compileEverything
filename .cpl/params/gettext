@@ -1,4 +1,4 @@
-#page=http://www.gnu.org/s/gettext/
+page=http://www.gnu.org/s/gettext/
 url=http://ftp.gnu.org/pub/gnu/gettext/
 makefile=Makefile
-configcmd=./configure --prefix=${HUL}/libs/@@NAMEVER@@ --disable-shared --enable-static --with-libiconv-prefix=${HUL} --with-libexpat-prefix=${HUL} --with-libxml2-prefix=${HUL} --disable-libasprintf --with-included-gettext @@WITH_GNU_LD@@
+configcmd=./configure --prefix=${HUL}/libs/@@NAMEVER@@ --enable-shared --enable-static --with-libiconv-prefix=${HUL} --with-libexpat-prefix=${HUL} --with-libxml2-prefix=${HUL} --disable-libasprintf --with-included-gettext @@WITH_GNU_LD@@

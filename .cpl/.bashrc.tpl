@@ -76,6 +76,7 @@ if [[ -e "${HUL}/apps/ant" ]] ; then
   export ANT_HOME="${HUL}/apps/ant"
 else
   export -n ANT_HOME
+  unset ANT_HOME
 fi
 #export GITOLITE_HTTP_HOME=${H}
 export GITOLITE_HOME="${H}/gitolite"
@@ -83,13 +84,20 @@ export PATH="${PATH}":"${GITOLITE_HOME}/bin"
 export PATH="${PATH}":/sbin:/bin:/usr/sbin:/usr/bin
 
 export -n NGX_PM_CFLAGS
+unset NGX_PM_CFLAGS
 export -n CC
+unset CC
 export CC=gcc
 export -n LDDLFLAGS
+unset LDDLFLAGS
 export -n LD_LIBRARY_PATH
+unset LD_LIBRARY_PATH
 export -n PKG_CONFIG_PATH
+unset PKG_CONFIG_PATH
 export -n PERL_LIB
+unset PERL_LIB
 export -n NGX_AUX
+unset NGX_AUX
 
 export LD_RUN_PATH="${HULL}:${HUL}/ssl/lib:${HULA}/svn/lib:${HULA}/python/lib:${HULA}/gcc/lib"
 export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib -Wl,-rpath=${LD_RUN_PATH}"
