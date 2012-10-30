@@ -3317,4 +3317,38 @@ Cygwin issue on gcc-3.4.6 compilation
  make[1] : on quitte le répertoire « /home/auser/src/gcc-3.4.6/objdir/i686-pc-cygwin/libiberty »
  make: *** [all-target-libiberty] Erreur 2
  => to check
- 
+~~~~~~~~~~~~~~~~~~~~~~~~
+Unix glib make
+hostname /home/auser/src/glib-2.34.1/gio/tests #tl
+make[4]: Entering directory `/home/auser/src/glib-2.34.1/gio/tests'
+make[4]: *** No rule to make target `../../gio/gdbus-2.0/codegen/gdbus-codegen', needed by `gdbus-test-codegen-generated.c'.  Stop.
+make[4]: Leaving directory `/home/auser/src/glib-2.34.1/gio/tests'
+
+=> ahostname /home/auser/ce1/.cpl/src/glib/gio/gdbus-2.0/codegen #make gdbus-codegen
+ cd ../../.. && /bin/sh ./config.status gio/gdbus-2.0/codegen/Makefile
+config.status: creating gio/gdbus-2.0/codegen/Makefile
+  GEN    gdbus-codegen
+(Makefile seems already there) or maybe it should have been removed from src
+Add '--disable-modular-tests'
+~~~~~~~~~~~~~~~~~~~~~~~~
+Unix make pygment
+Downloading/unpacking pygments
+  Error <urlopen error timed out> while getting http://pypi.python.org/packages/source/P/Pygments/Pygments-1.5.tar.gz#md5=ef997066cc9ee7a47d01fb4f3da0b5ff (from http://pypi.python.org/simple/Pygments/)
+Exception:
+Traceback (most recent call last):
+  File "/home/auser/ce1/usr/local/apps/python-2.6.2/lib/python2.6/site-packages/pip-1.2.1-py2.6.egg/pip/basecommand.py", line 107, in main
+    status = self.run(options, args)
+
+Strange because in a sourced environment, when done manually, it works: 
+
+ahostname /home/auser/ce1/.cpl/params #pip install pygments
+Downloading/unpacking pygments
+  Downloading Pygments-1.5.tar.gz (3.7MB): 3.7MB downloaded
+  Running setup.py egg_info for package pygments
+Installing collected packages: pygments
+  Running setup.py install for pygments
+    Installing pygmentize script to /home/auser/ce1/usr/local/apps/python-2.6.2/bin
+Successfully installed pygments
+Cleaning up...
+~~~~~~~~~~~~~~~~~~~~~~~
+

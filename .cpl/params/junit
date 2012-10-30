@@ -1,6 +1,6 @@
 page=https://github.com/KentBeck/junit/tags
 url=https://github.com/KentBeck/junit/tarball/
-verexclude=sign|manpages|htmldocs|-rc|nofollow
+verexclude=sign|manpages|htmldocs|-rc|nofollow|beta
 nameurl=r
 nameact=junit
 ext=zip

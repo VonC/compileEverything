@@ -107,10 +107,10 @@ function getJDK {
     # local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
     #  grep -e "(?ms)Java SE \d(?: Update \d+)?<.*?href=\"(/technetwork[^\"]+)\"><img")
     local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
-      grep "jdk6-downloads-")
+      grep "technetwork/java/javase/downloads/jdk6")
     ajdk=${ajdk#*releasenotes*f=\"}
     ajdk="http://www.oracle.com${ajdk%%\"*}"
-    echo $ajdk
+    echo "JDK address: ${ajdk}"
     local ajdkgrep="linux-i586.bin"
     if [[ "${longbit}" == "64" ]]; then ajdkgrep="linux-x64.bin" ; fi
     # echo "D: longbit = ${longbit}, ajdkgrep = ${ajdkgrep}"

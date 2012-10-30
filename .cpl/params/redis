@@ -1,5 +1,6 @@
 page=http://redis.io/download
 url=http://redis.googlecode.com/files/
+verexclude=2.6
 configcmd=none
 makecmd=PREFIX=${HULA}/@@NAMEVER@@ make
 makeinstcmd=PREFIX=${HULA}/@@NAMEVER@@ make install
