@@ -3351,4 +3351,78 @@ Installing collected packages: pygments
 Successfully installed pygments
 Cleaning up...
 ~~~~~~~~~~~~~~~~~~~~~~~
+make gitlab Unix
+Installing pg (0.14.0) with native extensions
+Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native extension.
 
+/home/auser/usr/local/apps/ruby-1.9.2p0/bin/ruby extconf.rb
+checking for pg_config... no
+No pg_config... trying anyway. If building fails, please try again with
+ --with-pg-config=/path/to/pg_config
+checking for libpq-fe.h... no
+Can't find the 'libpq-fe.h header
+*** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of
+necessary libraries and/or headers.  Check the mkmf.log file for more
+details.  You may need configuration options.
+
+=> need to conpile and install postgresql, even though not directly used
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+gitlab installation Unix
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the ECDSA key sent by the remote host is
+55:51:06:c7:08:b5:57:04:42:8a:33:bf:95:d6:5d:2d.
+Please contact your system administrator.
+Add correct host key in /home/auser/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in /home/auser/.ssh/known_hosts:4
+ECDSA host key for [localhost]:2200 has changed and you have requested strict checking.
+Host key verification failed.
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+rake aborted!
+unable to clone gitolite-admin repo
+
+=> regenerate the openssh post script
+auser10:29 ahostname /home/auser/openssh #./post_install_ssh.sh
+~~~~~~~~~~~~~~~~~~~~~~~~
+auser12:52 ahostname /home/auser/gitlab #nginxd start
+starting nginx
+nginx: [emerg] bind() to 0.0.0.0:9883 failed (98: Address already in use)
+nginx: [emerg] bind() to 0.0.0.0:9883 failed (98: Address already in use)
+nginx: [emerg] bind() to 0.0.0.0:9883 failed (98: Address already in use)
+nginx: [emerg] bind() to 0.0.0.0:9883 failed (98: Address already in use)
+nginx: [emerg] bind() to 0.0.0.0:9883 failed (98: Address already in use)
+nginx: [emerg] still could not bind()
+auser12:52 ahostname /home/auser/gitlab #nginxd stop
+nginx already stopped
+http://colinharrington.net/blog/2010/12/which-process-has-that-port-open-linux-netstat-anp/
+It took me a second to figure out how locate the process, but it turned out to be a really easy task using the netstat command by executing .netstat -anp | grep 8080. (a = all interfaces, n = numeric, p = show pid)Â This isn.t perfect since it will still show you anything with a pid of 8080 (the port number I was looking for), but its a great quick-and dirtry way to identify the process.Â and once I.ve found it I can kill it with a .kill -9 <pid>.
+user@machine:~/$ netstat -anp | grep 8080
+tcp6ÂÂÂÂÂÂ 0ÂÂÂÂÂ 0 :::8080ÂÂÂÂÂÂÂÂÂÂÂÂÂÂÂÂ :::*ÂÂÂÂÂÂÂÂÂÂÂÂÂÂÂÂÂÂÂ LISTENÂÂÂÂÂ 19884/java
+user@machine:~/$ kill -9 19884
+Which reminds me of this classic (please excuse the profanity):
+
+ps:
+Windows => netstat -ano
+OSX => lsof -i -P
+
+However, here: no way to kill it...
+
+auser12:57 ahostname /home/auser/gitlab #netstat -anp |grep 9883
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        1      0 128.210.130.26:9883     128.209.20.112:3966     CLOSE_WAIT  -
+tcp        1      0 128.210.130.26:19883    128.209.20.112:3966     CLOSE_WAIT  -
+
+nslookup or host xxxx to find the name of the client which still maintains a ghost connexion on it. 
+But other than that, reboot or change the port number
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~

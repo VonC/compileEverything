@@ -62,7 +62,8 @@ app cgit git,zlib,libgcrypt,openssl
 app ant jdk
 app tomcat ant,jdk,junit
 app junit ant,jdk
-mod gitlab charlock_holmes,pygments,mysql_sandbox,libatomic_ops,redis,bundler
+app postgresql none
+mod gitlab charlock_holmes,pygments,mysql_sandbox,libatomic_ops,redis,bundler,postgresql
 mod charlock_holmes gem,icu
 mod bundler gem
 lib icu none

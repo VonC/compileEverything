@@ -1,0 +1,3 @@
+page=get_page_postgresql
+url=http://ftp.postgresql.org/pub/source/v@@VER@@/
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@

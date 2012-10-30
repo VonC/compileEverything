@@ -3,6 +3,7 @@
 gtl="${H}/gitlab"
 github="${gtl}/github"
 mysqlgtl="${H}/mysql/sandboxes/gitlab"
+gitolite="${H}/.gitolite"
 mkdir -p "${gtl}/logs"
 
 if [[ ! -e "${github}" ]] ; then
@@ -24,12 +25,12 @@ fi
 cp_tpl "${gtl}/gitlab.yml.tpl" "${gtl}"
 cp_tpl "${gtl}/database.yml.tpl" "${gtl}"
 cp_tpl "${gtl}/unicorn.rb.tpl" "${gtl}"
-cp_tpl "${gtl}/omniauth.rb.tpl" "${gtl}"
+#cp_tpl "${gtl}/omniauth.rb.tpl" "${gtl}"
 ln -fs ../../gitlab.yml "${github}/config/gitlab.yml"
 ln -fs ../../database.yml "${github}/config/database.yml"
 ln -fs ../../unicorn.rb "${github}/config/unicorn.rb"
-if [[ -e "${H}/.ldap.private" || -e "${H}/../.ldap.private" ]] ; then
-  ln -fs ../../../omniauth.rb "${github}/config/initializers/omniauth.rb"
+if [[ ! -e "${gitolite}/hooks/common/post-receive" ]] ; then
+  cp "${github}/lib/hooks/post-receive" "${gitolite}/hooks/common/"
 fi
 if [[ ! "$(ls -A ${github}/vendor/bundle/ruby/1.9.1/gems)" ]] ; then 
   d=$(pwd) ; cd "${github}"

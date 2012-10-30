@@ -1,0 +1,8 @@
+#! /bin/bash
+asrcline=$(wget -q -O - "http://www.postgresql.org/" | grep -e "release-")
+#echo "asrcline='${asrcline}'"
+pgsver="${asrcline%%</b*}"
+#echo "pgsver: ${pgsver}"
+pgsver="${pgsver##*b>}"
+#echo "pgsver: ${pgsver}"
+echo "http://ftp.postgresql.org/pub/source/v${pgsver}/"
