@@ -3426,3 +3426,28 @@ But other than that, reboot or change the port number
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+Unix make nxlog:
+
+/usr/bin/ld: /home/auser/usr/local/apps/perl-5.12.3/lib/5.12.3/x86_64-linux/CORE/libperl.a(op.o): relocation R_X86_64_32 against `a local symbol' can not be used when making a shared object; recompile with -fPIC
+/home/auser/usr/local/apps/perl-5.12.3/lib/5.12.3/x86_64-linux/CORE/libperl.a: could not read symbols: Bad value
+collect2: ld returned 1 exit status
+make[4]: *** [xm_perl.la] Error 1
+make[4]: Leaving directory `/devit_home/users/vobadm/gitpoc/src/nxlog-ce-2.0.926/src/modules/extension/perl'
+
+Wed, 10/31/2012 - 13:49 | admin
+Version 2.0.926 of nxlog community edition has been released.
+The most notable feature addition in this release is the xm_perl module
+
+http://www.gentoo.org/proj/en/base/amd64/howtos/index.xml?part=1&chap=3
+
+relocation R_X86_64_32 against `a local symbol' can not be used when making a shared object; recompile with -fPIC .libs/assert.o: could not read symbols: Bad value
+
+gnat% cd /usr/local/src/perl-5.10.1
+gnat% ./Configure -de -Dprefix=/usr/local -Dusethreads -Duseshrplib
+
+For now, avoid 2.0 (until trying compiling perl with -Duseshrplib)
+Or try a --without-pic --disable-shared for configuration of nxlog
+https://www.google.fr/search?q=ld%3A+libperl.a(op.o)%3A+relocation+R_X86_64_32+against&oq=ld%3A+libperl.a(op.o)%3A+relocation+R_X86_64_32+against&sugexp=chrome,mod=0&sourceid=chrome&ie=UTF-8#hl=fr&sclient=psy-ab&q=relocation+r_x86_64_32+against+a+local+symbol%27+can+not+be+used+when+making+a+shared+object&oq=%22relocation+R_X86_64_32+against%22
+http://www.vr.org/kb/4252/Curl-Compile-Error-relocation-RX866432-against-a-local-symbol-can-not-be-used-when-making-a-shared-object-recompile-with--fPIC.html
+~~~~~~~~~~~~~~~~~~~~~~~~
+

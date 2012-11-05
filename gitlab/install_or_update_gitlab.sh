@@ -22,6 +22,7 @@ if [[ ! -e "${mysqlgtl}" ]] ; then
   mysqlv=$(mysql -V); mysqlv=${mysqlv%%,*} ; mysqlv=${mysqlv##* }
   make_sandbox ${mysqlv} -- -d gitlab --no_confirm
 fi
+"${mysqlgtl}/start"
 cp_tpl "${gtl}/gitlab.yml.tpl" "${gtl}"
 cp_tpl "${gtl}/database.yml.tpl" "${gtl}"
 cp_tpl "${gtl}/unicorn.rb.tpl" "${gtl}"

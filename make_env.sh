@@ -508,6 +508,7 @@ function untar() {
     echo "${H}" > "${_src}/${namever}/.cmp"
     echo "${H}" > "${_src}/${namever}/.lck"
   fi
+  ln -fs "${namever}" "${_src}/${name}"
 }
 function getusername() {
   local _username=$1
