@@ -1,4 +1,4 @@
 page=http://sourceforge.net/projects/expat/files/expat/2.1.0
-url=http://sourceforge.net/projects/expat/files/expat/2.1.0/expat-@VER@.tar.gz/download
+url=http://downloads.sourceforge.net/project/expat/expat/2.1.0/
 makefile=Makefile
 configcmd=./configure --prefix=$H/usr/local/libs/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@

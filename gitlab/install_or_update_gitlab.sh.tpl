@@ -20,7 +20,7 @@ else
 fi
 if [[ ! -e "${mysqlgtl}" ]] ; then
   mysqlv=$(mysql -V); mysqlv=${mysqlv%%,*} ; mysqlv=${mysqlv##* }
-  make_sandbox ${mysqlv} -- -d gitlab --no_confirm -P 5526 --check_port
+  make_sandbox ${mysqlv} -- -d gitlab --no_confirm -P @PORT_MYSQL@ --check_port
 fi
 "${mysqlgtl}/start"
 cp_tpl "${gtl}/gitlab.yml.tpl" "${gtl}"

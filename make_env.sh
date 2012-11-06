@@ -255,6 +255,11 @@ function get_sources() {
   local name=$1
   local _namever=$2
   local _ver=$3
+  local mgsd=0
+  set +o nounset
+  if [[ "${MGS}" == "${name}" ]]; then mgsd=1 ; fi
+  set -o nounset
+  echo "mgsd='${mgsd}'"
   get_param ${name} nameurl "${name}"
   get_param ${name} nameact "${nameurl}"
   get_param ${name} page "${_vers}"
@@ -269,9 +274,9 @@ function get_sources() {
   if [[ -e "${page}" ]] ; then
     local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
   else
-    # echo "D: local asrcline wget -q -O - ${page} grep -e ${nameurl} grep ${ext}"
-    # local asrcpage=$(wget -U Mozilla -q -O - "${page}")
-    # echo "D: local page: ${asrcpage}"
+    if [[ ${mgsd} == 1 ]] ; then echo "D: local asrcline wget -q -O - ${page} grep -e ${nameurl} grep ${ext}" ; fi
+    if [[ ${mgsd} == 1 ]] ; then local asrcpage=$(wget -U Mozilla -q -O - "${page}") ; fi
+    if [[ ${mgsd} == 1 ]] ; then  echo "D: local page: ${asrcpage}" ; fi
     local asrcline=$(wget -q -O - "${page}" | grep -e "${nameurl}" | grep -e "${ext}")
   fi
   
@@ -279,13 +284,13 @@ function get_sources() {
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
   get_param ${name} verinclude ""
   if [[ "${verinclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -e "${verinclude}") ; fi
-  # echo "D: line0 source! from page ${page}, nameurl ${nameurl}, ext _${ext}_, exturl _${exturl}_"
-  # echo "D: line00 ${asrcline}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: line0 source! from page ${page}, nameurl ${nameurl}, ext _${ext}_, exturl _${exturl}_" ; fi
+  if [[ ${mgsd} == 1 ]] ; then echo "D: line00 ${asrcline}" ; fi
   if [[ "${asrcline}" == "" ]]; then echolog "unable to get source version for ${name} with nameact ${nameact}, nameurl ${nameurl}, verinclude ${verinclude}, verexclude ${verexclude}, ext _${ext}_, exturl _${exturl}_" ; get_sources_failed ; fi
   #if [[ ${name} == "cyrus-sasl" ]] ; then echo line source! ${asrcline} ; fffg ; fi
-  # echo "D: line1 source! ${asrcline}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: line1 source! ${asrcline}" ; fi
   local source="${asrcline%%${exturl}\"\>*}"
-  # echo "D: line2 source! ${source}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: line2 source! ${source}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\" *}" ; fi
   # "
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\'\>*}" ; fi
@@ -294,26 +299,26 @@ function get_sources() {
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\"*}" ; fi
   # "
   source="${source}${exturl}"
-  # echo "D: sour0 ${source}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: sour0 ${source}" ; fi
   local source0="${source}"
   source="${source0##*\"}"
   # "
   if [[ "${source}" == "${source0}" ]] ; then source="${source0##*\'}" ; fi
-  # echo "D: source1 ${source}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: source1 ${source}" ; fi
   get_param ${name} url ""
   if [[ "${url}" != "" && "${url#http}" == "${url}" ]] ; then url=$("${H}/.cpl/scripts/${url}") ; fi
-  # echo "D: url0 ${url}"
-  # echo "D: source ${source}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: url0 ${url}" ; fi
+  if [[ ${mgsd} == 1 ]] ; then echo "D: source ${source}" ; fi
   local targz="${source##*/}"
   local aver=""
   if [[ "${targz}" == "" ]] ; then
     aver="${source%%/*}"
   fi
   if [[ "${url}" != "" ]] ; then
-    # echo "D: IIIII url ${url} AAAAA targz ${targz}"
+    if [[ ${mgsd} == 1 ]] ; then echo "D: IIIII url ${url} AAAAA targz ${targz}" ; fi
     source="${url}${targz}"
   fi
-  # echo "D: sources for ${name}: ${targz} from ${source,} with aver ${aver}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: sources for ${name}: ${targz} from ${source} with aver ${aver}" ; fi
   if [[ "${exturl}" == "" ]] ; then targz="${targz}.${extact}" ; fi 
   if [[  "${nameurl}" != "${nameact}" ]] ; then targz="${nameact}-${targz#${nameurl}}" ; echo "new targz ${targz}" ; fi
   targz="${targz%-}"
@@ -322,30 +327,30 @@ function get_sources() {
     aver=${anamever#${nameact}-}
     aver=${aver%-src}
   fi
-  # echo "D: targz2 ${targz}"
-  # echo "D: aver_b ${aver}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: targz2 ${targz}" ; fi
+  if [[ ${mgsd} == 1 ]] ; then echo "D: aver_b ${aver}" ; fi
   local aver_="${aver//\./_}"
-  # echo "D: aver_ ${aver_}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: aver_ ${aver_}" ; fi
   source="${source//@@VER@@/${aver}}"
   source="${source//@@VER_@@/${aver_}}"
   targz="${targz//@@VER@@/${aver}}"
   targz="${targz//@@VER_@@/${aver_}}"
-  # echo "D: source ${source}, with targz ${targz}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: source ${source}, with targz ${targz}" ; fi
   local anamever="${targz%.${extact}}"
   local ss="xx"
   if [[ -e "${_pkgs}/${targz}" ]] ; then ss=$(stat -c%s "${_pkgs}/${targz}") ; fi
   if [[ -e "${_pkgs}/${targz}" ]] && [[ "${ss}" == "0" ]] ; then
     rm -f "${_pkgs}/${targz}"
   fi
-  # echo "D: YYY anamever ${anamever} vs. name ${name} and nameact ${nameact}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: YYY anamever ${anamever} vs. name ${name} and nameact ${nameact}" ; fi
   if [[ "${aver}" == "" ]] ; then
     aver=${anamever#${nameact}-}
     aver=${aver%-src}
   fi
-  # echo "D: get sources final: anamever ${anamever}, aver ${aver}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: get sources final: anamever ${anamever}, aver ${aver}" ; fi
   if [[ "${aver}" == "${anamever}" ]] ; then aver=${anamever#${nameact}} ; fi
   ver=${ver##*~}
-  # echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}" ; fi
   source=${source//@@VER@@/${aver}}
   if [[ "${nameurl}" == "master" ]] ; then
     source=${source%/*}/master
@@ -353,7 +358,7 @@ function get_sources() {
     anamever="${name}-master"
 	aver="master"
   fi
-  # echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}"
+  if [[ ${mgsd} == 1 ]] ; then echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}" ; fi
   if [[ ! -e "${_pkgs}/${targz}" ]] && [[ ! -e "${HUL}/._linked/${anamever}" ]]; then
     echolog "get sources for ${name} in ${_hpkgs}/${targz}"
     loge "wget ${source} -O ${_pkgs}/${targz}" "wget_sources_${targz}"

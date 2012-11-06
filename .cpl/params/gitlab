@@ -1,5 +1,6 @@
 configcmd=none
 makefile=none
+premake=cp_tpl "${H}/gitlab/install_or_update_gitlab.sh.tpl" "${H}/gitlab" ; "${H}/gitlab/install_or_update_gitlab.sh"
 makecmd=none
 makeinstcmd="${H}/gitlab/install_or_update_gitlab.sh"
 makeinstcmd=none

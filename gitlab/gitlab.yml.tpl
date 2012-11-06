@@ -28,7 +28,7 @@ app:
 # 2. Auth settings
 # ==========================
 ldap: 
-  enabled: false
+  enabled: true
   host: '@LDAP_HOSTNAME@'
   base: '@LDAP_BASE@'
   port: @LDAP_PORT@
