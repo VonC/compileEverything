@@ -23,6 +23,7 @@ app:
   default_projects_limit: 10 
   # backup_path: "/vol/backups"   # default: Rails.root + backups/
   # backup_keep_time: 604800      # default: 0 (forever) (in seconds)
+  # disable_gravatar: true        # default: false - Disable user avatars from Gravatar.com
 
 #
 # 2. Auth settings
@@ -71,6 +72,7 @@ git_host:
   upload_pack: true
   receive_pack: true
   host: @FQN@
+# config_file: gitolite.conf
   port: @PORT_SSHD@
 
 # Git settings

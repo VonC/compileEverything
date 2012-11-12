@@ -124,3 +124,4 @@ dump.rdb
 /openldap/ini_ldap_db.sh
 /openssh/check_ldap_rootca.sh
 /gitlab/install_or_update_gitlab.sh
+/gitolite-admin
