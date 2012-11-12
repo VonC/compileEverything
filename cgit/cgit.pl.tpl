@@ -6,6 +6,15 @@ $ENV{GL_BINDIR} = "$ENV{HOME}/gitolite/bin";
 $ENV{GL_LIBDIR} = "$ENV{GL_BINDIR}/lib";
 my $remote_user=$ENV{"REMOTE_USER"};
 $ENV{GL_USER} = $remote_user || "gitweb";
+open FILE, "$ENV{HOME}/.ssh/authorized_keys";
+while ($line=<FILE>){
+  if ($line=~/gitolite-shell ([\S]+)",no.*? $ENV{GL_USER}$/){
+    $ENV{GL_USER} = $1;
+    last;
+  }
+}
+close(FILE);
+#die "----------- GL_USER! ----------------: '$ENV{GL_USER}'\n";
 # set project root etc. absolute paths
 $ENV{GL_REPO_BASE_ABS} = "$ENV{HOME}/repositories";
 $projects_list = $projectroot = $ENV{GL_REPO_BASE_ABS};
