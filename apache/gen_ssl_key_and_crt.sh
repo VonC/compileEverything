@@ -1,8 +1,21 @@
 #! /bin/bash
 
+apache="${H}/apache"
+if [[ -e "${apache}/key" && -e "${apache}/crt" ]] ; then exit 0 ; fi
+
+hkey="${H}/../$(hostname).key"
+hcrt="${H}/../$(hostname).crt"
+
+if [[ -e "${hkey}" && -e "${hcrt}" ]] ; then
+  ln -fs "${hkey}" "${apache}/key"
+  ln -fs "${hcrt}" "${apache}/crt"
+  exit 0
+fi
+
+# if no private certificate was given, generate self-signed one locally
+
 fqn=$(host -TtA $(hostname -s)|grep "has address"|awk '{print $1}') ; if [[ "${fqn}" == "" ]] ; then fqn=$(hostname -s) ; fi
 fqnpassword="${fqn}1";
-apache="${H}/apache"
 passphrasekey="${apache}/${fqn}.passphrase.key"
 key="${apache}/${fqn}.key"
 cert="${apache}/${fqn}.crt"

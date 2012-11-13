@@ -654,7 +654,7 @@ openssl s_client -connect ldap.co.xx:3269  2>&1 | sed -ne '/-BEGIN CERTIFICATE-/
 ~~~~~~~~~~~~
 Check what files are accessed by a process
 http://blog.plenz.com/2011-01/which-files-are-accessed.html
-ahostname:55 gbl03097 /home/auser/openldap #strace -efile ldapsearch -d 1 -x -H ldaps://company.co.xx:3269 -D 'CN=bindingUser,OU=Accounts,DC=Full,DC=Context,DC=Company' -w password -b 'OU=Accounts,DC=Full,DC=Context,DC=Company' -ZZ  2>&1 1>/dev/null | grep ^open | cut -d\" -f2 | grep ldap
+ahostname /home/auser/openldap #strace -efile ldapsearch -d 1 -x -H ldaps://company.co.xx:3269 -D 'CN=bindingUser,OU=Accounts,DC=Full,DC=Context,DC=Company' -w password -b 'OU=Accounts,DC=Full,DC=Context,DC=Company' -ZZ  2>&1 1>/dev/null | grep ^open | cut -d\" -f2 | grep ldap
 /home/auser/usr/local/libs/openldap-2.4.26/etc/openldap/ldap.conf
 /home/auser/ldaprc
 /home/auser/.ldaprc
@@ -788,4 +788,144 @@ Sequence of keys: esc followed by:
 ~~~~~~~~~~~~~~~~
 Undefined reference: search with error redirection:  /usr/lib #nm -Ap *.so 2>/dev/null | grep libintl_textdomain
 ~~~~~~~~~~~~~~~~
+List all keys from a JKS keystore used by tomcat:
+ahostname /home/git/apache #keytool -keystore /path/to/jks/keystore -storepass ajksPassword -list              
+Keystore type: JKS
+Keystore provider: SUN
+
+Your keystore contains 3 entries
+
+theAlias, 12-Mar-2012, PrivateKeyEntry,
+Certificate fingerprint (MD5): 9E:74:1B:8C:F1:84:5E:D4:16:88:BD:02:7F:71:A7:B1
+root_ca, 12-Mar-2012, trustedCertEntry,
+Certificate fingerprint (MD5): 8E:24:21:C8:50:17:C0:78:DB:45:88:B9:68:CE:EF:58
+org_cert, 12-Mar-2012, trustedCertEntry,
+
+~~~~~~~~~~~~~~~~~~~~~~~~
+Exporting CAs from JKS
+
+keytool -keystore /path/to/jks/keystore -export -alias root_ca -rfc -file /home/root_ca.cacert -storepass ajksPassword
+org_cert
+keytool -keystore /path/to/jks/keystore -export -alias org_cert -rfc -file /home/org_cert.cacert -storepass ajksPassword
+Certificate stored in file </home/org_cert.cacert>
+
+ahostname /home/git/apache #keytool -keystore /path/to/jks/keystore -export -alias theAlias -rfc -file /home/theAlias.key -storepass ajksPassword
+Certificate stored in file </home/theAlias.key>
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Exporting private key from JSK
+
+Do not try to export everything
+
+ahostname /home/git/apache #keytool -importkeystore -srckeystore /path/to/jks/keystore -srcstoretype jks -srcstorepass ajksPassword -destkeystore intermediate.p12 -deststoretype pkcs12 -deststorepass azerty
+Enter destination keystore password:
+Keystore password is too short - must be at least 6 characters
+Enter destination keystore password:
+Re-enter new password:
+Enter source keystore password:
+Entry for alias theAlias successfully imported.
+Problem importing entry for alias root_ca: java.security.KeyStoreException: TrustedCertEntry not supported.
+Entry for alias root_ca not imported.
+Do you want to quit the import process? [no]:
+Problem importing entry for alias org_cert: java.security.KeyStoreException: TrustedCertEntry not supported.
+Entry for alias org_cert not imported.
+Do you want to quit the import process? [no]:
+Import command completed:  1 entries successfully imported, 2 entries failed or cancelled
+ahostname /home/git/apache #
+
+Normal:  pkcs12 format doesn't support *trusted* certificate.  
+
+Export just the right entry:
+
+ahostname /home #keytool -importkeystore -srckeystore /path/to/jks/keystore -srcstoretype jks -srcstorepass ajksPassword -destkeystore intermediate2.p12 -deststoretype pkcs12 -deststorepass ajksPassword -alias theAlias
+Entry for alias theAlias successfully imported.
+
+ahostname /home #openssl pkcs12 -in intermediate3.p12 -out extracted3.pem -nodes -passin pass:ajksPassword
+MAC verified OK
+
+NOTE: USE THE SAME PASSWORD FOR BOTH KEYSTORES (JKS and PKCS12):
+
+openssl pkcs12 -in intermediate3.p12 -out extracted3.pem -nodes -passin pass:aDifferentPassword
+MAC verified OK
+Error outputting keys and certificates
+46956866375680:error:06065064:digital envelope routines:EVP_DecryptFinal_ex:bad decrypt:evp_enc.c:467:
+46956866375680:error:23077074:PKCS12 routines:PKCS12_pbe_crypt:pkcs12 cipherfinal error:p12_decr.c:97:
+46956866375680:error:2306A075:PKCS12 routines:PKCS12_item_decrypt_d2i:pkcs12 pbe crypt error:p12_decr.c:123:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+For more on the importance of using the same password for both keystores (the JKS one and the PKCS12 one), see:
+
+http://www.herongyang.com/PKI/Intermediate-CA-OpenSSL-pkcs12-Decrypt-Error.html
+http://www.nicobo.net/articles/paper-backup-your-private-key
+
+Exporting keypair and certificate
+
+Since JDK 6, keytool provides the -importkeystore command to import / export full data between keystores. Before that, only public parts could be exported. Unfortunately it is still not able to export private data to plain text : you will need to use another tool to achieve this : openssl.
+
+keytool -importkeystore -srcstoretype jks -srcalias foo -deststoretype pkcs12 -srckeystore mykeys.jks -destkeystore foo.p12
+ 
+openssl pkcs12 -in foo.p12 -out foo.pem -nodes
+The first command exports all key/certificate data to a binary PKCS12 file. 
+
+=====> ****Make sure to give this file the same password as the exported key (see the note about passwords).****
+
+The second command converts the binary PKCS12 to readable text (also called PEM, or ASCII-armored).
+By default the private key is still printed encrypted with a symmetric algorithm, so even if you get this key data, you will need the password to unlock it. The option -nodes bypasses this by allowing the key to be printed unencrypted.
+
+You end up with two Base64-encoded elements in the file "foo.pem" : the private key and the certificate :
+
+Restoring the certificate
+
+When the big day has come and you want to restore your digital certificate from a piece of paper, simply type the key data back into a text file (let's call it "foo-restored.pem") then run the following commands :
+
+
+openssl pkcs12 -export -in foo-restored.pem -out foo-restored.p12
+ 
+keytool -importkeystore -srckeystore foo-restored.p12 -srcstoretype pkcs12 -destkeystore restored.jks -deststoretype jks -srcalias 1 -destalias foorestored
+You could try an OCR software to scan the text from a photo or image. I have not been successful with this yet.
+
+This time, the first line converts back the PEM data to binary PKCS12.
+Don't miss the -export option, that was not used for the opposite transformation.
+
+The second line imports back the key and certificate into your JKS keystore. If it already exists, it will be updated.
+We did not specify an alias (-name) for the key on the openssl command so we use -srcalias 1 to target it. You can choose whatever alias you want for the restored key in your keystore (here "foorestored").
+
+Remember : the new password the openssl command asks for will be the password for the key. The new password the keytool command asks for will be the password for the keystore.
+
+Your keystore "restored.jks" now contains an exact copy of your lost key : signing with it will produce identical results as signing with the original key.
+
+Note - If you want to compare two signed jar, compare their content, not the jar themselves : all files must be binary equal (except the name of the key files if you changed it).
+
+
+See also http://www.herongyang.com/PKI/Intermediate-CA-OpenSSL-pkcs12-Decrypt-Error.html
+
+This section provides a tutorial example on why OpenSSL 'pkcs12' failed with 'bad decrypt:./crypto/evp/evp_enc.c:461' error. The root cause is the key password different than file password.
+When I was trying to export my private key from the KeyStore file, I encountered an file password issue, which is worth mentioning here.
+See the OpenSSL error message displayed below:
+C:\herong>\local\jdk\bin\keytool -importkeystore 
+   -srckeystore herong.jks -srcstoretype jks -srcstorepass HerongJKS
+   -srcalias herongyang.com
+   -destkeystore test.p12 -deststoretype pkcs12 -deststorepass TestP12
+   -destalias 1
+
+C:\herong>\local\gnuwin32\bin\openssl pkcs12 -in Test.p12 
+   -passin pass:TestP12 -nocerts -out test_key.pem 
+   -des -passout pass:TestKey
+
+MAC verified OK
+Error outputting keys and certificates
+3812:error:06065064:digital envelope routines:EVP_DecryptFinal_ex:
+   bad decrypt:./crypto/evp/evp_enc.c:461:
+3812:error:23077074:PKCS12 routines:PKCS12_pbe_crypt:pkcs12 
+   cipherfinal error:./crypto/pkcs12/p12_decr.c:97:
+3812:error:2306A075:PKCS12 routines:PKCS12_item_decrypt_d2i:
+   pkcs12 pbe crypt error:./crypto/pkcs12/p12_decr.c:123:
+So what's wrong with the PKCS12 file, Test.p12? Why OpenSSL can not decrypt my private key from Test.p12? Here is what I think:
+In the original KeyStore file, Herong.jks, there are 2 separate passwords used: a. Key password, "HerongJKS", used to encrypt my private key; b. File password, "HerongJKS", used to encrypt the entire KeyStore file.
+In my "keytool -importkeystore" command, I did not specify the source key password. But "keytool" is smart enough to use the source file password to decrypt the private key.
+Also in my "keytool -importkeystore" command, I did not specify the destination key password. But "keytool" is stupid enough to reuse the source key password as the destination key password. "keytool" generate the destination PKCS12 file, Test.p12, with 2 different passwords: a. Key password, "HerongJKS", used to encrypt my private key; b. File password, "TestP12", used to encrypt the entire PKCS12 file.
+When executed the OpenSSL "pkcs12" command, I only specified the PKCS12 file password, "TestP12". There is no option for me to specify the key password, which is different than the file password. This is causing "pkcs12" command to fail.
+Obviously, to avoid this problem, you have to set the key password and the file password with the same value with "keytool". See tutorials in previous sections on how to do this.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
