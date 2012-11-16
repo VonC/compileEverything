@@ -19,6 +19,15 @@ if [[ ! -e "${H}/.ssh/gitoliteadm" ]]; then
   ssh-keygen -t rsa -f "${H}/.ssh/gitoliteadm" -C "Gitolite Admin access (not interactive)" -q -P ""
 fi
 # ln -fs ../../../gitolite/check_commits_strict.sh "${H}/.gitolite/hooks/common/pre-receive"
+
+glc=$(grep "LOCAL_CODE" "${H}/.gitolite.rc")
+if [[ "${glc}" == "" ]] ; then
+  a=$(grep -n ");" "${H}/.gitolite.rc")
+  a=${a%%:*}
+  echo $a
+  gen_sed -i "${a}i\    LOCAL_CODE                  => '$HOME/gitolite'," "${H}/.gitolite.rc"
+fi
+
 if [[ ! -e "${H}/gitolite/projects.list" ]] ; then
   GITOLITE_HTTP_HOME= gitolite setup -pk "${H}/.ssh/gitoliteadm.pub"
   gen_sed -i "s,\"/projects.list\",\"/gitolite/projects.list\",g" "${H}/.gitolite.rc"
@@ -32,4 +41,10 @@ if [[ ! -e "${H}/gitolite/projects.list" ]] ; then
 else
   GITOLITE_HTTP_HOME= gitolite setup
   rm -f "${H}/projects.list"
+fi
+
+if [[ ! -e "${gtl}/ga" ]]; then
+  git clone gitolitesrv:gitolite-admin "${gtl}/ga"
+else
+  git --git-dir="${gtl}/ga/.git" --work-tree="${gtl}/ga" pull
 fi

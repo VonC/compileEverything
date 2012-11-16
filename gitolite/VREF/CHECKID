@@ -1,8 +1,18 @@
 #!/bin/bash
 
+die() { echo -e "$@" >&2; exit 1; }
+
+repo=$GL_REPO
+user=$GL_USER
+refname=$1          # we're running like an update hook
+oldsha=$2
+newsha=$3
+
+#echo "test '$1', '$2', '$3'"
+
 NOREV=0000000000000000000000000000000000000000
 
-while read oldsha newsha refname ; do
+  #echo -e "oldsha='${oldsha}', \nnewsha='${newsha}', \nrefname='${refname}'"
   # deleting is always safe
   if [[ $newsha == $NOREV ]]; then
     continue
@@ -24,16 +34,14 @@ while read oldsha newsha refname ; do
     hash=`echo $cns | cut -d~ -f3`
     subject=`echo $cns | cut -d~ -f4`
     if [ "$an" != "$GL_USER" ]; then
-      echo "Commit found with wrong author name for $hash ($subject)"
-      echo "Should have been author '$GL_USER', was '$cn'"
+      die "Commit found with wrong author name for $hash ($subject)\nShould have been author '$GL_USER', was '$cn'"
       exit 1
     fi
     if [ "$cn" != "$GL_USER" ]; then
-      echo "Commit found with wrong committer name for $hash ($subject)"
-      echo "Should have been committer '$GL_USER', was '$cn'"
+      die "Commit found with wrong committer name for $hash ($subject)\nShould have been committer '$GL_USER', was '$cn'"
       exit 1
     fi
   done
-  echo "All commits are from authoer and committer '$GL_USER' => pass"
+  echo "All commits are from author and committer '$GL_USER' => pass"
   exit 0
-done
+

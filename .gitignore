@@ -125,3 +125,4 @@ dump.rdb
 /openssh/check_ldap_rootca.sh
 /gitlab/install_or_update_gitlab.sh
 /gitolite-admin
+/gitolite/ga/
