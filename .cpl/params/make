@@ -1,2 +1,4 @@
+page=http://ftp.gnu.org/pub/gnu/make/?O=D;C=M
+url=http://ftp.gnu.org/pub/gnu/make/
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-libiconv-prefix=${HUL} --with-libintl-prefix=${HUL} @@WITHOUT_GNU_LD@@
 post=ln -fs make ${HULA}/@@NAMEVER@@/bin/gmake

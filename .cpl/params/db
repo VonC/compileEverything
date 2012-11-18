@@ -1,3 +1,6 @@
+page=http://www.oracle.com/technetwork/products/berkeleydb/downloads/index-082944.html
+url=http://download.oracle.com/berkeley-db/
+verinclude=4.7.25NC
 verexclude=4.2
 cdpath=${H}/.cpl/src/@@NAMEVER@@/build_unix
 pre=gen_sed -i "s/if test -.\(.*\)tclConfig.sh/with_tclconfig=${EHULL} ; if test -e\1tclConfig.sh/g" $H/.cpl/src/@@NAMEVER@@/dist/configure

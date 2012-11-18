@@ -126,3 +126,5 @@ dump.rdb
 /gitlab/install_or_update_gitlab.sh
 /gitolite-admin
 /gitolite/ga/
+/.cpl/params/.mm
+/.mozilla/

@@ -1,1 +1,4 @@
+page=http://ftp.gnu.org/pub/gnu/libidn/?O=D;C=M
+url=http://ftp.gnu.org/pub/gnu/libidn/
+verexclude=win
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITHOUT_GNU_LD@@

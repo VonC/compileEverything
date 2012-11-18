@@ -19,3 +19,5 @@
     name = gitoliteadm
     email = gitoliteadm@mail.com
 
+[push]
+    default = simple

@@ -1,2 +1,5 @@
+page=http://ftp.gnu.org/pub/gnu/gdbm/?O=D;C=M
+url=http://ftp.gnu.org/pub/gnu/gdbm/
+verexclude=latest
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
 premake=gen_sed -i '\''s/BINOWN = .*/BINOWN = @@USERNAME@@/g'\'' $H/.cpl/src/@@NAMEVER@@/Makefile ; gen_sed -i '\''s/BINGRP = .*/BINGRP = @@USERGROUP@@/g'\'' $H/.cpl/src/@@NAMEVER@@/Makefile ; gen_sed -i '\''s/ $(BINGRP) / \"$(BINGRP)\" /g'\'' $H/.cpl/src/@@NAMEVER@@/Makefile

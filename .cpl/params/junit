@@ -9,4 +9,4 @@ extact=tar.gz
 configcmd=none
 makefile=none
 makecmd=ant dist
-makeinstcmd=cp -R "${H}/.cpl/src/@@NAMEVER@@/junit@@VER@@" "${H}/usr/local/apps/@@NAMEVER@@"
+makeinstcmd=if [[ -e "${H}/.cpl/src/@@NAMEVER@@/junit@@VER@@" ]] ; then cp -R "${H}/.cpl/src/@@NAMEVER@@/junit@@VER@@" "${H}/usr/local/apps/@@NAMEVER@@" ; else cp -R "${H}/.cpl/src/@@NAMEVER@@/junit@@VER@@-SNAPSHOT" "${H}/usr/local/apps/@@NAMEVER@@" ; fi

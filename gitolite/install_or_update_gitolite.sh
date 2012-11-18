@@ -20,14 +20,6 @@ if [[ ! -e "${H}/.ssh/gitoliteadm" ]]; then
 fi
 # ln -fs ../../../gitolite/check_commits_strict.sh "${H}/.gitolite/hooks/common/pre-receive"
 
-glc=$(grep "LOCAL_CODE" "${H}/.gitolite.rc")
-if [[ "${glc}" == "" ]] ; then
-  a=$(grep -n ");" "${H}/.gitolite.rc")
-  a=${a%%:*}
-  echo $a
-  gen_sed -i "${a}i\    LOCAL_CODE                  => '$HOME/gitolite'," "${H}/.gitolite.rc"
-fi
-
 if [[ ! -e "${H}/gitolite/projects.list" ]] ; then
   GITOLITE_HTTP_HOME= gitolite setup -pk "${H}/.ssh/gitoliteadm.pub"
   gen_sed -i "s,\"/projects.list\",\"/gitolite/projects.list\",g" "${H}/.gitolite.rc"
@@ -41,6 +33,14 @@ if [[ ! -e "${H}/gitolite/projects.list" ]] ; then
 else
   GITOLITE_HTTP_HOME= gitolite setup
   rm -f "${H}/projects.list"
+fi
+
+glc=$(grep "LOCAL_CODE" "${H}/.gitolite.rc")
+if [[ "${glc}" == "" ]] ; then
+  a=$(grep -n ");" "${H}/.gitolite.rc")
+  a=${a%%:*}
+  echo $a
+  gen_sed -i "${a}i\    LOCAL_CODE                  => '$HOME/gitolite'," "${H}/.gitolite.rc"
 fi
 
 if [[ ! -e "${gtl}/ga" ]]; then

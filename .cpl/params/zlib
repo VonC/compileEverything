@@ -1,2 +1,4 @@
+page=http://zlib.net/
+url=http://zlib.net/
 premake=gen_sed -i '\''s/cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)/if test "$(SHAREDLIBV)"; then cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir); fi/g'\'' "$H/.cpl/src/@@NAMEVER@@/Makefile"
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared

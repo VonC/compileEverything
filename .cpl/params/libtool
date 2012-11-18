@@ -1,1 +1,5 @@
+page=http://ftp.gnu.org/pub/gnu/libtool/?O=D;C=M
+url=http://ftp.gnu.org/pub/gnu/libtool/
+verexclude=diff|xz
+ext=tar.gz
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITHOUT_GNU_LD@@

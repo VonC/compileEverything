@@ -1,3 +1,9 @@
+page=http://ftp.riken.go.jp/pub/FreeBSD/distfiles/python/?C=M;O=D
+verexclude=-3.
+url=http://ftp.riken.go.jp/pub/FreeBSD/distfiles/python/
+nameurl=Python-
+nameact=python
+ext=tgz
 pre=gen_sed -i "s/\(['\'']\)\/usr\/local/\1\${EHUL}/g" "${H}/.cpl/src/@@NAMEVER@@/setup.py" ; changeSetup.dist "${H}/.cpl/src/@@NAMEVER@@/Modules/Setup.dist" ; gen_sed -i "s/\(['\'' IRL=]\)\/usr\/local/\1\${EHUL}/g" "${H}/.cpl/src/@@NAMEVER@@/Modules/Setup.dist"
 configcmd=@@./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-libs='\''-lexpat -lncurses -lbz2'\''
 premake=gen_sed -i "s/-ltermcap/-lncurses/g" "${H}/.cpl/src/@@NAMEVER@@/Makefile"

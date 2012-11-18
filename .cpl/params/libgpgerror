@@ -1,1 +1,5 @@
+page=http://mirrors.dotsrc.org/gcrypt/libgpg-error/?O=D;C=M
+url=http://mirrors.dotsrc.org/gcrypt/libgpg-error/
+nameurl=libgpg-error-
+nameact=libgpgerror
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-libiconv-prefix=${HUL} --with-libintl-prefix=${HUL} @@WITH_GNU_LD@@

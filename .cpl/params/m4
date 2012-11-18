@@ -1,1 +1,4 @@
+page=http://ftp.gnu.org/pub/gnu/m4/?O=D;C=M
+url=http://ftp.gnu.org/pub/gnu/m4/
+verexclude=latest|sig|xz|bz2
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --with-libsigsegv=${HUL} @@WITH_GNU_LD@@

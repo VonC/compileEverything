@@ -1,3 +1,5 @@
+page=http://www.bzip.org/downloads.html
+url=http://www.bzip.org/@@VER@@/
 configcmd=echo "no config necessary"
 premake=gen_sed -i "s/CFLAGS=/CFLAGS=-fPIC /g" "$H/.cpl/src/@@NAMEVER@@/Makefile"
 makecmd=echo "no make necessary"

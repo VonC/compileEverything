@@ -1,2 +1,4 @@
+page=http://www.ruby-lang.org/en/downloads/
+url=http://ftp.ruby-lang.org/pub/ruby/1.9/
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-ext=openssl --with-ext @@WITHOUT_GNU_LD@@ --with-opt-dir=${HUL}/ssl --with-opt-dir=${HUL}
 premake=gen_sed -i "s/-L. /-L. -L${EHULL} /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile" ; cp -f ${HULL}/libz.* "${H}/.cpl/src/@@NAMEVER@@/ext/zlib"

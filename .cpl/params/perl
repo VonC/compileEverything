@@ -1,3 +1,4 @@
+page=http://www.perl.org/get.html
 cdpath=${H}/.cpl/src/@@NAMEVER@@
 pre=./Configure -dEs -Dprefix=${HULA}/@@NAMEVER@@ -Dcc=gcc ; cp config.sh config.sh.ori ; gen_sed -i "s/\(['\'' IRL]\)\/usr\/local/\1\${EHUL}/g" "${H}/.cpl/src/@@NAMEVER@@/config.sh" ; diff -w config.sh config.sh.ori ; echo "diff done"
 configcmd=./Configure -des -f config.sh -Dprefix=${HULA}/@@NAMEVER@@ -Dcc=gcc ; diff -w config.sh config.sh.ori ; echo "diff after config done" ; cp -f config.sh config.status

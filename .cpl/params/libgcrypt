@@ -1,2 +1,4 @@
+page=http://mirrors.dotsrc.org/gcrypt/libgcrypt/?O=D;C=M
+url=http://mirrors.dotsrc.org/gcrypt/libgcrypt/
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-gpg-error-prefix=${HUL} @@WITH_GNU_LD@@
 premake=if [[ "$(uname)" == "SunOS" ]] ; then gen_sed -i '\''s/CCLD = \$(CC)/CCLD = \$(CC) ..\/cipher\/.libs\/ac.o/g'\'' "${H}/.cpl/src/@@NAMEVER@@/tests/Makefile" ; fi ; gen_sed -i "s/^LDFLAGS = \+-lintl/LDFLAGS = -lgpg-error -lintl/g" tests/Makefile 

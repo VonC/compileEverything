@@ -1,3 +1,5 @@
+page=http://www.tcl.tk/software/tcltk/download.html
+url=http://prdownloads.sourceforge.net/tcl/
 cdpath=${H}/.cpl/src/@@NAMEVER@@/unix
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared @@ENABLE_64BIT@@
 post=ln -fs  tclsh8.5 $HULS/@@NAMEVER@@/bin/tclsh
