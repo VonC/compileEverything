@@ -17,3 +17,7 @@ https://itsv
 ps -ef|grep compileEverything
 
 git clone https://itsvc/hgit/demo
+
+GitLab on NGiNX:
+
+https://voncvb:9893/ (admin@local.host 5iveL!fe)
