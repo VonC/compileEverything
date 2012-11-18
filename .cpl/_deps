@@ -52,7 +52,8 @@ lib pcre gcc,ncurses,libiconv,zlib
 lib libxslt gcc,libxml2,zlib,libiconv,libgcrypt,libgpgerror
 lib libgcrypt gcc,libgpgerror,libiconv
 lib libgpgerror gcc,libiconv
-app ruby gcc,openssl,gdbm,libiconv,ncurses,tcl,zlib,db,expat
+app ruby gcc,openssl,gdbm,libiconv,ncurses,tcl,zlib,db,expat,libyaml
+lib libyaml none
 app gem ruby
 mod svn2git gem,aliensvn
 mod aliensvn cpanm,termreadkey

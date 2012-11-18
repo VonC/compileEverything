@@ -1,0 +1,4 @@
+page=http://pyyaml.org/wiki/LibYAML
+url=http://pyyaml.org/download/libyaml/
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
+
