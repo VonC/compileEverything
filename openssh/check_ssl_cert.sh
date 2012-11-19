@@ -28,5 +28,8 @@ key="${H}/../$(hostname).key"
 
 if [[ ! -e "${key}" ]] ; then
   openssl pkcs12 -in "${p12}" -out "${key}" -nodes -passin pass:${jkspwd}
+fi
+if [[ ! -e "${H}/openssh/$(hostname).key" && -e "${key}" ]] ; then
   cat "${key}" >> "${H}/.ssh/curl-ca-bundle.crt"
+  cp "${key}" "${H}/openssh"
 fi

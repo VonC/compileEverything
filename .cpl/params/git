@@ -15,4 +15,5 @@ configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-lib=${HULL} --with-ope
 premake=gen_sed -i "s/^EXTLIBS =/EXTLIBS = -lintl /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile"
 makecmd=gmake
 makeinstcmd=gmake install
-post=cp_tpl "${H}/gitweb/gitweb.conf.pl.tpl" "${H}/gitweb" ; git config --global push.default simple
+post=cp_tpl "${H}/gitweb/gitweb.conf.pl.tpl" "${H}/gitweb"
+postcheck=git config --global push.default simple
