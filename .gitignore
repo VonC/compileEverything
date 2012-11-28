@@ -128,3 +128,4 @@ dump.rdb
 /gitolite/ga/
 /.cpl/params/.mm
 /.mozilla/
+/addresses.txt
