@@ -30,10 +30,12 @@ fi
 cp_tpl "${gtl}/gitlab.yml.tpl" "${gtl}"
 cp_tpl "${gtl}/database.yml.tpl" "${gtl}"
 cp_tpl "${gtl}/unicorn.rb.tpl" "${gtl}"
+cp_tpl "${gtl}/resque.yml.tpl" "${gtl}"
 #cp_tpl "${gtl}/omniauth.rb.tpl" "${gtl}"
 ln -fs ../../gitlab.yml "${github}/config/gitlab.yml"
 ln -fs ../../database.yml "${github}/config/database.yml"
 ln -fs ../../unicorn.rb "${github}/config/unicorn.rb"
+ln -fs ../../resque.yml "${github}/config/resque.yml"
 if [[ ! -e "${gitolite}/hooks/common/post-receive" ]] ; then
   cp "${github}/lib/hooks/post-receive" "${gitolite}/hooks/common/"
 fi
@@ -48,7 +50,7 @@ fi
 sshd start
 redisd start
 d=$(pwd) ; cd "${github}"
-if [[ "${upgradedb}" == "1" ]] ; then
+if [[ "${upgradedb}" == "1" || ${gitlabForceInit[@]} ]] ; then
   echo Initialize app
   bundle exec rake gitlab:app:setup RAILS_ENV=production
   fix=$(grep "Syc" -nrlHIF "${github}/vendor/bundle/ruby/1.9.1/specifications/")
