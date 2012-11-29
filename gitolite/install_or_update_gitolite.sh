@@ -43,6 +43,8 @@ if [[ "${glc}" == "" ]] ; then
   gen_sed -i "${a}i\    LOCAL_CODE                  => '$HOME/gitolite'," "${H}/.gitolite.rc"
 fi
 
+sshd start
+
 if [[ ! -e "${gtl}/ga" ]]; then
   git clone gitolitesrv:gitolite-admin "${gtl}/ga"
 else

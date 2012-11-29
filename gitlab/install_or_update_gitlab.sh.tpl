@@ -37,14 +37,15 @@ ln -fs ../../database.yml "${github}/config/database.yml"
 ln -fs ../../unicorn.rb "${github}/config/unicorn.rb"
 ln -fs ../../resque.yml "${github}/config/resque.yml"
 cp "${github}/lib/hooks/post-receive" "${gitolite}/hooks/common/"
+d=$(pwd) ; cd "${github}"
 if [[ ! "$(ls -A ${github}/vendor/bundle/ruby/1.9.1/gems)" ]] ; then 
-  d=$(pwd) ; cd "${github}"
-  echo Install bundles
+  echo Install gem bundles
   gem install charlock_holmes --version '0.6.8'
   gem install bundler
-  bundle install --without development test sqlite postgres --deployment
-  cd "${d}"
 fi
+echo "Install/update bundles"
+bundle install --without development test sqlite postgres --deployment
+cd "${d}"
 sshd start
 redisd start
 d=$(pwd) ; cd "${github}"
