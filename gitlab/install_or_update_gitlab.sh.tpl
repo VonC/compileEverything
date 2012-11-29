@@ -36,9 +36,7 @@ ln -fs ../../gitlab.yml "${github}/config/gitlab.yml"
 ln -fs ../../database.yml "${github}/config/database.yml"
 ln -fs ../../unicorn.rb "${github}/config/unicorn.rb"
 ln -fs ../../resque.yml "${github}/config/resque.yml"
-if [[ ! -e "${gitolite}/hooks/common/post-receive" ]] ; then
-  cp "${github}/lib/hooks/post-receive" "${gitolite}/hooks/common/"
-fi
+cp "${github}/lib/hooks/post-receive" "${gitolite}/hooks/common/"
 if [[ ! "$(ls -A ${github}/vendor/bundle/ruby/1.9.1/gems)" ]] ; then 
   d=$(pwd) ; cd "${github}"
   echo Install bundles
