@@ -38,6 +38,7 @@ http {
         # default max client body size was 1m! => Error code is 413
         # here: max 10Go
         client_max_body_size 10000m;
+        proxy_read_timeout 90s;
 
         ssl                  on;
         ssl_certificate      @H@/nginx/itsvc.world.company.crt;

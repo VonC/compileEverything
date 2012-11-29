@@ -72,7 +72,7 @@ gitolite/github
 /openldap/*.pem
 /openldap/ldap.conf
 /.history
-/.mm
+.mm
 /.manpath
 /lynx/lynx.cfg
 /apache/ctl
@@ -126,7 +126,6 @@ dump.rdb
 /gitlab/install_or_update_gitlab.sh
 /gitolite-admin
 /gitolite/ga/
-/.cpl/params/.mm
 /.mozilla/
 /addresses.txt
 /gitolite/VREF/CHECKID
