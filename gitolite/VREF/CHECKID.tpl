@@ -8,6 +8,16 @@ refname=$1          # we're running like an update hook
 oldsha=$2
 newsha=$3
 
+a=$(grep "${user}\"" "@H@/.ssh/authorized_keys")
+if [ ! -z "${a}" ] ; then
+  a="${a##* }"
+  #echo "new a: ${a}"
+  if [ ! -z ${a} ] ; then
+    user="${a}"
+  fi
+fi
+#echo "final user='${user}'"
+#exit 1
 #echo "test '$1', '$2', '$3'"
 
 NOREV=0000000000000000000000000000000000000000

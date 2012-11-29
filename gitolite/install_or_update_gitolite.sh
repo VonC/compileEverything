@@ -48,3 +48,6 @@ if [[ ! -e "${gtl}/ga" ]]; then
 else
   git --git-dir="${gtl}/ga/.git" --work-tree="${gtl}/ga" pull
 fi
+
+if [[ ! -e "${H}/sbin/gitolite-shell" ]] ; then cp_tpl "${H}/sbin/gitolite-shell" ; fi
+if [[ ! -e "${gtl}/VREF/CHECKID" ]] ; then cp_tpl "${gtl}/VREF/CHECKID" ; fi

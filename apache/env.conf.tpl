@@ -104,7 +104,7 @@ Listen @PORT_HTTP_HGIT@
     SetEnv GIT_PROJECT_ROOT @H@/repositories
     SetEnv GIT_HTTP_EXPORT_ALL
     SetEnv GITOLITE_HTTP_HOME @H@
-    ScriptAlias /hgit/ @H@/gitolite/bin/gitolite-shell/
+    ScriptAlias /hgit/ @H@/sbin/gitolite-shell/
     SetEnv GIT_HTTP_BACKEND "@H@/usr/local/apps/git/libexec/git-core/git-http-backend"
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars

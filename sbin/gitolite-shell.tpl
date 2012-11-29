@@ -1,7 +1,7 @@
 #!/bin/bash
-H="/devit_home/users/vobadm/gitpoc/ce4"
+export H="@H@"
 if [ -z "${REQUEST_URI}" ]; then
-  "${H}/i/gitolite/bin/gitolite-shell"
+  "${H}/gitolite/bin/gitolite-shell"
 else
   a=$(grep "${REMOTE_USER}" "${H}/.ssh/authorized_keys")
   #echo "${REMOTE_USER}: ${a}" > aaa

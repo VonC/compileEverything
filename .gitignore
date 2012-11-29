@@ -129,3 +129,5 @@ dump.rdb
 /.cpl/params/.mm
 /.mozilla/
 /addresses.txt
+/gitolite/VREF/CHECKID
+/sbin/gitolite-shell

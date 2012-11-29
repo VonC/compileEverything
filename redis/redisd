@@ -32,8 +32,8 @@ case "$1" in
   fi
   ;;
 'restart')
-  sshd stop
-  sshd start
+  redisd stop
+  redisd start
 ;;
 'status')
   if [[ "${aps}" == "" ]] ; then
@@ -46,7 +46,7 @@ case "$1" in
   fi
   ;;
 *)
-  echo "usage: ${H}/sbin/sshd {start|stop|restart|status}"
+  echo "usage: ${H}/sbin/redisd {start|stop|restart|status}"
   ;;
 esac
 
