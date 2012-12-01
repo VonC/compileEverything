@@ -51,11 +51,11 @@ if [[ "${cptpl_uname#CYGWIN}" != "${cptpl_uname}" ]] ; then
   # echo $(${hostnames})
 fi
 
-gen_sed -i "s;@H@;${H};g" "${fullFilePathDst}"
-gen_sed -i "s/@HOSTNAME@/$(${hostnames})/g" "${fullFilePathDst}"
-gen_sed -i "s/@USERNAME@/$(/usr/bin/id -un)/g" "${fullFilePathDst}"
-gen_sed -i "s/@GROUPNAME@/$(/usr/bin/id -un)/g" "${fullFilePathDst}"
-gen_sed -i "s;@@TITLE@@;${H};g" "${fullFilePathDst}"
+"${H}/sbin/gen_sed" -i "s;@H@;${H};g" "${fullFilePathDst}"
+"${H}/sbin/gen_sed" -i "s/@HOSTNAME@/$(${hostnames})/g" "${fullFilePathDst}"
+"${H}/sbin/gen_sed" -i "s/@USERNAME@/$(/usr/bin/id -un)/g" "${fullFilePathDst}"
+"${H}/sbin/gen_sed" -i "s/@GROUPNAME@/$(/usr/bin/id -un)/g" "${fullFilePathDst}"
+"${H}/sbin/gen_sed" -i "s;@@TITLE@@;${H};g" "${fullFilePathDst}"
 
 #fqn=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*}
 if [[ "${cptpl_uname#CYGWIN}" != "${cptpl_uname}" ]] ; then
@@ -63,21 +63,21 @@ if [[ "${cptpl_uname#CYGWIN}" != "${cptpl_uname}" ]] ; then
 else
   fqn=$(/usr/bin/host -TtA $(hostname -s)|grep "has address"|/usr/bin/awk '{print $1}') ; if [[ "${fqn}" == "" ]] ; then fqn=$(hostname -s) ; fi
 fi
-gen_sed -i "s/@FQN@/${fqn}/g" "${fullFilePathDst}"
+"${H}/sbin/gen_sed" -i "s/@FQN@/${fqn}/g" "${fullFilePathDst}"
 fqnemail=${fqn/./@}
-gen_sed -i "s/@EMAIL@/${fqnemail}/g" "${fullFilePathDst}"
+"${H}/sbin/gen_sed" -i "s/@EMAIL@/${fqnemail}/g" "${fullFilePathDst}"
 
 get_param_file ".ports.ini" portini
 while read line; do 
   port=(${line#*=})
   name=(${line%=*})
   # echo "${name} - ${port}"
-  gen_sed -i "s;${name};${port};g" "${fullFilePathDst}"
+  "${H}/sbin/gen_sed" -i "s;${name};${port};g" "${fullFilePathDst}"
 done < "${portini}"
 
 epoch=$(date +%s)
 epoch=$((epoch+1000))
-gen_sed -i "s/@EPOCH@/${epoch}/g" "${fullFilePathDst}"
+"${H}/sbin/gen_sed" -i "s/@EPOCH@/${epoch}/g" "${fullFilePathDst}"
 
 ldapg=$(grep "@LDAP_" "${fullFilePathDst}")
 # echo "ldapg ${ldapg}"
@@ -88,15 +88,15 @@ if [[ "${ldapg}" != "" ]] ; then
       ldapp=("${line#*=}")
       ldapn=(${line%%=*})
       # echo "ldap: ${ldapn} - ${ldapp}"
-      gen_sed -i "s;${ldapn};${ldapp};g" "${fullFilePathDst}"
+      "${H}/sbin/gen_sed" -i "s;${ldapn};${ldapp};g" "${fullFilePathDst}"
     done < "${ldap}"
   else
-    gen_sed -i -n -e '/LDAP_START/{p; :a; N; /LDAP_END/!ba; s/.*\n//}; p' "${fullFilePathDst}"
-    # gen_sed -i -n -e '/LDAP_START/{' -e 'p' -e ':a' -e 'N' -e '/LDAP_END/!ba' -e 's/.*\n//' -e '}' -e 'p' "${fullFilePathDst}"
-    gen_sed -i "s; companyldap;;g" "${fullFilePathDst}"
+    "${H}/sbin/gen_sed" -i -n -e '/LDAP_START/{p; :a; N; /LDAP_END/!ba; s/.*\n//}; p' "${fullFilePathDst}"
+    # "${H}/sbin/gen_sed" -i -n -e '/LDAP_START/{' -e 'p' -e ':a' -e 'N' -e '/LDAP_END/!ba' -e 's/.*\n//' -e '}' -e 'p' "${fullFilePathDst}"
+    "${H}/sbin/gen_sed" -i "s; companyldap;;g" "${fullFilePathDst}"
   fi
-  gen_sed -i "s;# LDAP_START;;g" "${fullFilePathDst}"
-  gen_sed -i "s;# LDAP_END;;g" "${fullFilePathDst}"
+  "${H}/sbin/gen_sed" -i "s;# LDAP_START;;g" "${fullFilePathDst}"
+  "${H}/sbin/gen_sed" -i "s;# LDAP_END;;g" "${fullFilePathDst}"
 fi
 
 while [[ $(grep -m 1 "@MYSQL_" "${fullFilePathDst}") != "" ]] ; do
@@ -118,8 +118,8 @@ if [[ "${mysql}" != "" ]] ; then
       if [[ "${mysql_grep}" != "" ]] ; then
         # echo "D: mysql_grep='${mysql_grep}'"
         mysql_val=${mysql_grep##*= }
-        # echo "D: gen_sed -i \"s;${mysql};${mysql_val};g\" \"${fullFilePathDst}\""
-        gen_sed -i "s;${mysql};${mysql_val};g" "${fullFilePathDst}"
+        # echo "D: "${H}/sbin/gen_sed" -i \"s;${mysql};${mysql_val};g\" \"${fullFilePathDst}\""
+        "${H}/sbin/gen_sed" -i "s;${mysql};${mysql_val};g" "${fullFilePathDst}"
         replace=true
       fi
     fi

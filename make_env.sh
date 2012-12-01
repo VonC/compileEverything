@@ -155,7 +155,7 @@ function main {
       if [[ "${title}" == "" ]] ; then echolog "title should be set (to '${H}')" ; miss_bashrc_title ; fi
       build_bashrc
     fi
-    if [[ ! -e "${H}/addresses.txt" ]] ; then cp_tpl "${H}/.cpl/addresses.txt.tpl" "${H}" ; fi
+    if [[ ! -e "${H}/addresses.txt" ]] ; then "${H}/sbin/cp_tpl" "${H}/.cpl/addresses.txt.tpl" "${H}" ; fi
     sc
     mkdir -p "${HUL}/._linked"
     mkdir -p "${HUL}/ssl/lib"
