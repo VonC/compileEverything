@@ -130,3 +130,4 @@ dump.rdb
 /addresses.txt
 /gitolite/VREF/CHECKID
 /sbin/gitolite-shell
+/openldap/.ldap.test

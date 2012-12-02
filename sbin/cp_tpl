@@ -40,6 +40,7 @@ fi
 #echo "fileDst='${fileDst}', fileOri='${fileOri}'"
 
 fullFilePathDst="${fullPathDst}/${fileDst}"
+fullFilePathDst="${fullFilePathDst//\/\///}"
 echo cp -f "${fullFilePathOri}" "${fullFilePathDst}"
 cp -f "${fullFilePathOri}" "${fullFilePathDst}"
 
@@ -83,6 +84,7 @@ ldapg=$(grep "@LDAP_" "${fullFilePathDst}")
 # echo "ldapg ${ldapg}"
 if [[ "${ldapg}" != "" ]] ; then
   get_param_file ".ldap.private" ldap
+  if [[ ! -e "${ldap}" ]] ; then get_param_file ".ldap.test" ldap ; fi
   if [[ -e "${ldap}" ]] ; then
     while read line; do
       ldapp=("${line#*=}")
@@ -98,6 +100,8 @@ if [[ "${ldapg}" != "" ]] ; then
   "${H}/sbin/gen_sed" -i "s;# LDAP_START;;g" "${fullFilePathDst}"
   "${H}/sbin/gen_sed" -i "s;# LDAP_END;;g" "${fullFilePathDst}"
 fi
+
+"${H}/sbin/gen_sed" -i "s;#@#;@;g" "${fullFilePathDst}"
 
 while [[ $(grep -m 1 "@MYSQL_" "${fullFilePathDst}") != "" ]] ; do
 mysql==$(grep -m 1 "@MYSQL_" "${fullFilePathDst}")
@@ -126,4 +130,5 @@ if [[ "${mysql}" != "" ]] ; then
   fi
   if [[ "${replace}" == "false" ]] ; then exit 1 ; fi
 fi
+
 done

@@ -1,17 +1,21 @@
 #!/bin/bash
 
+cp_tpl "${H}/openldap/.ldap.test.tpl" "${H}/openldap" ; 
 cp_tpl "${H}/openldap/slapd.1.conf.tpl" "${H}/openldap" ; 
+cp_tpl "${H}/openldap/ldap.conf.tpl" "${H}/openldap"
 ln -fs ../../../../openldap/ldap.conf  "${HUL}/etc/openldap/ldap.conf" ; 
 ln -fs ../../../../openldap/slapd.1.conf "${HUL}/etc/openldap/slapd.conf"  ; 
 ln -fs ../../../../../../openldap/ldap.conf  "${HULS}/openldap/etc/openldap/ldap.conf" ; 
 ln -fs ../../../../../../openldap/slapd.1.conf "${HULS}/openldap/etc/openldap/slapd.conf"  ; 
-cp_tpl "${H}/openldap/ldap.conf.tpl" "${H}/openldap"
 
 openldap="${H}/openldap"
 if [[ ! -e "${openldap}/db.1.a" ]] ; then mkdir -p "${openldap}/db.1.a" ; fi
+slapdd stop
 slapdd start
 
+echo "Before wait: $(date)"
 read -t2 -n1 -r -p "Waiting a few seconds for ldap to start..." key
+echo -e "\nAfter wait : $(date)"
 
 slapdd status
 
@@ -35,5 +39,4 @@ fi
 ga=$(ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p @PORT_LDAP_TEST@ 'uid=gitoliteadm' uid)
 echo "ga='${ga}'"
 
-slapdd stop
-
+# slapdd stop

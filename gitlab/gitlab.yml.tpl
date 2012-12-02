@@ -34,7 +34,7 @@ ldap:
   base: '@LDAP_BASE@'
   port: @LDAP_PORT@
   uid: '@LDAP_UID@'
-  method: '@LDAP_METHOD@'
+  method: '@LDAP_METHOD_NC@'
   bind_dn: '@LDAP_BINDDN@'
   password: '@LDAP_PASSWORD@'
 
