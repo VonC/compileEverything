@@ -6,3 +6,4 @@
 @LDAP_BASE@=OU=CompanyPeople,DC=Prod,DC=company
 @LDAP_UID@=anIDField
 @LDAP_METHOD@=:plain (or :ssl if using ldaps://)
+@LDAP_METHOD_NC@=plain (or ssl if using ldaps://)
