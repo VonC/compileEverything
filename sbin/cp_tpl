@@ -68,7 +68,8 @@ fi
 fqnemail=${fqn/./@}
 "${H}/sbin/gen_sed" -i "s/@EMAIL@/${fqnemail}/g" "${fullFilePathDst}"
 
-get_param_file ".ports.ini" portini
+get_param_file ".ports.ini.private" portini
+if [[ ! -e "${portini}" ]] ; then get_param_file ".ports.ini" portini ; fi
 while read line; do 
   port=(${line#*=})
   name=(${line%=*})
