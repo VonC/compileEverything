@@ -131,3 +131,4 @@ dump.rdb
 /gitolite/VREF/CHECKID
 /sbin/gitolite-shell
 /openldap/.ldap.test
+/openldap/slapdd

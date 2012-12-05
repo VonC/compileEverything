@@ -3,12 +3,12 @@
 SLAPD="${H}/openldap/slapd -s0"
 CONF1="${H}/openldap/slapd.1.conf"
 LVL=0x4105
-URI1=ldap://localhost:9011/
+URI1=ldap://localhost:@PORT_LDAP_TEST@/
 LOG1="${H}/openldap/slapd.1.log"
 PIDFILE="${H}/openldap/slapd.1.pid"
 ARGSFILE="${H}/openldap/slapd.1.args"
 
-PORT1=9011
+PORT1=@PORT_LDAP_TEST@
 LOCALHOST=localhost
 TOOLARGS="-x $LDAP_TOOLARGS"
 TOOLPROTO="-P 3"
@@ -55,7 +55,7 @@ case "$1" in
     echo "slapd is stopped"
   else
     echo "slapd running, process ${aps}"
-    #ldapsearch -x -s base -b "cn=monitor" -h localhost -p 9011 'objectclass=*'
+    #ldapsearch -x -s base -b "cn=monitor" -h localhost -p @PORT_LDAP_TEST@ 'objectclass=*'
     echo $LDAPSEARCH -b "cn=monitor" -s base -h $LOCALHOST -p $PORT1 'objectclass=*'
     $LDAPSEARCH -b "cn=monitor" -s base -h $LOCALHOST -p $PORT1 'objectclass=*'
   fi
