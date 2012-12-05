@@ -43,6 +43,7 @@ NOREV=0000000000000000000000000000000000000000
     cn=`echo $cns | cut -d~ -f2`
     hash=`echo $cns | cut -d~ -f3`
     subject=`echo $cns | cut -d~ -f4`
+    if [[ "$an" == "gitoliteadm" ]]; then exit 0 ; fi
     if [ "$an" != "$GL_USER" ]; then
       die "Commit found with wrong author name for $hash ($subject)\nShould have been author '$GL_USER', was '$cn'"
       exit 1
