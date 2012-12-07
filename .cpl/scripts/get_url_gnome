@@ -1,0 +1,21 @@
+#! /bin/bash
+asrcline=$(wget -q -O - "http://ftp.gnome.org/pub/gnome/sources/$1/?O=D;C=M" | grep "folder\.gif")
+# echo "asrcline='${asrcline}'"
+if [[ "$#" -eq 2 ]] ; then
+  asrcline=$(echo "${asrcline}" | grep -m 1 -v "$2")
+else
+  asrcline=$(echo "${asrcline}" | grep -m 1 "")
+fi
+# echo "asrcline='${asrcline}'"
+majver="${asrcline%/*}"
+# echo "majver='${majver}'"
+majver="${majver##*>}"
+minver="${majver##*.}"
+majver="${majver%%.*}"
+# echo "majver='${majver}'"
+# echo "minver='${minver}'"
+minver="${minver%%/*}"
+# echo "minver='${minver}'"
+# echo "majver='${majver}'"
+# echo "minver='${minver}'"
+echo "http://ftp.gnome.org/pub/gnome/sources/$1/${majver}.${minver}/"

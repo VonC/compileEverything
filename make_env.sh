@@ -264,8 +264,11 @@ function get_sources() {
   get_param ${name} nameurl "${name}"
   get_param ${name} nameact "${nameurl}"
   get_param ${name} page "${_vers}"
+  get_param ${name} verexclude ""
+  get_param ${name} verinclude ""
+
   if [[ "${page}" == "none" ]] ; then eval ${_namever}="'${name}'" ; return 0 ; fi
-  if [[ "${page#http}" == "${page}" && "${page#/}" == "${page}" ]] ; then page=$("${H}/.cpl/scripts/${page}") ; fi
+  if [[ "${page#http}" == "${page}" && "${page#/}" == "${page}" ]] ; then page=$("${H}/.cpl/scripts/${page}" ${name} ${verexclude}) ; fi
   get_param ${name} ext "tar.gz"
   if [[ "${nameurl}" == "none" ]] ; then nameurl="" ; fi
   if [[ "${ext}" == "none" ]] ; then ext="" ; fi
@@ -281,9 +284,7 @@ function get_sources() {
     local asrcline=$(wget -q -O - "${page}" | grep -e "${nameurl}" | grep -e "${ext}")
   fi
   
-  get_param ${name} verexclude ""
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
-  get_param ${name} verinclude ""
   if [[ "${verinclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -e "${verinclude}") ; fi
   if [[ ${mgsd} == 1 ]] ; then echo "D: line0 source! from page ${page}, nameurl ${nameurl}, ext _${ext}_, exturl _${exturl}_" ; fi
   if [[ ${mgsd} == 1 ]] ; then echo "D: line00 ${asrcline}" ; fi
@@ -308,7 +309,7 @@ function get_sources() {
   if [[ "${source}" == "${source0}" ]] ; then source="${source0##*\'}" ; fi
   if [[ ${mgsd} == 1 ]] ; then echo "D: source1 ${source}" ; fi
   get_param ${name} url ""
-  if [[ "${url}" != "" && "${url#http}" == "${url}" ]] ; then url=$("${H}/.cpl/scripts/${url}") ; fi
+  if [[ "${url}" != "" && "${url#http}" == "${url}" ]] ; then url=$("${H}/.cpl/scripts/${url}" ${name} ${verexclude}) ; fi
   if [[ ${mgsd} == 1 ]] ; then echo "D: url0 ${url}" ; fi
   if [[ ${mgsd} == 1 ]] ; then echo "D: source ${source}" ; fi
   local targz="${source##*/}"

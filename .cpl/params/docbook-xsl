@@ -1,0 +1,6 @@
+page=http://www.linuxfromscratch.org/blfs/view/svn/pst/docbook-xsl.html
+url=http://sourceforge.net/projects/docbook/files/docbook-xsl/@@VER@@/
+#ext=zip
+ext=tar.bz2
+#configcmd=./configure --prefix=${HUL}/libs/@@NAMEVER@@ --enable-shared --enable-static --enable-utf8 --enable-unicode-properties --enable-pcregrep-libz @@WITH_GNU_LD@@
+#premake=gen_sed -i "s/^LDFLAGS = /LDFLAGS = -lintl /g" ${H}/.cpl/src/@@NAMEVER@@/Makefile
