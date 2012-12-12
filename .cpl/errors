@@ -3479,3 +3479,8 @@ I tried doing these things
 first -  /etc/init.d/portmap restart
 Second . /etc/init.d/nfslock restart
 ~~~~~~~~~~~~~~~~~
+openldap/slapd.1.log
+ldap bdb_db_open: database "database already in use"
+Could be only the  'openldap/db.1.a/alock', but the unlock script will go through all the files within 'openldap/db.1.a/'
+~~~~~~~~~~~~~~~~
+

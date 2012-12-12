@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ "$#" -ne "1" ]]; then echo "name of the openldap (or 'all')"  > /dev/stderr ; exit 1; fi
+db="${H}/openldap/$1"
+if [[ ! -e "${db}" ]] ; then echo "unknown ldap database '$1'"  > /dev/stderr ; exit 1 ; fi
+cd "${db}"
+for f in __db* log.* *.bdb alock ; do
+  echo $f
+  mv $f ${f}b
+  cp -a ${f}b $f
+  rm ${f}b
+done
+
