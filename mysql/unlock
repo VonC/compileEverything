@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ "$#" -ne "1" ]]; then echo "name of the sandbox required (or 'all')"  > /dev/stderr ; exit 1; fi
+db="${H}/mysql/sandboxes/$1"
+if [[ ! -e "${db}" ]] ; then echo "unknown sandbox '$1'"  > /dev/stderr ; exit 1 ; fi
+cd "${db}"/data
+for f in ib* ; do
+  echo $f
+  mv $f ${f}b
+  cp -a ${f}b $f
+  rm ${f}b
+done

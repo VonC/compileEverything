@@ -3450,4 +3450,32 @@ Or try a --without-pic --disable-shared for configuration of nxlog
 https://www.google.fr/search?q=ld%3A+libperl.a(op.o)%3A+relocation+R_X86_64_32+against&oq=ld%3A+libperl.a(op.o)%3A+relocation+R_X86_64_32+against&sugexp=chrome,mod=0&sourceid=chrome&ie=UTF-8#hl=fr&sclient=psy-ab&q=relocation+r_x86_64_32+against+a+local+symbol%27+can+not+be+used+when+making+a+shared+object&oq=%22relocation+R_X86_64_32+against%22
 http://www.vr.org/kb/4252/Curl-Compile-Error-relocation-RX866432-against-a-local-symbol-can-not-be-used-when-making-a-shared-object-recompile-with--fPIC.html
 ~~~~~~~~~~~~~~~~~~~~~~~~
+After unexpected reboot, impossible to start mysql sandbox
+See http://cglreport.zhenhua.info/2008/08/mysql-error-unable-to-lock-ibdata1.html
+Mysql error "InnoDB: Unable to lock ./ibdata1, error: 11"
 
+Recently, there was a power outage in the lab. I did not shut down my machines before the power outage. After I restarted my Ubuntu, I could not start up Mysql. The error was:
+
+InnoDB: Unable to lock ./ibdata1, error: 11
+InnoDB: Check that you do not already have another mysqld process
+InnoDB: using the same InnoDB data or log files.
+InnoDB: Error in opening ./ibdata1
+But I am 100% sure that no another mysqld process was running. After I searched on line, I found that I was not the only one encountering this error. See this post. 
+This post has an insight into this problem. It seems to be caused by NFS. Mysql is not installed on a local file system. It is installed on a remote file system which is mounted to other file systems by using NFS.
+
+Solution
+make a copy of the original files (ibdata1, ib_logfile0, ib_logfile1...).
+
+mv ibdata1 ibdata1.bak
+cp -a ibdata1.bak ibdata1
+......
+Posted by Gerald Guo at 8/18/2008 03:06:00 PM
+Labels: linux, mysql, nfs
+
+easier than:
+
+http://onaxer.com/blog/blog/2010/06/01/innodb-unable-to-lock-ibdata1-error-37 ,
+I tried doing these things
+first -  /etc/init.d/portmap restart
+Second . /etc/init.d/nfslock restart
+~~~~~~~~~~~~~~~~~
