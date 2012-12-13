@@ -6,7 +6,8 @@ lib readline none
 lib libxml2 zlib,libiconv,readline
 lib gettext libiconv,expat,zlib,libxml2
 app git gcc,man-db,openssl,libssh2,curl,libiconv,expat,libidn,zlib,nginx,perl,apache,python,subversion,openssh,autoconf,libsecret
-lib libsecret none
+lib libsecret intltool
+lib intltool none 
 app man-db groff,libpipeline,pkgconfig,db,tcl,zlib,gettext,libiconv
 lib groff gcc,libiconv,gettext
 mod gitolite git
