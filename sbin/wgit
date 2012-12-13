@@ -88,30 +88,7 @@ then
    echo -e "[ \E[34;47m$GIT_AUTHOR_NAME,$GIT_AUTHOR_EMAIL for $machine\033[0m ]"
    nextcmd=${gitcmd[0]}
    #echo NEXT $nextcmd
-   if [[ ( $nextcmd == "push" || $nextcmd == "clone" || $nextcmd == "fetch" ) && ! -f $HOME/.netrc ]]; then
-     authen=1
-     passwordvarname="${username}_${machine}"
-     if [[ ! $password ]] ; then
-       password=$(dec ${passwordvarname})
-     fi
-     if [[ ! $password ]] ; then
-       stty -echo
-       read -p "Enter your Windows password: " apasswd
-       stty echo
-       enc ${apasswd} "${passwordvarname}" 
-     else
-       apasswd="${password}"
-     fi
-     echo machine $machine > $HOME/.netrc
-     echo login $GIT_AUTHOR_NAME >> $HOME/.netrc
-     echo password $apasswd >> $HOME/.netrc
-   fi
-   #echo apasswd: $apasswd password $password
-   #more $HOME/.netrc
    "${ahome}/bin/git" "${gitcmd[@]}"
-   if [[ $authen ]]; then
-     rm $HOME/.netrc
-   fi
    for aconfigToSet in "${configs[@]}" ; do
      "${ahome}/bin/git" config --global --unset ${aconfigToSet%%=*}
    done

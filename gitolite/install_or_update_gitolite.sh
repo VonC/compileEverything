@@ -53,3 +53,6 @@ fi
 
 if [[ ! -e "${H}/sbin/gitolite-shell" ]] ; then cp_tpl "${H}/sbin/gitolite-shell" "${H}/sbin" ; fi
 if [[ ! -e "${gtl}/VREF/CHECKID" ]] ; then cp_tpl "${gtl}/VREF/CHECKID" "${gtl}/VREF" ; fi
+
+GL_USER=gitoliteadm gitolite print-default-rc > "${gtl}/default.gitolite.rc"
+diff "${gtl}/default.gitolite.rc" "${H}/.gitolite.rc"

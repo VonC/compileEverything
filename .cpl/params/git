@@ -16,4 +16,4 @@ premake=gen_sed -i "s/^EXTLIBS =/EXTLIBS = -lintl /g" "${H}/.cpl/src/@@NAMEVER@@
 makecmd=gmake
 makeinstcmd=gmake install
 post=cp_tpl "${H}/gitweb/gitweb.conf.pl.tpl" "${H}/gitweb"
-postcheck=git config --global push.default simple; set +e; complete -r git ; set -e
+postcheck=git config --global push.default simple; set +e; complete -r git ; set -e ; git config credential.helper cache

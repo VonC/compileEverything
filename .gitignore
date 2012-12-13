@@ -132,3 +132,4 @@ dump.rdb
 /sbin/gitolite-shell
 /openldap/.ldap.test
 /openldap/slapdd
+/gitolite/default.gitolite.rc
