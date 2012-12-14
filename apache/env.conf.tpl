@@ -186,3 +186,35 @@ Listen @PORT_HTTP_CGIT@
     TransferLog "@H@/apache/gitcgit_access_log"
     LogLevel info
 </VirtualHost>
+
+# LoadModule passenger_module @PASSENGER-ROOT@/ext/apache2/mod_passenger.so
+# PassengerRoot @PASSENGER-ROOT@
+# PassengerRuby @H@/usr/local/apps/ruby/bin/ruby
+
+# GitLabHq  on @PORT_HTTPS_GITLAB@
+Listen @PORT_HTTPS_GITLAB@
+<VirtualHost @FQN@:@PORT_HTTPS_GITLAB@>
+    ServerName @FQN@
+    ServerAlias @HOSTNAME@
+    SSLCertificateFile "@H@/apache/crt"
+    SSLCertificateKeyFile "@H@/apache/key"
+    SSLEngine on
+    SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
+    SetEnv GIT_HTTP_BACKEND "@H@/usr/local/apps/git/libexec/git-core/git-http-backend"
+    DocumentRoot @H@/gitlab/github
+    Alias /gitlab @H@/gitlab/github
+    <FilesMatch "\.(cgi|shtml|phtml|php)$">
+      SSLOptions +StdEnvVars
+    </FilesMatch>
+    RailsBaseURI /gitlab
+    <Directory @H@/gitlab/github>
+        SSLOptions +StdEnvVars
+        Options -MultiViews
+    </Directory>
+
+    CustomLog "@H@/gitlab/logs/apache_gitlab_ssl_request_log" \
+              "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+    ErrorLog "@H@/gitlab/logs/apache_gitlab_error_log"
+    TransferLog "@H@/gitlab/logs/apache_gitlab_access_log"
+    LogLevel debug
+</VirtualHost>

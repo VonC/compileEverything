@@ -105,7 +105,13 @@ fi
 "${H}/sbin/gen_sed" -i "s;#@#;@;g" "${fullFilePathDst}"
 
 psgroot=$(grep -m 1 "@PASSENGER-ROOT@" "${fullFilePathDst}")
-if [[ "${psgroot}" != "" ]] ; then "${H}/sbin/gen_sed" -i "s;@PASSENGER-ROOT@;$(passenger-config --root);g" "${fullFilePathDst}" ; fi
+if [[ "${psgroot}" != "" ]] ; then 
+  "${H}/sbin/gen_sed" -i "s;@PASSENGER-ROOT@;$(passenger-config --root);g" "${fullFilePathDst}" ; 
+  if [[ -e "${H}/bin/passenger-config" ]] ; then
+    "${H}/sbin/gen_sed" -i "s;# LoadModule passenger_module;LoadModule passenger_module;g" "${fullFilePathDst}" 
+    "${H}/sbin/gen_sed" -i "s;# Passenger;Passenger;g" "${fullFilePathDst}" 
+  fi
+fi
 
 while [[ $(grep -m 1 "@MYSQL_" "${fullFilePathDst}") != "" ]] ; do
 mysql==$(grep -m 1 "@MYSQL_" "${fullFilePathDst}")
