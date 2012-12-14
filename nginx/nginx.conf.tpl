@@ -18,6 +18,7 @@ http {
                       '$status $body_bytes_sent "$http_referer" '
                       '"$http_user_agent" "$http_x_forwarded_for"';
     access_log  logs/access.log  main;
+    passenger_root @PASSENGER-ROOT@;
 
     sendfile        on;
     #tcp_nopush     on;

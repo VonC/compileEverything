@@ -49,7 +49,7 @@ app jdk none
 lib neon gcc,openssl,expat,libxml2,zlib
 app openssh gcc,openssl,zlib,nxlog
 app nxlog apr,gettext,libiconv,pcre,openssl,zlib
-app nginx gcc,openssl,zlib,pcre,libxslt
+app nginx gcc,openssl,zlib,pcre,libxslt,ruby,passenger
 lib pcre gcc,ncurses,libiconv,zlib
 lib libxslt gcc,libxml2,zlib,libiconv,libgcrypt,libgpgerror
 lib libgcrypt gcc,libgpgerror,libiconv
@@ -66,7 +66,8 @@ app ant jdk
 app tomcat ant,jdk,junit
 app junit ant,jdk
 app postgresql none
-mod gitlab charlock_holmes,pygments,mysql_sandbox,libatomic_ops,redis,bundler,postgresql
+mod gitlab charlock_holmes,pygments,mysql_sandbox,libatomic_ops,redis,bundler,postgresql,passenger
+mod passenger gem
 mod charlock_holmes gem,icu
 mod bundler gem
 lib icu none
