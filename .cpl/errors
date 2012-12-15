@@ -3483,4 +3483,16 @@ openldap/slapd.1.log
 ldap bdb_db_open: database "database already in use"
 Could be only the  'openldap/db.1.a/alock', but the unlock script will go through all the files within 'openldap/db.1.a/'
 ~~~~~~~~~~~~~~~~
+mod passenger make apache2 extension
 
+cd $(passenger-config --root)
+rake apache2:clean apache2 RELEASE=yes
+
+g++ -shared ext/apache2/Configuration.o ext/apache2/Bucket.o ext/apache2/Hooks.o ext/apache2/mod_passenger.o -fPIC -o ext/apache2/mod_passenger.so -fPIC -D_REENTRANT -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -I/home/vonc/gitpoc/ce5/usr/local/libs/apr-1.4.6/include/apr-1 -I/home/vonc/gitpoc/ce5/usr/local/libs/aprutil-1.5.1/include/apr-1 -I/home/vonc/gitpoc/ce5/usr/local/include -I/home/vonc/gitpoc/ce5/usr/local/include -I/home/vonc/gitpoc/ce5/usr/local/ssl/include -fPIC -U_FORTIFY_SOURCE -I/home/vonc/gitpoc/ce5/usr/local/apps/httpd-2.2.23/include -D_REENTRANT -I/usr/local/include -DHASH_NAMESPACE="__gnu_cxx" -DHASH_FUN_H="<ext/hash_fun.h>" -DHAS_ALLOCA_H -DHAS_SFENCE -DHAS_LFENCE -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wpointer-arith -Wwrite-strings -Wno-long-long -g -DPASSENGER_DEBUG -DBOOST_DISABLE_ASSERTS ext/apache2/module_libpassenger_common.a ext/apache2/module_libboost_oxt.a -fPIC -L/home/vonc/gitpoc/ce5/usr/local/libs/apr-1.4.6/lib -lapr-1 -L/home/vonc/gitpoc/ce5/usr/local/libs/aprutil-1.5.1/lib -laprutil-1 -lpthread
+`.L3984' referenced in section `.rodata' of ext/apache2/module_libpassenger_common.a(aggregate.o): defined in discarded section `.gnu.linkonce.t._ZN9Passenger13FilterSupport9Tokenizer12typeToStringENS1_9TokenTypeE' of ext/apache2/module_libpassenger_common.a(aggregate.o)
+`.L3989' referenced in section `.rodata' of ext/apache2/module_libpassenger_common.a(aggregate.o): defined in discarded section `.gnu.linkonce.t._ZN9Passenger13FilterSupport9Tokenizer12typeToStringENS1_9TokenTypeE' of ext/apache2/module_libpassenger_common.a(aggregate.o)
+
+http://stackoverflow.com/questions/5333871/please-explain-this-linking-error-referenced-in-section-rodata
+http://stackoverflow.com/questions/1239730/help-with-linker-failer-gnu-linkonce-t
+
+Let's try with our onw binutils, ie our own ld

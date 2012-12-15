@@ -1,4 +1,5 @@
 app gcc make
+app binutils gcc
 app make expat,gettext
 lib expat none
 lib libiconv none

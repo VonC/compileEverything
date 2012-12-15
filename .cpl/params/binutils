@@ -1,0 +1,4 @@
+page=http://ftp.gnu.org/pub/gnu/binutils/?O=D;C=M
+url=http://ftp.gnu.org/pub/gnu/binutils/
+verexclude=latest|sig|xz|bz2
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@
