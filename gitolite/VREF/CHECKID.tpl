@@ -44,15 +44,15 @@ NOREV=0000000000000000000000000000000000000000
     hash=`echo $cns | cut -d~ -f3`
     subject=`echo $cns | cut -d~ -f4`
     if [[ "$an" == "gitoliteadm" ]]; then exit 0 ; fi
-    if [ "$an" != "$GL_USER" ]; then
-      die "Commit found with wrong author name for $hash ($subject)\nShould have been author '$GL_USER', was '$cn'"
+    if [ "$an" != "${user}" ]; then
+      die "Commit found with wrong author name for $hash ($subject)\nShould have been author '${user} ($GL_USER)', was '$cn'"
       exit 1
     fi
-    if [ "$cn" != "$GL_USER" ]; then
-      die "Commit found with wrong committer name for $hash ($subject)\nShould have been committer '$GL_USER', was '$cn'"
+    if [ "$cn" != "${user}" ]; then
+      die "Commit found with wrong committer name for $hash ($subject)\nShould have been committer '${user} ($GL_USER)', was '$cn'"
       exit 1
     fi
   done
-  echo "All commits are from author and committer '$GL_USER' => pass"
+  echo "All commits are from author and committer '${user} ($GL_USER)' => pass"
   exit 0
 
