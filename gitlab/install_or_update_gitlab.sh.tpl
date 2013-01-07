@@ -62,7 +62,11 @@ else
   bundle exec rake db:migrate RAILS_ENV=production
   echo Upgrade database done
 fi
-bundle exec rake gitlab:app:status RAILS_ENV=production
+echo Check if GitLab and its environment is configured correctly:
+bundle exec rake gitlab:env:info RAILS_ENV=production
+echo To make sure you didn't miss anything run a more thorough check with:
+#'
+bundle exec rake gitlab:check RAILS_ENV=production
 
 cd "${d}"
 

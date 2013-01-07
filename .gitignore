@@ -133,3 +133,6 @@ dump.rdb
 /openldap/.ldap.test
 /openldap/slapdd
 /gitolite/default.gitolite.rc
+*.1
+*.ori_tpl
+*.val_tpl

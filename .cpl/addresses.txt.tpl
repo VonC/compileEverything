@@ -6,14 +6,18 @@ Apache:
   gitweb                         : https://@FQN@:@PORT_HTTP_GITWEB@/git/
   https                          : https://@FQN@:@PORT_HTTP_HGIT@/hgit/
   cgit                           : https://@FQN@:@PORT_HTTP_CGIT@/cgit/
+  gitlab                         : https://@FQN@:@PORT_HTTPS_GITLAB@/gitlab/
   
 ~~~~~~~~~~~~~~
 NGiNX:
   RootDir                       : http://@FQN@:@PORT_NGINX_HTTP@/
-  Redirection gitweb,hgit,cgit  : https://@FQN@:@PORT_NGINX_HTTPS@/(git/|hgit/|cgit/)
-  GitLab                        : https://@FQN@:@PORT_HTTPS_GITLAB@/
+  Redirection gitweb            : https://@FQN@:@PORT_NGINX_HTTPS@/git/
+  Redirection hgit              : https://@FQN@:@PORT_NGINX_HTTPS@/hgit/
+  Redirection cgit              : https://@FQN@:@PORT_NGINX_HTTPS@/cgit/
+  GitLab                        : https://@FQN@:@PORT_NGINX_HTTPS@/gitlab/
                                   (admin@local.host/5iveL!fe)
 
+~~~~~~~~~~~~~~
 Redis                           : https://@FQN@:@PORT_REDIS@/
 
 ~~~~~~~~~~~~~~

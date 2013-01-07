@@ -18,7 +18,6 @@ http {
                       '$status $body_bytes_sent "$http_referer" '
                       '"$http_user_agent" "$http_x_forwarded_for"';
     access_log  logs/access.log  main;
-    passenger_root @PASSENGER-ROOT@;
 
     sendfile        on;
     #tcp_nopush     on;
@@ -28,7 +27,7 @@ http {
 
     port_in_redirect   on;
     proxy_redirect     off;
-    proxy_set_header   Host             $host;
+    proxy_set_header   Host             $host:$server_port;
     proxy_set_header   X-Real-IP        $remote_addr;
     proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
     #proxy_redirect     http://itsvc/git/  /git/;
