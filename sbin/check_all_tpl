@@ -1,0 +1,23 @@
+#!/bin/bash
+
+source "${H}/sbin/usrcmd/get_tpl"
+source "${H}/sbin/usrcmd/diff_tpl"
+
+status=0
+for file in $(find "$1" -maxdepth 4 -type f -name "*.tpl"); do
+  dst=${file%/*}
+  get_OriDst "${file}" "${dst}" fullFilePathOri fullFilePathDst
+  rdiff "${fullFilePathOri}" "${fullFilePathDst}" ardiff
+  #echo "ardiff='${ardiff}'"
+  if [[ "${ardiff}" != "" ]]; then
+    if [[ "${fullFilePathOri%.cookies.tpl}" != "${fullFilePathOri}" ]] ; then
+      echo "Expected diff for jdk/.cookies.tpl:"
+      echo "${ardiff}"
+    else
+      echo -e "\e[1;31mERROR --- diff for '${file}'\e[0m" 1>&2
+      echo -e "\e[1;31m${ardiff}\e[0m" 1>&2
+      status=1
+    fi
+  fi
+done 
+exit $status

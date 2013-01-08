@@ -1,0 +1,45 @@
+#!/bin/bash
+  
+function get_OriDst() {
+ 
+  local fullFilePathOri_local="$(readlink -f $1)"
+  local fullPathDst="$2"
+  local _fullFilePathOri="$3"
+  local _fullFilePathDst="$4"
+  if [[ ! -d "${fullPathDst}" ]] ; then
+    if [[ "${fullPathDst}" == "" ]] ; then
+      fullPathDst="."
+    else
+      echo "cp_tpl: there is no directory at '${fullPathDst}'" ; exit 1
+    fi
+  fi
+  local fileOri="${fullFilePathOri_local##*/}"
+  local fullPathOri="${fullFilePathOri_local%/*}"
+  if [[ "${fullPathOri}" == "${fullFilePathOri_local}" ]] ; then fullPathOri="." ; fi 
+  echo "-------"
+  #echo "fullFilePathOri_local='${fullFilePathOri_local}',"
+  #echo "fullPathDst='${fullPathDst}'"
+  #echo "fullPathOri='${fullPathOri}',"
+  #echo "fileOri='${fileOri}'"
+  
+  local fileDst="${fileOri%.tpl}"
+  if [[  "${fileDst}" == "${fileOri}" ]] ; then 
+    if [[ -f "${fullFilePathOri_local}.tpl" ]] ; then
+      fileDst="${fileOri}"
+      fileOri="${fileOri}.tpl"
+      fullFilePathOri_local="${fullFilePathOri_local}.tpl"
+    else
+      echo "cp_tpl: name '${fileOri}' MUST end with '.tpl' or '${fileOri}.tpl' MUST exist." ; exit 1 
+    fi
+  fi
+  #echo "fileDst='${fileDst}', fileOri='${fileOri}'"
+  
+  local fullFilePathDst_local="${fullPathDst}/${fileDst}"
+  fullFilePathDst_local="${fullFilePathDst_local//\/\///}"
+
+  # echo "fullFilePathOri_local='${fullFilePathOri_local}', for _fullFilePathOri='${_fullFilePathOri}'"
+  # echo "fullFilePathDst_local='${fullFilePathDst_local}', for _fullFilePathDst='${_fullFilePathDst}'"
+
+  eval ${_fullFilePathOri}="'${fullFilePathOri_local}'"
+  eval ${_fullFilePathDst}="'${fullFilePathDst_local}'"
+}

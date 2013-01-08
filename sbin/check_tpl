@@ -1,0 +1,10 @@
+#!/bin/bash
+
+source "${H}/sbin/usrcmd/get_tpl"
+
+get_OriDst "$1" "$2" fullFilePathOri fullFilePathDst
+
+#echo "fullFilePathOri='${fullFilePathOri}', fullFilePathDst='${fullFilePathDst}'"
+
+source "${H}/sbin/usrcmd/diff_tpl"
+rdiff "${fullFilePathOri}" "${fullFilePathDst}" myrdiff

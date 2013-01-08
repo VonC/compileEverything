@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source "${H}/sbin/usrcmd/get_tpl"
+source "${H}/sbin/usrcmd/diff_tpl"
+
+status=0
+for file in $(find "$1" -maxdepth 4 -type f -name "*.tpl_*"); do
+  echo "rm file='${file}'"
+  rm "${file}"
+done 
+exit $status

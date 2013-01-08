@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function rdiff() {
+  local fullFilePathOri="$1"
+  local fullFilePathDst="$2"
+  local _rdiff="$3"
+
+  if [[ -e "${fullFilePathDst}" ]] ; then
+    cp -f "${fullFilePathDst}" "${fullFilePathDst}.tpl_ori"
+    "${H}/sbin/usrcmd/repl_tpl" "${fullFilePathOri}" "${fullFilePathDst}.tpl_val"
+    local rdiff_local=$(diff "${fullFilePathDst}.tpl_ori" "${fullFilePathDst}.tpl_val")
+    #echo ${rdiff_local}
+  else
+    echo "warning: no '${fullFilePathDst}' to compare to."
+    local rdiff_local=""
+  fi
+
+  eval ${_rdiff}="'${rdiff_local}'"
+}
