@@ -7,7 +7,7 @@
 # Global directives                    #
 ########################################
 User @USERNAME@
-Group @GROUPNAME@
+Group @USERGROUP@
 
 LogFile @H@/nxlog/nxlog.log
 LogLevel INFO

@@ -1,29 +1,42 @@
 # # # # # # # # # # # # # # # # # # 
 # Gitlab application config file  #
 # # # # # # # # # # # # # # # # # #
+#
+# How to use:
+# 1. copy file as gitlab.yml
+# 2. Replace gitlab -> host with your domain
+# 3. Replace gitolite -> ssh_host with your domain
+# 4. Replace gitlab -> email_from
 
 #
-# 1. Common settings
+# 1. GitLab app settings
 # ==========================
 
-# Web application specific settings
-web:
+## GitLab settings
+gitlab:
+  ## Web server settings
   host: localhost
   port: @PORT_HTTPS_GITLAB@
   https: true
+  # uncomment and customize to run in non-root path
+  # note that ENV['RAILS_RELATIVE_URL_ROOT'] in config/unicorn.rb may need to be changed
+  relative_url_root: /gitlab
 
-# Email used for notification
-# about new issues, comments
-email:
-  from: notify@localhost
+  ## Email settings
+  # Email address used in the "From" field in mails sent by GitLab
+  email_from: gitoliteadm@mail.com
+  git_user: gitoliteadm # by default "GitLab"
 
-# Application specific settings
-# Like default project limit for user etc
-app: 
-  default_projects_limit: 10 
-  # backup_path: "/vol/backups"   # default: Rails.root + backups/
-  # backup_keep_time: 604800      # default: 0 (forever) (in seconds)
-  # disable_gravatar: true        # default: false - Disable user avatars from Gravatar.com
+  ## Project settings
+  default_projects_limit: 10
+
+## Gravatar
+gravatar:
+  enabled: true                 # Use user avatar images from Gravatar.com (default: true)
+  # plain_url: "http://..."     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
+  # ssl_url:   "https://..."    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
+
+
 
 #
 # 2. Auth settings
@@ -38,17 +51,23 @@ ldap:
   bind_dn: '@LDAP_BINDDN@'
   password: '@LDAP_PASSWORD@'
 
+## Omniauth settings
 omniauth:
   # Enable ability for users
   # to login via twitter, google ..
   enabled: false
 
-  # IMPORTANT! 
-  # It allows user to login without having user account
+  # CAUTION!
+  # This allows users to login without having a user account first (default: false)
+  # User accounts will be created automatically when authentication was successful.
   allow_single_sign_on: false
+  # Locks down those users until they have been cleared by the admin (default: true)
   block_auto_created_users: true
 
   # Auth providers 
+  # Uncomment the lines and fill in the data of the auth provider you want to use
+  # If your favorite auth provider is not listed you can user others:
+  # see https://github.com/gitlabhq/gitlabhq/wiki/Using-Custom-Omniauth-Providers
   providers:
     # - { name: 'google_oauth2', app_id: 'YOUR APP ID',
     #     app_secret: 'YOUR APP SECRET',
@@ -58,29 +77,39 @@ omniauth:
     # - { name: 'github', app_id: 'YOUR APP ID',
     #     app_secret: 'YOUR APP SECRET' }
 
+
+
 # 
 # 3. Advanced settings: 
 # ==========================
 
-# Git Hosting configuration
-git_host:
+## Backup settings
+backup:
+  path: "tmp/backups"   # Relative paths are relative to Rails.root (default: tmp/backups/)
+  # keep_time: 604800   # default: 0 (forever) (in seconds)
+
+## Gitolite settings
+gitolite:
+  install_path: @H@/gitolite/bin/
   admin_uri: gitolitesrv:gitolite-admin
-  base_path: @H@/repositories/
+  repos_path: @H@/repositories/
   hooks_path: @H@/.gitolite/hooks/
-  gitolite_admin_key: gitoliteadm
-  git_user: @USERNAME@
+  admin_key: gitoliteadm
   upload_pack: true
   receive_pack: true
-  host: @FQN@
-# config_file: gitolite.conf
-  port: @PORT_SSHD@
+  ssh_user: @USERNAME@
+  ssh_host: localhost
+  ssh_port: @PORT_SSHD@
+  # config_file: gitolite.conf
 
 # Git settings
-# Use default values unless you understand it
+# CAUTION!
+# Use the default values unless you really know what you are doing
 git:
-  path: @H@/bin/git
+  group: @USERGROUP@
+  bin_path: @H@/bin/git
   # Max size of git object like commit, in bytes
   # This value can be increased if you have a very large commits
-  git_max_size: 5242880 # 5.megabytes
+  max_size: 5242880 # 5.megabytes
   # Git timeout to read commit, in seconds
-  git_timeout: 10
+  timeout: 10
