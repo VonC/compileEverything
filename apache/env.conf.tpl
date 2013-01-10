@@ -202,27 +202,27 @@ Listen @PORT_HTTPS_GITLAB@
     SSLEngine on
     SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
     SetEnv GIT_HTTP_BACKEND "@H@/usr/local/apps/git/libexec/git-core/git-http-backend"
-    DocumentRoot @H@/gitlab/github
-    Alias /gitlab @H@/gitlab/github/gitlab
+    DocumentRoot @H@/gitlab
+    Alias /gitlab @H@/gitlab
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars
     </FilesMatch>
     RailsBaseURI /gitlab
-    <Directory @H@/gitlab/github/gitlab>
+    RailsAutoDetect off
+    <Location /gitlab>
         SSLOptions +StdEnvVars
 
         PassengerEnabled on
         Options ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
-        AllowOverride All
+        #AllowOverride All
         order allow,deny
         Allow from all
         Options -MultiViews
-
-    </Directory>
+    </Location>
 
     CustomLog "@H@/gitlab/logs/apache_gitlab_ssl_request_log" \
               "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
     ErrorLog "@H@/gitlab/logs/apache_gitlab_error_log"
     TransferLog "@H@/gitlab/logs/apache_gitlab_access_log"
-    LogLevel debug
+    LogLevel info
 </VirtualHost>
