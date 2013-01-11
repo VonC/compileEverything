@@ -25,10 +25,12 @@ gitlab:
   ## Email settings
   # Email address used in the "From" field in mails sent by GitLab
   email_from: gitoliteadm@mail.com
-  git_user: gitoliteadm # by default "GitLab"
 
   ## Project settings
   default_projects_limit: 10
+
+  ## Account used for GitLab installation ('gitlab' if undefined)
+  user: @USERNAME@
 
 ## Gravatar
 gravatar:
@@ -100,13 +102,13 @@ gitolite:
   ssh_user: @USERNAME@
   ssh_host: localhost
   ssh_port: @PORT_SSHD@
+  group: @USERGROUP@ # default: 'git' if undefined
   # config_file: gitolite.conf
 
 # Git settings
 # CAUTION!
 # Use the default values unless you really know what you are doing
 git:
-  group: @USERGROUP@
   bin_path: @H@/bin/git
   # Max size of git object like commit, in bytes
   # This value can be increased if you have a very large commits
