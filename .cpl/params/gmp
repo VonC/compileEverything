@@ -1,0 +1,4 @@
+page=http://ftp.gnu.org/gnu/gmp/?C=M;O=D
+url=http://ftp.gnu.org/gnu/gmp/
+ext=tar.xz
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
