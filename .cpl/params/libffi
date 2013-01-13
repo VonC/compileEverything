@@ -1,10 +1,10 @@
 page=https://github.com/atgreen/libffi/tags
-url=https://github.com/atgreen/libffi/tarball/
-verexclude=sign|manpages|htmldocs|-rc|nofollow
+url=https://github.com/atgreen/libffi/archive/
+verexclude=sign|manpages|htmldocs|-rc
 nameurl=v
 nameact=libffi
 ext=zip
-exturl=none
-extact=tar.gz
+;exturl=zip
+;extact=tar.gz
 pre=gen_sed -i "s;^includesdir = .*$;includesdir = \$(includedir);g" include/Makefile.in
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@
