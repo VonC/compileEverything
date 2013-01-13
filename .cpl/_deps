@@ -1,5 +1,9 @@
-app gcc make,binutils
-app binutils make
+app gcc make,binutils,gmp,mpfr,mpc,glibc
+lib glibc binutils
+lib gmp m4
+lib mpfr m4
+lib mpc mpfr,gmp
+app binutils expat,gettext
 app make expat,gettext
 lib expat none
 lib libiconv none
@@ -27,7 +31,7 @@ lib libffi gettext,libiconv
 app automake none
 app patchelf automake
 app pkgconfig libiconv,glib
-lib m4 pkgconfig,libsigsegv
+lib m4 none
 lib libsigsegv none
 lib gdbm texinfo
 lib texinfo libiconv,ncurses,gettext

@@ -1,0 +1,4 @@
+page=http://ftp.gnu.org/gnu/mpfr/?C=M;O=D
+url=http://ftp.gnu.org/gnu/mpfr/
+ext=tar.xz
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
