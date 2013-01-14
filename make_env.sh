@@ -42,7 +42,7 @@ _pkgs="${_src}/_pkgs"
 _hsrc="${_hcpl}/src"
 _hpkgs="${_hsrc}/_pkgs"
 mkdir -p "${_pkgs}"
-if [[ -d "${H}/../src" ]] ; then
+if [[ -d "${H}/../src" && ! -e "${_src}/.keep_local" ]] ; then
   if [[ -d "${_src}" && ! -h "${_src}" ]] ; then rm -Rf "${_src}" ; fi
   _src="${H}/../src"
   _hsrc="../src"
