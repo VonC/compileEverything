@@ -1,4 +1,6 @@
-page=http://libarchive.github.com/
-url=https://github.com/downloads/libarchive/libarchive/
-verinclude=2.8
-configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
+page=https://github.com/libarchive/libarchive/tags
+url=https://github.com/libarchive/libarchive/archive/
+#verinclude=2.8
+ext=zip
+#pre=if [[ ! -e ${H}/.cpl/src/@@NAMEVER@@/configure ]] ; then autoconf -o ${H}/.cpl/src/@@NAMEVER@@/configure ${H}/.cpl/src/@@NAMEVER@@/configure.ac ; fi
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ @@WITH_GNU_LD@@

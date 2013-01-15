@@ -3,13 +3,11 @@
 #p age=http://mirror.anl.gov/pub/software/scm/git/?C=M;O=D
 #u rl=http://hjemli.net/git/git/snapshot/
 page=https://github.com/gitster/git/tags
-url=https://github.com/gitster/git/tarball/
-verexclude=sign|manpages|htmldocs|-rc|nofollow
+url=https://github.com/gitster/git/archive/
+verexclude=sign|manpages|htmldocs|-rc
 nameurl=v
 nameact=git
 ext=zip
-exturl=none
-extact=tar.gz
 pre=if [[ ! -e ${H}/.cpl/src/@@NAMEVER@@/configure ]] ; then autoconf -o ${H}/.cpl/src/@@NAMEVER@@/configure ${H}/.cpl/src/@@NAMEVER@@/configure.ac ; fi ; gen_sed -i "s/-pthread -lpthread/-pthreads -lpthreads/g" ${H}/.cpl/src/@@NAMEVER@@/configure
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-lib=${HULL} --with-openssl --with-curl --with-expat --with-iconv=${HUL} --with-gitconfig=${HUL}/var/gitconfig --with-editor=vim --with-perl=${HULA}/perl/bin/perl --with-zlib=${HUL} --with-tcltk=no --with-python=${HULA}/python/bin/python
 premake=gen_sed -i "s/^EXTLIBS =/EXTLIBS = -lintl /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile"

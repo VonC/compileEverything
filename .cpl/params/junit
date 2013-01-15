@@ -1,11 +1,9 @@
 page=https://github.com/KentBeck/junit/tags
-url=https://github.com/KentBeck/junit/tarball/
-verexclude=sign|manpages|htmldocs|-rc|nofollow|beta
+url=https://github.com/KentBeck/junit/archive/
+verexclude=sign|manpages|htmldocs|-rc|beta
 nameurl=r
 nameact=junit
 ext=zip
-exturl=none
-extact=tar.gz
 configcmd=none
 makefile=none
 makecmd=ant dist
