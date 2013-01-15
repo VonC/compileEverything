@@ -503,9 +503,15 @@ function untar() {
     local anactualname=${actualname}
     #echo "anactualname=${anactualname}";
     actualname=${actualname%%/*}
+    if [[ "${actualname%%Archive*}" != "${actualname}" ]] ; then
+      echo ok
+      actualname=$(head -5 "${lastlog}"|tail -1)
+      actualname=${actualname%/*}
+      actualname=${actualname##*/}
+    fi
     # echo "namever ${namever} actualver %/* ${anactualname%/*} actualname%%/* ${anactualname%%/*}, actualname#*/ ${anactualname#*/}, actualname##*/ ${anactualname##*/}"
     if [[ "${namever}" != "${actualname}" ]] ; then
-      echolog "ln do to: ln -fs ${actualname} ${_src}/${namever}"
+      echolog "ln to do: ln -fs ${actualname} ${_src}/${namever}"
       # TOCOMMENT
       ln -fs "${actualname}" "${_src}/${namever}"
     fi
