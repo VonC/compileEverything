@@ -52,6 +52,8 @@ fi
 sshd start
 l=$(grep "localhost" "${H}/.ssh/known_hosts" | grep nist | tail -1)
 p=$(grep "@PORT_SSHD@" "${H}/.ports.ini")
+if [[ -e "${H}/../.ports.ini.private" ]] ; then p=$(grep "@PORT_SSHD@" "${H}/../.ports.ini.private") ; fi
+if [[ -e "${H}/.ports.ini.private" ]] ; then p=$(grep "@PORT_SSHD@" "${H}/.ports.ini.private") ; fi
 p=${p#*=}
 k=$(ssh-keyscan -t ecdsa -p ${p} localhost 2>&1 | grep ecdsa | grep nist)
   echo "D: 0k='${k}'"
