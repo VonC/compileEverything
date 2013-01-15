@@ -8,3 +8,4 @@ pre=gen_sed -i "s/\(['\'']\)\/usr\/local/\1\${EHUL}/g" "${H}/.cpl/src/@@NAMEVER@
 configcmd=@@./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-libs='\''-lexpat -lncurses -lbz2'\''
 premake=gen_sed -i "s/-ltermcap/-lncurses/g" "${H}/.cpl/src/@@NAMEVER@@/Makefile"
 post=rm -Rf ${HULA}/python;ln -s @@NAMEVER@@ ${HULA}/python
+postcheck=ln -fs python "${H}/bin/python2"
