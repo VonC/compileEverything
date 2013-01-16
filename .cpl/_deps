@@ -1,6 +1,5 @@
-app gcc make,binutils,gmp,mpfr,mpc,glibc
-lib glibc binutils
-lib gmp m4
+app gcc make,binutils,gmp,mpfr,mpc,binutils
+lib gmp m4,tar
 lib mpfr m4
 lib mpc mpfr,gmp
 app binutils expat,gettext
