@@ -1,7 +1,9 @@
 page=http://ftp.gnu.org/gnu/glibc/?C=M;O=D
 url=http://ftp.gnu.org/gnu/glibc/
-verexclude=port
+verexclude=port|17|16|15
+verinclude=.14
 precond=set +e ; mkdir -p ${H}/.cpl/src/@@NAMEVER@@/build ; mkdir -p "${H}/.cpl/src/@@NAMEVER@@/objdir/lib/gcc/i686-pc-linux-gnu" ; set -e
+pre=gen_sed -i "s; 4.\[1-9\]\[0-9\]; 4.[1-9]" $H/.cpl/src/@@NAMEVER@@/configure
 cdpath=${H}/.cpl/src/@@NAMEVER@@/build
 makefile=objdir/Makefile
-configcmd=../configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
+configcmd=../configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@ --with-binutils=${H}/bin
