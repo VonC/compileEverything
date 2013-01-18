@@ -9,11 +9,11 @@ production:
   pool: 5
   username: root
   password: msandbox
+  # host: localhost
   socket: @MYSQL_gitlab_socket@
 
 #
 # Development specific
-#
 #
 development:
   adapter: mysql2
@@ -37,6 +37,3 @@ test: &test
   username: root
   password: msandbox
   socket: @MYSQL_gitlab_socket@
-
-cucumber:
-  <<: *test

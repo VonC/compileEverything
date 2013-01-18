@@ -18,9 +18,12 @@ gitlab:
   host: localhost
   port: @PORT_HTTPS_GITLAB@
   https: true
-  # uncomment and customize to run in non-root path
-  # note that ENV['RAILS_RELATIVE_URL_ROOT'] in config/unicorn.rb may need to be changed
+  # Uncomment and customize to run in non-root path
+  # Note that ENV['RAILS_RELATIVE_URL_ROOT'] in config/unicorn.rb may need to be changed
   relative_url_root: /gitlab
+
+  # Uncomment and customize if you can't use the default user to run GitLab (default: 'gitlab')
+  user: @USERNAME@
 
   ## Email settings
   # Email address used in the "From" field in mails sent by GitLab
@@ -28,9 +31,6 @@ gitlab:
 
   ## Project settings
   default_projects_limit: 10
-
-  ## Account used for GitLab installation ('gitlab' if undefined)
-  user: @USERNAME@
 
 ## Gravatar
 gravatar:
@@ -43,6 +43,8 @@ gravatar:
 #
 # 2. Auth settings
 # ==========================
+
+## LDAP settings
 ldap: 
   enabled: true
   host: '@LDAP_HOSTNAME@'
@@ -56,7 +58,7 @@ ldap:
 ## Omniauth settings
 omniauth:
   # Enable ability for users
-  # to login via twitter, google ..
+  # Allow logging in via Twitter, Google, etc. using Omniauth providers
   enabled: false
 
   # CAUTION!
@@ -66,10 +68,12 @@ omniauth:
   # Locks down those users until they have been cleared by the admin (default: true)
   block_auto_created_users: true
 
-  # Auth providers 
+  ## Auth providers
   # Uncomment the lines and fill in the data of the auth provider you want to use
   # If your favorite auth provider is not listed you can user others:
   # see https://github.com/gitlabhq/gitlabhq/wiki/Using-Custom-Omniauth-Providers
+  # The 'app_id' and 'app_secret' parameters are always passed as the first two
+  # arguments, followed by optional 'args' which can be either a hash or an array.
   providers:
     # - { name: 'google_oauth2', app_id: 'YOUR APP ID',
     #     app_secret: 'YOUR APP SECRET',
@@ -81,9 +85,14 @@ omniauth:
 
 
 
-# 
-# 3. Advanced settings: 
+#
+# 3. Advanced settings
 # ==========================
+
+# GitLab Satellites
+satellites:
+  # Relative paths are relative to Rails.root (default: tmp/repo_satellites/)
+  path: @H@/gitlab/gitlab-satellites/
 
 ## Backup settings
 backup:
@@ -94,6 +103,7 @@ backup:
 gitolite:
   install_path: @H@/gitolite/bin/
   admin_uri: gitolitesrv:gitolite-admin
+  # repos_path must not be a symlink
   repos_path: @H@/repositories/
   hooks_path: @H@/.gitolite/hooks/
   admin_key: gitoliteadm
@@ -102,10 +112,11 @@ gitolite:
   ssh_user: @USERNAME@
   ssh_host: localhost
   ssh_port: @PORT_SSHD@
-  group: @USERGROUP@ # default: 'git' if undefined
   # config_file: gitolite.conf
+  # Uncomment and customize if you can't use the default group to own the repositories and run Gitolite (default: same as the 'ssh_user' above)
+  owner_group: @USERGROUP@
 
-# Git settings
+## Git settings
 # CAUTION!
 # Use the default values unless you really know what you are doing
 git:

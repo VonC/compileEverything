@@ -10,7 +10,7 @@ working_directory app_dir
 # worker spawn times
 preload_app true
 
-# nuke workers after 60 seconds (the default)
+# nuke workers after 90 seconds (60 is the default)
 timeout 90
 
 # listen on a Unix domain socket and/or a TCP port,
