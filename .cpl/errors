@@ -3496,3 +3496,17 @@ http://stackoverflow.com/questions/5333871/please-explain-this-linking-error-ref
 http://stackoverflow.com/questions/1239730/help-with-linker-failer-gnu-linkonce-t
 
 Let's try with our onw binutils, ie our own ld
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+tcl wget:
+
+vonc@voncvb ~/gitpoc/src/tcl8.6.0 $ tar xpvf /home/vonc/gitpoc/passenger/../_pkgs/tcl8.6.0-src.tar.gz -C /home/vonc/gitpoc/passenger/../src
+tcl8.6.0/
+tcl8.6.0/ChangeLog.2008
+tcl8.6.0/ChangeLog.2003
+
+gzip: stdin: invalid compressed data--format violated
+tar: Unexpected EOF in archive
+tar: Unexpected EOF in archive
+tar: Error is not recoverable: exiting now
+

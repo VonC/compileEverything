@@ -500,7 +500,6 @@ function untar() {
     # loge "echo ${tarname} ${_pkgs}/${namever}.${extact} ${dirext} ${_src}" "tar_xpvf_namever.${extact}" # TOCOMMENT
     local lastlog=$(mrf "${_logs}" "*tar_xpvf*")
     local actualname=$(head -3 "${lastlog}"|tail -1)
-    local anactualname=${actualname}
     #echo "anactualname=${anactualname}";
     actualname=${actualname%%/*}
     if [[ "${actualname%%Archive*}" != "${actualname}" ]] ; then
@@ -509,9 +508,10 @@ function untar() {
       actualname=${actualname%/*}
       actualname=${actualname##*/}
     fi
+    local anactualname=${actualname}
     # echo "namever ${namever} actualver %/* ${anactualname%/*} actualname%%/* ${anactualname%%/*}, actualname#*/ ${anactualname#*/}, actualname##*/ ${anactualname##*/}"
     if [[ "${namever}" != "${actualname}" ]] ; then
-      echolog "ln to do: ln -fs ${actualname} ${_src}/${namever}"
+      echolog "ln to ido: ln -fs ${actualname} ${_src}/${namever}"
       # TOCOMMENT
       ln -fs "${actualname}" "${_src}/${namever}"
     fi
