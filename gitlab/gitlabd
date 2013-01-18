@@ -54,8 +54,8 @@ start() {
     #${CD_TO_APP_ROOT} > "${H}/gitlab/logs/start.log" 2>&1 && mkdir -p $PID_PATH && $START_DAEMON_PROCESS && $START_SIDEKIQ 
     echo "nohup bundle exec unicorn_rails $DAEMON_OPTS  > /dev/null  2>&1 &"
     echo "mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &"
-    #nohup bundle exec unicorn_rails $DAEMON_OPTS  > /dev/null  2>&1 &
-    #mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &
+    nohup bundle exec unicorn_rails $DAEMON_OPTS  > /dev/null  2>&1 &
+    mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &
     echo "$DESC started"
   fi
 }

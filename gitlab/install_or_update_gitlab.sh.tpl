@@ -51,7 +51,7 @@ redisd start
 d=$(pwd) ; cd "${github}"
 if [[ "${upgradedb}" == "1" || ${gitlabForceInit[@]} ]] ; then
   echo Initialize app
-  bundle exec rake gitlab:app:setup RAILS_ENV=production
+  bundle exec rake gitlab:setup RAILS_ENV=production
   fix=$(grep "Syc" -nrlHIF "${github}/vendor/bundle/ruby/1.9.1/specifications/")
   while read line; do
     gen_sed -i "s/\"#<Syck::DefaultKey:.*>/\"~>/g" "${line}"
