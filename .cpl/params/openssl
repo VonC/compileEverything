@@ -1,6 +1,7 @@
 page=http://www.openssl.org/source/
 url=http://www.openssl.org/source/
-verexclude=fips
+verinclude=LATEST
+verexclude=fips|foo
 configcmd=./config --openssldir=${HULS}/@@NAMEVER@@ zlib shared --with-zlib-include=${HULI} --with-zlib-lib=${HULL}
 linkdst=${HUL}/ssl
 premake=gen_sed -i "s;rpath,\$(LIBRPATH)\";rpath,\$(LIBRPATH):${HULL}\";g" "${H}/.cpl/src/@@NAMEVER@@/Makefile.shared"

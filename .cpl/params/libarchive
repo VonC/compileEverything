@@ -2,6 +2,6 @@ page=https://github.com/libarchive/libarchive/tags
 url=https://github.com/libarchive/libarchive/archive/
 #verinclude=2.8
 ext=zip
-pre=autoreconf -f -i -Wall,no-obsolete
+pre=set +e; build/autogen.sh; set -e; autoreconf -f -i -Wall,no-obsolete
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@
 #configcmd=@@if [[ ! -e ${H}/.cpl/src/@@NAMEVER@@/configure ]] ; then autoconf -o ${H}/.cpl/src/@@NAMEVER@@/configure ${H}/.cpl/src/@@NAMEVER@@/configure.ac ; fi
