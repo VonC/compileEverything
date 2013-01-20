@@ -3510,3 +3510,22 @@ tar: Unexpected EOF in archive
 tar: Unexpected EOF in archive
 tar: Error is not recoverable: exiting now
 
+~~~~~~~~~~~~~~~~~~~~~~
+python make:
+./make_env.sh executed for /home/vonc/gitpoc/passenger
+bashrc set local home to '/home/vonc/gitpoc/passenger'
+2013/01/19-18:56:02 ~ cd /home/vonc/gitpoc/passenger/.cpl/src/python-2.6.8
+2013/01/19-18:56:03 ~~~ eval make
+2013/01/19-18:56:03 ~ (see /home/vonc/gitpoc/passenger/.cpl/logs/20130119.185602.makecmd_python-2.6.8.log or simply tail -f /home/vonc/gitpoc/passenger/.cpl/logs/l)
+!!!!_FAIL_!!!!
+2013/01/19-18:56:02 ~ cd /home/vonc/gitpoc/passenger/.cpl/src/python-2.6.8
+2013/01/19-18:56:03 ~ (see /home/vonc/gitpoc/passenger/.cpl/logs/20130119.185602.makecmd_python-2.6.8.log or simply tail -f /home/vonc/gitpoc/passenger/.cpl/logs/l)
+!!!!_FAIL_!!!!
+Objects/fileobject.c:622: error: invalid operands to binary +
+Objects/fileobject.c:626: warning: passing arg 2 of `fsetpos' from incompatible pointer type
+Objects/fileobject.c: In function `_portable_ftell':
+Objects/fileobject.c:649: error: incompatible types in return
+
+
+libexpat wasn't compiled
+~~~~~~~~~~~~~~~~~~~~~~

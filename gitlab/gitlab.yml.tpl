@@ -29,8 +29,12 @@ gitlab:
   # Email address used in the "From" field in mails sent by GitLab
   email_from: gitoliteadm@mail.com
 
+  # Email address of your support contanct (default: same as email_from)
+  # support_email: support@localhost
+
   ## Project settings
   default_projects_limit: 10
+  # signup_enabled: true          # default: false - Account passwords are not sent via the email if signup is enabled.
 
 ## Gravatar
 gravatar:

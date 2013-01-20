@@ -25,6 +25,10 @@ if [[ ! -e "${mysqlgtl}" ]] ; then
   mysqlv=$(mysql -V); mysqlv=${mysqlv%%,*} ; mysqlv=${mysqlv##* }
   make_sandbox ${mysqlv} -- -d gitlab --no_confirm -P @PORT_MYSQL@ --check_port
   upgradedb=1
+  mysql -u root --socket=@MYSQL_gitlab_socket@ --password=msandbox -e "CREATE USER 'gitlab'@'localhost' IDENTIFIED BY 'gitlab';"
+  mysql -u root --socket=@MYSQL_gitlab_socket@ --password=msandbox -e "DROP DATABASE gitlabhq_production;"
+  mysql -u root --socket=@MYSQL_gitlab_socket@ --password=msandbox -e "CREATE DATABASE IF NOT EXISTS gitlabhq_production DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+  mysql -u root --socket=@MYSQL_gitlab_socket@ --password=msandbox -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON gitlabhq_production.* TO gitlab@localhost;"
 fi
 "${mysqlgtl}/start"
 cp_tpl "${gtl}/gitlab.yml.tpl" "${gtl}"
@@ -49,14 +53,14 @@ cd "${d}"
 sshd start
 redisd start
 d=$(pwd) ; cd "${github}"
+if [[ ! -e "${github}/tmp/pids/sidekiq.pid" ]]; then
+  bundle exec rake sidekiq:start RAILS_ENV=production
+fi
 if [[ "${upgradedb}" == "1" || ${gitlabForceInit[@]} ]] ; then
   echo Initialize app
-  bundle exec rake gitlab:setup RAILS_ENV=production
-  fix=$(grep "Syc" -nrlHIF "${github}/vendor/bundle/ruby/1.9.1/specifications/")
-  while read line; do
-    gen_sed -i "s/\"#<Syck::DefaultKey:.*>/\"~>/g" "${line}"
-  done < <(echo "${fix}") 
-  bundle exec rake gitlab:app:setup RAILS_ENV=production
+  bundle exec rake db:setup
+  bundle exec rake db:seed_fu RAILS_ENV=production
+  bundle exec rake gitlab:enable_automerge RAILS_ENV=production
 else
   echo Upgrade database
   bundle exec rake db:migrate RAILS_ENV=production
