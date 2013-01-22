@@ -29,6 +29,9 @@ alldone=""
 unameo=$(uname -o)
 refresh="false"
 
+homed=${H##*/}
+echo "homed='${homed}'"
+
 _cpl="${H}/.cpl"
 _hcpl=".cpl"
 _deps="${_cpl}/_deps"
@@ -42,6 +45,15 @@ _pkgs="${_src}/_pkgs"
 _hsrc="${_hcpl}/src"
 _hpkgs="${_hsrc}/_pkgs"
 mkdir -p "${_pkgs}"
+if [[ ! -e "${_src}/.keep_local" && -e "${H}/../.keep_local.${homed}" ]]; then
+  echo "set keep_local for ${homed} sources"
+  ln -fs "../../../.keep_local.${homed}" "${_src}/.keep_local"
+fi
+if [[ ! -e "${H}/.ports.ini.private" && -e "${H}/../.ports.ini.private.${homed}" ]]; then
+  echo "set private ports for ${homed}"
+  ln -fs "../.ports.ini.private.${homed}" "${H}/.ports.ini.private"
+fi
+
 if [[ -d "${H}/../src" && ! -e "${_src}/.keep_local" ]] ; then
   if [[ -d "${_src}" && ! -h "${_src}" ]] ; then rm -Rf "${_src}" ; fi
   _src="${H}/../src"
@@ -154,6 +166,9 @@ function main {
     if [[ ! -e "${H}/.bashrc" ]]; then
       if [[ "${title}" == "" ]] ; then echolog "title should be set (to '${H}')" ; miss_bashrc_title ; fi
       build_bashrc
+      echo "source \"${H}/.bashrc\" --force"
+      trap - EXIT
+      exit 0
     fi
     if [[ ! -e "${H}/addresses.txt" ]] ; then "${H}/sbin/cp_tpl" "${H}/.cpl/addresses.txt.tpl" "${H}" ; fi
     sc
