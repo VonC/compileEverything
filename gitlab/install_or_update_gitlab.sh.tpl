@@ -25,10 +25,11 @@ if [[ ! -e "${mysqlgtl}" ]] ; then
   mysqlv=$(mysql -V); mysqlv=${mysqlv%%,*} ; mysqlv=${mysqlv##* }
   make_sandbox ${mysqlv} -- -d gitlab --no_confirm -P @PORT_MYSQL@ --check_port
   upgradedb=1
-  mysql -u root --socket=@MYSQL_gitlab_socket@ --password=msandbox -e "CREATE USER 'gitlab'@'localhost' IDENTIFIED BY 'gitlab';"
-  mysql -u root --socket=@MYSQL_gitlab_socket@ --password=msandbox -e "DROP DATABASE gitlabhq_production;"
-  mysql -u root --socket=@MYSQL_gitlab_socket@ --password=msandbox -e "CREATE DATABASE IF NOT EXISTS gitlabhq_production DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
-  mysql -u root --socket=@MYSQL_gitlab_socket@ --password=msandbox -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON gitlabhq_production.* TO gitlab@localhost;"
+  "${mysqlgtl}/start"
+  # mysql -u root --socket=@MYSQL_gitlab_socket@ --password=msandbox -e "CREATE USER 'gitlab'@'localhost' IDENTIFIED BY 'gitlab';"
+  # mysql -u root --socket=@MYSQL_gitlab_socket@ --password=msandbox -e "DROP DATABASE gitlabhq_production;"
+  # mysql -u root --socket=@MYSQL_gitlab_socket@ --password=msandbox -e "CREATE DATABASE IF NOT EXISTS gitlabhq_production DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+  # mysql -u root --socket=@MYSQL_gitlab_socket@ --password=msandbox -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON gitlabhq_production.* TO gitlab@localhost;"
 fi
 "${mysqlgtl}/start"
 cp_tpl "${gtl}/gitlab.yml.tpl" "${gtl}"
@@ -44,27 +45,37 @@ cp "${github}/lib/hooks/post-receive" "${gitolite}/hooks/common/"
 d=$(pwd) ; cd "${github}"
 if [[ ! "$(ls -A ${github}/vendor/bundle/ruby/1.9.1/gems)" ]] ; then 
   echo Install gem bundles
-  gem install charlock_holmes --version '0.6.8'
+  gem install charlock_holmes --version '0.6.9'
   gem install bundler
 fi
 echo "Install/update bundles"
-bundle install --without development test sqlite postgres --deployment
+bundle install --deployment --without development test postgres
 cd "${d}"
 sshd start
 redisd start
 d=$(pwd) ; cd "${github}"
-if [[ ! -e "${github}/tmp/pids/sidekiq.pid" ]]; then
-  bundle exec rake sidekiq:start RAILS_ENV=production
+if [[ -e "${github}/tmp/pids/sidekiq.pid" ]]; then
+  echo "Stopping sidekiq"
+  bundle exec rake sidekiq:stop RAILS_ENV=production
+  rm -f "${github}/tmp/pids/sidekiq.pid"
 fi
 if [[ "${upgradedb}" == "1" || ${gitlabForceInit[@]} ]] ; then
-  echo Initialize app
-  bundle exec rake db:setup
+  echo "Initialize GitLab database"
+  bundle exec rake db:setup RAILS_ENV=production
+  if [[ ! -e "${github}/tmp/pids/sidekiq.pid" ]]; then
+    echo "Starting Sidekiq"
+    bundle exec rake sidekiq:start RAILS_ENV=production
+  fi
   bundle exec rake db:seed_fu RAILS_ENV=production
   bundle exec rake gitlab:enable_automerge RAILS_ENV=production
 else
-  echo Upgrade database
+  if [[ ! -e "${github}/tmp/pids/sidekiq.pid" ]]; then
+    echo "Starting Sidekiq"
+    bundle exec rake sidekiq:start RAILS_ENV=production
+  fi
+  echo "Upgrade GitLab database"
   bundle exec rake db:migrate RAILS_ENV=production
-  echo Upgrade database done
+  echo "Upgrade GitLab database done"
 fi
 echo Check if GitLab and its environment is configured correctly:
 bundle exec rake gitlab:env:info RAILS_ENV=production
@@ -75,4 +86,3 @@ bundle exec rake gitlab:check RAILS_ENV=production
 cd "${d}"
 
 gitlabd start
-
