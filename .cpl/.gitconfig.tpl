@@ -17,7 +17,7 @@
 [http]
 	sslcainfo = @H@/.ssh/curl-ca-bundle.crt
 [user]
-    name = gitoliteadm
+    name = GitLab
     email = gitoliteadm@mail.com
 
 [push]
