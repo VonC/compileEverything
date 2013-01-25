@@ -54,25 +54,15 @@ cd "${d}"
 sshd start
 redisd start
 d=$(pwd) ; cd "${github}"
-if [[ -e "${github}/tmp/pids/sidekiq.pid" ]]; then
-  echo "Stopping sidekiq"
-  bundle exec rake sidekiq:stop RAILS_ENV=production
-  rm -f "${github}/tmp/pids/sidekiq.pid"
-fi
+${gtl}/sidekiqd stop
 if [[ "${upgradedb}" == "1" || ${gitlabForceInit[@]} ]] ; then
   echo "Initialize GitLab database"
   bundle exec rake db:setup RAILS_ENV=production
-  if [[ ! -e "${github}/tmp/pids/sidekiq.pid" ]]; then
-    echo "Starting Sidekiq"
-    bundle exec rake sidekiq:start RAILS_ENV=production
-  fi
+  ${gtl}/sidekiqd start
   bundle exec rake db:seed_fu RAILS_ENV=production
   bundle exec rake gitlab:enable_automerge RAILS_ENV=production
 else
-  if [[ ! -e "${github}/tmp/pids/sidekiq.pid" ]]; then
-    echo "Starting Sidekiq"
-    bundle exec rake sidekiq:start RAILS_ENV=production
-  fi
+  ${gtl}/sidekiqd start
   echo "Upgrade GitLab database"
   bundle exec rake db:migrate RAILS_ENV=production
   echo "Upgrade GitLab database done"

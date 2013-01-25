@@ -22,8 +22,8 @@ DAEMON_OPTS="-c $APP_ROOT/config/unicorn.rb -E production"
 PID_PATH="$APP_ROOT/tmp/pids"
 UNICORN_PID="$PID_PATH/unicorn.pid"
 SIDEKIQ_PID="$PID_PATH/sidekiq.pid"
-STOP_SIDEKIQ="RAILS_ENV=production bundle exec rake sidekiq:stop"
-START_SIDEKIQ="RAILS_ENV=production bundle exec rake sidekiq:start"
+STOP_SIDEKIQ="${H}/gitlab/sidekiqd stop"
+START_SIDEKIQ="${H}/gitlab/sidekiqd start"
 NAME="unicorn"
 DESC="Gitlab service"
 CD_TO_APP_ROOT="cd ${APP_ROOT}"
@@ -33,7 +33,7 @@ check_pid(){
   if [ -f $UNICORN_PID ]; then
     PID=`cat $UNICORN_PID`
     SPID=`cat $SIDEKIQ_PID`
-    echo "ps aux | grep $PID | grep -v grep | wc -l"
+    #echo "ps aux | grep $PID | grep -v grep | wc -l"
     STATUS=`ps aux | grep $PID | grep -v grep | wc -l`
   else
     STATUS=0
@@ -52,8 +52,8 @@ start() {
     echo "Starting $DESC: "
     #echo "${CD_TO_APP_ROOT} > ${H}/gitlab/logs/start.log 2>&1 && mkdir -p $PID_PATH && $START_DAEMON_PROCESS && $START_SIDEKIQ" 
     #${CD_TO_APP_ROOT} > "${H}/gitlab/logs/start.log" 2>&1 && mkdir -p $PID_PATH && $START_DAEMON_PROCESS && $START_SIDEKIQ 
-    echo "nohup bundle exec unicorn_rails $DAEMON_OPTS  > /dev/null  2>&1 &"
-    echo "mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &"
+    #echo "nohup bundle exec unicorn_rails $DAEMON_OPTS  > /dev/null  2>&1 &"
+    #echo "mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &"
     nohup bundle exec unicorn_rails $DAEMON_OPTS  > /dev/null  2>&1 &
     mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &
     echo "$DESC started"
@@ -67,7 +67,7 @@ stop() {
     ## Program is running, stop it.
     kill -QUIT `cat $UNICORN_PID`
     mkdir -p $PID_PATH && $STOP_SIDEKIQ
-    rm "$UNICORN_PID" >> /dev/null
+    rm -f "$UNICORN_PID" >> /dev/null
     echo "$DESC stopped"
   else
     ## Program is not running, exit with error.
@@ -95,7 +95,7 @@ status() {
   check_pid
   if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
     echo "$DESC / Unicorn with PID $PID is running."
-    echo "$DESC / Sidekiq with PID $SPID is running."
+    "${H}/gitlab/sidekiqd" status
   else
     echo "$DESC is not running."
     exit 1

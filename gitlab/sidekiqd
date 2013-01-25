@@ -1,0 +1,78 @@
+#! /bin/bash
+auser=$(id -nu)
+someps=$(ps -ef|grep ${auser}|grep -v grep|grep -v sidekiqd|grep "sidekiq")
+#echo "$someps"
+pss=""
+while read aps ; do
+  #echo "aps=$aps"
+  if [[ "${aps#*${HULA}/ruby}" != "$aps" ]] ; then
+    pss="${pss} $(awk <<< $aps '{ print $2 }')"
+  elif [[ "${aps%sidekiq *}" != "${aps}" ]] ; then
+    aaps="$(awk <<< $aps '{ print $2 }')"
+    #echo "aaps='${aaps}'"
+    aapspath=$(readlink -f /proc/$aaps/exe)
+    #echo "aapspath='${aapspath}'"
+    if [[ "${aapspath#*${HULA}/ruby}" != "$aapspath" ]] ; then
+      pss="${pss} ${aaps}"
+    fi
+  fi
+  pss=${pss# }
+done <<< "$someps"
+
+gh="${H}/gitlab/github"
+spid="${gh}/tmp/pids/sidekiq.pid"
+
+#echo -e "pss='${pss}'"
+
+afps=""
+if [[ -e "${spid}" ]] ; then 
+  afps=$(cat "${spid}")
+fi
+
+# echo "aps ${aps}, afps ${afps}"
+
+case "$1" in
+
+'start')
+  if [[ "$pss" == "" ]] ; then
+    echo starting sidekiqd
+    cd ${gh}
+    rake sidekiq:start RAILS_ENV=production
+    #afps=$(cat "${spid}")
+    #pss=$afps
+  else
+    echo "sidekiqd already started, process ${pss}"
+  fi
+  ;;
+'stop')
+  if [[ "$pss" != "" ]] ; then
+    echo stopping sidekiqd
+    cd ${gh}
+    rake sidekiq:stop RAILS_ENV=production
+    kill -9 "${pss}" 2> /dev/null
+    rm -f "${spid}"
+    pss=""
+    afps=""
+  else
+    echo "sidekiqd already stopped"
+  fi
+  ;;
+'restart')
+  sidekiqd stop
+  sidekiqd start
+  ;;
+'status')
+  if [[ "${pss}" == "" ]] ; then
+    echo "sidekiqd is stopped"
+  else
+    echo "sidekiqd running, process ${pss}"
+  fi
+  if [[ "${afps}" != "${pss}" ]] ; then
+    echo "Warning, the sidekiqd pid recorded ${spid} '${afps}' is not the same than the running one: '${pss}'"
+  fi
+  ;;
+*)
+  echo "usage: ${H}/sbin/sidekiqd {start|stop|restart|status}"
+  ;;
+esac
+
