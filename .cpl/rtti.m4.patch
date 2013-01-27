@@ -1,0 +1,21 @@
+2004-07-06  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR c++/16276
+	* rtti.c (emit_tinfo_decl): Turn off DECL_ONE_ONLY if typeinfo
+	is not public.
+
+--- gcc/cp/rtti.c.linkonce	2004-03-09 08:09:34.000000000 -0800
++++ gcc/cp/rtti.c	2004-07-06 15:28:00.594865910 -0700
+@@ -1454,7 +1454,11 @@ emit_tinfo_decl (tree decl)
+   DECL_EXTERNAL (decl) = 0;
+   TREE_PUBLIC (decl) = !non_public;
+   if (non_public)
+-    DECL_COMDAT (decl) = 0;
++    {
++      DECL_COMDAT (decl) = 0;
++      if (SUPPORTS_ONE_ONLY)
++	DECL_ONE_ONLY (decl) = 0;
++    }
+ 
+   DECL_INITIAL (decl) = var_init;
+   mark_used (decl);
