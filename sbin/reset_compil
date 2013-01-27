@@ -116,6 +116,7 @@ fi
 if [[ "${root}" != "" ]] ; then
   echo "D: readlink '${root}/${name}'"
   nameverFromRoot=$(readlink "${root}/${name}")
+  if [[ -d "${root}/${name}" && -d "${root}/${namever}" ]]; then nameverFromRoot=${namever} ; fi
   echo "D: root='${root}',  nameverFromRoot '${nameverFromRoot}'"
   if [[ "${namever}" != "${nameverFromRoot}" ]] ; then
     echo  -e "\e[1;31m! Inconsistent namever between src '${namever}' and root '${root}': '${nameverFromRoot}'\e[0m" 1>&2
