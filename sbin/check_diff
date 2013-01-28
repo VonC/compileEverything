@@ -1,0 +1,106 @@
+#!/bin/bash
+
+function fdiff() {
+  #echo "Elements in arrayLeft :  ${arrayLeft[@]}"
+  #echo "Elements in arrayRight:  ${arrayRight[@]}"
+  local added=""
+  local amix=""
+  i=0
+  for ((n=0; n < ${#arrayLeft[@]}; n++)); do
+    foundLeft=0
+    local aLeft="${arrayLeft[$n]}"
+    for ((m=0; m < ${#arrayRight[@]}; m++)); do
+      local aRight="${arrayRight[$m]}"
+      if [[ "${aLeft}" == "${aRight}" ]] ; then 
+        if [[ ${i} != ${m} ]] ; then
+          #echo "${title}: i='${i}', m='${m}'"
+          if [[ "${amix}" == "" ]] ; then amix="${title}: MIXED ORDER (from <'${aLeft}')" ; fi
+        fi
+        foundLeft=1 ; break ; 
+      fi
+    done
+    if [[ "${foundLeft}" == "0" ]] ; then
+      if [[ "${added}" != "" ]] ; then added="${added}, " ; fi
+      added="${added}${aLeft}"
+      i=$((i-1))
+    fi
+    i=$((i+1))
+  done
+  if [[ "${added}" != "" ]] ; then 
+    if [[ "${warnings}" != "" ]] ; then warnings="${warnings}\n" ; fi
+    warnings="${warnings}${title}: ADDED '${added}'"
+  fi
+  if [[ "${amix}" != "" ]] ; then 
+    if [[ "${warnings}" != "" ]] ; then warnings="${warnings}\n" ; fi
+    warnings="${warnings}${amix}"
+  fi
+
+  local missing=""
+  for ((m=0; m < ${#arrayRight[@]}; m++)); do
+    foundRight=0
+    local aRight="${arrayRight[$m]}"
+    for ((n=0; n < ${#arrayLeft[@]}; n++)); do
+      local aLeft="${arrayLeft[$n]}"
+      if [[ "${aLeft}" == "${aRight}" ]] ; then foundRight=1 ; break ; fi
+    done
+    if [[ "${foundRight}" == "0" ]] ; then
+      if [[ "${missing}" != "" ]] ; then missing="${missing}, " ; fi
+      missing="${missing}${aRight}";
+    fi
+  done
+  if [[ "${missing}" != "" ]] ; then
+    if [[ "${errors}" != "" ]] ; then errors="${errors}\n" ; fi
+    errors="${errors}${title}: MISSING '${missing}'"
+  fi
+
+}
+
+warnings=""
+errors=""
+status=0
+shopt -s extglob
+adiff=$(diff "${1}" "${2}")
+#echo -e "diff=\n'${adiff}'"
+
+while read aline ; do
+  #echo "aline='${aline}'"
+  if [[ "${aline#[0-9]}" != "${aline}" ]]; then
+    #echo "aline='${aline}'"
+    fdiff 
+    arrayLeft=( )
+    arrayRight=( )
+    title="${aline}"
+  fi
+  if [[ "${aline#<}" != "${aline}" ]]; then
+    left="${aline#<}"
+    left="${left##*( )}"
+    left="${left#\#}"
+    left="${left##*( )}"
+    left="${left%%:*}"
+    left="${left%%=*}"
+    arrayLeft=( "${arrayLeft[@]}" "${left}" )
+  fi
+  if [[ "${aline#>}" != "${aline}" ]]; then
+    right="${aline#>}"
+    right="${right##*( )}"
+    right="${right#\#}"
+    right="${right##*( )}"
+    right="${right%%:*}"
+    right="${right%%=*}"
+    arrayRight=( "${arrayRight[@]}" "${right}" )
+  fi
+done <<< "${adiff}"
+if [[ "${warnings}" != "" || "${errors}" != "" ]] ; then
+  echo -e "${1}:"
+fi
+if [[ "${warnings}" != "" ]] ; then
+  echo -e "\e[1;33mWarnings:\e[0m\n${warnings}"
+fi
+if [[ "${errors}" != "" ]] ; then
+  echo -e "\e[1;31mErrors:\e[0m\n${errors}" 1>&2
+  status=1
+fi
+if [[ "${warnings}" != "" || "${errors}" != "" ]] ; then
+  echo -e "------------"
+fi
+exit ${status}

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+f1=$(readlink -f "${1}")
+f2=$(readlink -f "${2}")
+if [[ "${f1}" == "" ]] ; then f1="$(pwd)"; fi
+#echo "f1='${f1}'"
+#echo "f2='${f2}'"
+status=0
+
+if [[ "${f1}" != "" && "${f2}" != "" ]] ; then
+  if [[ ! -f "${f1}" ]] ; then echo -e "\e[1;31mErrors:\e[0m\n'f1 ${f1}' must be a file" 1>&2 ; status=1 ; fi
+  if [[ ! -f "${f2}" ]] ; then echo -e "\e[1;31mErrors:\e[0m\n'f2 ${f2}' must be a file" 1>&2 ; status=1 ; fi
+  if [[ ${status} != 0 ]] ; then exit ${status} ; fi
+  check_diff "${f1}" "${f2}"
+  exit $?
+fi
+
+if [[ ! -f "${f1}" && ! -d "${f1}" ]] ; then
+  echo -e "\e[1;31mErrors:\e[0m\n'f1 ${f1}' must be a file or a directory" 1>&2
+  exit 1
+fi
+
+if [[ -f "${f1}" ]] ; then
+  if [[ -f "${f1}.example" ]] ; then f2="${f1}.example"; fi
+  check_diff "${f1}" "${f2}"
+  exit $?
+fi
+
+for file in $(find "$1" -maxdepth 4 -type f -name "*.example"); do
+  f2=${file}
+  f1=${file%.example}
+  check_diff "${f1}" "${f2}"
+  if [[ $? != 0 ]] ; then status=1 ; fi
+done
+
+exit ${status}
