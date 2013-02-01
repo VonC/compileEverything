@@ -105,9 +105,8 @@ backup:
 
 ## Gitolite settings
 gitolite:
-  install_path: @H@/gitolite/bin/
   admin_uri: gitolitesrv:gitolite-admin
-  # repos_path must not be a symlink
+  # REPOS_PATH MUST NOT BE A SYMLINK!!!
   repos_path: @H@/repositories/
   hooks_path: @H@/.gitolite/hooks/
   admin_key: gitoliteadm

@@ -6,7 +6,7 @@ mysqlgtl="${H}/mysql/sandboxes/gitlab"
 gitolite="${H}/.gitolite"
 mkdir -p "${gtl}/logs"
 
-gitlabd stop
+demod stop
 upgradedb=0
 if [[ ! -e "${github}" ]] ; then
   xxgit=1 git clone https://github.com/gitlabhq/gitlabhq "${github}"
@@ -75,4 +75,4 @@ bundle exec rake gitlab:check RAILS_ENV=production
 
 cd "${d}"
 
-gitlabd start
+demod start
