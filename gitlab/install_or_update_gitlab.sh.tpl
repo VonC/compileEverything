@@ -11,6 +11,7 @@ upgradedb=0
 if [[ ! -e "${github}" ]] ; then
   xxgit=1 git clone https://github.com/gitlabhq/gitlabhq "${github}"
   #cp -f "${gtl}/boot.rb" "${github}/config/boot.rb"
+  cp_tpl "${gtl}/p.rake.tpl" "${github}/lib/tasks"
   d=$(pwd)
   cd "${github}"
   bundle config build.charlock_holmes --with-icu-dir="${HUL}"
