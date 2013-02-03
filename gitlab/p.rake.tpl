@@ -3,6 +3,9 @@ namespace :gitlab do
     def gitolite_user_home
       "@H@"
     end
+    def gitolite_version
+      "v3.2"
+    end
   end
   namespace :app do
     def check_init_script_exists
