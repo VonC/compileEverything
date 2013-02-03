@@ -32,6 +32,7 @@ if [[ ! -e "${H}/gitolite/projects.list" ]] ; then
   #echo "# REPO_UMASK = 0007" >> "${H}/.gitolite.rc"
   chmod -R ug+rwX,o-rwx "${H}/repositories/"
   chmod -R ug-s "${H}/repositories/"
+  chmod 750 "${H}/.gitolite"
   find "${H}/repositories/" -type d -print0 | xargs -0 chmod g+s
 else
   GITOLITE_HTTP_HOME= gitolite setup
