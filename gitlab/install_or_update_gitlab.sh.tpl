@@ -10,8 +10,11 @@ demod stop
 upgradedb=0
 if [[ ! -e "${github}" ]] ; then
   xxgit=1 git clone https://github.com/gitlabhq/gitlabhq "${github}"
-  #cp -f "${gtl}/boot.rb" "${github}/config/boot.rb"
   cp_tpl "${gtl}/p.rake.tpl" "${github}/lib/tasks"
+  gi=$(grep "/lib/tasks/p.rake" "${github}/.git/info/exclude")
+  if [[ "${gi}" == "" ]] ; then echo "/lib/tasks/p.rake" >> "${github}/.git/info/exclude"; fi
+  gi=$(grep "/dump.rdb" "${github}/.git/info/exclude")
+  if [[ "${gi}" == "" ]] ; then echo "/dump.rdb" >> "${github}/.git/info/exclude"; fi
   d=$(pwd)
   cd "${github}"
   bundle config build.charlock_holmes --with-icu-dir="${HUL}"
