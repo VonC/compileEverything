@@ -8,6 +8,7 @@ mkdir -p "${gtl}/logs"
 
 demod stop
 upgradedb=0
+if [[ ! -e "${gtl}/gitlab-satellites" ]] ; then mkdir "${gtl}/gitlab-satellites" ; fi
 if [[ ! -e "${github}" ]] ; then
   xxgit=1 git clone https://github.com/gitlabhq/gitlabhq "${github}"
   cp_tpl "${gtl}/p.rake.tpl" "${github}/lib/tasks"
@@ -71,6 +72,8 @@ else
   bundle exec rake db:migrate RAILS_ENV=production
   echo "Upgrade GitLab database done"
 fi
+echo "(Re-)Create satellite repos"
+bundle exec rake gitlab:satellites:create RAILS_ENV=production
 echo Check if GitLab and its environment is configured correctly:
 bundle exec rake gitlab:env:info RAILS_ENV=production
 echo To make sure you didn't miss anything run a more thorough check with:

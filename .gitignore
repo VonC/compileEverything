@@ -136,3 +136,4 @@ dump.rdb
 *.1
 *.tpl_*
 /.mysql_history
+/gitlab/gitlab-satellites/
