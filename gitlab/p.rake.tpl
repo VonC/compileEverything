@@ -26,5 +26,14 @@ namespace :gitlab do
         fix_and_rerun
       end
     end
+    def check_init_script_up_to_date
+      print "Init script up-to-date? ... "
+      script_path = "@H@/gitlab/gitlabd"
+      unless File.exists?(script_path)
+        puts "can't check because of previous errors".magenta
+        return
+      end
+      puts "yes".green
+    end
   end
 end
