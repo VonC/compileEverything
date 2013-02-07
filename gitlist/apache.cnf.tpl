@@ -1,4 +1,4 @@
-# GitList  on @PORT_HTTPS_GITLIST@
+# GitList on @PORT_HTTPS_GITLIST@
 Listen @PORT_HTTPS_GITLIST@
 <VirtualHost @FQN@:@PORT_HTTPS_GITLIST@>
     ServerName @FQN@
@@ -13,15 +13,25 @@ Listen @PORT_HTTPS_GITLIST@
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars
     </FilesMatch>
-    <Location /gitlist>
+    <Directory @H@/gitlist/github>
         SSLOptions +StdEnvVars
-        Options ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
-        #AllowOverride All
+        Options ExecCGI +Indexes +FollowSymLinks
+        AllowOverride All
         order allow,deny
         Allow from all
         Options -MultiViews
-    </Location>
 
+        RewriteEngine On
+        #RewriteBase @H@/gitlist/github/
+        RewriteBase /
+
+        RewriteCond %{REQUEST_FILENAME} !-f
+        #RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule ^(.*)$ index.php [L,NC,QSA]
+    </Directory>
+
+    # RewriteLog "@H@/gitlist/logs/apache_gitlist_rewrite_log"
+    # RewriteLogLevel 3
     CustomLog "@H@/gitlist/logs/apache_gitlist_ssl_request_log" \
               "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
     ErrorLog "@H@/gitlist/logs/apache_gitlist_error_log"
