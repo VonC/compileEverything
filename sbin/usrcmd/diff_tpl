@@ -5,10 +5,14 @@ function rdiff() {
   local fullFilePathDst="$2"
   local _rdiff="$3"
 
+  fullFilePathDst=$(readlink -f "${fullFilePathDst}") 
   if [[ -e "${fullFilePathDst}" ]] ; then
-    cp -f "${fullFilePathDst}" "${fullFilePathDst}.tpl_ori"
-    "${H}/sbin/usrcmd/repl_tpl" "${fullFilePathOri}" "${fullFilePathDst}.tpl_val"
-    local rdiff_local=$(diff "${fullFilePathDst}.tpl_ori" "${fullFilePathDst}.tpl_val")
+    fullFilePathDstCpl="${fullFilePathDst/${H}/${H}/.cpl/tpl_checks}"
+    mkdir -p "${fullFilePathDstCpl%/*}"
+    echo "cp -f '${fullFilePathDst}' '${fullFilePathDstCpl}.tpl_ori'"
+    cp -f "${fullFilePathDst}" "${fullFilePathDstCpl}.tpl_ori"
+    "${H}/sbin/usrcmd/repl_tpl" "${fullFilePathOri}" "${fullFilePathDstCpl}.tpl_val"
+    local rdiff_local=$(diff "${fullFilePathDstCpl}.tpl_ori" "${fullFilePathDstCpl}.tpl_val")
     #echo ${rdiff_local}
   else
     echo "warning: no '${fullFilePathDst}' to compare to."
