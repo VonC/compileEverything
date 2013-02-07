@@ -7,6 +7,7 @@ Apache:
   https                          : https://@FQN@:@PORT_HTTP_HGIT@/hgit/
   cgit                           : https://@FQN@:@PORT_HTTP_CGIT@/cgit/
   gitlab                         : https://@FQN@:@PORT_HTTPS_GITLAB@/gitlab/
+  gitlist                        : https://@FQN@:@PORT_HTTPS_GITLIST@/gitlist/
   
 ~~~~~~~~~~~~~~
 NGiNX:
@@ -14,6 +15,7 @@ NGiNX:
   Redirection gitweb            : https://@FQN@:@PORT_NGINX_HTTPS@/git/
   Redirection hgit              : https://@FQN@:@PORT_NGINX_HTTPS@/hgit/
   Redirection cgit              : https://@FQN@:@PORT_NGINX_HTTPS@/cgit/
+  Redirection gitlist           : https://@FQN@:@PORT_NGINX_HTTPS@/gitlist/
   GitLab                        : https://@FQN@:@PORT_NGINX_HTTPS@/gitlab/
                                   (admin@local.host/5iveL!fe)
 

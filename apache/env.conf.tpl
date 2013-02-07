@@ -226,3 +226,5 @@ Listen @PORT_HTTPS_GITLAB@
     TransferLog "@H@/gitlab/logs/apache_gitlab_access_log"
     LogLevel info
 </VirtualHost>
+
+Include @H@/gitlist/apache.cnf
