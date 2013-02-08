@@ -1,0 +1,3 @@
+page=http://mirror.cogentco.com/pub/php/?C=M;O=D
+url=http://mirror.internode.on.net/pub/php/
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
