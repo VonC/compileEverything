@@ -13,6 +13,12 @@ Listen @PORT_HTTPS_GITLIST@
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars
     </FilesMatch>
+    <FilesMatch ".php$">
+      SetHandler application/x-httpd-php
+    </FilesMatch>
+    <FilesMatch ".phps$">
+      SetHandler application/x-httpd-php-source
+    </FilesMatch>
     <Directory @H@/gitlist/github>
         SSLOptions +StdEnvVars
         Options ExecCGI +Indexes +FollowSymLinks
