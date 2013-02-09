@@ -3529,3 +3529,73 @@ Objects/fileobject.c:649: error: incompatible types in return
 
 libexpat wasn't compiled
 ~~~~~~~~~~~~~~~~~~~~~~
+groff configure
+
+checking that C++ compiler can compile simple program... no
+configure: error: a working C++ compiler is required
+
+configure:4494: g++ -o conftest -g -O2 -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -lintl -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib conftest.cpp  -lintl >&5
+/usr/bin/ld: conftest: hidden symbol `fstat' in /usr/lib/x86_64-linux-gnu/libc_nonshared.a(fstat.oS) is referenced by DSO
+/usr/bin/ld: final link failed: Bad value
+collect2: ld returned 1 exit status
+configure:4494: $? = 1
+configure: program exited with status 1
+configure: failed program was:
+| /* confdefs.h */
+| #define PACKAGE_NAME "groff"
+| #define PACKAGE_TARNAME "groff-1.22.2"
+| #define PACKAGE_VERSION "1.22.2"
+| #define PACKAGE_STRING "groff 1.22.2"
+| #define PACKAGE_BUGREPORT "bug-groff@gnu.org"
+| #define PACKAGE_URL ""
+| #define STDC_HEADERS 1
+| #define HAVE_SYS_TYPES_H 1
+| #define HAVE_SYS_STAT_H 1
+| #define HAVE_STDLIB_H 1
+| #define HAVE_STRING_H 1
+| #define HAVE_MEMORY_H 1
+| #define HAVE_STRINGS_H 1
+| #define HAVE_INTTYPES_H 1
+| #define HAVE_STDINT_H 1
+| #define HAVE_UNISTD_H 1
+| #define __EXTENSIONS__ 1
+| #define _ALL_SOURCE 1
+| #define _GNU_SOURCE 1
+| #define _POSIX_PTHREAD_SEMANTICS 1
+| #define _TANDEM_SOURCE 1
+| /* end confdefs.h.  */
+| 
+| 
+| 
+| int main() {
+|   return 0;
+| }
+| 
+| 
+| 
+configure:4498: result: no
+configure:4500: error: a working C++ compiler is required
+
+
+vonc@voncp1 ~/.cpl/tests/groff $ gcc -o conftest conftest.cpp
+/tmp/ccLdKRpe.o:(.eh_frame+0x11): undefined reference to `__gxx_personality_v0'
+collect2: ld returned 1 exit status
+
+http://stackoverflow.com/questions/6045809/problem-with-g-and-undefined-reference-to-gxx-personality-v0
+
+vonc@voncp1 ~/.cpl/tests/groff $ gcc -o conftest conftest.cpp -lstdc++
+/usr/bin/ld: conftest: hidden symbol `fstat' in /usr/lib/x86_64-linux-gnu/libc_nonshared.a(fstat.oS) is referenced by DSO
+/usr/bin/ld: final link failed: Bad value
+collect2: ld returned 1 exit status
+
+vonc@voncp1 ~/.cpl/tests/groff $ nm /usr/lib/x86_64-linux-gnu/libc_nonshared.a|grep fstat
+fstat.oS:
+0000000000000000 W fstat
+0000000000000000 T __fstat
+fstat64.oS:
+0000000000000000 T fstat64
+fstatat.oS:
+0000000000000000 T fstatat
+fstatat64.oS:
+0000000000000000 T fstatat64
+
