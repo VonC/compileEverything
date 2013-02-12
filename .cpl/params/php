@@ -2,3 +2,4 @@ page=http://mirror.cogentco.com/pub/php/?C=M;O=D
 url=http://mirror.internode.on.net/pub/php/
 #configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@ --with-mysql --with-config-file-path=${HULA}/@@NAMEVER@@ --enable-force-cgi-redirect --disable-cgi --with-zlib --with-gettext --with-gdbm --with-apxs2=${HUL}/apache2/bin/apxs
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@ --with-mysql --with-config-file-path=${HULA}/@@NAMEVER@@ --enable-force-cgi-redirect --disable-cgi --with-zlib --with-gettext --with-apxs2=${HUL}/apache2/bin/apxs
+post="${H}/php/post_install_php"

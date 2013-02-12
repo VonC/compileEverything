@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ ! -e "${H}/apache/apache2/modules/libphp5.so" ]] ; then
+  if [[ -e "${H}/.cpl/src/php/libs/libphp5.so" ]] ; then
+    cp "${H}/.cpl/src/php/libs/libphp5.so" "${H}/apache/apache2/modules/"
+  else
+  fi
+fi
+
+if [[ ! -e "${HULA}/php/php.ini" ]] ; then
+  cp "${H}/.cpl/src/php/php.ini-development" "${HULA}/php/php.ini"
+fi
