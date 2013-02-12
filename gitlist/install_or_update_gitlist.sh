@@ -6,8 +6,11 @@ mkdir -p "${gtl}/logs"
 
 if [[ ! -e "${github}" ]] ; then
   xxgit=1 git clone https://github.com/klaussilveira/gitlist "${github}"
+  composer install -- --working-dir "${H}/gitlist/github/"
+
 else
   xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" pull
+  composer update -- --working-dir "${H}/gitlist/github/"
 fi
 if [[ -f "${github}/.htaccess" ]] ; then
   mv "${github}/.htaccess" "${github}/.htaccess.example"
@@ -21,6 +24,6 @@ cp_tpl "${gtl}/apache.cnf.tpl" "${gtl}"
 cp_tpl "${gtl}/config.ini.tpl" "${gtl}"
 
 g=$(grep gitlist "${H}/apache/cnf")
-if [[ "${g}" == "" ]] ; then echo "Include ${H}/gitlist/apache.cnf" >> "${H}/apache/cnf" fi
+if [[ "${g}" == "" ]] ; then echo "Include ${H}/gitlist/apache.cnf" >> "${H}/apache/cnf" ; fi
 g=$(grep gitlist "${H}/apache/cnf.tpl")
-if [[ "${g}" == "" ]] ; then echo "Include @H@/gitlist/apache.cnf" >> "${H}/apache/cnf.tpl" fi
+if [[ "${g}" == "" ]] ; then echo "Include @H@/gitlist/apache.cnf" >> "${H}/apache/cnf.tpl" ; fi

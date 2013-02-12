@@ -83,6 +83,7 @@ lib libarchive gcc,bzip2,libxml2,zlib,openssl
 lib gc gcc
 lib libatomic_ops gcc
 app redis gcc
-mod gitlist php
-app php none
+mod gitlist php,composer
+mod composer php
+app php gettext,zlib,libxml2,libiconv
 __no_deps__

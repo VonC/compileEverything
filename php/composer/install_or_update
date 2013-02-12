@@ -1,0 +1,4 @@
+#!/bin/bash
+
+curl -s https://getcomposer.org/installer | "${H}/bin/php" -- --quiet --install-dir="${H}/php/composer"
+ln -fs ../php/composer/composer "${H}/bin/composer"

@@ -142,3 +142,7 @@ dump.rdb
 /gitlist/config.ini
 /gitlist/htaccess
 /divergence
+*.o
+*.out
+.composer/
+composer/

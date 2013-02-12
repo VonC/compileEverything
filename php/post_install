@@ -4,6 +4,8 @@ if [[ ! -e "${H}/apache/apache2/modules/libphp5.so" ]] ; then
   if [[ -e "${H}/.cpl/src/php/libs/libphp5.so" ]] ; then
     cp "${H}/.cpl/src/php/libs/libphp5.so" "${H}/apache/apache2/modules/"
   else
+    echo -e "\e[1;31mERROR --- '${H}/.cpl/src/php/libs/libphp5.so' is MISSING\e[0m" 1>&2
+    exit 1
   fi
 fi
 
