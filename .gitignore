@@ -141,5 +141,4 @@ dump.rdb
 /gitlist/apache.cnf
 /gitlist/config.ini
 /gitlist/htaccess
-/gitlist/install_or_update_gitlist.sh
 /divergence

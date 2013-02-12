@@ -1,4 +1,4 @@
 configcmd=none
 makefile=none
 makecmd=none
-makeinstcmd=cp_tpl "${H}/gitlist/install_or_update_gitlist.sh.tpl" "${H}/gitlist/" ; "${H}/gitlist/install_or_update_gitlist.sh"
+makeinstcmd="${H}/gitlist/install_or_update_gitlist.sh"

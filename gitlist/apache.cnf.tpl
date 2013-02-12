@@ -1,4 +1,7 @@
 # GitList on @PORT_HTTPS_GITLIST@
+<IfModule !php5_module>
+  LoadModule php5_module modules/libphp5.so
+</IfModule>
 Listen @PORT_HTTPS_GITLIST@
 <VirtualHost @FQN@:@PORT_HTTPS_GITLIST@>
     ServerName @FQN@
@@ -27,13 +30,13 @@ Listen @PORT_HTTPS_GITLIST@
         Allow from all
         Options -MultiViews
 
+        DirectoryIndex index.php
         RewriteEngine On
-        #RewriteBase @H@/gitlist/github/
-        RewriteBase /
 
+        RewriteBase @H@/gitlist/github/
         RewriteCond %{REQUEST_FILENAME} !-f
-        #RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteRule ^(.*)$ index.php [L,NC,QSA]
+        RewriteRule ^(.*)$ gitlist/index.php/$1 [L,NC]
+
     </Directory>
 
     # RewriteLog "@H@/gitlist/logs/apache_gitlist_rewrite_log"
