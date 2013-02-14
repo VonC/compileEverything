@@ -33,9 +33,9 @@ Listen @PORT_HTTPS_GITLIST@
         DirectoryIndex index.php
         RewriteEngine On
 
-        RewriteBase @H@/gitlist/github/
+        RewriteBase /
         RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteRule ^(.*)$ gitlist/index.php/$1 [L,NC]
+        RewriteRule ^(.*)$ gitlist/index.php/$1 [L,NC,QSA]
 
     </Directory>
 
