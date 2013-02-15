@@ -283,7 +283,7 @@ function get_sources() {
   get_param ${name} verinclude ""
 
   if [[ "${page}" == "none" ]] ; then eval ${_namever}="'${name}'" ; return 0 ; fi
-  if [[ "${page#http}" == "${page}" && "${page#/}" == "${page}" ]] ; then page=$("${H}/.cpl/scripts/${page}" ${name} ${verexclude}) ; fi
+  if [[ "${page#http}" == "${page}" && "${page#/}" == "${page}" && "${page}" != "l" ]] ; then page=$("${H}/.cpl/scripts/${page}" ${name} ${verexclude}) ; fi
   get_param ${name} ext "tar.gz"
   if [[ "${nameurl}" == "none" ]] ; then nameurl="" ; fi
   if [[ "${ext}" == "none" ]] ; then ext="" ; fi
@@ -292,6 +292,11 @@ function get_sources() {
   get_param ${name} extact "${ext}"
   if [[ -e "${page}" ]] ; then
     local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
+  elif [[ "${page}" == "l" ]]; then
+    local asrcline=$(ls -1 ${H}/.cpl/src/_pkgs | grep "${nameurl}-")
+    if [[ ${mgsd} == 1 ]] ; then echo "D: l0 asrcline ${asrcline} from ext ${ext}" ; fi
+    asrcline=${asrcline%${ext}}
+    if [[ ${mgsd} == 1 ]] ; then echo "D: l asrcline ${asrcline} from ext ${ext}" ; fi
   else
     if [[ ${mgsd} == 1 ]] ; then echo "D: local asrcline wget -q -O - ${page} grep -e ${nameurl} grep ${ext}" ; fi
     if [[ ${mgsd} == 1 ]] ; then local asrcpage=$(wget -U Mozilla -q -O - "${page}") ; fi
