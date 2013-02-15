@@ -3599,3 +3599,74 @@ fstatat.oS:
 fstatat64.oS:
 0000000000000000 T fstatat64
 
+http://www.archivum.info/gnu.gcc.help/2006-08/00137/Re-Nasty-problem-with-stat-fstat-on-Linux.html
+
+Only if it was linked incorrectly.
+
+>> /usr/lib/libc_nonshared.a(stat.oS): definition of stat
+>> /usr/lib/libc_nonshared.a(fstat.oS): definition of fstat
+>
+> Are they compiled with PIC, though? Suitable for the shared-library, in
+> other words?
+
+Yes. When you link against /usr/lib/libc.so on Linux, you get most
+of libc.so.6 from (surprize!) libc.so.6, and you get a little bit
+of libc_nonshared.a statically bound into your executable or DSO.
+
+If ld compiled before gcc:
+
+https://bugs.launchpad.net/ubuntu/+source/armel-cross-toolchain-base/+bug/692987
+http://mingw.5.n7.nabble.com/ld-not-configured-to-use-sysroots-td20850.html
+
+this linker was not configured to use sysroots
+
+Svein Seldal (sveinse) wrote on 2010-12-27:  #6
+As a temporary workaround, you can pin the binutils-arm-linux-gnueabi to version 2.20.51.20100908-0ubuntu2cross1.50. It seems to still linger around the various Ubuntu mirrors.
+
+Please note the sysroot setting was removed from binutils due to bug #598389, so don't expect xdeb to work properly with the pinned binutils version.
+
+I'm currently considering repackaging the binutils package with sysroot enabled for those of us which needs it.
+
+
+vonc@voncp1 ~/.cpl/tests/groff $ g++ conftest.c -Wl,-v
+collect2 version 3.4.6 (x86-64 Linux/ELF)
+/home/vonc/gitpoc/gitlist/bin/ld --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o /home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6/crtbegin.o -L/usr/lib/x86_64-linux-gnu -L/home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6 -L/home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6/../../../../lib64 -L/home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6/../../.. -L/lib/../lib64 /tmp/ccgWNs9B.o -v -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6/crtend.o /usr/lib/x86_64-linux-gnu/crtn.o
+GNU ld (GNU Binutils) 2.23.1
+/home/vonc/gitpoc/gitlist/bin/ld: a.out: hidden symbol `fstat' in /usr/lib/x86_64-linux-gnu/libc_nonshared.a(fstat.oS) is referenced by DSO
+/home/vonc/gitpoc/gitlist/bin/ld: final link failed: Bad value
+
+
+
+  451  2013-02-14 22:58:43 - grep -nRHI "S_IREG" *
+  452  2013-02-14 22:58:46 - vi objdir/x86_64-unknown-linux-gnu/libstdc++-v3/include/x86_64-unknown-linux-gnu/bits/c++config.h
+  453  2013-02-14 22:59:01 - grep -nRHI "S_ISREG" *
+  454  2013-02-14 22:59:50 - vi libstdc++-v3/config/io/basic_file_stdio.cc
+  455  2013-02-14 23:03:59 - vi objdir/x86_64-unknown-linux-gnu/libstdc++-v3/include/x86_64-unknown-linux-gnu/bits/c++config.h
+  456  2013-02-14 23:04:11 - find . -name "stat.h"
+  457  2013-02-14 23:04:23 - vi ./gcc/fixinc/tests/base/sys/stat.h
+  460  2013-02-15 18:43:54 - reset_compil -f gcc
+  461  2013-02-15 18:44:11 - cd objdir/
+  462  2013-02-15 18:44:14 - make clean
+  463  2013-02-15 18:44:21 - cd ..
+  464  2013-02-15 18:44:37 - vi libstdc++-v3/config/io/basic_file_stdio.cc
+  465  2013-02-15 18:49:36 - find . -name "config.log"
+  467  2013-02-15 18:50:15 - grep --include="*.log" -nRHI "S_ISREG" *
+  468  2013-02-15 18:50:28 - cd libstdc++-v3/
+  469  2013-02-15 18:50:51 - cd ../objdir/x86_64-unknown-linux-gnu/libstdc++-v3/
+  470  2013-02-15 18:50:54 - vi config.log 
+  471  2013-02-15 18:52:51 - l ../../../libstdc++-v3/src/|grep basi
+  472  2013-02-15 18:53:04 - find ../../../libstdc++-v3/ -name "*basi*"
+  473  2013-02-15 18:53:43 - grep -nrHI "ISREG" ../../../libstdc++-v3/* 
+  474  2013-02-15 18:53:54 - grep -nrHI "fstat" ../../../libstdc++-v3/* 
+  475  2013-02-15 18:54:43 - vi ../../../libstdc++-v3/config/io/basic_file_stdio.cc
+  476  2013-02-15 18:56:56 - cd
+  477  2013-02-15 18:57:00 - cd .cpl/tests/groff/
+  478  2013-02-15 18:57:01 - sc
+  479  2013-02-15 18:57:05 - which g++
+  480  2013-02-15 18:57:08 - g++ conftest.c 
+  481  2013-02-15 18:58:45 - cd
+  482  2013-02-15 18:58:48 - cd .cpl/params/
+  483  2013-02-15 18:58:51 - grep prema *
+  485  2013-02-15 19:02:31 - vi "${H}/.cpl/src/gcc/libstdc++-v3/config/io/basic_file_stdio.cc"
+  488  2013-02-15 19:02:57 - sed "s#= fstat#= 0; // fstat#g" "${H}/.cpl/src/gcc/libstdc++-v3/config/io/basic_file_stdio.cc"
+
