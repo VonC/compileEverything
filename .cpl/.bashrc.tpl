@@ -159,7 +159,7 @@ if [[ ! ${ce_key128} ]] ; then
 fi
 if [[ ! ${ce_iv} ]] ; then
   ce_iv=$(echo "iv-$RANDOM-$$-$(date)" | md5sum | md5sum)
-  ce_iv=${ce_iv:0:32}
+  ce_iv=${ce_iv:0:32}export LIBRARY_PATH=/usr/lib/i386-linux-gnu
   export ce_iv=${ce_iv}
 fi
 if [[ ! ${ce_session} ]] ; then
@@ -185,3 +185,15 @@ export CMAKE_SYSTEM_LIBRARY_PATH="/lib:/usr/lib"
 export CMAKE_PROGRAM_PATH="${HB}"
 
 if [[ -e "${H}/sbin/ssh" ]] ; then export GIT_SSH="${H}/sbin/ssh" ; fi
+
+export -n LIBRARY_PATH
+if [[ -d /usr/lib/i386-linux-gnu ]] ; then export LIBRARY_PATH=/usr/lib/i386-linux-gnu ; fi
+if [[ -d /usr/lib/x86_64-linux-gnu ]] ; then export LIBRARY_PATH=/usr/lib/x86_64-linux-gnu ; fi
+
+export -n C_INCLUDE_PATH
+if [[ -d /usr/include/i386-linux-gnu ]] ; then export C_INCLUDE_PATH=/usr/include/i386-linux-gnu ; fi
+if [[ -d /usr/include/x86_64-linux-gnu ]] ; then export C_INCLUDE_PATH=/usr/include/x86_64-linux-gnu ; fi
+
+export -n CPLUS_INCLUDE_PATH
+if [[ -d /usr/include/i386-linux-gnu ]] ; then export CPLUS_INCLUDE_PATH=/usr/include/i386-linux-gnu ; fi
+if [[ -d /usr/include/x86_64-linux-gnu ]] ; then export CPLUS_INCLUDE_PATH=/usr/include/x86_64-linux-gnu ; fi
