@@ -120,7 +120,7 @@ if [[ "${root}" != "" ]] ; then
   echo "D: root='${root}',  nameverFromRoot '${nameverFromRoot}'"
   if [[ "${namever}" != "${nameverFromRoot}" ]] ; then
     echo  -e "\e[1;31m! Inconsistent namever between src '${namever}' and root '${root}': '${nameverFromRoot}'\e[0m" 1>&2
-    exit 1
+    #exit 1
   fi
 fi
 
