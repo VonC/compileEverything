@@ -3891,3 +3891,23 @@ make: *** [miniperl] Error 1
 
 => add -Wl,-rpath=/lib/x86_64-linux-gnu:/lib/i686-linux-gnu in the premake replace step, to go with -lrt
 ~~~~~~~~~~~~~~~~~~~~~
+libssh2 configure Ubuntu multi-arch x86_64-linux-gnu
+
+checking if the linker (/home/vonc/gitpoc/gitlist/bin/ld -m elf_x86_64) is GNU ld... yes
+checking for shared library run path origin... done
+checking for libssl... no
+checking for libgcrypt... no
+configure: error: cannot find OpenSSL or Libgcrypt,
+try --with-libssl-prefix=PATH or --with-libgcrypt-prefix=PATH
+
+configure:13916: gcc -o conftest -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -lintl -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu conftest.c  /home/vonc/gitpoc/gitlist/usr/local/ssl/lib/libssl.so /home/vonc/gitpoc/gitlist/usr/local/ssl/lib/libcrypto.so -Wl,-rpath -Wl,/home/vonc/gitpoc/gitlist/usr/local/ssl/lib >&5
+/home/vonc/gitpoc/gitlist/bin/ld: warning: libdl.so.2, needed by /home/vonc/gitpoc/gitlist/usr/local/ssl/lib/libssl.so, not found (try using -rpath or -rpath-link)
+/home/vonc/gitpoc/gitlist/usr/local/ssl/lib/libcrypto.so: undefined reference to `dlopen@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/ssl/lib/libcrypto.so: undefined reference to `dlerror@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/ssl/lib/libcrypto.so: undefined reference to `dlclose@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/ssl/lib/libcrypto.so: undefined reference to `dladdr@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/ssl/lib/libcrypto.so: undefined reference to `dlsym@GLIBC_2.2.5'
+collect2: ld returned 1 exit status
+
+Same addition than man-db in the configcmd step: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu 
+~~~~~~~~~~~~~~~~~~~~~

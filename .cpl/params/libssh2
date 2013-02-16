@@ -4,6 +4,6 @@
 page=http://ftp.lyx.org/pub/FreeBSD/ports/local-distfiles/sbz/?C=M;O=D
 url=http://ftp.lyx.org/pub/FreeBSD/ports/local-distfiles/sbz/
 
-configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-openssl --with-libssl-prefix=${HUL}/ssl --with-libz --with-libz-prefix=${HUL} @@WITHOUT_GNU_LD@@
+configcmd=@@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu ./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-openssl --with-libssl-prefix=${HUL}/ssl --with-libz --with-libz-prefix=${HUL} @@WITHOUT_GNU_LD@@
 pre=anos=$(uname -o) ; if [[ "${anos#*Cygwin}" != "${anos}" ]] ; then gen_sed -i "/int __cdecl _/ i #include <windows.h>" ${H}/.cpl/src/@@NAMEVER@@/src/misc.c ; fi
 premake=gen_sed -i "s/^CFLAGS = /CFLAGS = -lsasl2 /g" ${H}/.cpl/src/@@NAMEVER@@/example/Makefile;gen_sed -i "s/^CFLAGS = /CFLAGS = -lsasl2 /g" ${H}/.cpl/src/@@NAMEVER@@/tests/Makefile
