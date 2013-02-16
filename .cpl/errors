@@ -3951,3 +3951,18 @@ configure:26206: gcc -o conftest -fPIC -O -m64 -Wno-system-headers -isystem /hom
 
 Same addition than man-db in the configcmd step: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu 
 ~~~~~~~~~~~~~~~~~~~~
+nginx configure Ubuntu multi-arch x86_64-linux-gnu
+
+checking for PCRE JIT support ... found
+checking for OpenSSL library ... not found
+
+./configure: error: SSL modules require the OpenSSL library.
+You can either do not enable the modules, or install the OpenSSL library
+into the system, or build the OpenSSL library statically from the source
+with nginx by using --with-openssl=<path> option.
+
+from /home/vonc/gitpoc/gitlist/.cpl/src/nginx/auto/lib/openssl/conf
+
+Same addition than man-db in the configcmd step: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu 
+=> add LDFLAGS (completed with /lib/...) to --with-ld-opt option
+~~~~~~~~~~~~~~~~~~~~
