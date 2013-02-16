@@ -60,12 +60,7 @@ export HISTIGNORE="&:[ ]*:exit:history:h:l"
 
 # first override the $PATH, making sure to use *local* paths:
 export PATH="${H}/sbin:${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin"
-# then add the applications paths
-#export PATH="$PATH:$HULA/gcc/bin"
-#export PATH="$PATH:$HULA/git/bin:$HULA/svn/bin:$HULA/apache/bin"
-#export PATH="$PATH:$HULA/perl/bin:$HULA/python/bin"
-#export PATH="$PATH:$HULA/jdk/bin:$HULA/ant/bin"
-# then add the few system paths we actually need
+# then add the application paths which don't end up in ${H}/bin
 if [[ -e "${HUL}/jdk6" ]] ; then
   export JAVA_HOME="${HUL}/jdk6"
   export PATH="${PATH}":"${JAVA_HOME}/bin"
@@ -100,6 +95,12 @@ export -n NGX_AUX
 unset NGX_AUX
 
 export LD_RUN_PATH="${HULL}:${HUL}/ssl/lib:${HULA}/svn/lib:${HULA}/python/lib:${HULA}/gcc/lib"
+if [[ -e "${HUL}/ssl/lib" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:${HUL}/ssl/lib" ; fi
+if [[ -e "${HULA}/svn/lib" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:${HULA}/svn/lib" ; fi
+if [[ -e "${HULA}/python/lib" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:${HULA}/python/lib" ; fi
+if [[ -e "${HULA}/gcc/lib" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:${HULA}/gcc/lib" ; fi
+if [[ -e "/lib/i386-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/lib/i386-linux-gnu" ; fi
+if [[ -e "/lib/x86_64-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/lib/x86_64-linux-gnu" ; fi
 export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib -Wl,-rpath=${LD_RUN_PATH}"
 if [[ -e "${HULS}/gettext" ]] ; then export LDFLAGS="-lintl ${LDFLAGS}" ; fi
 export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE @@M64@@ @@CYGWIN@@"
@@ -179,21 +180,25 @@ fi
 export CMAKE_PREFIX_PATH="${HUL}:${HUL}/ssl"
 export CMAKE_LIBRARY_PATH="${HULL}:${HUL}/ssl/lib"
 export CMAKE_INCLUDE_PATH="${HULI}:${HUL}/ssl/include"
-export CMAKE_SYSTEM_IGNORE_PATH="/lib/i386-linux-gnu:/usr/lib64:/usr/lib"
-export CMAKE_IGNORE_PATH="/lib/i386-linux-gnu:/usr/lib64:/usr/lib"
+export CMAKE_SYSTEM_IGNORE_PATH="/lib/i386-linux-gnu:/usr/lib64:/usr/lib:/usr/include/i386-linux-gnu:/usr/lib/x86_64-linux-gnu"
+export CMAKE_IGNORE_PATH="/lib/i386-linux-gnu:/usr/lib64:/usr/lib:/usr/include/i386-linux-gnu:/usr/lib/x86_64-linux-gnu"
 export CMAKE_SYSTEM_LIBRARY_PATH="/lib:/usr/lib"
 export CMAKE_PROGRAM_PATH="${HB}"
 
 if [[ -e "${H}/sbin/ssh" ]] ; then export GIT_SSH="${H}/sbin/ssh" ; fi
 
 export -n LIBRARY_PATH
-if [[ -d /usr/lib/i386-linux-gnu ]] ; then export LIBRARY_PATH=/usr/lib/i386-linux-gnu ; fi
-if [[ -d /usr/lib/x86_64-linux-gnu ]] ; then export LIBRARY_PATH=/usr/lib/x86_64-linux-gnu ; fi
-
 export -n C_INCLUDE_PATH
-if [[ -d /usr/include/i386-linux-gnu ]] ; then export C_INCLUDE_PATH=/usr/include/i386-linux-gnu ; fi
-if [[ -d /usr/include/x86_64-linux-gnu ]] ; then export C_INCLUDE_PATH=/usr/include/x86_64-linux-gnu ; fi
-
 export -n CPLUS_INCLUDE_PATH
-if [[ -d /usr/include/i386-linux-gnu ]] ; then export CPLUS_INCLUDE_PATH=/usr/include/i386-linux-gnu ; fi
-if [[ -d /usr/include/x86_64-linux-gnu ]] ; then export CPLUS_INCLUDE_PATH=/usr/include/x86_64-linux-gnu ; fi
+
+# Multu-arch support
+if [[ -d /usr/lib/i386-linux-gnu ]] ; then 
+  export LIBRARY_PATH=/usr/lib/i386-linux-gnu:/lib/i386-linux-gnu
+  export C_INCLUDE_PATH=/usr/include/i386-linux-gnu
+  export CPLUS_INCLUDE_PATH=/usr/include/i386-linux-gnu
+fi
+if [[ -d /usr/lib/x86_64-linux-gnu ]] ; then 
+  export LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu
+  export C_INCLUDE_PATH=/usr/include/x86_64-linux-gnu
+  export CPLUS_INCLUDE_PATH=/usr/include/x86_64-linux-gnu
+fi

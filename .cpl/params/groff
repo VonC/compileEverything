@@ -1,3 +1,4 @@
+#page=l
 page=http://groff.ffii.org/groff/?O=D&C=M
 url=http://groff.ffii.org/groff/
 configcmd=@@LIBS=" -lintl" ./configure --prefix=${HULS}/@@NAMEVER@@ @@WITH_GNU_LD@@ --with-libiconv-prefix=${HUL}

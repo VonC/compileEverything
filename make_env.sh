@@ -173,10 +173,6 @@ function main {
     if [[ ! -e "${H}/addresses.txt" ]] ; then "${H}/sbin/cp_tpl" "${H}/.cpl/addresses.txt.tpl" "${H}" ; fi
     sc
     mkdir -p "${HUL}/._linked"
-    mkdir -p "${HUL}/ssl/lib"
-    mkdir -p "${HULA}/svn/lib"
-    mkdir -p "${HULA}/python/lib"
-    mkdir -p "${HULA}/gcc/lib"
     if [[ ! -e "${_vers}" ]]; then
       echolog "#### VERS ####"
       echolog "download compatible versions from SunFreeware"
