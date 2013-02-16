@@ -3931,3 +3931,23 @@ configure: error: BDB/HDB: BerkeleyDB not available
 
 Same addition than man-db in the configcmd step: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu 
 ~~~~~~~~~~~~~~~~~~
+curl configure Ubuntu multi-arch x86_64-linux-gnu
+
+
+configure:3552: using LDFLAGS: -lintl -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu
+configure:3570: LDFLAGS error: LDFLAGS may only be used to specify linker flags, not libraries. Use LIBS for: -lintl
+configure:3639: using CFLAGS: -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64
+configure:3653: CFLAGS error: CFLAGS may only be used to specify C compiler flags, not include directories. Use CPPFLAGS for: -I/home/vonc/gitpoc/gitlist/usr/local/include
+
+=> set LDFLAGS="${LDFLAGS#-lintl }" CFLAGS="-fPIC -O -m64" approriately
+
+configure:26206: gcc -o conftest -fPIC -O -m64 -Wno-system-headers -isystem /home/vonc/gitpoc/gitlist/usr/local/include -isystem /home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/include -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/lib conftest.c -lssh2 -lz  >&5
+/home/vonc/gitpoc/gitlist/bin/ld: warning: libdl.so.2, needed by /home/vonc/gitpoc/gitlist/usr/local/lib/libssl.so.1.0.0, not found (try using -rpath or -rpath-link)
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so.1.0.0: undefined reference to `dlopen@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so.1.0.0: undefined reference to `dlerror@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so.1.0.0: undefined reference to `dlclose@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so.1.0.0: undefined reference to `dladdr@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so.1.0.0: undefined reference to `dlsym@GLIBC_2.2.5'
+
+Same addition than man-db in the configcmd step: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu 
+~~~~~~~~~~~~~~~~~~~~
