@@ -3769,3 +3769,105 @@ vonc@voncp1 ~/.cpl/src/ncurses/misc $ ldd ../progs/tic
 
 
 ~~~~~~~~~~~~~~~~
+man-db configure ubuntu x86_64-linux-gnu
+
+checking db.h usability... yes
+checking db.h presence... yes
+checking for db.h... yes
+checking for dbopen from <db.h> in -ldb... no
+checking for dbopen from <db.h> in -ldb1... no
+checking db1/db.h usability... no
+checking db1/db.h presence... no
+checking for db1/db.h... no
+checking ndbm.h usability... no
+checking ndbm.h presence... no
+checking for ndbm.h... no
+configure: error: Fatal: no supported database library/header found
+
+
+
+
+configure:40661: checking db.h usability
+configure:40661: gcc -std=gnu99 -c -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -Wall -W -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Wshadow -Wformat-security -Wredundant-decls -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 conftest.c >&5
+configure:40661: $? = 0
+configure:40661: result: yes
+configure:40661: checking db.h presence
+configure:40661: gcc -E -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 conftest.c
+configure:40661: $? = 0
+configure:40661: result: yes
+configure:40661: checking for db.h
+configure:40661: result: yes
+configure:40680: checking for dbopen from <db.h> in -ldb
+configure:40696: gcc -std=gnu99 -o conftest -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -Wall -W -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Wshadow -Wformat-security -Wredundant-decls -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -lintl -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu conftest.c  -ldb >&5
+conftest.c:522: warning: function declaration isn't a prototype
+conftest.c: In function `main':
+conftest.c:523: warning: implicit declaration of function `dbopen'
+/home/vonc/gitpoc/gitlist/bin/ld: warning: libpthread.so.0, needed by /home/vonc/gitpoc/gitlist/usr/local/lib/libdb.so, not found (try using -rpath or -rpath-link)
+/home/vonc/gitpoc/gitlist/bin/ld: warning: libdl.so.2, needed by /home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so, not found (try using -rpath or -rpath-link)
+/home/vonc/gitpoc/gitlist/bin/ld: warning: libm.so.6, needed by /home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so, not found (try using -rpath or -rpath-link)
+/tmp/cc8lvP54.o: In function `main':
+conftest.c:(.text+0x26): undefined reference to `dbopen'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `pthread_setspecific@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `floor@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `ceil@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `hypot@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `sinh@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `atan@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `tan@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `dlopen@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `dlerror@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `sqrt@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `cosh@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libdb.so: undefined reference to `pthread_yield@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `pthread_getspecific@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `fmod@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libdb.so: undefined reference to `pthread_mutexattr_init@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `log10@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `pthread_key_delete@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `sin@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `pthread_key_create@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `dlclose@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libdb.so: undefined reference to `pthread_condattr_setpshared@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `cos@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `atan2@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libdb.so: undefined reference to `pthread_create@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `acos@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `tanh@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `exp@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libdb.so: undefined reference to `pthread_mutexattr_destroy@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libdb.so: undefined reference to `pthread_mutexattr_setpshared@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `log@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `dlsym@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `asin@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libdb.so: undefined reference to `pthread_join@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libdb.so: undefined reference to `pthread_attr_setstacksize@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so: undefined reference to `pow@GLIBC_2.2.5'
+collect2: ld returned 1 exit status
+configure:40696: $? = 1
+configure: failed program was:
+
+#include <db.h>
+int
+main ()
+{
+dbopen("foo", 0, 0, 0, (void *) 0)
+  ;
+  return 0;
+}
+
+configure:40706: result: no
+
+vonc@voncp1 ~/usr $ grep --include "*.h" dbopen -nRHI *
+local/libs/db-4.7.25.NC/include/db_185.h:169:/* Re-define the user's dbopen calls. */
+local/libs/db-4.7.25.NC/include/db_185.h:170:#define    dbopen __db185_open
+local/libs/db/include/db_185.h:169:/* Re-define the user's dbopen calls. */
+local/libs/db/include/db_185.h:170:#define  dbopen __db185_open
+local/include/db_185.h:169:/* Re-define the user's dbopen calls. */
+local/include/db_185.h:170:#define  dbopen __db185_open
+vonc@voncp1 ~/usr $ cd local/include/
+vonc@voncp1 ~/usr/local/include $ ls db*.h
+db_185.h  db_cxx.h  db.h
+vonc@voncp1 ~/usr/local/include $ vi db_185.h 
+
+=> LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu ./configure --prefix=${HULA}/@@NAMEVER@@ @@WITH_GNU_LD@@ --with-libiconv-prefix=${HUL} (add LDFLAGS with reference to /lib/multi-arch)
+~~~~~~~~~~~~~~~~~~~~~~
