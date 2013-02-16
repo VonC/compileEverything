@@ -3673,6 +3673,8 @@ GNU ld (GNU Binutils) 2.23.1
 ~~~~~~~~~~~~~~~~~~~~~~~
 tcl make Mint14 Ubuntu
 
+vonc@voncp1 ~/.cpl/src/db/build_unix
+
 gcc -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O3 -U_FORTIFY_SOURCE -m64 -o .libs/db_archive -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib .libs/db_archive.o .libs/util_sig.o  -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib ./.libs/libdb-4.7.so -ltcl8.6 /home/vonc/gitpoc/gitlist/usr/local/libs/gettext-0.18.2/lib/libintl.so /home/vonc/gitpoc/gitlist/usr/local/libs/libiconv-1.14/lib/libiconv.so -lc -lpthread  -Wl,--rpath -Wl,/home/vonc/gitpoc/gitlist/usr/local/libs/db-4.7.25.NC/lib -Wl,--rpath -Wl,/home/vonc/gitpoc/gitlist/usr/local/libs/gettext-0.18.2/lib -Wl,--rpath -Wl,/home/vonc/gitpoc/gitlist/usr/local/libs/libiconv-1.14/lib
 /home/vonc/gitpoc/gitlist/bin/ld: warning: libdl.so.2, needed by /home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so, not found (try using -rpath or -rpath-link)
 /home/vonc/gitpoc/gitlist/bin/ld: warning: libm.so.6, needed by /home/vonc/gitpoc/gitlist/usr/local/lib/libtcl8.6.so, not found (try using -rpath or -rpath-link)
@@ -3702,7 +3704,8 @@ gcc -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/us
 collect2: ld returned 1 exit status
 make: *** [db_archive] Error 1
 
-=> Tries and add /lib/x86_64-linux-gnu to the rpath (wrong, tries only /usr/lib/x... because /lib/x8... includes libs that we build and want to takes into account)
+=> Tries and add /lib/x86_64-linux-gnu to the rpath (wrong, tries only /usr/lib/x... because /lib/x8... includes libs that we build and want to takes into account). Actually, add /lib/x86 to rpath only in build_unix/Makefile for db.
+
 
 ~~~~~~~~~~~~~~~~~~~
 ncurses install Ubutu X86_64
