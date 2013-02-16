@@ -2,6 +2,6 @@ page=http://www.openldap.org/software/download/
 url=http://www.openldap.org/software/download/OpenLDAP/openldap-release/
 ext=tgz
 pre=anos=$(uname -o) ; if [[ "${anos#*Cygwin}" != "${anos}" ]] ; then gen_sed -i "s/-lsasl2  /-lsasl2 -lcrypto -ldb /g" ${H}/.cpl/src/@@NAMEVER@@/configure ; gen_sed -i '\''s/SASL_LIBS=\"/SASL_LIBS=\"-ldb /g'\'' ${H}/.cpl/src/@@NAMEVER@@/configure ; gen_sed -i '\''s/-lssl -lcrypto/-lssl -lcrypto -ldb/g'\'' ${H}/.cpl/src/@@NAMEVER@@/configure ; fi
-configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-cyrus-sasl --enable-overlays @@WITHOUT_GNU_LD@@
+configcmd=@@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu ./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-cyrus-sasl --enable-overlays @@WITHOUT_GNU_LD@@
 premake=make depend
 postcheck=cp_tpl "${H}/openldap/ini_ldap_db.sh.tpl" "${H}/openldap" ; cp_tpl "${H}/openldap/slapdd" "${H}/openldap/" ; "${H}/openldap/ini_ldap_db.sh" 

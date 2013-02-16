@@ -3911,3 +3911,23 @@ collect2: ld returned 1 exit status
 
 Same addition than man-db in the configcmd step: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu 
 ~~~~~~~~~~~~~~~~~~~~~
+openldap configure Ubuntu multi-arch x86_64-linux-gnu
+
+checking db.h usability... yes
+checking db.h presence... yes
+checking for db.h... yes
+checking for Berkeley DB major version in db.h... 4
+checking for Berkeley DB minor version in db.h... 7
+checking if Berkeley DB version supported by BDB/HDB backends... yes
+checking for Berkeley DB link (-ldb-4.7)... no
+checking for Berkeley DB link (-ldb47)... no
+checking for Berkeley DB link (-ldb-47)... no
+checking for Berkeley DB link (-ldb-4-7)... no
+checking for Berkeley DB link (-ldb-4)... no
+checking for Berkeley DB link (-ldb4)... no
+checking for Berkeley DB link (-ldb)... no
+checking for Berkeley DB link (default)... no
+configure: error: BDB/HDB: BerkeleyDB not available
+
+Same addition than man-db in the configcmd step: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu 
+~~~~~~~~~~~~~~~~~~
