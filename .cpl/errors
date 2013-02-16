@@ -3871,3 +3871,23 @@ vonc@voncp1 ~/usr/local/include $ vi db_185.h
 
 => LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu ./configure --prefix=${HULA}/@@NAMEVER@@ @@WITH_GNU_LD@@ --with-libiconv-prefix=${HUL} (add LDFLAGS with reference to /lib/multi-arch)
 ~~~~~~~~~~~~~~~~~~~~~~
+Perl make Ubuntu multi-arch x86_64-linux-gnu
+
+gcc -lm -lrt -L/home/vonc/gitpoc/gitlist/usr/local/lib -o miniperl \
+    perlmini.o opmini.o miniperlmain.o   gv.o toke.o perly.o pad.o regcomp.o dump.o util.o mg.o reentr.o mro.o keywords.o hv.o av.o run.o pp_hot.o sv.o pp.o scope.o pp_ctl.o pp_sys.o doop.o doio.o regexec.o utf8.o taint.o deb.o universal.o globals.o perlio.o perlapi.o numeric.o mathoms.o locale.o pp_pack.o pp_sort.o   -lnsl -ldl -lm -lcrypt -lutil -lc 
+/home/vonc/gitpoc/gitlist/bin/ld: warning: libpthread.so.0, needed by /usr/lib/x86_64-linux-gnu/librt.so, not found (try using -rpath or -rpath-link)
+/usr/lib/x86_64-linux-gnu/librt.so: undefined reference to `pthread_sigmask@GLIBC_2.2.5'
+/usr/lib/x86_64-linux-gnu/librt.so: undefined reference to `__pthread_unwind@GLIBC_PRIVATE'
+/usr/lib/x86_64-linux-gnu/librt.so: undefined reference to `pthread_once@GLIBC_2.2.5'
+/usr/lib/x86_64-linux-gnu/librt.so: undefined reference to `pthread_barrier_wait@GLIBC_2.2.5'
+/usr/lib/x86_64-linux-gnu/librt.so: undefined reference to `pthread_create@GLIBC_2.2.5'
+/usr/lib/x86_64-linux-gnu/librt.so: undefined reference to `pthread_cancel@GLIBC_2.2.5'
+/usr/lib/x86_64-linux-gnu/librt.so: undefined reference to `__pthread_get_minstack@GLIBC_PRIVATE'
+/usr/lib/x86_64-linux-gnu/librt.so: undefined reference to `pthread_detach@GLIBC_2.2.5'
+/usr/lib/x86_64-linux-gnu/librt.so: undefined reference to `pthread_barrier_init@GLIBC_2.2.5'
+/usr/lib/x86_64-linux-gnu/librt.so: undefined reference to `pthread_attr_setstacksize@GLIBC_2.2.5'
+collect2: ld returned 1 exit status
+make: *** [miniperl] Error 1
+
+=> add -Wl,-rpath=/lib/x86_64-linux-gnu:/lib/i686-linux-gnu in the premake replace step, to go with -lrt
+~~~~~~~~~~~~~~~~~~~~~
