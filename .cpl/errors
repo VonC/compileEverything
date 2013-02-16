@@ -3702,4 +3702,67 @@ gcc -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/us
 collect2: ld returned 1 exit status
 make: *** [db_archive] Error 1
 
-=> Tries and add /lib/x86_64-linux-gnu to the rpath
+=> Tries and add /lib/x86_64-linux-gnu to the rpath (wrong, tries only /usr/lib/x... because /lib/x8... includes libs that we build and want to takes into account)
+
+~~~~~~~~~~~~~~~~~~~
+ncurses install Ubutu X86_64
+
+make[1]: Entering directory `/home/vonc/gitpoc/gitlist/.cpl/src/ncurses-5.9/misc'
+mkdir -p /home/vonc/gitpoc/gitlist/usr/local/libs/ncurses-5.9/share
+mkdir -p /home/vonc/gitpoc/gitlist/usr/local/libs/ncurses-5.9/share/tabset
+DESTDIR= \
+prefix=/home/vonc/gitpoc/gitlist/usr/local/libs/ncurses-5.9 \
+exec_prefix=/home/vonc/gitpoc/gitlist/usr/local/libs/ncurses-5.9 \
+bindir=/home/vonc/gitpoc/gitlist/usr/local/libs/ncurses-5.9/bin \
+top_srcdir=.. \
+srcdir=. \
+datadir=/home/vonc/gitpoc/gitlist/usr/local/libs/ncurses-5.9/share \
+ticdir=/home/vonc/gitpoc/gitlist/usr/local/libs/ncurses-5.9/share/terminfo \
+source=terminfo.tmp \
+cross_compiling=no \
+/bin/sh ./run_tic.sh
+** Building terminfo database, please wait...
+Running sh ./shlib tic to install /home/vonc/gitpoc/gitlist/usr/local/libs/ncurses-5.9/share/terminfo ...
+
+    You may see messages regarding extended capabilities, e.g., AX.
+    These are extended terminal capabilities which are compiled
+    using
+        tic -x
+    If you have ncurses 4.2 applications, you should read the INSTALL
+    document, and install the terminfo without the -x option.
+
+tic: symbol lookup error: tic: undefined symbol: _nc_disable_period
+? tic could not build /home/vonc/gitpoc/gitlist/usr/local/libs/ncurses-5.9/share/terminfo
+make[1]: *** [install.data] Error 1
+make[1]: Leaving directory `/home/vonc/gitpoc/gitlist/.cpl/src/ncurses-5.9/misc'
+make: *** [install] Error 2
+
+vonc@voncp1 ~/.cpl/src/ncurses/misc $ nm -Ap /home/vonc/gitpoc/_gitlist1/.cpl/src/ncurses-5.9/lib/*.a | grep nc_disable_period
+/home/vonc/gitpoc/_gitlist1/.cpl/src/ncurses-5.9/lib/libncurses.a:comp_scan.o:0000000000000048 B _nc_disable_period
+/home/vonc/gitpoc/_gitlist1/.cpl/src/ncurses-5.9/lib/libncurses_g.a:comp_scan.o:0000000000000048 B _nc_disable_period
+vonc@voncp1 ~/.cpl/src/ncurses/misc $ nm -Ap ../lib/*.a | grep nc_disable_period
+../lib/libncurses.a:comp_scan.o:0000000000000048 B _nc_disable_period
+../lib/libncurses_g.a:comp_scan.o:0000000000000048 B _nc_disable_period
+
+
+vonc@voncp1 ~/.cpl/src/ncurses/misc $ grep "\-o tic" ../../../logs/*
+../../../logs/20130216.125903.makecmd_ncurses-5.9.log:
+gcc ../obj_s/tic.o ../obj_s/dump_entry.o ../obj_s/transform.o -Wl,-rpath,/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath,/home/vonc/gitpoc/gitlist/usr/local/ssl/lib   -lintl -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/lib/x86_64-linux-gnu -I../progs -I. -DHAVE_CONFIG_H -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -D_GNU_SOURCE -DNDEBUG -I. -I../include -I/home/vonc/gitpoc/gitlist/usr/local/libs/ncurses-5.9/include -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64  --param max-inline-insns-single=1200 -fPIC  -L../lib -lncurses -L../lib -lncurses    -o tic
+
+vonc@voncp1 ~/.cpl/src/ncurses/misc $ ldd ../progs/tic
+    linux-vdso.so.1 =>  (0x00007fffc2bff000)
+    libintl.so.8 => /home/vonc/gitpoc/gitlist/usr/local/lib/libintl.so.8 (0x00007f1eccc15000)
+    libncurses.so.5 => /lib/x86_64-linux-gnu/libncurses.so.5 (0x00007f1ecc9f3000)
+    libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f1ecc634000)
+    libiconv.so.2 => /home/vonc/gitpoc/gitlist/usr/local/libs/libiconv-1.14/lib/libiconv.so.2 (0x00007f1ecc34f000)
+    libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f1ecc14b000)
+    libtinfo.so.5 => /lib/x86_64-linux-gnu/libtinfo.so.5 (0x00007f1ecbf23000)
+    /lib64/ld-linux-x86-64.so.2 (0x00007f1ecce22000)
+
+=> add ../lib to rpath for compiling tic with the right libncurses, but that is not the solution. The solution is to make sure /lib/x86... is not there in the first place in the rpaths.
+
+2013-02-16 13:46:42 - gcc --verbose ../obj_s/tic.o ../obj_s/dump_entry.o ../obj_s/transform.o -Wl,-rpath,../lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath,/home/vonc/gitpoc/gitlist/usr/local/ssl/lib   -lintl -L../lib -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib -I../progs -I. -DHAVE_CONFIG_H -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -D_GNU_SOURCE -DNDEBUG -I. -I../include -I/home/vonc/gitpoc/gitlist/usr/local/libs/ncurses-5.9/include -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64  --param max-inline-insns-single=1200 -fPIC  -L../lib -lncurses -lncurses    -o tic -Wl,-v
+  627  2013-02-16 13:46:45 - ldd tic
+
+
+~~~~~~~~~~~~~~~~

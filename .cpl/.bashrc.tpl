@@ -95,12 +95,8 @@ export -n NGX_AUX
 unset NGX_AUX
 
 export LD_RUN_PATH="${HULL}:${HUL}/ssl/lib:${HULA}/svn/lib:${HULA}/python/lib:${HULA}/gcc/lib"
-if [[ -e "${HUL}/ssl/lib" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:${HUL}/ssl/lib" ; fi
-if [[ -e "${HULA}/svn/lib" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:${HULA}/svn/lib" ; fi
-if [[ -e "${HULA}/python/lib" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:${HULA}/python/lib" ; fi
-if [[ -e "${HULA}/gcc/lib" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:${HULA}/gcc/lib" ; fi
-if [[ -e "/lib/i386-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/lib/i386-linux-gnu" ; fi
-if [[ -e "/lib/x86_64-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/lib/x86_64-linux-gnu" ; fi
+if [[ -e "/usr/lib/i386-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/usr/lib/i386-linux-gnu" ; fi
+if [[ -e "/usr/lib/x86_64-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/usr/lib/x86_64-linux-gnu" ; fi
 export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib -Wl,-rpath=${LD_RUN_PATH}"
 if [[ -e "${HULS}/gettext" ]] ; then export LDFLAGS="-lintl ${LDFLAGS}" ; fi
 export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE @@M64@@ @@CYGWIN@@"
@@ -180,8 +176,8 @@ fi
 export CMAKE_PREFIX_PATH="${HUL}:${HUL}/ssl"
 export CMAKE_LIBRARY_PATH="${HULL}:${HUL}/ssl/lib"
 export CMAKE_INCLUDE_PATH="${HULI}:${HUL}/ssl/include"
-export CMAKE_SYSTEM_IGNORE_PATH="/lib/i386-linux-gnu:/usr/lib64:/usr/lib:/usr/include/i386-linux-gnu:/usr/lib/x86_64-linux-gnu"
-export CMAKE_IGNORE_PATH="/lib/i386-linux-gnu:/usr/lib64:/usr/lib:/usr/include/i386-linux-gnu:/usr/lib/x86_64-linux-gnu"
+export CMAKE_SYSTEM_IGNORE_PATH="/lib/i386-linux-gnu:/usr/lib64:/usr/lib:/usr/lib/i386-linux-gnu:/lib/i386-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu"
+export CMAKE_IGNORE_PATH="${CMAKE_SYSTEM_IGNORE_PATH}"
 export CMAKE_SYSTEM_LIBRARY_PATH="/lib:/usr/lib"
 export CMAKE_PROGRAM_PATH="${HB}"
 
@@ -193,12 +189,12 @@ export -n CPLUS_INCLUDE_PATH
 
 # Multu-arch support
 if [[ -d /usr/lib/i386-linux-gnu ]] ; then 
-  export LIBRARY_PATH=/usr/lib/i386-linux-gnu:/lib/i386-linux-gnu
+  export LIBRARY_PATH=/usr/lib/i386-linux-gnu
   export C_INCLUDE_PATH=/usr/include/i386-linux-gnu
   export CPLUS_INCLUDE_PATH=/usr/include/i386-linux-gnu
 fi
 if [[ -d /usr/lib/x86_64-linux-gnu ]] ; then 
-  export LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu
+  export LIBRARY_PATH=/usr/lib/x86_64-linux-gnu
   export C_INCLUDE_PATH=/usr/include/x86_64-linux-gnu
   export CPLUS_INCLUDE_PATH=/usr/include/x86_64-linux-gnu
 fi
