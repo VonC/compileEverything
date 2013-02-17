@@ -95,8 +95,8 @@ export -n NGX_AUX
 unset NGX_AUX
 
 export LD_RUN_PATH="${HULL}:${HUL}/ssl/lib:${HULA}/svn/lib:${HULA}/python/lib:${HULA}/gcc/lib"
-if [[ -e "/usr/lib/i386-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/usr/lib/i386-linux-gnu" ; fi
-if [[ -e "/usr/lib/x86_64-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/usr/lib/x86_64-linux-gnu" ; fi
+if [[ -e "/usr/lib/i386-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/usr/lib/i386-linux-gnu:/lib/i386-linux-gnu" ; fi
+if [[ -e "/usr/lib/x86_64-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu" ; fi
 export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib -Wl,-rpath=${LD_RUN_PATH}"
 if [[ -e "${HULS}/gettext" ]] ; then export LDFLAGS="-lintl ${LDFLAGS}" ; fi
 export CFLAGS="-I${HULI} -I${HUL}/ssl/include -fPIC -O -U_FORTIFY_SOURCE @@M64@@ @@CYGWIN@@"
