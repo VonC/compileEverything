@@ -3966,3 +3966,36 @@ from /home/vonc/gitpoc/gitlist/.cpl/src/nginx/auto/lib/openssl/conf
 Same addition than man-db in the configcmd step: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu 
 => add LDFLAGS (completed with /lib/...) to --with-ld-opt option
 ~~~~~~~~~~~~~~~~~~~~
+aprutil configure Ubuntu multi-arch x86_64-linux-gnu
+
+checking for unistd.h... yes
+checking for ldap support...
+  setting APRUTIL_INCLUDES to "-I/home/vonc/gitpoc/gitlist/usr/local/include"
+  setting APRUTIL_LDFLAGS to "-L/home/vonc/gitpoc/gitlist/usr/local/lib"
+checking for ldap_init in -lldap50... no
+checking for ldap_init in -lldapssl41... no
+checking for ldap_init in -lldapssl40... no
+checking for ldap_init in -lldapssl30... no
+checking for ldap_init in -lldapssl20... no
+checking for ldap_init in -lldapsdk... no
+checking for ldap_init in -lldapsdk... no
+checking for ldap_init in -lldap... no
+checking for ldap_init in -lldap... no
+checking for ldap_init in -lldap... no
+checking for ldap_init in -lldap... no
+configure: error: could not find an LDAP library
+
+configure:8689: checking for ldap_init in -lldap
+configure:8714: gcc -o conftest -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -pthread -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -D_REENTRANT -D_GNU_SOURCE -I/home/vonc/gitpoc/gitlist/usr/local/include -lintl -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu -L/home/vonc/gitpoc/gitlist/usr/local/lib conftest.c -lldap -llber -lresolv  >&5
+/home/vonc/gitpoc/gitlist/bin/ld: warning: libdl.so.2, needed by /home/vonc/gitpoc/gitlist/usr/local/lib/libsasl2.so.2, not found (try using -rpath or -rpath-link)
+/home/vonc/gitpoc/gitlist/usr/local/lib/libsasl2.so.2: undefined reference to `dlopen@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libsasl2.so.2: undefined reference to `dlerror@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libsasl2.so.2: undefined reference to `dlclose@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libsasl2.so.2: undefined reference to `dlsym@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so.1.0.0: undefined reference to `dladdr@GLIBC_2.2.5'
+collect2: ld returned 1 exit status
+configure:8714: $? = 1
+
+
+Same addition than man-db in the configcmd step: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu
+~~~~~~~~~~~~~~~~~~~~~
