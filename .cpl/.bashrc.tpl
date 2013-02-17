@@ -1,4 +1,4 @@
-#!/bin/bash
+/x#!/bin/bash
 if [[ "${1}" != "--force" && "${1}" != "-f" ]]; then
   echo ${0} not executed for @@TITLE@@ unles called with --force
   return 0
@@ -96,6 +96,7 @@ unset NGX_AUX
 
 export LD_RUN_PATH="${HULL}:${HUL}/ssl/lib:${HULA}/svn/lib:${HULA}/python/lib:${HULA}/gcc/lib"
 if [[ -e "/usr/lib/i386-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/usr/lib/i386-linux-gnu:/lib/i386-linux-gnu" ; fi
+if [[ -e "/usr/lib/i686-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/usr/lib/i686-linux-gnu:/lib/i686-linux-gnu" ; fi
 if [[ -e "/usr/lib/x86_64-linux-gnu" ]] ; then export LD_RUN_PATH="${LD_RUN_PATH}:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu" ; fi
 export LDFLAGS="-L${HULL} -L${HUL}/ssl/lib -L${HULA}/python/lib -Wl,-rpath=${LD_RUN_PATH}"
 if [[ -e "${HULS}/gettext" ]] ; then export LDFLAGS="-lintl ${LDFLAGS}" ; fi
