@@ -1,5 +1,5 @@
-page=https://github.com/KentBeck/junit/tags
-url=https://github.com/KentBeck/junit/archive/
+page=https://github.com/junit-team/junit/tags
+url=https://github.com/junit-team/junit/archive/
 verexclude=sign|manpages|htmldocs|-rc|beta
 nameurl=r
 nameact=junit
