@@ -7,6 +7,6 @@ exturl=/
 extact=tgz
 makefile=source/Makefile
 pre=gen_sed -i '\''s/^DUAL/LIBS=\"-lintl\";DUAL/'\'' ${H}/.cpl/src/@@NAMEVER@@/source/configure
-configcmd=@@cd source ; LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu ./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static ; cd ..
-makecmd=@@cd source ; LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu make;cd ..
-makeinstcmd=@@cd source ; LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu make install ; cd ..
+configcmd=cd source ; ./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static ; cd ..
+makecmd=cd source ; make;cd ..
+makeinstcmd=cd source ; make install ; cd ..

@@ -1,5 +1,5 @@
 page=get_page_postgresql
 url=http://ftp.postgresql.org/pub/source/v@@VER@@/
-configcmd=@@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu ./configure --prefix=${HULA}/@@NAMEVER@@
-makecmd=@@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu make
-makeinstcmd=@@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu make install
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@
+makecmd=make
+makeinstcmd=make install
