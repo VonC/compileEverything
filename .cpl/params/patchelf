@@ -1,9 +1,9 @@
-page=https://github.com/NixOS/patchelf/downloads
+page=https://github.com/NixOS/patchelf/tags
 url=https://github.com/NixOS/patchelf/archive/
 verexclude=sign|manpages|htmldocs|-rc
-nameurl=master
+nameurl=0
 nameact=patchelf
-ext=none
-extact=tar.gz
+ext=zip
+;extact=tar.gz
 pre=./bootstrap.sh
 configcmd=@@LIBS=" -lintl" ./configure --prefix=${HULA}/@@NAMEVER@@
