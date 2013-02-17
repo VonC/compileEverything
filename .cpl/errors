@@ -4009,7 +4009,7 @@ configure: error: ... Error, SSL/TLS libraries were missing or unusable
 
 Same addition than man-db in the configcmd step: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu
 ~~~~~~~~~~~~~~~~~~~~~
-nxlog make  Ubuntu multi-arch x86_64-linux-gnu
+nxlog make Ubuntu multi-arch x86_64-linux-gnu
 
 libtool: link: gcc -shared  .libs/xm_perl_la-xm_perl.o .libs/xm_perl_la-xm_perl_funcproc_cb.o .libs/xm_perl_la-expr-xm_perl-funcproc.o .libs/xm_perl_la-libnxperl.o .libs/xm_perl_la-xsinit.o   -Wl,-rpath -Wl,/home/vonc/gitpoc/gitlist/usr/local/libs/gettext-0.18.2/lib -Wl,-rpath -Wl,/home/vonc/gitpoc/gitlist/usr/local/libs/apr-1.4.6/lib -Wl,-rpath -Wl,/home/vonc/gitpoc/gitlist/usr/local/libs/gettext-0.18.2/lib -Wl,-rpath -Wl,/home/vonc/gitpoc/gitlist/usr/local/libs/apr-1.4.6/lib -Wl,-rpath -Wl,/home/vonc/gitpoc/gitlist/usr/local/lib /home/vonc/gitpoc/gitlist/usr/local/libs/gettext-0.18.2/lib/libintl.so -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/perl-5.16.2/lib/5.16.2/x86_64-linux/CORE -lperl -lnsl -lm -lutil -lc -L/home/vonc/gitpoc/gitlist/usr/local/libs/apr-1.4.6/lib /home/vonc/gitpoc/gitlist/usr/local/libs/apr-1.4.6/lib/libapr-1.so -lrt -lcrypt -lpthread -ldl  -m64 -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu -Wl,-E   -pthread -Wl,-soname -Wl,xm_perl.so -o .libs/xm_perl.so
 /home/vonc/gitpoc/gitlist/bin/ld: /home/vonc/gitpoc/gitlist/usr/local/apps/perl-5.16.2/lib/5.16.2/x86_64-linux/CORE/libperl.a(op.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a shared object; recompile with -fPIC
@@ -4026,4 +4026,53 @@ make[1]: Leaving directory `/home/vonc/gitpoc/gitlist/.cpl/src/nxlog-ce-2.1.957/
 make: *** [all-recursive] Error 1
 
 => Now 2.1. Again, avoid 2.x for now => update verexclude
+~~~~~~~~~~~~~~~~~~~~~~~~
+gitolite make Ubuntu multi-arch x86_64-linux-gnu
+
++ git clone -n https://github.com/sitaramc/gitolite /home/vonc/gitpoc/gitlist/gitolite/github
+Cloning into '/home/vonc/gitpoc/gitlist/gitolite/github'...
+fatal: Unable to find remote helper for 'https'
+
+Issue with curl
+
+http://git.661346.n2.nabble.com/fatal-Unable-to-find-remote-helper-for-http-td5041606.html
+
+Started in a new directory.  Then ran the following commands 
+
+make prefix=<git_install_path> CURLDIR=<curl_install_path> 
+NO_R_TO_GCC_LINKER=YesPlease EXPATDIR=<expat_install_path> all 
+
+make prefix=<git_install_path> CURLDIR=<curl_install_path> 
+NO_R_TO_GCC_LINKER=YesPlease EXPATDIR=<expat_install_path> install 
+
+
+There are three differences: 
+
+1) The NO_R_TO_GCC_LINKER directive 
+2) Bypassed the configure script altogether 
+3) Included the path directives for curl and expat in both "make all" and 
+"make install" steps 
+
+Not sure which were necessary. 
+
+https://forum.openwrt.org/viewtopic.php?id=35399
+
+http and https is handled by curl, which is disabled in the git-makefile for openwrt.
+So I guess adding "+libcurl" as dependency and removing the line "NO_CURL="YesPlease" \" from the MAKE_FLAGS should do the trick
+
+configure for git:
+checking for curl_global_init in -lcurl... no
+
+configure:4038: checking for curl_global_init in -lcurl
+configure:4063: gcc -o conftest -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -lintl -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu conftest.c -lcurl   >&5
+/home/vonc/gitpoc/gitlist/bin/ld: warning: librt.so.1, needed by /home/vonc/gitpoc/gitlist/usr/local/lib/libcurl.so, not found (try using -rpath or -rpath-link)
+/home/vonc/gitpoc/gitlist/bin/ld: warning: libdl.so.2, needed by /home/vonc/gitpoc/gitlist/usr/local/lib/libssl.so.1.0.0, not found (try using -rpath or -rpath-link)
+/home/vonc/gitpoc/gitlist/bin/ld: warning: libresolv.so.2, needed by /home/vonc/gitpoc/gitlist/usr/local/lib/liblber-2.4.so.2, not found (try using -rpath or -rpath-link)
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so.1.0.0: undefined reference to `dlopen@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so.1.0.0: undefined reference to `dlerror@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so.1.0.0: undefined reference to `dlclose@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so.1.0.0: undefined reference to `dlsym@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libldap-2.4.so.2: undefined reference to `__dn_expand@GLIBC_2.2.5'
+
+=> 
 ~~~~~~~~~~~~~~~~~~~~~~~~
