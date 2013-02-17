@@ -1112,3 +1112,6 @@ It looks in the cache file /etc/ld/so/cache (disabled with the ‘-z nodeflib’
 It looks in the default directories /lib then /usr/lib (disabled with the ‘-z nodeflib’ linker option).
 
 ~~~~~~~~~~~~~~~~~~~~
+restore deleted file in git: http://stackoverflow.com/a/11301004/6309 git co $(git rev-list -n 1 HEAD -- <file_path>)~1 -- $(git diff --name-status $(git rev-list -n 1 HEAD -- <file_path>)~1 | grep '^D' | cut -f 2)
+See http://stackoverflow.com/a/14922749/6309
+~~~~~~~~~~~~~~~~~~~~

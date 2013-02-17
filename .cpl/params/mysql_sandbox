@@ -1,0 +1,7 @@
+configcmd=none
+makecmd=cpanm MySQL::Sandbox
+# If above fails, change sources/http%www.cpan.org #sed -i "s;3.0.28;3.0.27;g" 02packages.details.txt
+# Then use '--mirror-only' to avoid refreshing cache from cpan.org
+# makecmd=cpanm MySQL::Sandbox --mirror-only
+makeinstcmd=none
+post=for file in $(ls -1 "${HULA}/perl/bin/sb"*); do a=${file##*/} ; ln -fs "../usr/local/apps/perl/bin/${a}" "${HB}/${a}"; done ; for file in $(ls -1 "${HULA}/perl/bin/"*sandbox*); do a=${file##*/} ; ln -fs "../usr/local/apps/perl/bin/${a}" "${HB}/${a}"; done 
