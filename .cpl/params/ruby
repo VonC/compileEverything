@@ -5,4 +5,4 @@ configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-ext=op
 premake=gen_sed -i "s/-L. /-L. -L${EHULL} /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile" ; cp -f ${HULL}/libz.* "${H}/.cpl/src/@@NAMEVER@@/ext/zlib"
 makecmd=make
 makeinstcmd=make install
-post=f=$(find "${HULA}/@@NAMEVER@@/" -type f -name "rbconfig.rb"); gen_sed -i "s#:/usr[^:]\+##g" ${f}
+post=f=$(find "${HULA}/@@NAMEVER@@/" -type f -name "rbconfig.rb"); gen_sed -i "s#:/usr[^:]\+##g" ${f} ; gen_sed -i "s#:/lib[^:]\+##g" ${f}
