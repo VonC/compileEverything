@@ -4074,5 +4074,19 @@ configure:4063: gcc -o conftest -I/home/vonc/gitpoc/gitlist/usr/local/include -I
 /home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so.1.0.0: undefined reference to `dlsym@GLIBC_2.2.5'
 /home/vonc/gitpoc/gitlist/usr/local/lib/libldap-2.4.so.2: undefined reference to `__dn_expand@GLIBC_2.2.5'
 
-=> 
+=> recompile git with right configure option LDFLAGS
 ~~~~~~~~~~~~~~~~~~~~~~~~
+cgit make Ubuntu multi-arch x86_64-linux-gnu
+
+   CC cgit
+/home/vonc/gitpoc/gitlist/bin/ld: warning: libdl.so.2, needed by /home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so, not found (try using -rpath or -rpath-link)
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so: undefined reference to `dlopen@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so: undefined reference to `dlerror@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so: undefined reference to `dlclose@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so: undefined reference to `dladdr@GLIBC_2.2.5'
+/home/vonc/gitpoc/gitlist/usr/local/lib/libcrypto.so: undefined reference to `dlsym@GLIBC_2.2.5'
+collect2: ld returned 1 exit status
+make: *** [cgit] Error 1
+
+Same addition than man-db in the configcmd *and* makecmd *and* makeinstcmd steps: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu
+~~~~~~~~~~~~~~~~~~~~
