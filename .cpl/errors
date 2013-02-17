@@ -3999,3 +3999,13 @@ configure:8714: $? = 1
 
 Same addition than man-db in the configcmd step: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu
 ~~~~~~~~~~~~~~~~~~~~~
+apache configure Ubuntu multi-arch x86_64-linux-gnu
+
+checking for SSL_CTX_new... no
+checking for ENGINE_init... no
+checking for ENGINE_load_builtin_engines... no
+checking for SSL_set_cert_store... no
+configure: error: ... Error, SSL/TLS libraries were missing or unusable
+
+Same addition than man-db in the configcmd step: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu
+~~~~~~~~~~~~~~~~~~~~~
