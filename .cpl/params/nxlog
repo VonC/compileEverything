@@ -1,5 +1,5 @@
 page=http://sourceforge.net/projects/nxlog-ce/files/older-releases/
 url=http://sourceforge.net/projects/nxlog-ce/files/older-releases/
-verexclude=2.0
+verexclude=2.0|2.1
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ @@WITH_GNU_LD@@ --without-perl
 post=mkdir -p ${HULA}/@@NAMEVER@@/etc/nxlog ; ln -fs ../../../../../../nxlog/nxlog.conf ${HULA}/@@NAMEVER@@/etc/nxlog/nxlog.conf ; cp_tpl "${H}/nxlog/nxlog.conf" "${H}/nxlog" ; mkdir -p ${HUL}/var/log/nxlog/ ; ln -fs ../../../../../nxlog/nxlog.log ${HUL}/var/log/nxlog/nxlog.log ; mkdir -p ${HULA}/@@NAMEVER@@/var/spool/nxlog
