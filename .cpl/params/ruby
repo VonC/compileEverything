@@ -1,5 +1,8 @@
 page=http://mirrors.ircam.fr/pub/ruby/1.9/?C=M;O=D
 url=http://mirrors.ircam.fr/pub/ruby/1.9/
 verinclude=1.9.3
-configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-ext=openssl --with-ext @@WITHOUT_GNU_LD@@ --with-opt-dir=${HUL}/ssl --with-opt-dir=${HUL}
+configcmd=@@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu ./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --with-ext=openssl --with-ext @@WITHOUT_GNU_LD@@ --with-opt-dir=${HUL}/ssl --with-opt-dir=${HUL}
 premake=gen_sed -i "s/-L. /-L. -L${EHULL} /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile" ; cp -f ${HULL}/libz.* "${H}/.cpl/src/@@NAMEVER@@/ext/zlib"
+makecmd=@@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu make
+makeinstcmd=@@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu make install
+post=f=$(find "${HULA}/@@NAMEVER@@/" -type f -name "rbconfig.rb"); gen_sed -i "s#:/usr[^:]\+##g" ${f}

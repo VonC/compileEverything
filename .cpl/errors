@@ -4090,3 +4090,170 @@ make: *** [cgit] Error 1
 
 Same addition than man-db in the configcmd *and* makecmd *and* makeinstcmd steps: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu
 ~~~~~~~~~~~~~~~~~~~~
+postgresql make Ubuntu multi-arch x86_64-linux-gnu
+
+
+make[4]: Leaving directory `/home/vonc/gitpoc/gitlist/.cpl/src/postgresql-9.2.3/src/port'
+gcc -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -Wall -Wmissing-prototypes -Wpointer-arith -Wdeclaration-after-statement -Wendif-labels -Wmissing-format-attribute -Wformat-security -fno-strict-aliasing -fwrapv pg_ctl.o  -L../../../src/port -lpgport -L../../../src/interfaces/libpq -lpq -L../../../src/port -lintl -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu  -Wl,--as-needed -Wl,-rpath,'/home/vonc/gitpoc/gitlist/usr/local/apps/postgresql-9.2.3/lib',--enable-new-dtags  -lpgport -lz -lreadline -lncurses -lcrypt -ldl -lm  -o pg_ctl
+/home/vonc/gitpoc/gitlist/bin/ld: warning: libpthread.so.0, needed by ../../../src/interfaces/libpq/libpq.so, not found (try using -rpath or -rpath-link)
+../../../src/interfaces/libpq/libpq.so: undefined reference to `pthread_sigmask@GLIBC_2.2.5'
+collect2: ld returned 1 exit status
+make[3]: *** [pg_ctl] Error 1
+make[3]: Leaving directory `/home/vonc/gitpoc/gitlist/.cpl/src/postgresql-9.2.3/src/bin/pg_ctl'
+make[2]: *** [all-pg_ctl-recurse] Error 2
+make[2]: Leaving directory `/home/vonc/gitpoc/gitlist/.cpl/src/postgresql-9.2.3/src/bin'
+make[1]: *** [all-bin-recurse] Error 2
+make[1]: Leaving directory `/home/vonc/gitpoc/gitlist/.cpl/src/postgresql-9.2.3/src'
+make: *** [all-src-recurse] Error 2
+
+Same addition than man-db in the configcmd *and* makecmd *and* makeinstcmd steps: @@LDFLAGS=${LDFLAGS}:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu
+~~~~~~~~~~~~~~~~~~~~~~~~~
+charlock_homes make Ubuntu multi-arch x86_64-linux-gnu
+
+
+2013/02/17-11:18:37 ~~~ eval gem install charlock_holmes -- --with-icu-dir=/home/vonc/gitpoc/gitlist/usr/local
+~~~~~~~~~~~~~~~~~~~
+Building native extensions.  This could take a while...
+ERROR:  Error installing charlock_holmes:
+    ERROR: Failed to build gem native extension.
+
+        /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/bin/ruby extconf.rb --with-icu-dir=/home/vonc/gitpoc/gitlist/usr/local
+checking for main() in -licui18n... no
+checking for main() in -licui18n... no
+
+/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/gems/1.9.1/gems/charlock_holmes-0.6.9/ext/charlock_holmes/mkmf.log
+
+"gcc -o conftest -I/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/include/ruby-1.9.1/x86_64-linux -I/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/include/ruby-1.9.1/ruby/backward -I/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/include/ruby-1.9.1 -I. -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64  -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -fPIC conftest.c  -L. -L/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib -Wl,-R/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib -L/home/vonc/gitpoc/gitlist/usr/local/lib -Wl,-R/home/vonc/gitpoc/gitlist/usr/local/lib -L. -lintl -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu -rdynamic -Wl,-export-dynamic -L/home/vonc/gitpoc/gitlist/usr/local/lib  -Wl,-R/home/vonc/gitpoc/gitlist/usr/local/lib   -m64   -Wl,-R -Wl,/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib -lruby  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main() {return 0;}
+/* end */
+
+Works outside of gem. See verbose gcc below
+
+
+vonc@voncp1 ~/usr/local/apps/ruby-1.9.3-p385/lib/ruby/gems/1.9.1/gems/charlock_holmes-0.6.9/ext/charlock_holmes $ LIBRARY_PATH=${HULL}:/lib/x86_64-linux-gnu ruby --verbose extconf.rb 
+
+
+/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:381:in `try_do': The compiler failed to generate an executable file. (RuntimeError)
+You have to install development tools first.
+    from /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:461:in `try_link0'
+    from /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:476:in `try_link'
+    from /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:619:in `try_func'
+    from /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:845:in `block in have_library'
+    from /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:790:in `block in checking_for'
+    from /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:284:in `block (2 levels) in postpone'
+    from /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:254:in `open'
+    from /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:284:in `block in postpone'
+    from /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:254:in `open'
+    from /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:280:in `postpone'
+    from /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:789:in `checking_for'
+    from /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/1.9.1/mkmf.rb:840:in `have_library'
+    from extconf.rb:27:in `<main>'
+
+
+
+have_library: checking for main() in -licui18n... -------------------- no
+
+"gcc --verbose -WL,-v -o conftest -I/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/include/ruby-1.9.1/x86_64-linux -I/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/include/ruby-1.9.1/ruby/backward -I/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/include/ruby-1.9.1 -I. -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64  -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -fPIC conftest.c  -L. -L/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib -Wl,-R/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib -L/home/vonc/gitpoc/gitlist/usr/local/lib -Wl,-R/home/vonc/gitpoc/gitlist/usr/local/lib -L. -lintl -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu -rdynamic -Wl,-export-dynamic -L/home/vonc/gitpoc/gitlist/usr/local/lib  -Wl,-R/home/vonc/gitpoc/gitlist/usr/local/lib   -m64   -Wl,-R -Wl,/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib -lruby -licui18n  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+Reading specs from /home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6/specs
+Configured with: ../configure --prefix=/home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6 --enable-shared --disable-multilib --enable-languages=c,c++ --with-as=/home/vonc/gitpoc/gitlist/bin/as --with-ld=/home/vonc/gitpoc/gitlist/bin/ld --disable-libstdcxx-pch --enable-linker-build-id --enable-threads=posix --disable-werror
+Thread model: posix
+gcc version 3.4.6
+ /home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/libexec/gcc/x86_64-unknown-linux-gnu/3.4.6/cc1 -quiet -v -I/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/include/ruby-1.9.1/x86_64-linux -I/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/include/ruby-1.9.1/ruby/backward -I/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/include/ruby-1.9.1 -I. -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -U_FORTIFY_SOURCE -U_FORTIFY_SOURCE -U_FORTIFY_SOURCE conftest.c -quiet -dumpbase conftest.c -m64 -m64 -m64 -mtune=k8 -auxbase conftest -O -O -O -WL,-v -version -fPIC -fPIC -fPIC -fPIC -o /tmp/cc99HsFZ.s
+ignoring nonexistent directory "/home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6/../../../../x86_64-unknown-linux-gnu/include"
+ignoring duplicate directory "/home/vonc/gitpoc/gitlist/usr/local/include"
+ignoring duplicate directory "/home/vonc/gitpoc/gitlist/usr/local/ssl/include"
+ignoring duplicate directory "/home/vonc/gitpoc/gitlist/usr/local/include"
+ignoring duplicate directory "/home/vonc/gitpoc/gitlist/usr/local/include"
+ignoring duplicate directory "/home/vonc/gitpoc/gitlist/usr/local/ssl/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/include/ruby-1.9.1/x86_64-linux
+ /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/include/ruby-1.9.1/ruby/backward
+ /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/include/ruby-1.9.1
+ .
+ /home/vonc/gitpoc/gitlist/usr/local/include
+ /home/vonc/gitpoc/gitlist/usr/local/ssl/include
+ /usr/include/x86_64-linux-gnu
+ /usr/local/include
+ /home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/include
+ /home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6/include
+ /usr/include
+End of search list.
+GNU C version 3.4.6 (x86_64-unknown-linux-gnu)
+    compiled by GNU C version 4.7.2.
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ /home/vonc/gitpoc/gitlist/bin/as --traditional-format -V -Qy -o /tmp/ccHmFgZH.o /tmp/cc99HsFZ.s
+GNU assembler version 2.23.1 (x86_64-unknown-linux-gnu) using BFD version (GNU Binutils) 2.23.1
+ /home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/libexec/gcc/x86_64-unknown-linux-gnu/3.4.6/collect2 --eh-frame-hdr -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o conftest /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o /home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6/crtbegin.o -L. -L/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib -L/home/vonc/gitpoc/gitlist/usr/local/lib -L. -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/usr/lib/x86_64-linux-gnu -L/home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6 -L/home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6/../../../../lib64 -L/home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6/../../.. -L/lib/../lib64 /tmp/ccHmFgZH.o -R/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib -R/home/vonc/gitpoc/gitlist/usr/local/lib -lintl -rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu -export-dynamic -R/home/vonc/gitpoc/gitlist/usr/local/lib -R /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib -lruby -licui18n -lpthread -lrt -ldl -lcrypt -lm -lc -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /home/vonc/gitpoc/gitlist/usr/local/apps/gcc-3.4.6/lib/gcc/x86_64-unknown-linux-gnu/3.4.6/crtend.o /usr/lib/x86_64-linux-gnu/crtn.o
+/usr/lib/x86_64-linux-gnu/libstdc++.so.6: undefined reference to `_Unwind_GetIPInfo@GCC_4.2.0'
+collect2: ld returned 1 exit status
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))main; return 0; }
+/* end */
+
+Modify gcc with
+
+vonc@voncp1 ~/usr/local/apps/ruby/lib/ruby/1.9.1 $ grep gcc -nRHI *
+fileutils.rb:294:  #   FileUtils.ln 'gcc', 'cc', :verbose => true
+open3.rb:173:  #   # check gcc warnings
+open3.rb:175:  #   Open3.popen2e("gcc", "-Wall", source) {|i,oe,t|
+x86_64-linux/rbconfig.rb:35:  CONFIG["configure_args"] = " '--prefix=/home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385' '--enable-shared' '--with-ext=openssl' '--with-ext' '--with-opt-dir=/home/vonc/gitpoc/gitlist/usr/local/ssl' '--with-opt-dir=/home/vonc/gitpoc/gitlist/usr/local' 'CC=gcc' 'CFLAGS=-I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64' 'LDFLAGS=-lintl -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu' 'CPPFLAGS=-I/home/vonc/gitpoc/gitlist/usr/local/include -I/home/vonc/gitpoc/gitlist/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64'"
+x86_64-linux/rbconfig.rb:140:  CONFIG["LDFLAGS"] = "-L. -lintl -L/home/vonc/gitpoc/gitlist/usr/local/lib -L/home/vonc/gitpoc/gitlist/usr/local/ssl/lib -L/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/gitlist/usr/local/lib:/home/vonc/gitpoc/gitlist/usr/local/ssl/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/svn/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/python/lib:/home/vonc/gitpoc/gitlist/usr/local/apps/gcc/lib:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:/lib/i686-linux-gnu -rdynamic -Wl,-export-dynamic -L/home/vonc/gitpoc/gitlist/usr/local/lib  -Wl,-R/home/vonc/gitpoc/gitlist/usr/local/lib "
+x86_64-linux/rbconfig.rb:142:  CONFIG["CC"] = "gcc"
+vonc@voncp1 ~/usr/local/apps/ruby/lib/ruby/1.9.1 $ vi x86_64-linux/rbconfig.rb
+
+difference is in the Wrpath. If ends with /usr/... => libstdc++ found at the wrong place
+
+vonc@voncp1 ~/.cpl/tests/gem $ ./test1 2>&1 |grep stdc
+libstdc++.so.6 needed by /home/vonc/gitpoc/gitlist/usr/local/lib/libicui18n.so
+found libstdc++.so.6 at /home/vonc/gitpoc/gitlist/usr/local/lib/libstdc++.so.6
+vonc@voncp1 ~/.cpl/tests/gem $ ./test1 2>&1 |grep stdc
+libstdc++.so.6 needed by /home/vonc/gitpoc/gitlist/usr/local/lib/libicui18n.so
+found libstdc++.so.6 at /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+/usr/lib/x86_64-linux-gnu/libstdc++.so.6: undefined reference to `_Unwind_GetIPInfo@GCC_4.2.0'
+
+
+If used with -v -Wl,--verbose: (as in http://sourceware.org/ml/binutils/2005-01/msg00303.html)
+
+
+GNU ld (GNU Binutils) 2.23.1
+  Supported emulations:
+   elf_x86_64
+   elf32_x86_64
+   elf_i386
+   i386linux
+   elf_l1om
+   elf_k1om
+using internal linker script:
+==================================================
+/* Script for -z combreloc: combine and sort reloc sections */
+OUTPUT_FORMAT("elf64-x86-64", "elf64-x86-64",
+          "elf64-x86-64")
+OUTPUT_ARCH(i386:x86-64)
+ENTRY(_start)
+SEARCH_DIR("/home/vonc/gitpoc/gitlist/usr/local/apps/binutils-2.23.1/x86_64-unknown-linux-gnu/lib64"); SEARCH_DIR("=/usr/local/lib64"); SEARCH_DIR("=/lib64"); SEARCH_DIR("=/usr/lib64"); SEARCH_DIR("=/usr/local/lib"); SEARCH_DIR("=/lib"); SEARCH_DIR("=/usr/lib");
+SECTIONS
+
+vonc@voncp1 ~/usr/local/apps/binutils-2.23.1/x86_64-unknown-linux-gnu $ cd /home/vonc/gitpoc/gitlist/usr/local/apps/binutils-2.23.1/x86_64-unknown-linux-gnu/lib64
+bash: cd: /home/vonc/gitpoc/gitlist/usr/local/apps/binutils-2.23.1/x86_64-unknown-linux-gnu/lib64: No such file or directory
+
+vonc@voncp1 ~/usr/local/apps/binutils-2.23.1/x86_64-unknown-linux-gnu $ ln -fs ../../../lib lib64
+
+The rpath order doesn't seem to be respected
+
+=> remove any trace of :/usr in 
+vonc@voncp1 ~/usr/local/apps/ruby $ find . -name "rbconfig.rb"
+./lib/ruby/1.9.1/x86_64-linux/rbconfig.rb
+
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~
