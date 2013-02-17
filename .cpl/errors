@@ -4256,4 +4256,56 @@ vonc@voncp1 ~/usr/local/apps/ruby $ find . -name "rbconfig.rb"
 
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+vonc@voncp1 ~/.cpl/logs $ more /home/vonc/gitpoc/gitlist/.cpl/logs/20130217.164017.post_passenger.log
+2013/02/17-16:40:18 ~~~ eval for file in $(ls -1 "/home/vonc/gitpoc/gitlist/usr/local/apps/$(readlink "/home/vonc/gitpoc/gitlist/usr/local/apps/ruby")/bin/pa
+sseng"*); do a=${file##*/} ; ln -fs "../usr/local/apps/$(readlink "/home/vonc/gitpoc/gitlist/usr/local/apps/ruby")/bin/${a}" "/home/vonc/gitpoc/gitlist/bin/$
+{a}"; done ; r="$(passenger-config --root)" ; gen_sed -i "s;g\(..\)\";g\1 $CFLAGS $LDFLAGS\";g" $r/build/config.rb ; gen_sed -i "s;-fPIC -O ; ;g" $r/build/co
+nfig.rb ; gen_sed -i "s;(\"(g++ -c;(\"(g++ #{ENV[\x27CFLAGS\x27]} -c;g" $r/lib/phusion_passenger/dependencies.rb ; gen_sed -i "s;\t\([^#]\)LoggingAgent;\t#\1
+LoggingAgent;g" $r/build/common_library.rb ; passenger-install-apache2-module -a ; cp_tpl "/home/vonc/gitpoc/gitlist/apache/cnf" "/home/vonc/gitpoc/gitlist/apache"
+~~~~~~~~~~~~~~~~~~~
+
+passenger make Ubuntu multi-arch
+
+Welcome to the Phusion Passenger Apache 2 module installer, v3.0.19.
+
+This installer will guide you through the entire installation process. It
+shouldn't take more than 3 minutes in total.
+
+Here's what you can expect from the installation process:
+
+ 1. The Apache 2 module will be installed for you.
+ 2. You'll learn how to configure Apache.
+ 3. You'll learn how to deploy a Ruby on Rails application.
+
+Don't worry if anything goes wrong. This installer will advise you on how to
+solve any problems.
+
+Press Enter to continue, or Ctrl-C to abort.
+
+--------------------------------------------
+
+Checking for required software...
+
+ * GNU C++ compiler... found at /home/vonc/gitpoc/gitlist/bin/g++
+ * Curl development headers with SSL support... not found
+ * OpenSSL development headers... found
+ * Zlib development headers... found
+ * Ruby development headers... found
+ * OpenSSL support for Ruby... found
+ * RubyGems... found
+ * Rake... found at /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/bin/rake
+ * rack... found
+ * Apache 2... found at /home/vonc/gitpoc/gitlist/usr/local/apps/httpd-2.2.23/bin/httpd
+ * Apache 2 development headers... found at /home/vonc/gitpoc/gitlist/bin/apxs
+ * Apache Portable Runtime (APR) development headers... found at /home/vonc/gitpoc/gitlist/usr/local/libs/apr-1.4.6/bin/apr-1-config
+ * Apache Portable Runtime Utility (APU) development headers... found at /home/vonc/gitpoc/gitlist/usr/local/libs/aprutil-1.5.1/bin/apu-1-config
+
+Some required software is not installed.
+
+
+vonc@voncp1 ~ $ cd $(passenger-config --root)
+vonc@voncp1 ~/usr/local/apps/ruby-1.9.3-p385/lib/ruby/gems/1.9.1/gems/passenger-3.0.19 $ 
+
+=> make sure /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/gems/1.9.1/gems/passenger-3.0.19/build/config.rb receives LDFLAGS as well as CFLAGS, to include rpath with /usr/x... and /lib/x... (modify post step)
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~
