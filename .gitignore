@@ -146,3 +146,6 @@ dump.rdb
 *.out
 .composer/
 composer/
+/.config/
+/.local/
+/.pki/
