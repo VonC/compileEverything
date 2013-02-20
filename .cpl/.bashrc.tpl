@@ -1,4 +1,4 @@
-/x#!/bin/bash
+#!/bin/bash
 if [[ "${1}" != "--force" && "${1}" != "-f" ]]; then
   echo ${0} not executed for @@TITLE@@ unles called with --force
   return 0
