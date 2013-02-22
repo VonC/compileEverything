@@ -1,0 +1,4 @@
+configcmd=none
+makefile=none
+makecmd=none
+makeinstcmd="${H}/php/composer/install_or_update"
