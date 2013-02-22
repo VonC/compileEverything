@@ -6,12 +6,11 @@ mkdir -p "${gtl}/logs"
 
 if [[ ! -e "${github}" ]] ; then
   xxgit=1 git clone https://github.com/klaussilveira/gitlist "${github}"
-  composer install -- --working-dir "${H}/gitlist/github/"
-
 else
   xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" pull
-  composer update -- --working-dir "${H}/gitlist/github/"
 fi
+cd "${gtl}/github"
+composer update
 if [[ -f "${github}/.htaccess" ]] ; then
   mv "${github}/.htaccess" "${github}/.htaccess.example"
   #ln -fs ../htaccess "${github}/.htaccess"
