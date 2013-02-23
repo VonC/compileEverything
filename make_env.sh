@@ -720,6 +720,8 @@ function build_item() {
       get_param ${name} linksrc ${linksrcdef}; linksrc=$(echo "${linksrc}") ; # echo "linksrc ${linksrc}"
       get_param ${name} linkdst ${linkdstdef}; linkdst=$(echo "${linkdst}") ; # echo "linkdst ${linkdst}"
     fi
+    if [[ "${type}" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
+    if [[ "${type}" == "LIB" && ! -e "${HULS}/${name}" ]] ; then  ln -fs "${namever}" "${HULS}/${name}" ; fi
     if [[ ! -e "${HUL}"/._linked/${namever} ]] ; then
       if [[ "${type}" != "MOD" ]] ; then 
         if [[ ! -e "${asrc}/._links" ]] ; then
@@ -741,10 +743,6 @@ function build_item() {
       echo done > "${HUL}"/._linked/${namever} ;
     fi
     rm -f "${_src}/${namever}/.lck"
-    # if [[ "${type}" == "APP" ]] ; then mkdir -p "${HULA}/${namever}" ; fi # TOCOMMENT
-    # if [[ "${type}" == "LIB" ]] ; then mkdir -p "${HULS}/${namever}" ; fi # TOCOMMENT
-    if [[ "${type}" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
-    if [[ "${type}" == "LIB" && ! -e "${HULS}/${name}" ]] ; then  ln -fs "${namever}" "${HULS}/${name}" ; fi
     if [[ "${type}" == "LIB" && ! -e "${HULS}/${namever}" ]] ; then  rm -f "${HULS}/${name}" ; fi
     if [[ "${type}" == "APP" || "${type}" == "LIB" ]] ; then
       set +e
