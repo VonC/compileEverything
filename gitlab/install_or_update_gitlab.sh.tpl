@@ -4,6 +4,7 @@ gtl="${H}/gitlab"
 github="${gtl}/github"
 mysqlgtl="${H}/mysql/sandboxes/gitlab"
 gitolite="${H}/.gitolite"
+gtls="${gtl}/gitlab-shell"
 mkdir -p "${gtl}/logs"
 
 demod stop
@@ -26,6 +27,16 @@ if [[ ! -e "${github}" ]] ; then
 else
   xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" pull
 fi
+gtls_install=0
+if [[ ! -e "${gtls}" ]] ; then
+  xxgit=1 git clone https://github.com/gitlabhq/gitlab-shell "${gtls}"
+  gtls_install=1
+else
+  xxgit=1 git --work-tree="${gtls}" --git-dir="${gtls}/.git" pull
+fi
+cp_tpl "${gtl}/config.yml.tpl" "${gtl}"
+ln -fs ../config.yml "${gtls}/config.yml"
+if [[ "${gtls_install}" == "1" ]] ; then "${gtls}/bin/install" ; fi
 if [[ ! -e "${mysqlgtl}" ]] ; then
   mysqlv=$(mysql -V); mysqlv=${mysqlv%%,*} ; mysqlv=${mysqlv##* }
   make_sandbox ${mysqlv} -- -d gitlab --no_confirm -P @PORT_MYSQL@ --check_port
@@ -46,7 +57,8 @@ ln -fs ../../gitlab.yml "${github}/config/gitlab.yml"
 ln -fs ../../database.yml "${github}/config/database.yml"
 ln -fs ../../unicorn.rb "${github}/config/unicorn.rb"
 ln -fs ../../resque.yml "${github}/config/resque.yml"
-cp "${github}/lib/hooks/post-receive" "${gitolite}/hooks/common/"
+cp "${gtls}/hooks/post-receive" "${gitolite}/hooks/common/"
+cp "${gtls}/hooks/update" "${gitolite}/hooks/common/"
 d=$(pwd) ; cd "${github}"
 if [[ ! "$(ls -A ${github}/vendor/bundle/ruby/1.9.1/gems)" ]] ; then 
   echo Install gem bundles
@@ -81,5 +93,8 @@ echo To make sure you didn't miss anything run a more thorough check with:
 bundle exec rake gitlab:check RAILS_ENV=production
 
 cd "${d}"
+
+echo "Checking Gitlab-shell:"
+${gtls}/bin/check
 
 demod start

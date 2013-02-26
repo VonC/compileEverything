@@ -149,3 +149,4 @@ composer/
 /.config/
 /.local/
 /.pki/
+/gitlab/gitlab-shell/
