@@ -94,7 +94,7 @@ bundle exec rake gitlab:check RAILS_ENV=production
 
 cd "${d}"
 
+demod start
+
 echo "Checking Gitlab-shell:"
 ${gtls}/bin/check
-
-demod start
