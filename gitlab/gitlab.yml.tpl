@@ -108,7 +108,7 @@ production: &base
   gitlab_shell:
     # REPOS_PATH MUST NOT BE A SYMLINK!!!
     repos_path: @H@/repositories/
-    hooks_path: @H@/.gitolite/hooks/
+    hooks_path: @H@/gitlab/gitlab-shell/hooks/
 
     owner_group: @USERGROUP@
 
