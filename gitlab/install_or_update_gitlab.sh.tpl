@@ -11,7 +11,10 @@ demod stop
 upgradedb=0
 if [[ ! -e "${gtl}/gitlab-satellites" ]] ; then mkdir "${gtl}/gitlab-satellites" ; fi
 if [[ ! -e "${github}" ]] ; then
-  xxgit=1 git clone https://github.com/gitlabhq/gitlabhq "${github}"
+  xxgit=1 git clone -n https://github.com/gitlabhq/gitlabhq "${github}"
+  cp "${gtl}/config.git" "${github}/.git/config"
+  cp "${gtl}/attributes.git" "${github}/.git/info/attributes"
+  xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" checkout master
   cp_tpl "${gtl}/p.rake.tpl" "${github}/lib/tasks"
   gi=$(grep "/lib/tasks/p.rake" "${github}/.git/info/exclude")
   if [[ "${gi}" == "" ]] ; then echo "/lib/tasks/p.rake" >> "${github}/.git/info/exclude"; fi

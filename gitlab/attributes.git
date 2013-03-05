@@ -1,0 +1,2 @@
+*.rb filter=fileExpandPath
+*.rake filter=fileExpandPath

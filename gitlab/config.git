@@ -1,0 +1,14 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/gitlabhq/gitlabhq
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[filter "fileExpandPath"]
+    smudge= fileExpandPath_replace %f
+    clean = fileExpandPath_restore %f
