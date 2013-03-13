@@ -150,3 +150,5 @@ composer/
 /.local/
 /.pki/
 /gitlab/gitlab-shell/
+/Backup/
+/backups/

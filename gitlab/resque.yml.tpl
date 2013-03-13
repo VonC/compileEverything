@@ -1,3 +1,3 @@
-development: localhost:@PORT_REDIS@
-test: localhost:@PORT_REDIS@
-production: @FQN@:@PORT_REDIS@
+development: redis://localhost:@PORT_REDIS@
+test: redis://localhost:@PORT_REDIS@
+production: redis://@FQN@:@PORT_REDIS@
