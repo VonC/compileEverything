@@ -2,14 +2,19 @@
 
 gtl="${H}/gitolite"
 github="${gtl}/github"
+githubdir="${H}/.git/modules/gitolite"
 
-if [[ ! -e "${github}" ]] ; then
-  xxgit=1 git clone -n https://github.com/sitaramc/gitolite "${github}"
-  cp "${gtl}/config" "${github}/.git/config"
-  cp "${gtl}/attributes" "${github}/.git/info/attributes"
-  xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" checkout master
+if [[ ! -e "${github}/.git" ]] ; then
+  cd "${H}"
+  xxgit=1 git submodule update --init
+fi
+if [[ ! -e "${H}/.git/modules/gitolite/config" ]]; then
+  cp "${gtl}/config" "${githubdir}/config"
+  cp "${gtl}/attributes" "${githubdir}/info/attributes"
+  xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" checkout master
+  xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" checkout HEAD -- "{github}"
 else
-  xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" pull
+  xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" pull origin master
 fi
 mkdir -p "${gtl}/bin"
 "${github}/install" -to "${gtl}/bin"

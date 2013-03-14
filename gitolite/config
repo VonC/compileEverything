@@ -3,15 +3,13 @@
 	filemode = true
 	bare = false
 	logallrefupdates = true
+	worktree = ../../../gitolite/github
 [remote "origin"]
-	fetch = +refs/heads/*:refs/remotes/origin/*
 	url = https://github.com/sitaramc/gitolite
+	fetch = +refs/heads/*:refs/remotes/origin/*
 [branch "master"]
 	remote = origin
 	merge = refs/heads/master
 [filter "shebang"]
-	smudge = shebang_replace %f
-	clean = shebang_restore %f
-[branch "g2"]
-	remote = origin
-	merge = refs/heads/g2
+       smudge = shebang_replace %f
+       clean = shebang_restore %f
