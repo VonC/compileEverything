@@ -55,7 +55,6 @@ apache/openssl.cnf
 .ssh/old_authkeys
 gitolite/hooks
 gitolite/conf
-gitolite/github
 /.ssh/cnf
 /.ssh/known_hosts
 /a/
@@ -98,7 +97,6 @@ tomcat/key*
 *.pem
 *.pkcs12
 /.crypt/
-/gitlab/github/
 /gitlab/*.yml
 /mysql/sandboxes/
 /.bundle/
@@ -149,6 +147,5 @@ composer/
 /.config/
 /.local/
 /.pki/
-/gitlab/gitlab-shell/
 /Backup/
 /backups/

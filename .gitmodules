@@ -1,0 +1,9 @@
+[submodule "github"]
+	path = gitlab/github
+	url = https://github.com/gitlabhq/gitlabhq
+[submodule "gitlab-shell"]
+	path = gitlab/gitlab-shell
+	url = https://github.com/gitlabhq/gitlab-shell
+[submodule "gitolite"]
+	path = gitolite/github
+	url = https://github.com/sitaramc/gitolite
