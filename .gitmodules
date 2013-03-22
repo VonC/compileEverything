@@ -1,4 +1,4 @@
-[submodule "github"]
+[submodule "gitlab"]
 	path = gitlab/github
 	url = https://github.com/gitlabhq/gitlabhq
 [submodule "gitlab-shell"]

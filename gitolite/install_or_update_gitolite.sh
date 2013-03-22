@@ -4,17 +4,25 @@ gtl="${H}/gitolite"
 github="${gtl}/github"
 githubdir="${H}/.git/modules/gitolite"
 
+if [[ "$1" == "-h" || "$1" == "--help" || $# > 1 ]]; then
+  echo "`basename $0` [--upg]: make sure gitolite repo is cloned."
+  echo "  --upg: will for a pull from gitolite remote repo, upgrading local gitolite to latest."
+  exit 1
+fi
 if [[ ! -e "${github}/.git" ]] ; then
   cd "${H}"
   xxgit=1 git submodule update --init
 fi
-if [[ ! -e "${H}/.git/modules/gitolite/config" ]]; then
+if [[ ! -e "${githubdir}/info/attributes" ]]; then
   cp "${gtl}/config" "${githubdir}/config"
   cp "${gtl}/attributes" "${githubdir}/info/attributes"
-  xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" checkout master
-  xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" checkout HEAD -- "{github}"
-else
+  # xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" checkout master
+  # echo "xxgit=1 git --work-tree=\"${github}\" --git-dir=\"${githubdir}\" checkout HEAD -- \"${github}\""
+  xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" checkout HEAD -- "${github}"
+fi
+if [[ "$1" == "--upg" ]]; then
   xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" pull origin master
+  xxgit=1 git checkout -B master origin/master
 fi
 mkdir -p "${gtl}/bin"
 "${github}/install" -to "${gtl}/bin"

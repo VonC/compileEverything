@@ -1,3 +1,1 @@
-#!/bin/bash
-
-gen_sed -e "s;File.expand_path(\"~#{Gitlab.config.gitlab_shell.ssh_user}\");\"${H}\";"
+../gitlab/fileExpandPath_replace

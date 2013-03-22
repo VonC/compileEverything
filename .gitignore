@@ -149,3 +149,4 @@ composer/
 /.pki/
 /Backup/
 /backups/
+*.old/

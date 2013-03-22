@@ -2,24 +2,39 @@
 
 gtl="${H}/gitlab"
 github="${gtl}/github"
+githubdir="${H}/.git/modules/gitlab"
 mysqlgtl="${H}/mysql/sandboxes/gitlab"
 gitolite="${H}/.gitolite"
 gtls="${gtl}/gitlab-shell"
+gtlsdir="${H}/.git/modules/gitlab-shell"
 mkdir -p "${gtl}/logs"
+
+if [[ "$1" == "-h" || "$1" == "--help" || $# > 1 ]]; then
+  echo "`basename $0` [--upg|--upgs|--upall]: make sure gitlab and gitlab-shell repos are cloned and installed."
+  echo "  --upg: will force a pull from gitlab remote repo, upgrading local gitlab to latest."
+  echo "  --upgs: will force a pull from gitlab-shell remote repo, upgrading local gitlab-shell to latest."
+  echo "  --upg: will force a pull from gitlab and gitlab-shell remote repos, upgrading local gitlab and gitlab-shell to latest."
+  exit 1
+fi
 
 demod stop
 upgradedb=0
 if [[ ! -e "${gtl}/gitlab-satellites" ]] ; then mkdir "${gtl}/gitlab-satellites" ; fi
-if [[ ! -e "${github}" ]] ; then
-  xxgit=1 git clone -n https://github.com/gitlabhq/gitlabhq "${github}"
-  cp "${gtl}/config.git" "${github}/.git/config"
-  cp "${gtl}/attributes.git" "${github}/.git/info/attributes"
-  xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" checkout master
+if [[ ! -e "${github}/.git" ]] ; then
+  d=$(pwd)
+  cd "${H}"
+  xxgit=1 git submodule update --init
+  cd "${d}"
+fi
+if [[ ! -e "${githubdir}/info/attributes" ]]; then
+  cp "${gtl}/config.gitlab" "${githubdir}/config"
+  cp "${gtl}/attributes.gitlab" "${githubdir}/info/attributes"
+  xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" checkout HEAD -- "${github}"
   cp_tpl "${gtl}/p.rake.tpl" "${github}/lib/tasks"
-  gi=$(grep "/lib/tasks/p.rake" "${github}/.git/info/exclude")
-  if [[ "${gi}" == "" ]] ; then echo "/lib/tasks/p.rake" >> "${github}/.git/info/exclude"; fi
-  gi=$(grep "/dump.rdb" "${github}/.git/info/exclude")
-  if [[ "${gi}" == "" ]] ; then echo "/dump.rdb" >> "${github}/.git/info/exclude"; fi
+  gi=$(grep "/lib/tasks/p.rake" "${githubdir}/info/exclude")
+  if [[ "${gi}" == "" ]] ; then echo "/lib/tasks/p.rake" >> "${githubdir}/info/exclude"; fi
+  gi=$(grep "/dump.rdb" "${githubdir}/info/exclude")
+  if [[ "${gi}" == "" ]] ; then echo "/dump.rdb" >> "${githubdir}/info/exclude"; fi
   d=$(pwd)
   cd "${github}"
   bundle config build.charlock_holmes --with-icu-dir="${HUL}"
@@ -27,15 +42,27 @@ if [[ ! -e "${github}" ]] ; then
   bundle config build.sqlite3 --with-sqlite3-dir="${HUL}"
   bundle config build.mysql2  --with-mysql-config="${HB}/mysql_config" --with-ssl-dir="${HUL}/ssl" 
   cd "${d}"
-else
-  xxgit=1 git --work-tree="${github}" --git-dir="${github}/.git" pull
+fi
+if [[ "$1" == "--upg" || "$1" == "--upall" ]]; then
+  xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" pull
+  xxgit=1 git checkout -B master origin/master
 fi
 gtls_install=0
-if [[ ! -e "${gtls}" ]] ; then
-  xxgit=1 git clone https://github.com/gitlabhq/gitlab-shell "${gtls}"
+if [[ ! -e "${gtls}/.git" ]] ; then
+  d=$(pwd)
+  cd "${H}"
+  xxgit=1 git submodule update --init
+  cd "${d}"
   gtls_install=1
-else
-  xxgit=1 git --work-tree="${gtls}" --git-dir="${gtls}/.git" pull
+fi
+if [[ ! -e "${gtlsdir}/info/attributes" ]]; then
+  cp "${gtl}/config.gitlab-shell" "${gtlsdir}/config"
+  cp "${gtl}/attributes.gitlab-shell" "${gtlsdir}/info/attributes"
+  xxgit=1 git --work-tree="${gtls}" --git-dir="${gtlsdir}" checkout HEAD -- "${gtls}"
+fi
+if [[ "$1" == "--upgs" || "$1" == "--upall" ]]; then
+  xxgit=1 git --work-tree="${gtls}" --git-dir="${gtlsdir}" pull
+  xxgit=1 git checkout -B master origin/master
 fi
 cp_tpl "${gtl}/config.yml.tpl" "${gtl}"
 ln -fs ../config.yml "${gtls}/config.yml"
@@ -63,7 +90,7 @@ ln -fs ../../resque.yml "${github}/config/resque.yml"
 cp "${gtls}/hooks/post-receive" "${gitolite}/hooks/common/"
 cp "${gtls}/hooks/update" "${gitolite}/hooks/common/"
 d=$(pwd) ; cd "${github}"
-if [[ ! "$(ls -A ${github}/vendor/bundle/ruby/1.9.1/gems)" ]] ; then 
+if [[ ! -e "${github}/vendor/bundle/ruby/1.9.1/bundler/gems" || ! "$(ls -A ${github}/vendor/bundle/ruby/1.9.1/bundler/gems)" ]] ; then 
   echo Install gem bundles
   gem install charlock_holmes --version '0.6.9'
   gem install bundler

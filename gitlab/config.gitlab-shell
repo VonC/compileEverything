@@ -1,0 +1,16 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	worktree = ../../../gitlab/gitlab-shell
+[remote "origin"]
+	url = https://github.com/gitlabhq/gitlab-shell
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[filter "gitlab-shell"]
+    smudge= gitlab-shell_replace %f
+    clean = gitlab-shell_restore %f
+
