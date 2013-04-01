@@ -1,4 +1,4 @@
-Notes:
+gNotes:
 * to follow the most recent log, tail --follow=name logs/last (with a gnu tail at least)
 * export PS4='+${BASH_SOURCE}:${LINENO}: ' ; bash -x make_env.sh will display line numbers
 * git filter-branch --env-filter 'if [ $GIT_AUTHOR_EMAIL = vonc@laposte.com ]; then GIT_AUTHOR_EMAIL=vonc@laposte.net; fi; export GIT_AUTHOR_EMAIL' HEAD~4..HEAD
@@ -4309,3 +4309,92 @@ vonc@voncp1 ~/usr/local/apps/ruby-1.9.3-p385/lib/ruby/gems/1.9.1/gems/passenger-
 => make sure /home/vonc/gitpoc/gitlist/usr/local/apps/ruby-1.9.3-p385/lib/ruby/gems/1.9.1/gems/passenger-3.0.19/build/config.rb receives LDFLAGS as well as CFLAGS, to include rpath with /usr/x... and /lib/x... (modify post step)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~
+Ubuntu 32 glib make:
+
+  CCLD     gtester
+./.libs/libglib-2.0.so: undefined reference to `__sync_fetch_and_or'
+./.libs/libglib-2.0.so: undefined reference to `__sync_fetch_and_add'
+./.libs/libglib-2.0.so: undefined reference to `__sync_fetch_and_sub'
+./.libs/libglib-2.0.so: undefined reference to `__sync_bool_compare_and_swap'
+./.libs/libglib-2.0.so: undefined reference to `__sync_fetch_and_and'
+./.libs/libglib-2.0.so: undefined reference to `__sync_synchronize'
+./.libs/libglib-2.0.so: undefined reference to `__sync_fetch_and_xor'
+collect2: ld returned 1 exit status
+make[4]: *** [gtester] Error 1
+make[4]: Leaving directory `/home/vonc/gitpoc/20130331/.cpl/src/glib-2.36.0/glib'
+make[3]: *** [all-recursive] Error 1
+make[3]: Leaving directory `/home/vonc/gitpoc/20130331/.cpl/src/glib-2.36.0/glib'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory `/home/vonc/gitpoc/20130331/.cpl/src/glib-2.36.0/glib'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/home/vonc/gitpoc/20130331/.cpl/src/glib-2.36.0'
+make: *** [all] Error 2
+
+vonc@voncvb ~/.cpl/src/glib-2.36.0/glib $ grep "SYNC_COM" ../config.log 
+conftest.c:191: error: `__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4' undeclared (first use in this function)
+| __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4;
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+| #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+vonc@voncvb ~/.cpl/src/glib-2.36.0/glib $ grep "SYNC_COM" ~/../gitlist/.cpl/src/glib/config.log
+conftest.c:193: error: `__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4' undeclared (first use in this function)
+| __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4;
+conftest.c:193: error: `__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4' undeclared (first use in this function)
+| __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4;
+
+
+  CC       libglib_2_0_la-garray.lo
+  CC       libglib_2_0_la-gasyncqueue.lo
+  CC       libglib_2_0_la-gatomic.lo
+gatomic.c:668:2: #error G_ATOMIC_LOCK_FREE defined, but incapable of lock-free atomics.
+make[4]: *** [libglib_2_0_la-gatomic.lo] Error 1
+make[4]: Leaving directory `/home/vonc/gitpoc/20130331/.cpl/src/glib-2.36.0/glib'
+make[3]: *** [all-recursive] Error 1
+make[3]: Leaving directory `/home/vonc/gitpoc/20130331/.cpl/src/glib-2.36.0/glib'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory `/home/vonc/gitpoc/20130331/.cpl/src/glib-2.36.0/glib'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/home/vonc/gitpoc/20130331/.cpl/src/glib-2.36.0'
+make: *** [all] Error 2
+vonc@voncvb ~/.cpl/src/glib-2.36.0 $ grep -nRHI "G_ATOMIC_LOCK_FREE" *
+
+glib/glibconfig.h:160:#define G_ATOMIC_LOCK_FREE
+
+  CC       libglib_2_0_la-gasyncqueue.lo
+  CC       libglib_2_0_la-gatomic.lo
+gatomic.c:686: error: conflicting types for 'g_atomic_int_get'
+gatomic.h:34: error: previous declaration of 'g_atomic_int_get' was here
+gatomic.c:686: error: conflicting types for 'g_atomic_int_get'
+gatomic.h:34: error: previous declaration of 'g_atomic_int_get' was here
+gatomic.c:801: error: conflicting types for 'g_atomic_pointer_get'
+gatomic.h:60: error: previous declaration of 'g_atomic_pointer_get' was here
+gatomic.c:801: error: conflicting types for 'g_atomic_pointer_get'
+gatomic.h:60: error: previous declaration of 'g_atomic_pointer_get' was here
+make[4]: *** [libglib_2_0_la-gatomic.lo] Error 1
+
+vonc@voncvb ~/.cpl/src/glib $ diff glib/glibconfig.h ../2/glib/glibconfig.h | more
+106,107c106,107
+< #define GLIB_MINOR_VERSION 36
+< #define GLIB_MICRO_VERSION 0
+---
+> #define GLIB_MINOR_VERSION 34
+> #define GLIB_MICRO_VERSION 3
+159,160d158
+< 
+< #define G_ATOMIC_LOCK_FREE
+
+=> remove //#d_efine G_ATOMIC_LOCK_FREE in glib/glibconfig.h
+=> add const in 685 and 800 vfor g_atomic_pointer_get in glib/gatomic.c
+
+make check fails with "libglib-2.0.so possibly leaking symbols" FAIL: check-abis.sh
