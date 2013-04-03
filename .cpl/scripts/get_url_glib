@@ -1,5 +1,5 @@
 #! /bin/bash
-asrcline=$(wget -q -O - "http://developer.gnome.org/glib/stable/index.html" | grep -e "for GLib")
+asrcline=$(wget --no-check-certificate -q -O - "http://developer.gnome.org/glib/stable/index.html" | grep -e "for GLib")
 # echo "asrcline='${asrcline}'"
 majver="${asrcline%%.*}"
 majver="${majver##* }"
