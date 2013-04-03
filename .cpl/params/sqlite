@@ -1,4 +1,4 @@
 page=http://www.sqlite.org/download.html
-url=http://www.sqlite.org/
+url=http://www.sqlite.org/2013/
 verinclude=autoconf
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared
