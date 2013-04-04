@@ -120,9 +120,9 @@ function getJDK {
     #  grep -e "(?ms)Java SE \d(?: Update \d+)?<.*?href=\"(/technetwork[^\"]+)\"><img")
     local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
       grep "technetwork/java/javase/downloads/jdk6")
-    #echo "j1 ${ajdk}"
-    ajdk=${ajdk#*notes*f=\"}
-    #echo "j2 ${ajdk}"
+    # echo "j1 ${ajdk}"
+    ajdk=${ajdk#*Java SE 6 Update *JDK*f=\"}
+    # echo "j2 ${ajdk}"
     ajdk="http://www.oracle.com${ajdk%%\"*}"
     echo "JDK address: ${ajdk}"
     local ajdkgrep="linux-i586.bin"
@@ -136,7 +136,7 @@ function getJDK {
     echo $ajdk2 ${ajdkn}
     if [[ ! -e "${_pkgs}/${ajdkn}" ]]; then
       cp_tpl "${H}/jdk/.cookies.tpl" "${H}/jdk"
-      loge "wget --cookies=on --load-cookies=${H}/jdk/.cookies --keep-session-cookies $ajdk2 -O ${_pkgs}/${ajdkn}" "wget_sources_${ajdkn}"
+      loge "wget --no-check-certificate --cookies=on --load-cookies=${H}/jdk/.cookies --keep-session-cookies $ajdk2 -O ${_pkgs}/${ajdkn}" "wget_sources_${ajdkn}"
     fi
     chmod 755 "${_pkgs}/${ajdkn}"
     cd "${H}/usr/local"
