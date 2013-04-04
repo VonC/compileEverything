@@ -5,3 +5,4 @@ configcmd=none
 makecmd=none
 makeinstcmd=pwd ; mkdir -p "${HULA}/@@NAMEVER@@" ; tar cpvf - . | ( cd "${HULA}/@@NAMEVER@@" && tar xvpf - )
 post=gen_sed -i "s/!perl/!${EH}\/bin\/perl/g" "${HULA}/@@NAMEVER@@/bin/cpanm" ; gen_sed -i "s/  system \$shell;/# system \$shell;/g" "${HULA}/@@NAMEVER@@/bin/cpanm"
+postcheck=chmod 755 "${HULA}/@@NAMEVER@@/bin/cpanm"
