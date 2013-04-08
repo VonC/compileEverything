@@ -124,6 +124,8 @@ bundle exec rake gitlab:check RAILS_ENV=production
 
 cd "${d}"
 
+cp_tpl "${gtl}/apache.cnf.tpl" "${gtl}"
+
 demod start
 
 echo "Checking Gitlab-shell:"
