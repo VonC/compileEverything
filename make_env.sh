@@ -121,8 +121,8 @@ function getJDK {
     local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
       grep "technetwork/java/javase/downloads/jdk6")
     # echo "j1 ${ajdk}"
-    ajdk=${ajdk#*Java SE 6 Update *JDK*f=\"}
-    # echo "j2 ${ajdk}"
+    ajdk=${ajdk#*Java SE 6u*JDK*f=\"}
+     echo "j2 ${ajdk}"
     ajdk="http://www.oracle.com${ajdk%%\"*}"
     echo "JDK address: ${ajdk}"
     local ajdkgrep="linux-i586.bin"

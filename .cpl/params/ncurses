@@ -1,5 +1,4 @@
 page=http://ftp.gnu.org/pub/gnu/ncurses/?O=D;C=M
 url=http://ftp.gnu.org/pub/gnu/ncurses/
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --with-shared --with-devel=yes --without-ada --enable-overwrite --with-develop @@WITHOUT_GNU_LD@@ --with-gpm=no
-premake=gen_sed -i "s/-lpanel -lncurses/-lpanel -lncurses -lintl/g" ${H}/.cpl/src/@@NAMEVER@@/c++/Makefile
-#premake=gen_sed -i "s/-lpanel -lncurses/-lpanel -lncurses -lintl/g" ${H}/.cpl/src/@@NAMEVER@@/c++/Makefile ; ln -s "${H}/.cpl/src/ncurses/lib/libncurses.so.5" "${HULL}"
+premake=gen_sed -i "s/-lpanel -lncurses/-lpanel -lncurses -lintl/g" ${H}/.cpl/src/@@NAMEVER@@/c++/Makefile ; ln -fs "${H}/.cpl/src/ncurses/lib/libncurses.so.5" "${HULL}"
