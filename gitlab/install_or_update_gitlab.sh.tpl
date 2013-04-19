@@ -80,12 +80,12 @@ fi
 "${mysqlgtl}/start"
 cp_tpl "${gtl}/gitlab.yml.tpl" "${gtl}"
 cp_tpl "${gtl}/database.yml.tpl" "${gtl}"
-cp_tpl "${gtl}/unicorn.rb.tpl" "${gtl}"
+cp_tpl "${gtl}/puma.rb.tpl" "${gtl}"
 cp_tpl "${gtl}/resque.yml.tpl" "${gtl}"
 #cp_tpl "${gtl}/omniauth.rb.tpl" "${gtl}"
 ln -fs ../../gitlab.yml "${github}/config/gitlab.yml"
 ln -fs ../../database.yml "${github}/config/database.yml"
-ln -fs ../../unicorn.rb "${github}/config/unicorn.rb"
+ln -fs ../../puma.rb "${github}/config/puma.rb"
 ln -fs ../../resque.yml "${github}/config/resque.yml"
 cp "${gtls}/hooks/post-receive" "${gitolite}/hooks/common/"
 cp "${gtls}/hooks/update" "${gitolite}/hooks/common/"
@@ -107,7 +107,6 @@ if [[ "${upgradedb}" == "1" || ${gitlabForceInit[@]} ]] ; then
   bundle exec rake db:setup RAILS_ENV=production
   ${gtl}/sidekiqd start
   bundle exec rake db:seed_fu RAILS_ENV=production
-  bundle exec rake gitlab:enable_automerge RAILS_ENV=production
 else
   ${gtl}/sidekiqd start
   echo "Upgrade GitLab database"

@@ -17,21 +17,21 @@
 
 
 APP_ROOT="${H}/gitlab/github"
-START_DAEMON_PROCESS="bundle exec unicorn_rails $DAEMON_OPTS"
-DAEMON_OPTS="-c $APP_ROOT/config/unicorn.rb -E production"
+START_DAEMON_PROCESS="bundle exec puma $DAEMON_OPTS"
+DAEMON_OPTS="-c $APP_ROOT/config/puma.rb -e production"
 PID_PATH="$APP_ROOT/tmp/pids"
-UNICORN_PID="$PID_PATH/unicorn.pid"
+PUMA_PID="$PID_PATH/puma.pid"
 SIDEKIQ_PID="$PID_PATH/sidekiq.pid"
 STOP_SIDEKIQ="${H}/gitlab/sidekiqd stop"
 START_SIDEKIQ="${H}/gitlab/sidekiqd start"
-NAME="unicorn"
+NAME="PUMA"
 DESC="Gitlab service"
 CD_TO_APP_ROOT="cd ${APP_ROOT}"
 
 check_pid(){
 
-  if [ -f $UNICORN_PID ]; then
-    PID=`cat $UNICORN_PID`
+  if [ -f $PUMA_PID ]; then
+    PID=`cat $PUMA_PID`
     SPID=`cat $SIDEKIQ_PID`
     #echo "ps aux | grep $PID | grep -v grep | wc -l"
     STATUS=`ps aux | grep $PID | grep -v grep | wc -l`
@@ -52,9 +52,9 @@ start() {
     echo "Starting $DESC: "
     #echo "${CD_TO_APP_ROOT} > ${H}/gitlab/logs/start.log 2>&1 && mkdir -p $PID_PATH && $START_DAEMON_PROCESS && $START_SIDEKIQ" 
     #${CD_TO_APP_ROOT} > "${H}/gitlab/logs/start.log" 2>&1 && mkdir -p $PID_PATH && $START_DAEMON_PROCESS && $START_SIDEKIQ 
-    #echo "nohup bundle exec unicorn_rails $DAEMON_OPTS  > /dev/null  2>&1 &"
+    #echo "nohup bundle exec puma $DAEMON_OPTS  > /dev/null  2>&1 &"
     #echo "mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &"
-    nohup bundle exec unicorn_rails $DAEMON_OPTS  > /dev/null  2>&1 &
+    nohup RAILS_ENV=production bundle exec puma $DAEMON_OPTS  > /dev/null  2>&1 &
     mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &
     echo "$DESC started"
   fi
@@ -65,9 +65,9 @@ stop() {
   check_pid
   if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
     ## Program is running, stop it.
-    kill -QUIT `cat $UNICORN_PID`
+    kill -QUIT `cat $PUMA_PID`
     mkdir -p $PID_PATH && $STOP_SIDEKIQ
-    rm -f "$UNICORN_PID" >> /dev/null
+    rm -f "$PUMA_PID" >> /dev/null
     echo "$DESC stopped"
   else
     ## Program is not running, exit with error.
@@ -81,7 +81,7 @@ restart() {
   check_pid
   if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
     echo "Restarting $DESC..."
-    kill -USR2 `cat $UNICORN_PID`
+    kill -USR2 `cat $PUMA_PID`
     mkdir -p $PID_PATH && $STOP_SIDEKIQ && $START_SIDEKIQ 
     echo "$DESC restarted."
   else
@@ -94,7 +94,7 @@ status() {
   cd $APP_ROOT
   check_pid
   if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
-    echo "$DESC / Unicorn with PID $PID is running."
+    echo "$DESC / puma with PID $PID is running."
     "${H}/gitlab/sidekiqd" status
   else
     echo "$DESC is not running."

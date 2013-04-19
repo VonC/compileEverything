@@ -40,18 +40,26 @@ production: &base
 
   ## External issues trackers
   issues_tracker:
-    redmine:
-      ## If not nil, link 'Issues' on project page will be replaced with this
-      ## Use placeholders:
-      ##  :project_id        - GitLab project identifier
-      ##  :issues_tracker_id - Project Name or Id in external issue tracker
-      # project_url: "http://redmine.sample/projects/:issues_tracker_id"
-      ## If not nil, links from /#\d/ entities from commit messages will replaced with this
-      ## Use placeholders:
-      ##  :project_id        - GitLab project identifier
-      ##  :issues_tracker_id - Project Name or Id in external issue tracker
-      ##  :id                - Issue id (from commit messages)
-      # issues_url: "http://redmine.sample/issues/:id"
+    # redmine:
+    #   ## If not nil, link 'Issues' on project page will be replaced with this
+    #   ## Use placeholders:
+    #   ##  :project_id        - GitLab project identifier
+    #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
+    #   project_url: "http://redmine.sample/projects/:issues_tracker_id"
+    #
+    #   ## If not nil, links from /#\d/ entities from commit messages will replaced with this
+    #   ## Use placeholders:
+    #   ##  :project_id        - GitLab project identifier
+    #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
+    #   ##  :id                - Issue id (from commit messages)
+    #   issues_url: "http://redmine.sample/issues/:id"
+    #
+    #   ## If not nil, linkis to creating new issues will be replaced with this
+    #   ## Use placeholders:
+    #   ##  :project_id        - GitLab project identifier
+    #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
+    #   new_issue_url: "http://redmine.sample/projects/:issues_tracker_id/issues/new"
+      
 
   ## Gravatar
   gravatar:
