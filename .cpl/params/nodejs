@@ -1,0 +1,6 @@
+page=http://nodejs.org/dist/latest/
+url=http://nodejs.org/dist/latest/
+nameact=nodejs
+nameurl=node-
+verexclude=darwin|linux|sunos|x86
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@

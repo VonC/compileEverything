@@ -35,14 +35,17 @@ if [[ ! -e "${githubdir}/info/attributes" ]]; then
   if [[ "${gi}" == "" ]] ; then echo "/lib/tasks/p.rake" >> "${githubdir}/info/exclude"; fi
   gi=$(grep "/dump.rdb" "${githubdir}/info/exclude")
   if [[ "${gi}" == "" ]] ; then echo "/dump.rdb" >> "${githubdir}/info/exclude"; fi
-  d=$(pwd)
-  cd "${github}"
-  bundle config build.charlock_holmes --with-icu-dir="${HUL}"
-  bundle config build.raindrops --with-atomic_ops-dir="${HUL}"
-  bundle config build.sqlite3 --with-sqlite3-dir="${HUL}"
-  bundle config build.mysql2  --with-mysql-config="${HB}/mysql_config" --with-ssl-dir="${HUL}/ssl" 
-  cd "${d}"
 fi
+
+d=$(pwd)
+cd "${github}"
+bundle config build.charlock_holmes --with-icu-dir="${HUL}"
+bundle config build.raindrops --with-atomic_ops-dir="${HUL}"
+bundle config build.sqlite3 --with-sqlite3-dir="${HUL}"
+bundle config build.mysql2 --with-mysql-config="${HB}/mysql_config" --with-ssl-dir="${HUL}/ssl" 
+bundle config build.nokogiri --with-xml2-dir="${HUL}" --with-xslt-dir="${HUL}" --with-iconv-dir="${HUL}" --with-zlib-dir="${HUL}" 
+cd "${d}"
+
 if [[ "$1" == "--upg" || "$1" == "--upall" ]]; then
   xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" pull
   xxgit=1 git checkout -B master origin/master
@@ -55,6 +58,7 @@ if [[ ! -e "${gtls}/.git" ]] ; then
   cd "${d}"
   gtls_install=1
 fi
+if [[ ! -e "{gtls}/config.yml" ]] ; then gtls_install=1 ; fi
 if [[ ! -e "${gtlsdir}/info/attributes" ]]; then
   cp "${gtl}/config.gitlab-shell" "${gtlsdir}/config"
   cp "${gtl}/attributes.gitlab-shell" "${gtlsdir}/info/attributes"

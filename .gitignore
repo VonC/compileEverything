@@ -151,3 +151,4 @@ composer/
 /backups/
 *.old/
 /gitlab/apache.cnf
+/gitlab/puma.rb
