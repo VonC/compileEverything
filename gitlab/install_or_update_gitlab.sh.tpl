@@ -119,17 +119,18 @@ else
 fi
 echo "(Re-)Create satellite repos"
 bundle exec rake gitlab:satellites:create RAILS_ENV=production
+
+cp_tpl "${gtl}/apache.cnf.tpl" "${gtl}"
+demod start
+
 echo Check if GitLab and its environment is configured correctly:
 bundle exec rake gitlab:env:info RAILS_ENV=production
+
 echo To make sure you didn't miss anything run a more thorough check with:
 #'
 bundle exec rake gitlab:check RAILS_ENV=production
 
 cd "${d}"
-
-cp_tpl "${gtl}/apache.cnf.tpl" "${gtl}"
-
-demod start
 
 echo "Checking Gitlab-shell:"
 ${gtls}/bin/check

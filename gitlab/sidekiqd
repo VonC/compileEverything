@@ -63,12 +63,12 @@ case "$1" in
   ;;
 'status')
   if [[ "${pss}" == "" ]] ; then
-    echo "sidekiqd is stopped"
+    echo "(x) sidekiqd is stopped"
   else
-    echo "sidekiqd running, process ${pss}"
+    echo "(v) sidekiqd running, process ${pss}"
   fi
   if [[ "${afps}" != "${pss}" ]] ; then
-    echo "Warning, the sidekiqd pid recorded ${spid} '${afps}' is not the same than the running one: '${pss}'"
+    echo "(v)(!) Warning, the sidekiqd pid recorded ${spid} '${afps}' is not the same than the running one: '${pss}'"
   fi
   ;;
 *)

@@ -59,12 +59,13 @@ stdout_redirect "#{application_path}/log/puma.stdout.log", "#{application_path}/
 # The default is "tcp://0.0.0.0:9292".
 #
 # bind 'tcp://0.0.0.0:9292'
-bind "unix://#{application_path}/tmp/sockets/gitlab.socket"
+# bind "unix://#{application_path}/tmp/sockets/gitlab.socket"
+bind 'ssl://@FQN@:@PORT_HTTPS_GITLAB_PUMA@?key=@H@/apache/key&cert=@H@/apache/crt'
 
 # Instead of "bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'" you
 # can also use the "ssl_bind" option.
 #
-# ssl_bind '127.0.0.1', '9292', { key: path_to_key, cert: path_to_cert }
+# ssl_bind '@FQN@', '@PORT_HTTPS_GITLAB@', { key: @H@/apache/key, cert: @H@/apache/crt }
 
 # Code to run before doing a restart. This code should
 # close log files, database connections, etc.
