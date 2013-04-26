@@ -1,12 +1,4 @@
 namespace :gitlab do
-  namespace :gitolite do
-    def gitolite_user_home
-      "@H@"
-    end
-    def gitolite_version
-      "v3.2"
-    end
-  end
   namespace :app do
     def check_init_script_exists
       print "Init script exists? ... "

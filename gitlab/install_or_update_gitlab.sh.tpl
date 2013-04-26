@@ -30,12 +30,12 @@ if [[ ! -e "${githubdir}/info/attributes" ]]; then
   cp "${gtl}/config.gitlab" "${githubdir}/config"
   cp "${gtl}/attributes.gitlab" "${githubdir}/info/attributes"
   xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" checkout HEAD -- "${github}"
-  cp_tpl "${gtl}/p.rake.tpl" "${github}/lib/tasks"
   gi=$(grep "/lib/tasks/p.rake" "${githubdir}/info/exclude")
   if [[ "${gi}" == "" ]] ; then echo "/lib/tasks/p.rake" >> "${githubdir}/info/exclude"; fi
   gi=$(grep "/dump.rdb" "${githubdir}/info/exclude")
   if [[ "${gi}" == "" ]] ; then echo "/dump.rdb" >> "${githubdir}/info/exclude"; fi
 fi
+cp_tpl "${gtl}/p.rake.tpl" "${github}/lib/tasks"
 
 d=$(pwd)
 cd "${github}"
@@ -115,6 +115,7 @@ else
   ${gtl}/sidekiqd start
   echo "Upgrade GitLab database"
   bundle exec rake db:migrate RAILS_ENV=production
+  # bundle exec rake migrate_merge_requests RAILS_ENV=production
   echo "Upgrade GitLab database done"
 fi
 echo "(Re-)Create satellite repos"
