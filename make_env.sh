@@ -595,8 +595,13 @@ function configure() {
       configcmd=${configcmd/@@PATH_AS@@/${path_as}}
       configcmd=${configcmd/@@WITHOUT_GNU_AS@@/${without_gnu_as}}
       configcmd=${configcmd/@@WITH_GNU_AS@@/${with_gnu_as}}
-      if [[ "${longbit}" == "64" ]] ; then configcmd=${configcmd/@@ENABLE_64BIT@@/--enable-64bit} ;
-      else configcmd=${configcmd/@@ENABLE_64BIT@@/} ; fi
+      if [[ "${longbit}" == "64" ]] ; then 
+        configcmd=${configcmd/@@ENABLE_64BIT@@/--enable-64bit} ;
+        configcmd=${configcmd/@@3264@@/64} ;
+      else 
+        configcmd=${configcmd/@@ENABLE_64BIT@@/} ; 
+        configcmd=${configcmd/@@3264@@/32} ;
+      fi
       # echo "D: configcmd=${configcmd}"
       if [[ "${configcmd#@@}" != "${configcmd}" ]] ; then
         configcmd="${configcmd#@@}"

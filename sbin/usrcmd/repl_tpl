@@ -36,8 +36,10 @@ if [[ "${unamem//64/}" != "${unamem}" ]] ; then longbit="64" ; fi
 
 if [[ "${longbit}" == "32" ]]; then
   "${H}/sbin/gen_sed" -i 's/ @@M64@@//g' "${fullFilePathDst}" ;
+  "${H}/sbin/gen_sed" -i 's/@@3264@@/32/g' "${fullFilePathDst}" ;
 elif [[ "${longbit}" == "64" ]]; then
   "${H}/sbin/gen_sed" -i 's/@@M64@@/-m64/g' "${fullFilePathDst}" ;
+  "${H}/sbin/gen_sed" -i 's/@@3264@@/64/g' "${fullFilePathDst}" ;
 else 
   echolog "Unable to get LONG_BIT conf (32 or 64bits)" ; getconfrepl  
 fi
