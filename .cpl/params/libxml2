@@ -1,4 +1,4 @@
 page=http://xmlsoft.org/sources/?O=D;C=M
 url=http://xmlsoft.org/sources/
 verexclude=git|test
-configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-zlib=${HUL}  --with-iconv=${HUL} --with-readline=${HUL}  --with-python=${HULA}/python
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-zlib=${HUL}  --with-iconv=${HUL} --with-readline=${HUL}  --without-python --with-modules
