@@ -34,6 +34,8 @@ if [[ ! -e "${githubdir}/info/attributes" ]]; then
   if [[ "${gi}" == "" ]] ; then echo "/lib/tasks/p.rake" >> "${githubdir}/info/exclude"; fi
   gi=$(grep "/dump.rdb" "${githubdir}/info/exclude")
   if [[ "${gi}" == "" ]] ; then echo "/dump.rdb" >> "${githubdir}/info/exclude"; fi
+  gi=$(grep "/public/assets/" "${githubdir}/info/exclude")
+  if [[ "${gi}" == "" ]] ; then echo "/public/assets/" >> "${githubdir}/info/exclude"; fi
 fi
 cp_tpl "${gtl}/p.rake.tpl" "${github}/lib/tasks"
 
@@ -135,3 +137,9 @@ cd "${d}"
 
 echo "Checking Gitlab-shell:"
 ${gtls}/bin/check
+
+if [[ ! -e "${gtl}/public/assets" ]] ; then
+  echo "Precompile public/assets with RAILS_RELATIVE_URL_ROOT=/gitlab"
+  bundle exec rake assets:precompile RAILS_ENV=production RAILS_RELATIVE_URL_ROOT=/gitlab
+  echo "Precompilation of public/assets done."
+fi
