@@ -18,8 +18,11 @@ Listen @PORT_HTTPS_GITLAB@
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
       SSLOptions +StdEnvVars
     </FilesMatch>
-    RailsBaseURI /gitlab
-    RailsAutoDetect off
+    # http://stackoverflow.com/questions/13871154/gitlab-apache-phusion-passenger-no-such-file-or-directory-config-enviro/16393263#16393263
+    RackBaseURI /gitlab
+    RackAutoDetect off
+    #RailsBaseURI /gitlab
+    #RailsAutoDetect off
     <Location /gitlab>
         SSLOptions +StdEnvVars
 
