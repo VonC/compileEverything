@@ -78,6 +78,9 @@ while read aline ; do
     left="${left##*( )}"
     left="${left%%:*}"
     left="${left%%=*}"
+    #echo "left='${left}' for '${1}'"
+    left="$(echo -ne "${left}" | sed 's/'`echo -ne "\xe2\x80\x9c"`'\|'`echo -ne "\xe2\x80\x9d"`'/\"/g')"
+    #echo "left2='${left}'"
     arrayLeft=( "${arrayLeft[@]}" "${left}" )
   fi
   if [[ "${aline#>}" != "${aline}" ]]; then
@@ -87,6 +90,9 @@ while read aline ; do
     right="${right##*( )}"
     right="${right%%:*}"
     right="${right%%=*}"
+    #echo "right='${right}' for '${2}'"
+    right="$(echo -ne "${right}" | sed 's/'`echo -ne "\xe2\x80\x9c"`'\|'`echo -ne "\xe2\x80\x9d"`'/\"/g')"
+    #echo "right2='${right}'"
     arrayRight=( "${arrayRight[@]}" "${right}" )
   fi
 done <<< "${adiff}"
