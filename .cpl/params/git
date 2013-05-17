@@ -14,4 +14,4 @@ premake=gen_sed -i "s/^EXTLIBS =/EXTLIBS = -lintl /g" "${H}/.cpl/src/@@NAMEVER@@
 makecmd=gmake
 makeinstcmd=gmake install
 post=cp_tpl "${H}/gitweb/gitweb.conf.pl.tpl" "${H}/gitweb"
-postcheck=if [[ ! -e "${H}/.git" ]] ; then xxgit=1 git clone --bare https://VonC@github.com/VonC/compileEverything "${H}/.git" ; xxgit=1 git config --local --bool core.bare false ; xxgit=1 git reset HEAD -- . ; fi ; xxgit=1 git config --global push.default simple; set +e; complete -r git ; set -e ; xxgit=1 git config --global credential.helper cache
+postcheck=if [[ ! -e "${H}/.git" ]] ; then xxgit=1 git clone --bare https://VonC@github.com/VonC/compileEverything "${H}/.git" ; xxgit=1 git config --local --bool core.bare false ; xxgit=1 git reset HEAD -- . ; xxgit=1 git config --local remote.origin.fetch +refs/heads/*:refs/remotes/origin/* ; xxgit=1 git fetch origin ; xxgit=1 git branch -u origin/master master ; fi ; xxgit=1 git config --global push.default simple; set +e; complete -r git ; set -e ; xxgit=1 git config --global credential.helper cache
