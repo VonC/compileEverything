@@ -269,6 +269,43 @@ function get_sources() {
   local name=$1
   local _namever=$2
   local _ver=$3
+  if [[ -e "${H}/.cpl/fixed_versions" ]] ; then
+    local aline=$(grep "#${name}#" "${H}/.cpl/fixed_versions")
+    if [[ "${aline}" != "" ]] ; then
+      anamever=${aline##*#}
+      anamever=${acachenamever%%~*}
+      aver=${aline##*~}
+    else
+      get_sources_from_web ${name} anamever aver
+      # echo "cache no line: get_sources ${name}, acachenamever ${acache}${namever}, acachever ${acachever}"
+    fi
+  else
+    get_sources ${name} anamever aver
+    # echo "cache no cache: get_sources ${name}, cache${namever} ${acache}${namever}, acachever ${acachever}"
+  fi
+ 
+  fi
+  update_cache "${name}" "${anamever}" "${aver}"
+  eval ${_namever}="'${anamever}'"
+  eval ${_ver}="'${aver}'"
+
+}
+
+function get_source_from_version() {
+  local name=$1
+  local namever=$2
+  local ver=$3
+  local _namever=$4
+  local _ver=$5
+
+  eval ${_namever}="'${anamever}'"
+  eval ${_ver}="'${aver}'"
+}
+
+function get_sources_from_web() {
+  local name=$1
+  local _namever=$2
+  local _ver=$3
   local mgsd=0
   set +o nounset
   if [[ "${MGS}" == "${name}" ]]; then mgsd=1 ; fi
