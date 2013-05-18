@@ -35,7 +35,6 @@ echo "homed='${homed}'"
 _cpl="${H}/.cpl"
 _hcpl=".cpl"
 _deps="${_cpl}/_deps"
-_vers="${_cpl}/_vers"
 _log="${_cpl}/log"
 _hlog="${_hcpl}/log"
 _logs="${_cpl}/logs"
@@ -175,14 +174,6 @@ function main {
     if [[ ! -e "${H}/addresses.txt" ]] ; then "${H}/sbin/cp_tpl" "${H}/.cpl/addresses.txt.tpl" "${H}" ; fi
     sc
     mkdir -p "${HUL}/._linked"
-    if [[ ! -e "${_vers}" ]]; then
-      echolog "#### VERS ####"
-      echolog "download compatible versions from SunFreeware"
-      loge "wget http://www.sunfreeware.com/programlistsparc10.html -O ${_vers}$(Ymd)" "wget_vers_sunfreeware"
-      log "ln -fs ${_vers}$(Ymd) ${_vers}" ln_vers
-      gen_sed -i 's/ftp:\/\/ftp.sunfreeware.com/http:\/\/ftp.sunfreeware.com\/ftp/g' ${_vers}$(Ymd)
-      gen_sed -i 's/\/SOURCES\//http:\/\/www.sunfreeware.com\/SOURCES\//g' ${_vers}$(Ymd)
-    fi
   fi
   ldd=$(cat "${_deps}")
   while read line; do
@@ -283,8 +274,6 @@ function get_sources() {
     get_sources ${name} anamever aver
     # echo "cache no cache: get_sources ${name}, cache${namever} ${acache}${namever}, acachever ${acachever}"
   fi
- 
-  fi
   update_cache "${name}" "${anamever}" "${aver}"
   eval ${_namever}="'${anamever}'"
   eval ${_ver}="'${aver}'"
@@ -313,7 +302,7 @@ function get_sources_from_web() {
   echo "mgsd='${mgsd}'"
   get_param ${name} nameurl "${name}"
   get_param ${name} nameact "${nameurl}"
-  get_param ${name} page "${_vers}"
+  get_param ${name} page ""
   get_param ${name} verexclude ""
   get_param ${name} verinclude ""
 
@@ -325,8 +314,8 @@ function get_sources_from_web() {
   get_param ${name} exturl "${ext}"
   if [[ "${exturl}" == "none" ]] ; then exturl="" ; fi
   get_param ${name} extact "${ext}"
-  if [[ -e "${page}" ]] ; then
-    local asrcline=$(grep " ${nameurl}-" "${_vers}"|grep "Source Code")
+  if [[ "${page}" == "" ]] ; then
+    echolog "unable to get web page for ${name} with nameact ${nameact}, nameurl ${nameurl}, verinclude ${verinclude}, verexclude ${verexclude}, ext _${ext}_, exturl _${exturl}_" ; get_sources_failed_no_page
   elif [[ "${page}" == "l" ]]; then
     local asrcline=$(ls -1 ${H}/.cpl/src/_pkgs | grep "${nameurl}-")
     if [[ ${mgsd} == 1 ]] ; then echo "D: l0 asrcline ${asrcline} from ext ${ext}" ; fi

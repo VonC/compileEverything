@@ -3,7 +3,7 @@ lib gmp m4,tar
 lib mpfr m4
 lib mpc mpfr,gmp
 app binutils expat,gettext
-app make expat,gettext
+app make expat,aaa,gettext
 lib expat none
 lib libiconv none
 lib readline none
