@@ -1,3 +1,4 @@
+
 wget https://github.com/VonC/compileEverything/tarball/master
 tar xpvf master
 mv Von* ce1
@@ -7,6 +8,24 @@ tail --follow=name --retry .lastlog or tail -F .lastlog
 except on Ubuntu (http://superuser.com/questions/392072/make-tail-wait-for-a-file-to-exist)
 while ! tail -f bar/somefile.log ; do sleep 1 ; done
 :1,$s$/home/auser/compileEverything$@H@$g (vi, vim, replace subst on all file)
+~~~~~~~~~~~
+    1  gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'
+    3  sudo apt-get install git
+    4  git --version
+    5  mkdir gitpoc
+    6  chmod 700 gitpoc/
+    7  cd gitpoc/
+    8  wget https://github.com/VonC/compileEverything/tarball/master
+    9  mkdir v1
+   10  chmod 700 v1
+   12  tar xvf master -C v1 --strip-components 1
+   cd v1
+   git clone --bare https://VonC@github.com/VonC/compileEverything .git
+   git config --local --bool core.bare false
+   git reset HEAD -- .
+   git config --local remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+   git fetch origin
+   git branch -u origin/master master
 ~~~~~~~~~~~
 port:
 lsof -i :port
