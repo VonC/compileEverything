@@ -256,27 +256,30 @@ function build_bashrc() {
   elif [[ "${longbit}" == "64" ]]; then "${H}/sbin/gen_sed" -i 's/@@M64@@/-m64/g' "${H}/.bashrc" ;
   else echolog "Unable to get LONG_BIT conf (32 or 64bits)" ; getconf2 ; fi
 }
+
 function get_sources() {
   local name=$1
   local _namever=$2
   local _ver=$3
+  echo "get_sources ${name}, _namever ${_namever}, _ver ${_ver}"
   if [[ -e "${H}/.cpl/fixed_versions" ]] ; then
     local aline=$(grep "#${name}#" "${H}/.cpl/fixed_versions")
     if [[ "${aline}" != "" ]] ; then
-      anamever=${aline##*#}
-      anamever=${acachenamever%%~*}
-      aver=${aline##*~}
+      asnamever=${aline##*#}
+      asnamever=${asnamever%%~*}
+      asver=${aline##*~}
+      echo "cache line: get_sources ${name}, acachenamever ${asnamever}, acachever ${asver}"
     else
-      get_sources_from_web ${name} anamever aver
-      # echo "cache no line: get_sources ${name}, acachenamever ${acache}${namever}, acachever ${acachever}"
+      get_sources_from_web ${name} asnamever asver
+      echo "cache no line: get_sources ${name}, awebnamever ${asnamever}, awebver ${asver}"
     fi
   else
-    get_sources ${name} anamever aver
-    # echo "cache no cache: get_sources ${name}, cache${namever} ${acache}${namever}, acachever ${acachever}"
+    get_sources_from_web ${name} asnamever asver
+    echo "cache no cache: get_sources ${name}, awebnamever ${asnamever}, awebver ${asver}"
   fi
-  update_cache "${name}" "${anamever}" "${aver}"
-  eval ${_namever}="'${anamever}'"
-  eval ${_ver}="'${aver}'"
+  update_cache "${name}" "${asnamever}" "${asver}"
+  eval ${_namever}="'${asnamever}'"
+  eval ${_ver}="'${asver}'"
 
 }
 
@@ -295,6 +298,7 @@ function get_sources_from_web() {
   local name=$1
   local _namever=$2
   local _ver=$3
+  echo "get_sources_from_web ${name}, _namever ${_namever}, _ver ${_ver}"
   local mgsd=0
   set +o nounset
   if [[ "${MGS}" == "${name}" ]]; then mgsd=1 ; fi
@@ -411,6 +415,7 @@ function get_sources_from_web() {
     loge "wget ${source} -O ${_pkgs}/${targz}" "wget_sources_${targz}"
   fi
   update_cache "${name}" "${anamever}" "${aver}"
+  echo "get_sources_from_web RES ${name}, anamever ${anamever}, aver ${aver}"
   eval ${_namever}="'${anamever}'"
   eval ${_ver}="'${aver}'"
 }
