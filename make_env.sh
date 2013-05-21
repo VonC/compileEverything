@@ -115,7 +115,7 @@ function getJDK {
        echo "Java detected, version: ${ajvv}"
        if [[ ! -z "${ajvv}" ]] && [[ "${ajvv#*1.6.}" != "${ajvv}" ]] ; then donelist="${donelist}@${name}@" ; return 0;  fi
     fi
-    if [[ ! -e "${_pkgs}/${name}" ]] ;
+    if [[ ! -e "${_pkgs}/${name}" ]] ; then
       wget -q -O "${_pkgs}/${name}" http://www.oracle.com/technetwork/java/javase/downloads/index.html
     fi
     local ajdk=$(cat "${_pkgs}/${name}" | grep "technetwork/java/javase/downloads/jdk6")
@@ -127,7 +127,7 @@ function getJDK {
     local ajdkgrep="linux-i586.bin"
     if [[ "${longbit}" == "64" ]]; then ajdkgrep="linux-x64.bin" ; fi
     # echo "D: longbit = ${longbit}, ajdkgrep = ${ajdkgrep}"
-    if [[ ! -e "${_pkgs}/${name}2" ]] ;
+    if [[ ! -e "${_pkgs}/${name}2" ]] ; then
       wget -q -O "${_pkgs}/${name}2" ${ajdk}
     fi
     local ajdk2=$(cat "${_pkgs}/${name}2" | grep "http://download.oracle.com/otn-pub/java/jdk" | \
@@ -260,18 +260,24 @@ function build_bashrc() {
   else echolog "Unable to get LONG_BIT conf (32 or 64bits)" ; getconf2 ; fi
 }
 
+globalverinclude=""
+
 function get_sources() {
   local name=$1
   local _namever=$2
   local _ver=$3
   echo "get_sources ${name}, _namever ${_namever}, _ver ${_ver}"
+  globalverinclude=""
   if [[ -e "${H}/.cpl/fixed_versions" ]] ; then
     local aline=$(grep "#${name}#" "${H}/.cpl/fixed_versions")
     if [[ "${aline}" != "" ]] ; then
       asnamever=${aline##*#}
       asnamever=${asnamever%%~*}
       asver=${aline##*~}
-      echo "cache line: get_sources ${name}, acachenamever ${asnamever}, acachever ${asver}"
+      echo "fixed line: get_sources ${name}, acachenamever ${asnamever}, acachever ${asver}"
+      globalverinclude="${asver}"
+      get_sources_from_web ${name} asnamever asver
+      echo "fixed line after get: get_sources ${name}, acachenamever ${asnamever}, acachever ${asver}"
     else
       get_sources_from_web ${name} asnamever asver
       echo "cache no line: get_sources ${name}, awebnamever ${asnamever}, awebver ${asver}"
@@ -284,17 +290,6 @@ function get_sources() {
   eval ${_namever}="'${asnamever}'"
   eval ${_ver}="'${asver}'"
 
-}
-
-function get_source_from_version() {
-  local name=$1
-  local namever=$2
-  local ver=$3
-  local _namever=$4
-  local _ver=$5
-
-  eval ${_namever}="'${anamever}'"
-  eval ${_ver}="'${aver}'"
 }
 
 function get_sources_from_web() {
@@ -312,10 +307,16 @@ function get_sources_from_web() {
   get_param ${name} page ""
   get_param ${name} verexclude ""
   get_param ${name} verinclude ""
+  if [[ "${globalverinclude}" != "" ]] ; then verinclude="${globalverinclude}" ; fi
 
   if [[ "${page}" == "none" ]] ; then eval ${_namever}="'${name}'" ; return 0 ; fi
-  if [[ -e "${_pkgs}/${name}" ]] ; then page="${name}" ; fi
-  if [[ "${page#http}" == "${page}" && "${page#/}" == "${page}" && "${page}" != "l" ]] ; then page=$("${H}/.cpl/scripts/${page}" ${name} ${verexclude}) ; fi
+  if [[ -e "${_pkgs}/${name}" ]] ; then
+    page="${name}"
+  else
+    if [[ "${page#http}" == "${page}" && "${page#/}" == "${page}" && "${page}" != "l" ]] ; then 
+      page=$("${H}/.cpl/scripts/${page}" ${name} ${verexclude})
+    fi
+  fi
   get_param ${name} ext "tar.gz"
   if [[ "${nameurl}" == "none" ]] ; then nameurl="" ; fi
   if [[ "${ext}" == "none" ]] ; then ext="" ; fi
@@ -332,11 +333,11 @@ function get_sources_from_web() {
   else
     if [[ ${mgsd} == 1 ]] ; then echo "D: local asrcline wget -q -O - ${page} grep -e ${nameurl} grep ${ext}" ; fi
     local asrcline=""
-    if [[ ! -e "${_pkgs}/name" ]] ; then
+    if [[ ! -e "${_pkgs}/${name}" ]] ; then
       wget -q -O "${_pkgs}/${name}" "${page}" 
     fi
     if [[ ${mgsd} == 1 ]] ; then  echo "D: local page: $(cat "${_pkgs}/${name}")" ; fi
-    asrcline=$(cat ""  | grep -e "${nameurl}" | grep -e "${ext}")
+    asrcline=$(cat "${_pkgs}/${name}"  | grep -e "${nameurl}" | grep -e "${ext}")
   fi
   
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
