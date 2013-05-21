@@ -115,19 +115,22 @@ function getJDK {
        echo "Java detected, version: ${ajvv}"
        if [[ ! -z "${ajvv}" ]] && [[ "${ajvv#*1.6.}" != "${ajvv}" ]] ; then donelist="${donelist}@${name}@" ; return 0;  fi
     fi
-    # local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
-    #  grep -e "(?ms)Java SE \d(?: Update \d+)?<.*?href=\"(/technetwork[^\"]+)\"><img")
-    local ajdk=$(wget -q -O - http://www.oracle.com/technetwork/java/javase/downloads/index.html | \
-      grep "technetwork/java/javase/downloads/jdk6")
+    if [[ ! -e "${_pkgs}/${name}" ]] ;
+      wget -q -O "${_pkgs}/${name}" http://www.oracle.com/technetwork/java/javase/downloads/index.html
+    fi
+    local ajdk=$(cat "${_pkgs}/${name}" | grep "technetwork/java/javase/downloads/jdk6")
     # echo "j1 ${ajdk}"
     ajdk=${ajdk#*Java SE 6u*JDK*f=\"}
-     echo "j2 ${ajdk}"
+    # echo "j2 ${ajdk}"
     ajdk="http://www.oracle.com${ajdk%%\"*}"
     echo "JDK address: ${ajdk}"
     local ajdkgrep="linux-i586.bin"
     if [[ "${longbit}" == "64" ]]; then ajdkgrep="linux-x64.bin" ; fi
     # echo "D: longbit = ${longbit}, ajdkgrep = ${ajdkgrep}"
-    local ajdk2=$(wget -q -O - ${ajdk} | grep "http://download.oracle.com/otn-pub/java/jdk" | \
+    if [[ ! -e "${_pkgs}/${name}2" ]] ;
+      wget -q -O "${_pkgs}/${name}2" ${ajdk}
+    fi
+    local ajdk2=$(cat "${_pkgs}/${name}2" | grep "http://download.oracle.com/otn-pub/java/jdk" | \
       grep "${ajdkgrep}")
     ajdk2=${ajdk2##*:\"}
     ajdk2=${ajdk2%%\"*}
@@ -311,6 +314,7 @@ function get_sources_from_web() {
   get_param ${name} verinclude ""
 
   if [[ "${page}" == "none" ]] ; then eval ${_namever}="'${name}'" ; return 0 ; fi
+  if [[ -e "${_pkgs}/${name}" ]] ; then page="${name}" ; fi
   if [[ "${page#http}" == "${page}" && "${page#/}" == "${page}" && "${page}" != "l" ]] ; then page=$("${H}/.cpl/scripts/${page}" ${name} ${verexclude}) ; fi
   get_param ${name} ext "tar.gz"
   if [[ "${nameurl}" == "none" ]] ; then nameurl="" ; fi
@@ -327,9 +331,12 @@ function get_sources_from_web() {
     if [[ ${mgsd} == 1 ]] ; then echo "D: l asrcline ${asrcline} from ext ${ext}" ; fi
   else
     if [[ ${mgsd} == 1 ]] ; then echo "D: local asrcline wget -q -O - ${page} grep -e ${nameurl} grep ${ext}" ; fi
-    if [[ ${mgsd} == 1 ]] ; then local asrcpage=$(wget -U Mozilla -q -O - "${page}") ; fi
-    if [[ ${mgsd} == 1 ]] ; then  echo "D: local page: ${asrcpage}" ; fi
-    local asrcline=$(wget -q -O - "${page}" | grep -e "${nameurl}" | grep -e "${ext}")
+    local asrcline=""
+    if [[ ! -e "${_pkgs}/name" ]] ; then
+      wget -q -O "${_pkgs}/${name}" "${page}" 
+    fi
+    if [[ ${mgsd} == 1 ]] ; then  echo "D: local page: $(cat "${_pkgs}/${name}")" ; fi
+    asrcline=$(cat ""  | grep -e "${nameurl}" | grep -e "${ext}")
   fi
   
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
