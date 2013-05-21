@@ -310,6 +310,7 @@ function get_sources_from_web() {
   if [[ "${globalverinclude}" != "" ]] ; then verinclude="${globalverinclude}" ; fi
 
   if [[ "${page}" == "none" ]] ; then eval ${_namever}="'${name}'" ; return 0 ; fi
+  if [[ -e "${_pkgs}/${name}" && ! -s "${_pkgs}/${name}" ]] ; then rm "${_pkgs}/${name}" ; fi
   if [[ -e "${_pkgs}/${name}" ]] ; then
     page="${name}"
   else
