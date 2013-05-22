@@ -1,0 +1,24 @@
+#!/bin/bash
+
+function usage() {
+ echo
+ echo "Usage: vilog modulename <step>"
+ echo "will look for a '$H/.cpl/logs/modulename*.log' and edit the one with the right step"
+ echo
+exit
+}
+
+if [[ $# -lt 1 || $# -gt 2 ]] ; then usage ; exit 1 ; fi
+
+if [[ $# -eq 1 ]] ; then
+  ls -alrt "${H}/.cpl/logs" | grep "_${1}"
+fi
+
+if [[ $# -eq 2 ]] ; then
+  name=$(ls -1art "${H}/.cpl/logs" | grep "_${1}" | grep "${2}_" | tail -1)
+  if [[ "${name}" == "" ]] ; then
+    echo "No logs for '${1}', step '${2}'"
+    exit 1
+  fi
+  vi "${H}/.cpl/logs/${name}"
+fi
