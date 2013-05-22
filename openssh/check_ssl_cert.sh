@@ -8,7 +8,7 @@ if [[ ! -e "${crt}" ]] ; then exit 0 ; fi
 jks=$(grep jks "${priv}")
 jks=${jks##*=}
 #echo "jks='${jks}'"
-if [[ ! -e "${jks}" ]] ; then echo "missing JKS keystore at '${jks}'" ; exist 1 ; fi
+if [[ "${jks}" == "" ]] ; then echo "missing JKS keystore at '${jks}'" ; exit 1 ; fi
 
 jkspwd=$(grep password "${priv}")
 jkspwd=${jkspwd##*=}
@@ -17,6 +17,9 @@ jkspwd=${jkspwd##*=}
 jksalias=$(grep alias "${priv}")
 jksalias=${jksalias##*=}
 #echo "jkspwd='${jkspwd}'"
+
+# http://stackoverflow.com/a/5596842/6309
+# Extract private key from keystore
 
 p12="${H}/../$(hostname).p12"
 
