@@ -1,6 +1,6 @@
 #! /bin/bash
 
-if [[ ! -e "${H}/nginx/nginx.conf || ! -e "${HULA}/nginx" ]] ; then exit 0 ; fi
+if [[ ! -e "${H}/nginx/nginx.conf" || ! -e "${HULA}/nginx" ]] ; then exit 0 ; fi
 auser=$(id -nu)
 aps=$(ps -wef|grep ${auser}|grep "${H}/usr/local/apps/nginx/sbin/"|grep -v grep|awk '{print $2}')
 afps=""

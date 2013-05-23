@@ -15,7 +15,7 @@ case "$1" in
 'stop')
   "${H}/sbin/sshd" stop
   if [[ -e "${H}/sbin/slapdd" ]] ; then "${H}/sbin/slapdd" stop ; fi
-  if [[ -e "${H}/sbin/ctld" ]] ; "${H}/sbin/ctld" stop ; fi
+  if [[ -e "${H}/sbin/ctld" ]] ; then "${H}/sbin/ctld" stop ; fi
   "${H}/sbin/nginxd" stop
   "${H}/sbin/gitlabd" stop
   "${H}/sbin/redisd" stop
@@ -26,7 +26,7 @@ case "$1" in
 'restart')
   "${H}/sbin/sshd" restart
   if [[ -e "${H}/sbin/slapdd" ]] ; then "${H}/sbin/slapdd" restart ; fi
-  if [[ -e "${H}/sbin/ctld" ]] ; "${H}/sbin/ctld" restart ; fi
+  if [[ -e "${H}/sbin/ctld" ]] ; then "${H}/sbin/ctld" restart ; fi
   "${H}/sbin/nginxd" restart
   if [[ -e "${H}/mysql/sandboxes/gitlab/restart" ]] ; then
     "${H}/mysql/sandboxes/gitlab/restart"
@@ -35,7 +35,7 @@ case "$1" in
   "${H}/sbin/gitlabd" restart
 ;;
 'status')
-  if [[ -e "${H}/sbin/ctld" ]] ; "${H}/sbin/ctld" status ; fi
+  if [[ -e "${H}/sbin/ctld" ]] ; then "${H}/sbin/ctld" status ; fi
   "${H}/sbin/sshd" status
   if [[ -e "${H}/sbin/slapdd" ]] ; then "${H}/sbin/slapdd" status ; fi
   "${H}/sbin/nginxd" status
@@ -45,11 +45,11 @@ case "$1" in
   fi
   ;;
 'test')
-  if [[ -e "${H}/sbin/ctld" ]] ; "${H}/sbin/ctld" test ; fi
+  if [[ -e "${H}/sbin/ctld" ]] ; then "${H}/sbin/ctld" test ; fi
   "${H}/sbin/nginxd" test
   ;;
 'reload')
-  if [[ -e "${H}/sbin/ctld" ]] ; "${H}/sbin/ctld" reload ; fi
+  if [[ -e "${H}/sbin/ctld" ]] ; then "${H}/sbin/ctld" reload ; fi
   "${H}/sbin/nginxd" reload
   "${H}/sbin/gitlabd" reload
   ;;
