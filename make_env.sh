@@ -179,6 +179,9 @@ function main {
     mkdir -p "${HUL}/._linked"
   fi
   ldd=$(cat "${_deps}")
+  gstopat=""
+  if [[ -e "${H}/../stopat.${homed}" ]] ; then gstopat=$(cat "${H}/../stopat.${homed}") ; fi
+  echo "gstopat='${gstopat}'"
   while read line; do
     # echo "D: main line '${line}'"
     gline="${line}"
@@ -186,6 +189,15 @@ function main {
       if [[ "${glastline}" == "" || "${line}" == "${glastline}" ]] ; then
         glastline=""
         build_line "${line}"
+        if [[ "${gstopat}" != "" ]] ; then
+          alinename=${line#* }
+          alinename=${alinename%% *}
+          echo "alinename='${alinename}'"
+          if [[ "${gstopat}" == "${alinename}" ]] ; then
+            glastline="stop"
+            gline="__no_deps__"
+          fi
+        fi
       fi
     fi
   done < <(echo "${ldd}")
@@ -808,31 +820,51 @@ function build_line() {
   set -- junk ${line} ; shift
   local type=$1; local name=$2 ; local deps=${3//,/ }
   isItDone "${name}" aaisdone "${lineori}"
-  if [[ "${aaisdone}" == "false" ]] ; then
+  if [[ "${aaisdone}" == "false" && "${glastline}" != "stop" ]] ; then
     # echo "D: build_line not done: deps '${deps}' for '${name}' with '${type}'"
     declare -a Array=(${deps})
     for adep in "${Array[@]}"; do
       # echo "D: build_line adep '${adep}' for '${name}' with '${type}'"
-      if [[ "${adep}" != "none" ]]; then
+      if [[ "${adep}" != "none" && "${glastline}" != "stop" ]]; then
         adepline=$(egrep -e "((app|lib|mod) ${adep})|__no_deps__" "${_deps}")
         # echo "D: build_line: dep line: '${adepline}'"
         if [[ "${adepline}" == "__no_deps__" ]] ; then echolog "unable to find dependencies of ${adep}"; nodepfound ; fi
         adepline=$(echo "${adepline}" | egrep -e "${adep}")
         # echo "D: build_line: dep line2: '${adepline}'"
         build_line "${adepline}"
+        if [[ "${gstopat}" != "" ]] ; then
+          alinename=${adepline#* }
+          alinename=${alinename%% *}
+          echo "alinenamedep='${alinename}'"
+          if [[ "${gstopat}" == "${alinename}" ]] ; then
+            glastline="stop"
+            gline="__no_deps__"
+          fi
+        fi
       fi
     done
     # echo "D: build_line: done deps from ${name} with ${type}, now building '${name}'"
-    if [[ ${type} == "app" ]] && [[ ${name} == "jdk" ]]; then getJDK "${lineori}";
-    elif [[ ${type} == "app" ]]; then build_item "${name}" "APP" "${lineori}";
-    elif [[ ${type} == "lib" ]] ; then build_item  "${name}" "LIB" "${lineori}";
-    elif [[ ${type} == "mod" ]] ; then build_item "${name}" "MOD" "${lineori}"
-    else echo "unknow type" ; exit 1 ; fi
-    # echo "D: build_line: done building '${name}'"
+    if [[ "${glastline}" != "stop" ]] ; then
+      if [[ ${type} == "app" ]] && [[ ${name} == "jdk" ]]; then getJDK "${lineori}";
+      elif [[ ${type} == "app" ]]; then build_item "${name}" "APP" "${lineori}";
+      elif [[ ${type} == "lib" ]] ; then build_item  "${name}" "LIB" "${lineori}";
+      elif [[ ${type} == "mod" ]] ; then build_item "${name}" "MOD" "${lineori}"
+      else echo "unknow type" ; exit 1 ; fi
+      # echo "D: build_line: done building '${name}'"
+    fi
+    if [[ "${gstopat}" != "" ]] ; then
+      alinename=${lineori#* }
+      alinename=${alinename%% *}
+      echo "alinenameLINE='${alinename}'"
+      if [[ "${gstopat}" == "${alinename}" ]] ; then
+        glastline="stop"
+        gline="__no_deps__"
+      fi
+    fi
   fi
 }
 
-while [[ "${gline}" != "__no_deps__" && "${gline}" != "${glastline}" ]] ; do 
+while [[ "${gline}" != "__no_deps__" && "${gline}" != "${glastline}" && "${glastline}" != "stop" ]] ; do 
   if [[ "${gline}" == "_" ]] ; then gline="" ; fi
   # echo "D: before main gline='${gline}', glastline='${glastline}'"
   main $*
