@@ -121,6 +121,7 @@ status() {
 #fi
 
 if [[ ! -e "${APP_ROOT}" ]]; then exit 0 ; fi
+if [[ ! -e "${H}/gitlab/gitlab.yml" ]] ; then exit 0 ; fi
 
 case "$1" in
   start)

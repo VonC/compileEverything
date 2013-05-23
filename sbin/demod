@@ -3,45 +3,53 @@
 case "$1" in
 'start')
   "${H}/sbin/sshd" start
-  "${H}/sbin/slapdd" start
-  "${H}/sbin/ctld" start
+  if [[ -e "${H}/sbin/slapdd" ]] ; then "${H}/sbin/slapdd" start ; fi
+  if [[ -e "${H}/sbin/ctld" ]] ; then "${H}/sbin/ctld" start ; fi
   "${H}/sbin/nginxd" start
-  "${H}/mysql/sandboxes/gitlab/start"
+  if [[ -e "${H}/mysql/sandboxes/gitlab/start" ]] ; then
+    "${H}/mysql/sandboxes/gitlab/start"
+  fi
   "${H}/sbin/redisd" start
   "${H}/sbin/gitlabd" start
   ;;
 'stop')
   "${H}/sbin/sshd" stop
-  "${H}/sbin/slapdd" stop
-  "${H}/sbin/ctld" stop
+  if [[ -e "${H}/sbin/slapdd" ]] ; then "${H}/sbin/slapdd" stop ; fi
+  if [[ -e "${H}/sbin/ctld" ]] ; "${H}/sbin/ctld" stop ; fi
   "${H}/sbin/nginxd" stop
   "${H}/sbin/gitlabd" stop
   "${H}/sbin/redisd" stop
-  "${H}/mysql/sandboxes/gitlab/stop"
+  if [[ -e "${H}/mysql/sandboxes/gitlab/stop" ]] ; then
+    "${H}/mysql/sandboxes/gitlab/stop"
+  fi
   ;;
 'restart')
   "${H}/sbin/sshd" restart
-  "${H}/sbin/slapdd" restart
-  "${H}/sbin/ctld" restart
+  if [[ -e "${H}/sbin/slapdd" ]] ; then "${H}/sbin/slapdd" restart ; fi
+  if [[ -e "${H}/sbin/ctld" ]] ; "${H}/sbin/ctld" restart ; fi
   "${H}/sbin/nginxd" restart
-  "${H}/mysql/sandboxes/gitlab/restart"
+  if [[ -e "${H}/mysql/sandboxes/gitlab/restart" ]] ; then
+    "${H}/mysql/sandboxes/gitlab/restart"
+  fi
   "${H}/sbin/redisd" restart
   "${H}/sbin/gitlabd" restart
 ;;
 'status')
-  "${H}/sbin/ctld" status
+  if [[ -e "${H}/sbin/ctld" ]] ; "${H}/sbin/ctld" status ; fi
   "${H}/sbin/sshd" status
-  "${H}/sbin/slapdd" status
+  if [[ -e "${H}/sbin/slapdd" ]] ; then "${H}/sbin/slapdd" status ; fi
   "${H}/sbin/nginxd" status
   "${H}/sbin/redisd" status
-  "${H}/mysql/sandboxes/gitlab/status"
+  if [[ -e "${H}/mysql/sandboxes/gitlab/status" ]] ; then
+    "${H}/mysql/sandboxes/gitlab/status"
+  fi
   ;;
 'test')
-  "${H}/sbin/ctld" test
+  if [[ -e "${H}/sbin/ctld" ]] ; "${H}/sbin/ctld" test ; fi
   "${H}/sbin/nginxd" test
   ;;
 'reload')
-  "${H}/sbin/ctld" reload
+  if [[ -e "${H}/sbin/ctld" ]] ; "${H}/sbin/ctld" reload ; fi
   "${H}/sbin/nginxd" reload
   "${H}/sbin/gitlabd" reload
   ;;

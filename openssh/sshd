@@ -1,5 +1,6 @@
 #! /bin/bash
 
+if [[ ! -e "${HB}/ssh" ]] ; then exit 0 ; fi
 if [[ ! -e "${HULA}/openssh" ]] ; then
   aln=$(find "${HULA}" -maxdepth 1  -type d -name "openssh*")
   aln=${aln##*/}

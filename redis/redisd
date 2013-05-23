@@ -1,6 +1,7 @@
 #! /bin/bash
 
 REDISD="${H}/bin/redis-server"
+if [[ ! -e "${REDISD}" ]] ; then exit 0 ; fi
 REDIS="${H}/redis"
 REDIS_PID="${REDIS}/redis.pid"
 auser=$(id -nu)
