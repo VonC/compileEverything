@@ -73,5 +73,8 @@ if [[ ! -e "${gtl}/VREF/CHECKID" ]] ; then cp_tpl "${gtl}/VREF/CHECKID" "${gtl}/
 
 GL_USER=gitoliteadm gitolite print-default-rc > "${gtl}/default.gitolite.rc"
 set +e
+echo vvvvvvvvvvvvvvvvvvvvv
+echo diff "${gtl}/default.gitolite.rc" "${H}/.gitolite.rc"
+echo vvvvvvvvvvvvvvvvvvvvv
 diff "${gtl}/default.gitolite.rc" "${H}/.gitolite.rc"
 set -e

@@ -153,3 +153,4 @@ composer/
 /gitlab/apache.cnf
 /gitlab/puma.rb
 /.cpl/fixed_versions
+.*.old
