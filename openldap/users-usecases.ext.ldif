@@ -1,0 +1,47 @@
+dn: ou=Project External Users,ou=People,dc=example,dc=com
+objectclass: organizationalUnit
+ou: Project External Users
+
+dn: cn=Project External User1,ou=Project Users,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project External User1
+sn: peu1
+uid: projextusr1
+givenname: peu1
+mail: projectextusr1@company.com
+userPassword: projextusr1
+description: Project External User 1
+
+dn: cn=Project External User2,ou=Project Users,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project External User2
+sn: peu2
+uid: projextusr2
+givenname: peu2
+mail: projectextusr2@company.com
+userPassword: projextusr2
+description: Project External User 2
+
+dn: cn=Project External User3,ou=Project Users,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project External User3
+sn: peu3
+uid: projextusr3
+givenname: peu3
+mail: projectextusr3@company.com
+userPassword: projextusr3
+description: Project External User 3
+
+dn: cn=Project External User4,ou=Project Users,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project External User4
+sn: peu4
+uid: projextusr4
+givenname: peu4
+mail: projectextusr4@company.com
+userPassword: projextusr4
+description: Project External User 4
