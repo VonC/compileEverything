@@ -24,19 +24,27 @@ echo "bj='${bj}'"
 
 if [[ "${bj}" == "" ]] ; then
   ldapmodify -a -P 3 -x -D "cn=Manager,dc=example,dc=com" -h localhost -p @PORT_LDAP_TEST@ -w secret < "${openldap}/test-ordered.ldif"
+  bj=$(ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p @PORT_LDAP_TEST@ 'uid=bjensen' uid)
+  echo "bj='${bj}'"
 fi
-
-bj=$(ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p @PORT_LDAP_TEST@ 'uid=bjensen' uid)
-echo "bj='${bj}'"
 
 ga=$(ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p @PORT_LDAP_TEST@ 'uid=gitoliteadm' uid)
 echo "ga='${ga}'"
 
 if [[ "${ga}" == "" ]] ; then
   ldapmodify -a -P 3 -x -D "cn=Manager,dc=example,dc=com" -h localhost -p @PORT_LDAP_TEST@ -w secret < "${openldap}/gitoliteadm.ldif"
+  ga=$(ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p @PORT_LDAP_TEST@ 'uid=gitoliteadm' uid)
+  echo "ga='${ga}'"
 fi
 
-ga=$(ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p @PORT_LDAP_TEST@ 'uid=gitoliteadm' uid)
+ga=$(ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p @PORT_LDAP_TEST@ 'uid=almadm1' uid)
 echo "ga='${ga}'"
+
+if [[ "${ga}" == "" ]] ; then
+  echo ldapmodify -a -P 3 -x -D "cn=Manager,dc=example,dc=com" -h localhost -p @PORT_LDAP_TEST@ -w secret < "${openldap}/users-usecases.ldif"
+  ldapmodify -a -P 3 -x -D "cn=Manager,dc=example,dc=com" -h localhost -p @PORT_LDAP_TEST@ -w secret < "${openldap}/users-usecases.ldif"
+  ga=$(ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p @PORT_LDAP_TEST@ 'uid=almadm1' uid)
+  echo "ga='${ga}'"
+fi
 
 # slapdd stop

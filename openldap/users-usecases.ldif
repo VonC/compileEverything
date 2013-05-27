@@ -1,0 +1,108 @@
+dn: ou=ALM Admins,ou=People,dc=example,dc=com
+objectclass: organizationalUnit
+ou: ALM Admins
+
+dn: cn=ALM Admins Staff,ou=Groups,dc=example,dc=com
+member: cn=Manager,dc=example,dc=com
+member: cn=almadmin1,ou=ALM Admins,ou=People,dc=example,dc=com
+member: cn=almadmin2,ou=ALM Admins,ou=People,dc=example,dc=com
+owner: cn=Manager,dc=example,dc=com
+description: All ALM Admins Staff
+cn: ALM Admins Staff
+objectclass: groupofnames
+
+dn: cn=ALM Admin1,ou=ALM Admins,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: ALM Admin1
+sn: aa1
+uid: almadm1
+givenname: aa1
+mail: almadm1@company.com
+userPassword: almadm1
+description: ALM Admin 1
+
+dn: cn=ALM Admin2,ou=ALM Admins,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: ALM Admin2
+sn: aa2
+uid: almadm2
+givenname: aa2
+mail: almadm1@company.com
+userPassword: almadm2
+description: ALM Admin 2
+
+dn: ou=Project Admins,ou=People,dc=example,dc=com
+objectclass: organizationalUnit
+ou: Project Admins
+
+dn: cn=Project Admin1,ou=Project Admins,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project Admin1
+sn: aa1
+uid: projadm1
+givenname: aa1
+mail: projadm1@company.com
+userPassword: projadm1
+description: Project Admin 1
+
+dn: cn=Project Admin2,ou=Project Admins,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project Admin2
+sn: aa2
+uid: projadm2
+givenname: aa2
+mail: projadm2@company.com
+userPassword: projadm2
+description: Project Admin 2
+
+dn: ou=Project Users,ou=People,dc=example,dc=com
+objectclass: organizationalUnit
+ou: Project Users
+
+dn: cn=Project User1,ou=Project Users,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project User1
+sn: pu1
+uid: projusr1
+givenname: aa1
+mail: projectusr1@company.com
+userPassword: projusr1
+description: Project User 1
+
+dn: cn=Project User2,ou=Project Users,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project User2
+sn: pu2
+uid: projusr2
+givenname: aa2
+mail: projectusr2@company.com
+userPassword: projusr2
+description: Project User 2
+
+dn: cn=Project User3,ou=Project Users,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project User3
+sn: pu3
+uid: projusr3
+givenname: aa3
+mail: projectusr3@company.com
+userPassword: projusr3
+description: Project User 3
+
+dn: cn=Project User4,ou=Project Users,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project User4
+sn: pu4
+uid: projusr4
+givenname: aa4
+mail: projectusr4@company.com
+userPassword: projusr4
+description: Project User 4
