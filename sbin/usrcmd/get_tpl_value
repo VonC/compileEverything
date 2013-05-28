@@ -1,0 +1,26 @@
+#!/bin/bash
+  
+function get_tpl_value() {
+ 
+  local aparamfile="$(readlink -f $1)"
+  local akey="$2"
+  local _value="$3"
+  local avalue=""
+
+  if [[ ! -e "${aparamfile}" ]] ; then return 0 ; fi
+  while read line; do
+    local rvalue=(${line#*=})
+    local rkey=(${line%%=*})
+    # echo "key: '${rkey}' - '${rvalue}'"
+    if [[ "${rkey}" != "" && "${line#@}" != "${line}" ]] ; then
+      echo "key: '${rkey}' - akey '${akey}'"
+      if [[ "${rkey}" == "${akey}" ]] ; then
+        avalue="${rvalue}"
+        # echo "avalue='${avalue}'"
+      fi
+    fi
+  done < "${aparamfile}"
+
+  # echo "avalueF='${avalue}'"
+  eval ${_value}="'${avalue}'"
+}
