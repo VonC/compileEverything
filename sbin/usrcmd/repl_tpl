@@ -13,6 +13,20 @@ function get_param_file() {
   eval $_filename="'${afilename}'"
 }
 
+function repl_param_file() {
+  local aparamfile="${1}"
+  local adestfile="${2}"
+  if [[ ! -e "${aparamfile}" || ! -e "${adestfile}" ]] ; then return 0 ; fi
+  while read line; do
+    local value=(${line#*=})
+    local key=(${line%%=*})
+    # echo "${name} - ${port}"
+    if [[ "${key}" != "" && "${line#@}" != "${line}" ]] ; then 
+      "${H}/sbin/gen_sed" -i "s;${key};${value};g" "${adestfile}"
+    fi
+  done < "${aparamfile}"
+}
+
 echo cp -f "${fullFilePathOri}" "${fullFilePathDst}"
 cp -f "${fullFilePathOri}" "${fullFilePathDst}"
 
@@ -59,12 +73,7 @@ fqnemail=${fqn/./@}
 
 get_param_file ".ports.ini.private" portini
 if [[ ! -e "${portini}" ]] ; then get_param_file ".ports.ini" portini ; fi
-while read line; do 
-  port=(${line#*=})
-  name=(${line%=*})
-  # echo "${name} - ${port}"
-  "${H}/sbin/gen_sed" -i "s;${name};${port};g" "${fullFilePathDst}"
-done < "${portini}"
+repl_param_file "${portini}" "${fullFilePathDst}"
 
 epoch=$(date +%s)
 epoch=$((epoch+1000))
@@ -76,12 +85,7 @@ if [[ "${ldapg}" != "" ]] ; then
   get_param_file ".ldap.private" ldap
   if [[ ! -e "${ldap}" ]] ; then get_param_file ".ldap.test" ldap ; fi
   if [[ -e "${ldap}" ]] ; then
-    while read line; do
-      ldapp=("${line#*=}")
-      ldapn=(${line%%=*})
-      # echo "ldap: ${ldapn} - ${ldapp}"
-      "${H}/sbin/gen_sed" -i "s;${ldapn};${ldapp};g" "${fullFilePathDst}"
-    done < "${ldap}"
+    repl_param_file "${ldap}" "${fullFilePathDst}"
   else
     "${H}/sbin/gen_sed" -i -n -e '/LDAP_START/{p; :a; N; /LDAP_END/!ba; s/.*\n//}; p' "${fullFilePathDst}"
     # "${H}/sbin/gen_sed" -i -n -e '/LDAP_START/{' -e 'p' -e ':a' -e 'N' -e '/LDAP_END/!ba' -e 's/.*\n//' -e '}' -e 'p' "${fullFilePathDst}"
@@ -130,5 +134,5 @@ if [[ "${mysql}" != "" ]] ; then
   fi
   if [[ "${replace}" == "false" ]] ; then exit 1 ; fi
 fi
-
 done
+repl_param_file "${H}/../.envs.private" "${fullFilePathDst}"
