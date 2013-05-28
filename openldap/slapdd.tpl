@@ -3,7 +3,7 @@
 SLAPD="${H}/openldap/slapd -s0"
 CONF1="${H}/openldap/slapd.1.conf"
 LVL=0x4105
-URI1=ldap://localhost:@PORT_LDAP_TEST@/
+URI1="ldap://localhost:@PORT_LDAP_TEST@/ ldap://@FQN@:@PORT_LDAP_TEST@/"
 LOG1="${H}/openldap/slapd.1.log"
 PIDFILE="${H}/openldap/slapd.1.pid"
 ARGSFILE="${H}/openldap/slapd.1.args"
@@ -31,7 +31,7 @@ case "$1" in
 'start')
   if [[ "$aps" == "" ]] ; then
     echo starting slapd
-    $SLAPD -f $CONF1 -h $URI1 -d $LVL $TIMING &> "${LOG1}" &
+    $SLAPD -f $CONF1 -h "$URI1" -d $LVL $TIMING &> "${LOG1}" &
   else
     echo "slapd already started, process ${aps}"
   fi
