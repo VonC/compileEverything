@@ -24,7 +24,7 @@ for file in $(find "$1" -maxdepth 4 -type f -name "*.tpl"); do
         echo "Expected diff for jdk/.cookies.tpl:"
         echo "${ardiff}"
       else
-        echo -e "\e[1;31mERROR --- diff for '${file}'\e[0m" 1>&2
+        echo -e "\e[1;31mERROR --- diff for '${file}' (<='ori', >='val')\e[0m" 1>&2
         echo -e "\e[1;31m${ardiff}\e[0m" 1>&2
         status=1
       fi

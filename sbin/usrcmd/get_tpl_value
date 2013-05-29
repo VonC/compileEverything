@@ -9,9 +9,9 @@ function get_tpl_value() {
 
   if [[ ! -e "${aparamfile}" ]] ; then return 0 ; fi
   while read line; do
-    local rvalue=(${line#*=})
-    local rkey=(${line%%=*})
-    # echo "key: '${rkey}' - '${rvalue}'"
+    local rvalue=${line#*=}
+    local rkey=${line%%=*}
+     echo "key: '${rkey}' - '${rvalue}', for line '${line}'"
     if [[ "${rkey}" != "" && "${line#@}" != "${line}" ]] ; then
       # echo "key: '${rkey}' - akey '${akey}'"
       if [[ "${rkey}" == "${akey}" ]] ; then

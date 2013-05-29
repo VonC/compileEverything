@@ -18,8 +18,8 @@ function repl_param_file() {
   local adestfile="${2}"
   if [[ ! -e "${aparamfile}" || ! -e "${adestfile}" ]] ; then return 0 ; fi
   while read line; do
-    local value=(${line#*=})
-    local key=(${line%%=*})
+    local value=${line#*=}
+    local key=${line%%=*}
     # echo "${name} - ${port}"
     if [[ "${key}" != "" && "${line#@}" != "${line}" ]] ; then 
       "${H}/sbin/gen_sed" -i "s;${key};${value};g" "${adestfile}"

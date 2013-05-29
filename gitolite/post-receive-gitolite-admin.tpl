@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Display refs in post-receive of gitolite-adm"
 fenv="${H}/.envs.private"
-if [[ !-e "${fenv}" ]] ; then
+if [[ ! -e "${fenv}" ]] ; then
   echo "No '.envs.private', meaning nothing to push to upstream/gitolite-admin.git"
 fi
 while read oldrev newrev ref
