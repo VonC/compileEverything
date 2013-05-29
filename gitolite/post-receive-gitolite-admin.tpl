@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Display refs in post-receive of gitolite-adm"
-fenv="${H}/../.envs.private"
+fenv="${H}/.envs.private"
 while read oldrev newrev ref
 do
   branchname=${ref#refs/heads/}

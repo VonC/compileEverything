@@ -52,6 +52,10 @@ if [[ ! -e "${H}/.ports.ini.private" && -e "${H}/../.ports.ini.private.${homed}"
   echo "set private ports for ${homed}"
   ln -fs "../.ports.ini.private.${homed}" "${H}/.ports.ini.private"
 fi
+if [[ ! -e "${H}/.envs.private" && -e "${H}/../.envs.private.${homed}" ]]; then
+  echo "set private envs for ${homed}"
+  ln -fs "../.envs.private.${homed}" "${H}/.envs.private"
+fi
 
 if [[ -d "${H}/../src" && ! -e "${_src}/.keep_local" ]] ; then
   if [[ -d "${_src}" && ! -h "${_src}" ]] ; then rm -Rf "${_src}" ; fi
@@ -181,7 +185,7 @@ function main {
   ldd=$(cat "${_deps}")
   gstopat=""
   if [[ -e "${H}/../stopat.${homed}" ]] ; then gstopat=$(cat "${H}/../stopat.${homed}") ; fi
-  echo "gstopat='${gstopat}'"
+  # echo "gstopat='${gstopat}'"
   while read line; do
     # echo "D: main line '${line}'"
     gline="${line}"
@@ -192,7 +196,7 @@ function main {
         if [[ "${gstopat}" != "" ]] ; then
           alinename=${line#* }
           alinename=${alinename%% *}
-          echo "alinename='${alinename}'"
+          # echo "alinename='${alinename}'"
           if [[ "${gstopat}" == "${alinename}" ]] ; then
             glastline="stop"
             gline="__no_deps__"
@@ -835,7 +839,7 @@ function build_line() {
         if [[ "${gstopat}" != "" ]] ; then
           alinename=${adepline#* }
           alinename=${alinename%% *}
-          echo "alinenamedep='${alinename}'"
+          # echo "alinenamedep='${alinename}'"
           if [[ "${gstopat}" == "${alinename}" ]] ; then
             glastline="stop"
             gline="__no_deps__"
@@ -855,7 +859,7 @@ function build_line() {
     if [[ "${gstopat}" != "" ]] ; then
       alinename=${lineori#* }
       alinename=${alinename%% *}
-      echo "alinenameLINE='${alinename}'"
+      # echo "alinenameLINE='${alinename}'"
       if [[ "${gstopat}" == "${alinename}" ]] ; then
         glastline="stop"
         gline="__no_deps__"
