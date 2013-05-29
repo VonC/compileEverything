@@ -11,7 +11,7 @@ function get_tpl_value() {
   while read line; do
     local rvalue=${line#*=}
     local rkey=${line%%=*}
-     echo "key: '${rkey}' - '${rvalue}', for line '${line}'"
+    # echo "key: '${rkey}' - '${rvalue}', for line '${line}'"
     if [[ "${rkey}" != "" && "${line#@}" != "${line}" ]] ; then
       # echo "key: '${rkey}' - akey '${akey}'"
       if [[ "${rkey}" == "${akey}" ]] ; then
