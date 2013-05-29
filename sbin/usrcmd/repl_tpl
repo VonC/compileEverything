@@ -135,4 +135,4 @@ if [[ "${mysql}" != "" ]] ; then
   if [[ "${replace}" == "false" ]] ; then exit 1 ; fi
 fi
 done
-repl_param_file "${H}/../.envs.private" "${fullFilePathDst}"
+repl_param_file "${H}/.envs.private" "${fullFilePathDst}"
