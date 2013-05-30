@@ -1,0 +1,5 @@
+#!/bin/bash
+
+branch=$(git rev-parse --symbolic --abbrev-ref $1)
+echo "Post Update for branch '${branch}'"
+# if there is a master_ext branch then it is a repo public

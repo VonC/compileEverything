@@ -53,8 +53,6 @@ apache/openssl.cnf
 *.crt*
 *.key
 .ssh/old_authkeys
-gitolite/hooks
-gitolite/conf
 /.ssh/cnf
 /.ssh/known_hosts
 /a/
