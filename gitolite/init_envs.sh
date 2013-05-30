@@ -4,12 +4,14 @@ if [[ ! -e "${H}/.envs.private" ]] ; then exit 0 ; fi
 
 source "${H}/sbin/usrcmd/get_tpl_value"
 
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_URL_HGIT@" upstream_url
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_NAME@" upstream_name
+
+if [[ "${upstream_url}" == "" || "${upstream_name}" == "" ]] ; then exit 0 ; fi
+
 gtl="${H}/gitolite"
 cp_tpl "${gtl}/post-receive-gitolite-admin.tpl" "${glt}"
 ln -fs "../../../gitolite/post-receive-gitolite-admin" "${H}/repositories/gitolite-admin.git/hooks/post-receive"
-
-get_tpl_value "${H}/.envs.private" "@UPSTREAM_URL_HGIT@" upstream_url
-get_tpl_value "${H}/.envs.private" "@UPSTREAM_NAME@" upstream_name
 
 r=$(GIT_DIR="${H}/repositories/gitolite-admin.git" xxgit=1 git remote show -n ${upstream_name}|grep "https")
 if [[ "${r}" == "" ]] ; then
