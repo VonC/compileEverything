@@ -13,7 +13,7 @@ branch=$(git rev-parse --symbolic --abbrev-ref $1)
 echo "Post Update for branch '${branch}'"
 
 if [[ "${branch}" != "${branch_local}" ]] ; then
-  echo "Update on '${branch_local}', nothing to push to upstream."
+  echo "Update on different branch than '${branch_local}', nothing to push to upstream."
   exit 0
 fi
 
@@ -71,8 +71,8 @@ if [[ "${r}" == "" ]] ; then
   git remote add ${upstream_name} ${upstream_url}${reponame}
 fi
 
-echo "Pushing public repo master branch to '${branch_ext}'"
+echo "Pushing public repo '${branch_local}' branch to '${upstream_name}'/'${branch_ext}'"
 
 cp "${H}/.envs.private" "${H}/.netrc"
-git push -f ${upstream_name} master:${branch_upstream}
+git push -f ${upstream_name} ${branch_local}:${branch_upstream}
 rm -f "${H}/.netrc"
