@@ -1,5 +1,78 @@
 #!/bin/bash
 
+source "${H}/sbin/usrcmd/get_tpl_value"
+
+# A local branch must be registered
+get_tpl_value "${H}/.envs.private" "@LOCAL_BRANCH@" branch_local
+if [[ "${branch_local}" == "" ]] ; then
+  echo "No local branch registered, nothing to push to upstream"
+  exit 0
+fi
+
 branch=$(git rev-parse --symbolic --abbrev-ref $1)
 echo "Post Update for branch '${branch}'"
-# if there is a master_ext branch then it is a repo public
+
+if [[ "${branch}" != "${branch_local}" ]] ; then
+  echo "Update on '${branch_local}', nothing to push to upstream."
+  exit 0
+fi
+
+echo "Update on local '${branch_local}, checking on external branch presence"
+
+# if there is an external branch then it is a repo public
+get_tpl_value "${H}/.envs.private" "@EXT_BRANCH_NAME@" branch_ext
+if [[ "${branch_ext}" == "" ]] ; then
+  echo "No external branch registered, nothing to push to upstream"
+  exit 0
+fi
+
+a_branch_ext=$(git branch|grep "${branch_ext}")
+if [[ "${a_branch_ext}" == "" ]] ; then
+  echo "No external branch '${branch_ext}' detected in the local repo, must be an internal repo only."
+  exit 0
+fi
+
+# An upstream branch must be registered
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_BRANCH@" branch_upstream
+if [[ "${branch_upstream}" == "" ]] ; then
+  echo "No upstream branch registered, nothing to push to upstream"
+  exit 0
+fi
+
+# An upstream name must be registered
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_NAME@" upstream_name
+if [[ "${upstream_name}" == "" ]] ; then
+  echo "No upstream name registered, nothing to push to upstream"
+  exit 0
+fi
+
+# An upstream url must be registered
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_URL_HGIT@" upstream_url
+if [[ "${upstream_url}" == "" ]] ; then
+  echo "No upstream url registered, nothing to push to upstream"
+  exit 0
+fi
+
+reponame=$(basename "$PWD")
+
+# A login must be defined for that public repo
+get_tpl_value "${H}/.envs.private" "@USER_PUSH_${reponame}@" user_push
+if [[ "${user_push}" == "" ]] ; then
+  echo "No user is registered to push to upstream url '${upstream_url}'"
+  exit 0
+fi
+
+upstream_url="https://${user_push}@${upstream_url#https://}"
+
+r=$(xxgit=1 git remote show -n ${upstream_name}|grep "https")
+
+if [[ "${r}" == "" ]] ; then
+  echo "register '${upstream_url}${reponame}' as '${upstream_name}'"
+  git remote add ${upstream_name} ${upstream_url}${reponame}
+fi
+
+echo "Pushing public repo master branch to '${branch_ext}'"
+
+cp "${H}/.envs.private" "${H}/.netrc"
+git push -f ${upstream_name} master:${branch_upstream}
+rm -f "${H}/.netrc"

@@ -3,6 +3,22 @@ machine upstream.fully.qualified.name
 login gitoliteadm
 password xxxx
 
+# login used to push to upstream for public repos
+login projadm1
+password xxx
+
 @UPSTREAM_URL_HGIT@=https://upstream.fully.qualified.name:yy443/hgit/
 @UPSTREAM_NAME@=staging|external
 @LOCAL_GA_BRANCH@=(master or master-ext)
+
+# branch used by public repo for internal contribution
+@LOCAL_BRANCH@=master
+
+# branch used locally to store external contribution
+@EXT_BRANCH_NAME@=master_ext
+
+# remote branch used to publish internal commits to upstream repo
+@UPSTREAM_BRANCH@=master_xxx
+
+# login for pushing to repo xxx
+@USER_PUSH_xxx.git@=projadm1
