@@ -22,3 +22,7 @@ password xxx
 
 # login for pushing to repo xxx
 @USER_PUSH_xxx.git@=projadm1
+
+
+# url to push back commits detected from external
+@DOWNSTREAM_URL_HGIT@=https://downstream.fully.qualified.name:yy443/hgit/
