@@ -5,3 +5,4 @@ mc="${H}/mcron"
 cd "${H}"
 mkdir -p "${mc}/cron"
 ln -fs "mcron/cron" "${H}/.cron"
+rm -f mcron/cron/cron
