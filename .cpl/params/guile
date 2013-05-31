@@ -1,4 +1,5 @@
 page=http://ftp.gnu.org/gnu/guile/?C=M;O=D
 url=http://ftp.gnu.org/gnu/guile/
 verinclude=1.8
+pre=gen_sed -i "s; -Werror;;g" $H/.cpl/src/@@NAMEVER@@/configure ; gen_sed -i "s;-Werror ;;g" $H/.cpl/src/@@NAMEVER@@/configure
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
