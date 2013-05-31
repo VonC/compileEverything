@@ -1,0 +1,7 @@
+#!/bin/bash
+
+mc="${H}/mcron"
+
+cd "${H}"
+mkdir -p "${mc}/cron"
+ln -fs "mcron/cron" "${H}/.cron"

@@ -1,3 +1,4 @@
 page=http://ftp.gnu.org/gnu/mcron/?C=M;O=D
 url=http://ftp.gnu.org/gnu/mcron/
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
+postcheck="${H}/mcron/ini_cron"
