@@ -1,0 +1,5 @@
+nameact=gc-
+nameurl=gc-
+page=http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/?C=M;O=D
+url=http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@

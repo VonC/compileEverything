@@ -1,0 +1,4 @@
+page=http://ftp.gnu.org/gnu/guile/?C=M;O=D
+url=http://ftp.gnu.org/gnu/guile/
+verinclude=1.8
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
