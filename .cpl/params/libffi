@@ -8,3 +8,4 @@ ext=zip
 ;extact=tar.gz
 pre=gen_sed -i "s;^includesdir = .*$;includesdir = \$(includedir);g" include/Makefile.in
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@
+postcheck=if [[ -e "${HULS}/@@NAMEVER@@/lib64" ]] ; then cd "${HULS}/@@NAMEVER@@/lib" ; ln -fs ../lib64/* . ; fi
