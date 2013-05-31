@@ -18,7 +18,7 @@ mod gitolite git
 lib libpipeline groff
 lib openssl zlib,perl
 lib zlib none
-app perl db,gdbm
+app perl db
 lib db tcl
 lib tcl autoconf
 app autoconf pkgconfig,m4
@@ -33,7 +33,7 @@ app pkgconfig libiconv,glib
 lib m4 none
 lib libsigsegv none
 lib gdbm texinfo
-lib texinfo libiconv,ncurses,gettext
+lib texinfo libiconv,ncurses,gettext,perl
 lib ncurses gcc
 lib libssh2 openssl,zlib,cyrus-sasl
 lib cyrus-sasl db,openssl
