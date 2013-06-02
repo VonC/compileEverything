@@ -1,3 +1,4 @@
 page=http://www.gnu.org/software/tar/
 url=http://ftp.gnu.org/pub/gnu/tar/
+pre=gen_sed -i "s;_GL_WARN_ON_USE (gets;//_GL_WARN_ON_USE (gets;g" $H/.cpl/src/@@NAMEVER@@/gnu/stdio.in.h
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-libiconv-prefix=${HUL} --with-libintl-prefix=${HUL} @@WITH_GNU_LD@@

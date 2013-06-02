@@ -1134,3 +1134,6 @@ It looks in the default directories /lib then /usr/lib (disabled with the ‘-z 
 restore deleted file in git: http://stackoverflow.com/a/11301004/6309 git co $(git rev-list -n 1 HEAD -- <file_path>)~1 -- $(git diff --name-status $(git rev-list -n 1 HEAD -- <file_path>)~1 | grep '^D' | cut -f 2)
 See http://stackoverflow.com/a/14922749/6309
 ~~~~~~~~~~~~~~~~~~~~
+Change author/committer name for the last 5 commits:
+vonc@voncu:~/gitpoc/ce1$ git filter-branch --env-filter "GIT_AUTHOR_NAME='VonC'; GIT_AUTHOR_EMAIL='vonc@laposte.net'; GIT_COMMITTER_NAME='VonC'; GIT_COMMITTER_EMAIL='vonc@laposte.net';" -- -5
+~~~~~~~~~~~~~~~~~~~~

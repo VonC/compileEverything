@@ -4441,3 +4441,10 @@ make[3]: Leaving directory `/home/vonc/gitpoc/ce1/.cpl/src/m4-1.4.16/lib'
 
 => same as libiconv
 ~~~~~~~~~~~~~~~~~~~~
+Ubuntu 64bits tar
+  CC     argp-eexst.o
+In file included from argp.h:24:0,
+                 from argp-eexst.c:27:
+./stdio.h:479:1: error: ‘gets’ undeclared here (not in a function)
+make[4]: *** [argp-eexst.o] Error 1
+make[4]: Leaving directory `/home/vonc/gitpoc/ce1/.cpl/src/tar-1.26/gnu'
