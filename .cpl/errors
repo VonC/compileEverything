@@ -4431,3 +4431,13 @@ Gnulib intentionally does not have a gets module, and now that C11 and glibc hav
 => comments line 1010 of /home/vonc/gitpoc/ce1/.cpl/src/libiconv/srclib/stdio.in.h:
 // _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
 ~~~~~~~~~~~~~~~~~~~
+Ubuntu 64bits make m4
+gcc -std=gnu99  -I.   -I/home/vonc/gitpoc/ce1/usr/local/include -I/home/vonc/gitpoc/ce1/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64  -I/home/vonc/gitpoc/ce1/usr/local/include -I/home/vonc/gitpoc/ce1/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -MT clean-temp.o -MD -MP -MF .deps/clean-temp.Tpo -c -o clean-temp.o clean-temp.c
+In file included from clean-temp.h:22:0,
+                 from clean-temp.c:23:
+./stdio.h:477:1: error: 'gets' undeclared here (not in a function)
+make[3]: *** [clean-temp.o] Error 1
+make[3]: Leaving directory `/home/vonc/gitpoc/ce1/.cpl/src/m4-1.4.16/lib'
+
+=> same as libiconv
+~~~~~~~~~~~~~~~~~~~~
