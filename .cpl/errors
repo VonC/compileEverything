@@ -4415,3 +4415,19 @@ mv tmp-libgcc.map libgcc.map
 collect2: error: ld returned 1 exit status
 make[3]: *** [libgcc_s.so] Error 1
 make[3]: Leaving directory `/home/vonc/gitpoc/src/gcc-4.7.2/objdir/i686-pc-linux-gnu/libgcc'
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ubuntu 64bits make libiconv
+gcc -DHAVE_CONFIG_H -DEXEEXT=\"\" -I. -I.. -I../lib  -I../intl -DDEPENDS_ON_LIBICONV=1 -DDEPENDS_ON_LIBINTL=1 -I/home/vonc/gitpoc/ce1/usr/local/include -I/home/vonc/gitpoc/ce1/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64  -I/home/vonc/gitpoc/ce1/usr/local/include -I/home/vonc/gitpoc/ce1/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -c progname.c
+In file included from progname.c:26:0:
+./stdio.h:1010:1: error: ‘gets’ undeclared here (not in a function)
+make[2]: *** [progname.o] Error 1
+make[2]: Leaving directory `/home/vonc/gitpoc/ce1/.cpl/src/libiconv-1.14/srclib'
+
+http://savannah.gnu.org/bugs/?37171
+https://lists.gnu.org/archive/html/bug-gnulib/2012-03/msg00186.html
+
+Gnulib intentionally does not have a gets module, and now that C11 and glibc have dropped it, we should be more proactive about warning any user on a platform that still has a declaration of this dangerous interface.
+
+=> comments line 1010 of /home/vonc/gitpoc/ce1/.cpl/src/libiconv/srclib/stdio.in.h:
+// _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+~~~~~~~~~~~~~~~~~~~

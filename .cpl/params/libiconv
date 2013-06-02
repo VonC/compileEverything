@@ -1,5 +1,6 @@
 page=http://ftp.gnu.org/pub/gnu/libiconv/?O=D;C=M
 url=http://ftp.gnu.org/pub/gnu/libiconv/
+pre=gen_sed -i "s;_GL_WARN_ON_USE (gets;//_GL_WARN_ON_USE (gets;g" $H/.cpl/src/@@NAMEVER@@/srclib/stdio.in.h
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITHOUT_GNU_LD@@
 premake=gen_sed -i "s/func_fatal_error \"cannot find the library/lib=\"\${EHULS}\/@@NAMEVER@@\/lib\/libiconv.la\"; deplib=\"\$lib\"; echo \"cannot find the library/g" "$H/.cpl/src/@@NAMEVER@@/libtool" 
 # needed by gettext
