@@ -4448,3 +4448,36 @@ In file included from argp.h:24:0,
 ./stdio.h:479:1: error: ‘gets’ undeclared here (not in a function)
 make[4]: *** [argp-eexst.o] Error 1
 make[4]: Leaving directory `/home/vonc/gitpoc/ce1/.cpl/src/tar-1.26/gnu'
+
+=> same as libiconv
+~~~~~~~~~~~~~~~~~~~~~~~~
+Ubuntu 64bit 13.04 make gcc
+
+
+make[2]: Leaving directory `/home/vonc/gitpoc/ce1/.cpl/src/gcc-4.8.0/objdir/libbacktrace'
+mkdir -p -- ./libcpp
+Configuring in ./libcpp
+...
+checking whether gcc supports -fno-rtti... yes
+configure: error: C++ compiler missing or inoperational
+make[1]: *** [configure-libcpp] Error 1
+make[1]: Leaving directory `/home/vonc/gitpoc/ce1/.cpl/src/gcc-4.8.0/objdir'
+
+The program 'c++' can be found in the following packages:
+ * g++
+ * clang
+ * pentium-builder
+Try: sudo apt-get install <selected package>
+
+vonc@voncu:~/gitpoc/ce1$ sudo apt-get install g++
+...
+Setting up libstdc++6-4.7-dev:amd64 (4.7.3-1ubuntu1) ...
+Setting up g++-4.7 (4.7.3-1ubuntu1) ...
+Setting up g++ (4:4.7.3-1ubuntu10) ...
+update-alternatives: using /usr/bin/g++ to provide /usr/bin/c++ (c++) in auto mode
+vonc@voncu:~/gitpoc/ce1$ c++ --version
+c++ (Ubuntu/Linaro 4.7.3-1ubuntu1) 4.7.3
+
+=> compile ok
+
+~~~~~~~~~~~~~~~~~~~~~~~~
