@@ -4481,3 +4481,15 @@ c++ (Ubuntu/Linaro 4.7.3-1ubuntu1) 4.7.3
 => compile ok
 
 ~~~~~~~~~~~~~~~~~~~~~~~~
+Ubuntu 64bits make man-db
+  CC     argp-eexst.lo
+In file included from argp.h:22:0,
+                 from argp-eexst.c:25:
+./stdio.h:1029:1: error: 'gets' undeclared here (not in a function)
+ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+ ^
+make[4]: *** [argp-eexst.lo] Error 1
+make[4]: Leaving directory `/home/vonc/gitpoc/ce1/.cpl/src/man-db-2.6.2/gnulib/lib'
+
+=> same as libiconv
+~~~~~~~~~~~~~~~~~~~~~~~~

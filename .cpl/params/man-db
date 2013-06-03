@@ -1,3 +1,4 @@
 page=http://download.savannah.gnu.org/releases/man-db/?O=D&C=M
 url=http://download.savannah.gnu.org/releases/man-db/
+pre=gen_sed -i "s;_GL_WARN_ON_USE (gets;//_GL_WARN_ON_USE (gets;g" $H/.cpl/src/@@NAMEVER@@/gnulib/lib/stdio.in.h
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ @@WITH_GNU_LD@@ --with-libiconv-prefix=${HUL} --with-db=db4
