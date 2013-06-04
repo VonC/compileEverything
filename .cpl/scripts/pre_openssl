@@ -1,0 +1,18 @@
+#!/bin/bash
+
+for file in $(find "${H}/.cpl/src/openssl/doc" -name "*.pod"); do
+  gen_sed -i "s;=item \([0-9]\);=item Z<>\1;g" "${file}"
+done
+
+f1="${H}/.cpl/src/openssl/doc/crypto/X509_STORE_CTX_get_error.pod"
+g1=$(grep "=back" "${f1}")
+if [[ "${g1}" == "" ]] ; then
+  gen_sed -i "s;=head1 NOTES;=back\\n\\n=head1 NOTES;g" "${f1}"
+fi
+
+f2="${H}/.cpl/src/openssl/doc/ssl/SSL_CTX_use_psk_identity_hint.pod"
+g2=$(grep "=over" "${f2}")
+if [[ "${g2}" == "" ]] ; then
+  gen_sed -i "s;=item >;=over 4\\n\\n=item >;g" "${f2}"
+  gen_sed -i "s;=cut;=back\\n\\n=cut;g" "${f2}"
+fi

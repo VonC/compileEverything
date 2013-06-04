@@ -4513,7 +4513,18 @@ make: *** [install_docs] Error 255
 http://www.gossamer-threads.com/lists/perl/porters/290951
 https://github.com/theory/pod-simple/commit/5a01eba83824d9f91ecfae302af33fef65a8385c
 http://permalink.gmane.org/gmane.network.inn/9846 from http://comments.gmane.org/gmane.network.inn/9841
+Despite https://github.com/VonC/openssl/commit/5cc270774258149235f69e1789b3370f57b0e27b
 
 Add Z<> in front of 1, 2, ...
 =item Z<>1
+~~~~~~~~~~~~~~~~~~~~~
+Ubuntu 64bits make install openssl
+
+X509_STORE_CTX_get_error.pod around line 281: You forgot a '=back' before '=head1'
+POD document had syntax errors at /home/vonc/gitpoc/ce1/bin/pod2man line 71.
+make: *** [install_docs] Error 255
+
+Despite https://github.com/VonC/openssl/commit/5cc270774258149235f69e1789b3370f57b0e27b
+
+=> .cpl/scripts/pre_openssl
 ~~~~~~~~~~~~~~~~~~~~~

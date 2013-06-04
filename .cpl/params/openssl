@@ -2,9 +2,8 @@ page=http://www.openssl.org/source/
 url=http://www.openssl.org/source/
 verinclude=LATEST
 verexclude=fips|foo
-pre=for file in $(find "${H}/.cpl/src/@@NAMEVER@@/doc" -name "*.pod"); do gen_sed -i "s;=item \([1-9]\);=item Z<>\1;g" "${file}" ; done
+pre="${H}/.cpl/scripts/pre_openssl"
 configcmd=./config --openssldir=${HULS}/@@NAMEVER@@ zlib shared --with-zlib-include=${HULI} --with-zlib-lib=${HULL}
 linkdst=${HUL}/ssl
 premake=gen_sed -i "s;rpath,\$(LIBRPATH)\";rpath,\$(LIBRPATH):${HULL}\";g" "${H}/.cpl/src/@@NAMEVER@@/Makefile.shared"
 post=ln -fs ../openssl ${HULS}/@@NAMEVER@@/include/openssl/include ; ln -fs ../ssl/lib/libssl.so "${HULL}" ; ln -fs ../ssl/lib/libcrypto.so "${HULL}" ; ln -fs ../openssl ${HULS}/@@NAMEVER@@/include/openssl/include ; ln -fs ../ssl/lib/libssl.so.1.0.0 "${HULL}" ; ln -fs ../ssl/lib/libcrypto.so.1.0.0 "${HULL}"
-postcheck=aaa
