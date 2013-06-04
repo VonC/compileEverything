@@ -4493,3 +4493,27 @@ make[4]: Leaving directory `/home/vonc/gitpoc/ce1/.cpl/src/man-db-2.6.2/gnulib/l
 
 => same as libiconv
 ~~~~~~~~~~~~~~~~~~~~~~~~
+Ubuntu 64bits make install openssl
+
+created directory `/home/vonc/gitpoc/ce1/usr/local/libs/openssl-1.0.1e/man/man7'
+installing man1/CA.pl.1
+installing man1/asn1parse.1
+installing man1/ca.1
+installing man1/ciphers.1
+installing man1/cms.1
+cms.pod around line 457: Expected text after =item, not a number
+cms.pod around line 461: Expected text after =item, not a number
+cms.pod around line 465: Expected text after =item, not a number
+cms.pod around line 470: Expected text after =item, not a number
+cms.pod around line 474: Expected text after =item, not a number
+POD document had syntax errors at /home/vonc/gitpoc/ce1/bin/pod2man line 71.
+make: *** [install_docs] Error 255
+
+
+http://www.gossamer-threads.com/lists/perl/porters/290951
+https://github.com/theory/pod-simple/commit/5a01eba83824d9f91ecfae302af33fef65a8385c
+http://permalink.gmane.org/gmane.network.inn/9846 from http://comments.gmane.org/gmane.network.inn/9841
+
+Add Z<> in front of 1, 2, ...
+=item Z<>1
+~~~~~~~~~~~~~~~~~~~~~
