@@ -1,0 +1,19 @@
+#!/bin/bash
+
+echo gem install passenger
+exit_status=$?
+if [[ "${exit_status}" != "0" ]] ; then
+  echo "'gem install passenger' failed with exit status '${exit_status}'" >&2
+  exit 1
+fi
+for file in $(ls -1 "${HULA}/$(readlink "${HULA}/ruby")/bin/passeng"*); do
+  a=${file##*/}
+  ln -fs "../usr/local/apps/$(readlink "${HULA}/ruby")/bin/${a}" "${HB}/${a}"
+done 
+r="$(passenger-config --root)"
+cd "${r}"
+gen_sed -i 's~^\$LIBS = .*~$LIBS = "" ; $LDFLAGS = "-L. '"${LDFLAGS}"'"~g' ext/ruby/extconf.rb
+gen_sed -i 's~flags = .*~flags = \["-D_REENTRANT -I'"${HUL}/include"' -I'"${HUL}/ssl/include"'"\]~g' lib/phusion_passenger/platform_info/cxx_portability.rb
+gen_sed -i 's~check_for_header(\x27openssl/ssl.h\x27)~check_for_header(\x27openssl/ssl.h\x27, :c, \x27-I'"${HUL}/ssl/include"'\x27)~g' lib/phusion_passenger/platform_info/depcheck_specs/libs.rb
+gen_sed -i 's~check_for_header(\x27zlib.h\x27)~check_for_header(\x27zlib.h\x27, :c, \x27-I'"${HULI}"'\x27)~g' lib/phusion_passenger/platform_info/depcheck_specs/libs.rb
+gen_sed -i 's~return \x27-lz\x27~return \x27-L'"${HULL}"' -lz\x27~g' lib/phusion_passenger/platform_info/zlib.rb

@@ -1,4 +1,4 @@
-LoadModule passenger_module @PASSENGER-ROOT@/ext/apache2/mod_passenger.so
+LoadModule passenger_module @PASSENGER-ROOT@/libout/apache2/mod_passenger.so
 PassengerRoot @PASSENGER-ROOT@
 PassengerRuby @H@/usr/local/apps/ruby/bin/ruby
 PassengerDefaultUser @USERNAME@
@@ -20,9 +20,7 @@ Listen @PORT_HTTPS_GITLAB@
     </FilesMatch>
     # http://stackoverflow.com/questions/13871154/gitlab-apache-phusion-passenger-no-such-file-or-directory-config-enviro/16393263#16393263
     RackBaseURI /gitlab
-    RackAutoDetect off
-    #RailsBaseURI /gitlab
-    #RailsAutoDetect off
+    PassengerEnabled On
     <Location /gitlab>
         SSLOptions +StdEnvVars
 
