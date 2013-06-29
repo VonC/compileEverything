@@ -112,46 +112,47 @@ function getJDK {
   #echo 'JDK ${type} ${donelist}' "${name} : ${donelist}"
   local isdone="false" ; isItDone "${name}" isdone ${afrom}
   if [[ "${isdone}" == "false" ]] ; then
-    echolog "##### Getting JDK6 latest ####" ; echo -ne "\e[m"
+    echolog "##### Getting JDK7 latest ####" ; echo -ne "\e[m"
     if [[ ! -z "${JAVA_HOME}" ]] && [[ -e "${JAVA_HOME}" ]]; then
        ajvv=$(${JAVA_HOME}/bin/java -version 2>&1) ;
-       echo -ne "\e[1;32m" ; echolog "JDK6 already installed" ; echo -ne "\e[m" ;
+       echo -ne "\e[1;32m" ; echolog "JDK7 already installed" ; echo -ne "\e[m" ;
        echo "Java detected, version: ${ajvv}"
-       if [[ ! -z "${ajvv}" ]] && [[ "${ajvv#*1.6.}" != "${ajvv}" ]] ; then donelist="${donelist}@${name}@" ; return 0;  fi
+       if [[ ! -z "${ajvv}" ]] && [[ "${ajvv#*1.7.}" != "${ajvv}" ]] ; then donelist="${donelist}@${name}@" ; return 0;  fi
     fi
     if [[ ! -e "${_pkgs}/${name}" ]] ; then
       wget -q -O "${_pkgs}/${name}" http://www.oracle.com/technetwork/java/javase/downloads/index.html
     fi
-    local ajdk=$(cat "${_pkgs}/${name}" | grep "technetwork/java/javase/downloads/jdk6")
+    local ajdk=$(cat "${_pkgs}/${name}" | grep "technetwork/java/javase/downloads/jdk7")
     # echo "j1 ${ajdk}"
-    ajdk=${ajdk#*Java SE 6u*JDK*f=\"}
+    ajdk=${ajdk#*href=\"}
     # echo "j2 ${ajdk}"
     ajdk="http://www.oracle.com${ajdk%%\"*}"
     echo "JDK address: ${ajdk}"
-    local ajdkgrep="linux-i586.bin"
-    if [[ "${longbit}" == "64" ]]; then ajdkgrep="linux-x64.bin" ; fi
+    local ajdkgrep="linux-i586.tar.gz"
+    if [[ "${longbit}" == "64" ]]; then ajdkgrep="linux-x64.tar.gz" ; fi
     # echo "D: longbit = ${longbit}, ajdkgrep = ${ajdkgrep}"
     if [[ ! -e "${_pkgs}/${name}2" ]] ; then
       wget -q -O "${_pkgs}/${name}2" ${ajdk}
     fi
+    # echo "cat \"${_pkgs}/${name}2\" | grep \"http://download.oracle.com/otn-pub/java/jdk\" | grep \"${ajdkgrep}\""
     local ajdk2=$(cat "${_pkgs}/${name}2" | grep "http://download.oracle.com/otn-pub/java/jdk" | \
       grep "${ajdkgrep}")
     ajdk2=${ajdk2##*:\"}
     ajdk2=${ajdk2%%\"*}
     local ajdkn=${ajdk2##*/}
-    echo $ajdk2 ${ajdkn}
+    echo "ajdk2: '$ajdk2', ajdkn '${ajdkn}'"
     if [[ ! -e "${_pkgs}/${ajdkn}" ]]; then
       cp_tpl "${H}/jdk/.cookies.tpl" "${H}/jdk"
       loge "wget --no-check-certificate --cookies=on --load-cookies=${H}/jdk/.cookies --keep-session-cookies $ajdk2 -O ${_pkgs}/${ajdkn}" "wget_sources_${ajdkn}"
     fi
     chmod 755 "${_pkgs}/${ajdkn}"
     cd "${H}/usr/local"
-    if [[ ! -e jdk6 ]]; then
-      loge "${_pkgs}/${ajdkn}" "wget_extract_${ajdkn}"
+    if [[ ! -e jdk7 ]]; then
+      loge "tar xpvf ${_pkgs}/${ajdkn}" "wget_extract_${ajdkn}"
       #loge "echo ${_pkgs}/${ajdkn}" "wget_extract_${ajdkn}" # TOCOMMENT
-      ln -s jdk1.6* jdk6
+      ln -s jdk1.7* jdk7
     fi
-    export JAVA_HOME="${HUL}/jdk6"
+    export JAVA_HOME="${HUL}/jdk7"
     cd "${H}"
     donelist="${donelist}@${name}@"
   fi

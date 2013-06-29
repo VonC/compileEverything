@@ -61,8 +61,8 @@ export HISTIGNORE="&:[ ]*:exit:history:h:l"
 # first override the $PATH, making sure to use *local* paths:
 export PATH="${H}/sbin:${H}/bin:${HULB}:${HUL}/sbin:${HUL}/ssl/bin"
 # then add the application paths which don't end up in ${H}/bin
-if [[ -e "${HUL}/jdk6" ]] ; then
-  export JAVA_HOME="${HUL}/jdk6"
+if [[ -e "${HUL}/jdk7" ]] ; then
+  export JAVA_HOME="${HUL}/jdk7"
   export PATH="${PATH}":"${JAVA_HOME}/bin"
 else
   export JAVA_HOME=""
