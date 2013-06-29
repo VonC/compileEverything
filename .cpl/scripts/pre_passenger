@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo gem install passenger
+gem install passenger
 exit_status=$?
 if [[ "${exit_status}" != "0" ]] ; then
   echo "'gem install passenger' failed with exit status '${exit_status}'" >&2
