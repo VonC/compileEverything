@@ -1,0 +1,11 @@
+#! /bin/bash
+sut="${H}/.cpl/src/_pkgs/setuptools"
+if [[ ! -e "${sut}" ]] ; then
+	wget --no-check-certificate -q -O - "http://pypi.python.org/pypi/setuptools" > "${sut}"
+fi
+asrcline=$(grep -e "setuptools/" "${sut}" | head -1)
+sutver=${asrcline#*;}
+sutver=${sutver%%<*}
+# echo "sutver='${sutver}'"
+rm "${sut}"
+echo "https://pypi.python.org/pypi/setuptools/${sutver}"

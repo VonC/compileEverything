@@ -1,4 +1,4 @@
-page=http://pypi.python.org/pypi/setuptools
+page=get_page_setuptools
 url=http://pypi.python.org/packages/source/s/setuptools/
 configcmd=none
 makefile=none
