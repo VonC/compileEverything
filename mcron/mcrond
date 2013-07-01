@@ -1,0 +1,86 @@
+#! /bin/bash
+
+APP_ROOT="${H}/mcron"
+MCRON_PID="${APP_ROOT}/mcron.pid"
+CD_TO_APP_ROOT="cd ${APP_ROOT}"
+
+check_pid(){
+
+  if [ -f $MCRON_PID ]; then
+    PID=`cat ${MCRON_PID}`
+    STATUS=`ps aux | grep $PID | grep -v grep | wc -l`
+  else
+    STATUS=0
+    PID=0
+  fi
+}
+
+start() {
+  cd $APP_ROOT
+  check_pid
+  if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
+    # Program is running, exit with error code 1.
+    echo "Error! mcron is currently running!"
+    exit 1
+  else
+    echo "Starting mcron: "
+    "${H}/bin/mcron" -d
+    read -t2 -n1 -r -p "Waiting for mcron daemon to start: "
+    ps aux | grep "${H}/bin/mcron" | grep -v grep | awk '{print $2}' > "${MCRON_PID}"
+    echo "mcron started"
+  fi
+}
+
+stop() {
+  cd $APP_ROOT
+  check_pid
+  if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
+    ## Program is running, stop it.
+    kill -QUIT `cat $MCRON_PID`
+    rm -f "$MCRON_PID" >> /dev/null
+    echo "mcron stopped"
+    check_pid
+  else
+    ## Program is not running, exit with error.
+    echo "Error! mcron not started!"
+    exit 1
+  fi
+}
+
+status() {
+  cd $APP_ROOT
+  check_pid
+  if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
+    echo "mcron with PID $PID is running."
+  else
+    echo "mcron is not running."
+    exit 1
+  fi
+}
+
+## Check to see if we are running as root first.
+## Found at http://www.cyberciti.biz/tips/shell-root-user-check-script.html
+#if [ "$(id -u)" != "0" ]; then
+#    echo "This script must be run as root"
+#    exit 1
+#fi
+
+if [[ ! -e "${APP_ROOT}/cron" ]]; then exit 0 ; fi
+
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  status)
+        status
+        ;;
+  *)
+        echo "Usage: mcrond {start|stop|status}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

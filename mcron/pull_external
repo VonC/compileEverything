@@ -5,7 +5,10 @@ source "${H}/sbin/usrcmd/get_tpl_value"
 
 get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_URL_HGIT@" downstream_url
 
-if [[ "${downstream_url}" == "" ]] ; then exit 0
+if [[ "${downstream_url}" == "" ]] ; then 
+  echo "no downstream_url."
+  exit 0
+fi
 
-echo "Check if anything new comes from upstream, before pushing it back to downstream"
+echo "Check if anything new comes from upstream '${downstream_url}', before pushing it back to downstream"
 
