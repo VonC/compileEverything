@@ -45,3 +45,15 @@ givenname: peu4
 mail: projectextusr4@company.com
 userPassword: projextusr4
 description: Project External User 4
+
+dn: cn=Project External Reader,ou=Project Users,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project External Reader
+sn: per
+uid: projextrdr
+givenname: per
+mail: projectextrdr@company.com
+userPassword: projextrdr
+description: Project External Reader
+
