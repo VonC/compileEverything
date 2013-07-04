@@ -798,6 +798,10 @@ function build_item() {
             if [[ "${l64}" != "" ]] ; then 
               echolog "checking links lib64 of ${type} ${namever}"; links "${HULL}" "${HULA}/${namever}/lib64" true;
             fi
+            local lsb=$(ls "${HULA}/${namever}"/sbin/* 2>/dev/null)
+            if [[ "${lsb}" != "" ]] ; then 
+              echolog "checking links sbin of ${type} ${namever}"; links "${H}/bin" "${HULA}/${namever}/sbin" true;
+            fi
           fi
           echo "done" > "${asrc}/._links"
         fi
