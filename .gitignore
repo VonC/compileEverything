@@ -98,7 +98,6 @@ tomcat/key*
 /gitlab/*.yml
 /mysql/sandboxes/
 /.bundle/
-/.gnupg/
 /.cache/
 /.cpl/src
 /mysql/5.*
@@ -153,3 +152,7 @@ composer/
 /.cpl/fixed_versions
 .*.old
 gitolite/post-receive-gitolite-admin
+/.gnupg/*.pub
+/.gnupg/*.gpg
+/.gnupg/*.sec
+/.gnupg/random_seed
