@@ -1,0 +1,3 @@
+page=http://www.issihosts.com/haveged/downloads.html
+url=http://www.issihosts.com/haveged/
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ @@WITH_GNU_LD@@

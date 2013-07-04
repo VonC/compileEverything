@@ -93,8 +93,9 @@ app redis gcc
 mod gitlist php,composer
 mod composer php
 app php gettext,zlib,libxml2,libiconv
-app gnupg bzip2,zlib,openldap,readline,libiconv,pth,libassuan,libksba
+app gnupg bzip2,zlib,openldap,readline,libiconv,pth,libassuan,libksba,haveged
 lib pth none
 lib libassuan none
 lib libksba none
+app haveged none
 __no_deps__
