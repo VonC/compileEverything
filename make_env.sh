@@ -115,8 +115,9 @@ function getJDK {
     echolog "##### Getting JDK7 latest ####" ; echo -ne "\e[m"
     if [[ ! -z "${JAVA_HOME}" ]] && [[ -e "${JAVA_HOME}" ]]; then
        ajvv=$(${JAVA_HOME}/bin/java -version 2>&1) ;
-       echo -ne "\e[1;32m" ; echolog "JDK7 already installed" ; echo -ne "\e[m" ;
+       echo -ne "\e[1;32m" ; echolog "JDK (local) already installed" ; echo -ne "\e[m" ;
        echo "Java detected, version: ${ajvv}"
+       if [[ ! -z "${ajvv}" ]] && [[ "${ajvv#*1.6.}" != "${ajvv}" ]] ; then donelist="${donelist}@${name}@" ; return 0;  fi
        if [[ ! -z "${ajvv}" ]] && [[ "${ajvv#*1.7.}" != "${ajvv}" ]] ; then donelist="${donelist}@${name}@" ; return 0;  fi
     fi
     if [[ ! -e "${_pkgs}/${name}" ]] ; then
