@@ -199,3 +199,4 @@ if [[ "${libarch}" != "" ]] ; then
   fi
 fi
 	      
+if [[ -e "${HB}/gpg2" ]] ; then alias gpg=gpg2 ; alias gpgv=gpgv2 ; fi

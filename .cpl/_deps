@@ -9,7 +9,7 @@ lib libiconv none
 lib readline none
 lib libxml2 zlib,libiconv,readline
 lib gettext libiconv,expat,zlib,libxml2
-app git gcc,man-db,openssl,libssh2,curl,libiconv,expat,libidn,zlib,nginx,perl,apache,python,subversion,openssh,autoconf,libsecret,mcron
+app git gcc,man-db,openssl,libssh2,curl,libiconv,expat,libidn,zlib,nginx,perl,apache,python,subversion,openssh,autoconf,libsecret,mcron,gnupg
 app mcron guile
 app guile libunistring,bdwgc
 lib bdwgc libatomic_ops
@@ -93,4 +93,8 @@ app redis gcc
 mod gitlist php,composer
 mod composer php
 app php gettext,zlib,libxml2,libiconv
+app gnupg bzip2,zlib,openldap,readline,libiconv,pth,libassuan,libksba
+lib pth none
+lib libassuan none
+lib libksba none
 __no_deps__

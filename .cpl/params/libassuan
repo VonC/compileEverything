@@ -1,0 +1,4 @@
+page=http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/libassuan/?C=M;O=D
+url=http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/libassuan/
+ext=tar.bz2
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@

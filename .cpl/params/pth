@@ -1,0 +1,3 @@
+page=http://ftp.gnu.org/gnu/pth/?C=M;O=D
+url=http://ftp.gnu.org/gnu/pth/
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
