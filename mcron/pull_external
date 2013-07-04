@@ -6,9 +6,18 @@ source "${H}/sbin/usrcmd/get_tpl_value"
 get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_URL_HGIT@" downstream_url
 
 if [[ "${downstream_url}" == "" ]] ; then 
-  echo "no downstream_url."
+  #echo "no downstream_url."
   exit 0
 fi
 
-echo "Check if anything new comes from upstream '${downstream_url}', before pushing it back to downstream"
+#echo "Check if anything new comes from upstream '${downstream_url}', before pushing it back to downstream"
+repos=$(git --git-dir=${H}/repositories/gitolite-admin.git show master:conf/gitolite.conf | grep "repo " | grep -v "testing" | grep -v "gitolite-admin")
+while read arepo; do
+  arepo=${arepo#* }
+  echo "arepo='${arepo}'"
+  ggit="git --git-dir=${H}/repositories/${arepo}.git"
+  $(${ggit} fetch external)
+  l=$(${ggit} log master_ext..external/master)
+  echo "log after fetch on '${arepo}': '${l}'."
+done < <(echo "${repos}")
 
