@@ -156,3 +156,4 @@ gitolite/post-receive-gitolite-admin
 /.gnupg/*.gpg
 /.gnupg/*.sec
 /.gnupg/random_seed
+*.asc
