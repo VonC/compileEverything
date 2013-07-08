@@ -15,14 +15,15 @@ repos=$(git --git-dir=${H}/repositories/gitolite-admin.git show master:conf/gito
 while read arepo; do
   arepo=${arepo#* }
   if [[ "${arepo#@}" == "${arepo}" ]] ; then
-    echo "arepo='${arepo}'"
+    # echo "arepo='${arepo}'"
     ggit="git --git-dir=${H}/repositories/${arepo}.git"
+    abr=$(${ggit} branch|grep "master_ext")
     # echo "${ggit} fetch external"
     exturl=$(${ggit} config --local --get remote.external.url)
     # echo "'${exturl}'"
     exturl="https://${exturl#*@}"
-     echo "exturl for repo '${arepo}': external='${exturl}'"
-    if [[ "${exturl}" != "" ]] ; then
+    # echo "exturl for repo '${arepo}': external='${exturl}'"
+    if [[ "${exturl}" != "" && "${abr}" != "" ]] ; then
       chelper=$(${ggit} config --local --get credential.helper)
       if [[ "${chelper#netrc }" == "${chelper}" ]] ; then
         $(${ggit} config --local credential.helper 'netrc -f ${H}/mcron/projextrdr.netrc.gpg -v -d')
@@ -31,7 +32,7 @@ while read arepo; do
       ${ggit} fetch ${exturl} master:master_ext
       aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
       fh=$(cat "${H}/repositories/${arepo}.git/FETCH_HEAD")
-      echo "FETCH_HEAD='${fh}', refs/heads/master_ext='${aref}' => '${aref2}"
+      # echo "FETCH_HEAD='${fh}', refs/heads/master_ext='${aref}' => '${aref2}"
       if [[ "${aref}" != "${aref2}" && "${fh#${aref2}}" != "${fh}" ]] ; then
         ${ggit} push --force ${downstream_url}${arepo}.git master_ext:master_ext
       fi

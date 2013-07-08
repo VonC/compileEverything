@@ -52,6 +52,8 @@ status() {
   check_pid
   if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
     echo "mcron with PID $PID is running."
+    echo "Next mcron job is:"
+    mcron -s1
   else
     echo "mcron is not running."
     exit 1
