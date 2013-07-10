@@ -4,7 +4,25 @@ die() { echo -e "$@" >&2; exit 1; }
 
 repo=$GL_REPO
 if [[ "${GL_REPO}" == "gitolite-admin" ]] ; then exit 0 ; fi
+
 user=$GL_USER
+homed=${H##*/}
+aparamfile=""
+if [[ -e "${H}/../nocheckid}" ]] ; then aparamfile="${H}/../nocheckid}" ; fi
+if [[ -e "${H}/../nocheckid}.${homed}" ]]; then aparamfile="${H}/../nocheckid}.${homed}" ; fi
+if [[ "${aparamfile}" != "" ]] ; then
+  while read line; do
+    local nci_repo=${line#*=}
+    local nci_user=${line%%=*}
+    # echo "user: '${nci_user}' - '${nci_repo}', for line '${line}'"
+    if [[ "${nci_user}" == "${GL_USER}" ]] ; then
+      if [[ "${nci_repo}" == "all" || "${nci_repo}" == "${GL_REPO}" ]] ; then
+        exit 0
+      fi
+    fi
+  done < "${aparamfile}"
+fi
+
 refname=$1          # we're running like an update hook
 oldsha=$2
 newsha=$3
