@@ -3,6 +3,7 @@
 die() { echo -e "$@" >&2; exit 1; }
 
 repo=$GL_REPO
+if [[ "${GL_REPO}" == "gitolite-admin" ]] ; then exit 0 ; fi
 user=$GL_USER
 refname=$1          # we're running like an update hook
 oldsha=$2
