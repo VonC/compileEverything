@@ -10,6 +10,14 @@ if [[ "${downstream_url}" == "" ]] ; then
   exit 0
 fi
 
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_URL_HGIT@" upstream_url
+
+if [[ "${upstream_url}" == "" ]] ; then
+  #echo "no upstream_url."
+  exit 0
+fi
+
+
 #echo "Check if anything new comes from upstream '${downstream_url}', before pushing it back to downstream"
 repos=$(git --git-dir=${H}/repositories/gitolite-admin.git show master:conf/gitolite.conf | grep "repo " | grep -v "testing" | grep -v "gitolite-admin")
 while read arepo; do
@@ -17,25 +25,47 @@ while read arepo; do
   if [[ "${arepo#@}" == "${arepo}" ]] ; then
     # echo "arepo='${arepo}'"
     ggit="git --git-dir=${H}/repositories/${arepo}.git"
-    abr=$(${ggit} branch|grep "master_ext")
-    # echo "${ggit} fetch external"
+    #  echo "${ggit} fetch external"
     exturl=$(${ggit} config --local --get remote.external.url)
-    # echo "'${exturl}'"
-    exturl="https://${exturl#*@}"
+    # echo "exturl='${exturl}'"
+    if [[ "${exturl#*@}" != "${exturl}" ]] ; then
+      exturl="https://projextrdr@${exturl#*@}"
+    else
+      exturl="https://projextrdr@${exturl#*//}"
+    fi
     # echo "exturl for repo '${arepo}': external='${exturl}'"
-    if [[ "${exturl}" != "" && "${abr}" != "" ]] ; then
-      chelper=$(${ggit} config --local --get credential.helper)
-      if [[ "${chelper#netrc }" == "${chelper}" ]] ; then
-        $(${ggit} config --local credential.helper 'netrc -f ${H}/mcron/projextrdr.netrc.gpg -v -d')
-      fi
+    if [[ "${exturl}" == "https://projextrdr@" ]] ; then
+      exturl="https://projextrdr@${upstream_url#*//}${arepo}.git"
+      # echo "set exturl for external: '${exturl}'"
+      ${ggit} remote add external ${exturl}
+    fi
+
+    chelper=$(${ggit} config --local --get credential.helper)
+    if [[ "${chelper#netrc }" == "${chelper}" ]] ; then
+      $(${ggit} config --local credential.helper 'netrc -f ${H}/mcron/projextrdr.netrc.gpg -v -d')
+    fi
+    aref=""
+    if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
       aref=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
-      ${ggit} fetch ${exturl} master:master_ext
+    fi
+    ${ggit} fetch ${exturl} master:master_ext
+    aref2=""
+    if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
       aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
-      fh=$(cat "${H}/repositories/${arepo}.git/FETCH_HEAD")
-      # echo "FETCH_HEAD='${fh}', refs/heads/master_ext='${aref}' => '${aref2}"
-      if [[ "${aref}" != "${aref2}" && "${fh#${aref2}}" != "${fh}" ]] ; then
-        ${ggit} push --force ${downstream_url}${arepo}.git master_ext:master_ext
+    fi
+    aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
+    fh=$(cat "${H}/repositories/${arepo}.git/FETCH_HEAD")
+    # echo "FETCH_HEAD='${fh}', refs/heads/master_ext='${aref}' => '${aref2}"
+    if [[ "${aref}" != "${aref2}" && "${fh#${aref2}}" != "${fh}" ]] ; then
+      dwnurl="${downstream_url}${arepo}.git"
+      if [[ "${dwnurl#*@}" != "${dwnurl}" ]] ; then
+        dwnurl="https://projextrdr@${dwnurl#*@}"
+      else
+        dwnurl="https://projextrdr@${dwnurl#*//}"
       fi
+
+      echo "${ggit} push --force ${dwnurl} master_ext:master_ext"
+      ${ggit} push --force ${dwnurl} master_ext:master_ext
     fi
   fi
 done < <(echo "${repos}")
