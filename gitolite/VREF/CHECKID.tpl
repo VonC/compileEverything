@@ -8,12 +8,12 @@ if [[ "${GL_REPO}" == "gitolite-admin" ]] ; then exit 0 ; fi
 user=$GL_USER
 homed=${H##*/}
 aparamfile=""
-if [[ -e "${H}/../nocheckid}" ]] ; then aparamfile="${H}/../nocheckid}" ; fi
-if [[ -e "${H}/../nocheckid}.${homed}" ]]; then aparamfile="${H}/../nocheckid}.${homed}" ; fi
+if [[ -e "${H}/../nocheckid" ]] ; then aparamfile="${H}/../nocheckid" ; fi
+if [[ -e "${H}/../nocheckid.${homed}" ]]; then aparamfile="${H}/../nocheckid.${homed}" ; fi
 if [[ "${aparamfile}" != "" ]] ; then
   while read line; do
-    local nci_repo=${line#*=}
-    local nci_user=${line%%=*}
+    nci_repo=${line#*=}
+    nci_user=${line%%=*}
     # echo "user: '${nci_user}' - '${nci_repo}', for line '${line}'"
     if [[ "${nci_user}" == "${GL_USER}" ]] ; then
       if [[ "${nci_repo}" == "all" || "${nci_repo}" == "${GL_REPO}" ]] ; then
