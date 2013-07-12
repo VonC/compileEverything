@@ -158,3 +158,5 @@ gitolite/post-receive-gitolite-admin
 /.gnupg/random_seed
 *.asc
 /mcron/projextrdr*
+/gitolite/ldap/
+/sbin/gitolite-ldap

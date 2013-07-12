@@ -68,8 +68,10 @@ else
   git --git-dir="${gtl}/ga/.git" --work-tree="${gtl}/ga" pull
 fi
 
-if [[ ! -e "${H}/sbin/gitolite-shell" ]] ; then cp_tpl "${H}/sbin/gitolite-shell" "${H}/sbin" ; fi
-if [[ ! -e "${gtl}/VREF/CHECKID" ]] ; then cp_tpl "${gtl}/VREF/CHECKID" "${gtl}/VREF" ; fi
+cp_tpl "${gtl}/gitolite-shell" "${H}/sbin"
+cp_tpl "${gtl}/gitolite-ldap" "${H}/sbin"
+mkdir -p "${gtl}/ldap"
+cp_tpl "${gtl}/VREF/CHECKID" "${gtl}/VREF"
 
 GL_USER=gitoliteadm gitolite print-default-rc > "${gtl}/default.gitolite.rc"
 set +e
