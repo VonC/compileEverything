@@ -60,6 +60,14 @@ if [[ "${glc}" == "" ]] ; then
   gen_sed -i "${a}i\    LOCAL_CODE                  => '$HOME/gitolite'," "${H}/.gitolite.rc"
 fi
 
+glc=$(grep "GROUPLIST_PGM" "${H}/.gitolite.rc")
+if [[ "${glc}" == "" ]] ; then
+  a=$(grep -n ");" "${H}/.gitolite.rc")
+  a=${a%%:*}
+  echo $a
+  gen_sed -i "${a}i\    GROUPLIST_PGM                  => 'gitolite-ldap'," "${H}/.gitolite.rc"
+fi
+
 sshd start
 
 if [[ ! -e "${gtl}/ga" ]]; then
