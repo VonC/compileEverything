@@ -17,6 +17,7 @@ if [[ "${aluser}" =~ ^[0-9]+$  && ! -e "${afuser}" ]] ; then
         if [[ "${line#*CN=}" != "${line}" ]] ; then
           aname="${line#*CN=}"
           aname="${aname%%,*}"
+          aname="${aname// /_20_}"
           if [[ "${names}" != "" ]] ; then names="${names} " ; fi
           names="${names}${aname}"
         fi
