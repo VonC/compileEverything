@@ -1,4 +1,4 @@
 #!/bin/bash
 export H="@H@"
-export D=3
+export D=0
 "${H}/gitolite/bin/gitolite-shell"
