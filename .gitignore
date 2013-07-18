@@ -160,3 +160,5 @@ gitolite/post-receive-gitolite-admin
 /mcron/projextrdr*
 /gitolite/ldap/
 /sbin/gitolite-ldap
+/sbin/ldap_name
+/openldap/ldap/

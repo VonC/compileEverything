@@ -1,1 +1,1 @@
-../usr/local/apps/git/share/gitweb/gitweb.cgi
+gitweb/gitweb.cgi
