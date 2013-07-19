@@ -62,10 +62,19 @@ NOREV=0000000000000000000000000000000000000000
     cn=`echo $cns | cut -d~ -f2`
     hash=`echo $cns | cut -d~ -f3`
     subject=`echo $cns | cut -d~ -f4`
+    # if user is 'Firstname Lastname (staffID)', then extract staffID
+    if [[ "${an%)*}" != "${an}" && "${an#*(}" != "${an}" ]]; then
+      an="${an#*(}"
+      an="${an%)*}"
+    fi
     if [[ "$an" == "gitoliteadm" ]]; then exit 0 ; fi
     if [ "$an" != "${user}" ]; then
       die "Commit found with wrong author name for $hash ($subject)\nShould have been author '${user} ($GL_USER)', was '$an'"
       exit 1
+    fi
+    if [[ "${cn%)*}" != "${cn}" && "${cn#*(}" != "${cn}" ]]; then
+      cn="${cn#*(}"
+      cn="${cn%)*}"
     fi
     if [ "$cn" != "${user}" ]; then
       die "Commit found with wrong committer name for $hash ($subject)\nShould have been committer '${user} ($GL_USER)', was '$cn'"
