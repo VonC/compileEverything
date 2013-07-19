@@ -56,7 +56,7 @@ fi
 reponame=$(basename "$PWD")
 
 # A login must be defined for that public repo
-get_tpl_value "${H}/.envs.private" "@USER_PUSH_${reponame}@" user_push
+get_tpl_value "${H}/.envs.private" "@USER_PUSH@" user_push
 if [[ "${user_push}" == "" ]] ; then
   echo "No user is registered to push to upstream url '${upstream_url}'"
   exit 0
@@ -71,7 +71,16 @@ if [[ "${r}" == "" ]] ; then
   git remote add ${upstream_name} ${upstream_url}${reponame}
 fi
 
-echo "Pushing public repo '${branch_local}' branch to '${upstream_name}'/'${branch_ext}'"
+ggit="git --git-dir=${H}/repositories/${reponame}"
+
+if [[ -e "${H}/.gnupg/projextrdr.netrc.gpg" ]]; then
+  chelper=$(${ggit} config --local --get credential.helper)
+  if [[ "${chelper#netrc }" == "${chelper}" ]] ; then
+    $(${ggit} config --local credential.helper 'netrc -f ${H}/.gnupg/projextrdr.netrc.gpg -v -d')
+  fi
+fi
+
+echo "Pushing public repo '${branch_local}' branch to '${upstream_name}'/'${branch_upstream}'"
 
 cp "${H}/.envs.private" "${H}/.netrc"
 git push -f ${upstream_name} ${branch_local}:${branch_upstream}
