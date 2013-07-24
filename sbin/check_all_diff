@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# To enable executing, run
+# $ chmod 755 check_all_diff
+
+
 f1=$(readlink -f "${1}")
 f2=$(readlink -f "${2}")
 if [[ "${f1}" == "" ]] ; then f1="$(pwd)"; fi
