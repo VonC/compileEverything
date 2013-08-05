@@ -125,7 +125,8 @@ function getJDK {
     fi
     local ajdk=$(cat "${_pkgs}/${name}" | grep "technetwork/java/javase/downloads/jdk7")
     # echo "j1 ${ajdk}"
-    ajdk=${ajdk#*href=\"}
+    ajdk=${ajdk#*archive-*href=\"}
+    ajdk=${ajdk%%\"*}
     # echo "j2 ${ajdk}"
     ajdk="http://www.oracle.com${ajdk%%\"*}"
     echo "JDK address: ${ajdk}"
@@ -135,7 +136,7 @@ function getJDK {
     if [[ ! -e "${_pkgs}/${name}2" ]] ; then
       wget -q -O "${_pkgs}/${name}2" ${ajdk}
     fi
-    # echo "cat \"${_pkgs}/${name}2\" | grep \"http://download.oracle.com/otn-pub/java/jdk\" | grep \"${ajdkgrep}\""
+     echo "cat \"${_pkgs}/${name}2\" | grep \"http://download.oracle.com/otn-pub/java/jdk\" | grep \"${ajdkgrep}\""
     local ajdk2=$(cat "${_pkgs}/${name}2" | grep "http://download.oracle.com/otn-pub/java/jdk" | \
       grep "${ajdkgrep}")
     ajdk2=${ajdk2##*:\"}
