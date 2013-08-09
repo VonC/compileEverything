@@ -1,5 +1,12 @@
 ServerName vonc-VirtualBox
 Listen @PORT_HTTP_STATUS@
+LoadModule negotiation_module modules/mod_negotiation.so
+LoadModule ssl_module modules/mod_ssl.so
+LoadModule ldap_module modules/mod_ldap.so
+LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
+LoadModule authnz_ldap_module modules/mod_authnz_ldap.so
+LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
 Include conf/extra/httpd-manual.conf
 <IfModule mod_status.c>
 #
@@ -87,7 +94,7 @@ Listen @PORT_HTTP_GITWEB@
     BrowserMatch ".*MSIE.*" \
          nokeepalive ssl-unclean-shutdown \
          downgrade-1.0 force-response-1.0
-    LogLevel Debug
+    LogLevel Debug ssl:info
     CustomLog "@H@/apache/gitweb_ssl_request_log" \
           "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
     ErrorLog "@H@/apache/gitweb_error_log"
