@@ -30,7 +30,9 @@ AddType application/x-x509-ca-cert .crt
 AddType application/x-pkcs7-crl    .crl
 SSLSessionCache        "shmcb:@H@/apache/ssl_scache(512000)"
 SSLSessionCacheTimeout  300
-SSLMutex  "file:@H@/apache/ssl_mutex"
+# http://stackoverflow.com/a/15633390/6309
+Mutex sysvsem default
+#SSLMutex  "file:@H@/apache/ssl_mutex"
 
 <AuthnProviderAlias ldap myldap>
   AuthLDAPBindDN cn=Manager,dc=example,dc=com
@@ -63,7 +65,7 @@ Listen @PORT_HTTP_GITWEB@
     </FilesMatch>
     <Directory @H@/gitweb>
         SSLOptions +StdEnvVars
-        Options ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
+        Options +ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
         AllowOverride All
         order allow,deny
         Allow from all
@@ -71,7 +73,7 @@ Listen @PORT_HTTP_GITWEB@
         AuthName "LDAP authentication for ITSVC Prod GitWeb repositories"
         AuthType Basic
         AuthBasicProvider myldap companyldap
-        AuthzLDAPAuthoritative Off
+        # AuthzLDAPAuthoritative Off
         Require valid-user
 
         AddHandler cgi-script cgi
@@ -111,14 +113,14 @@ Listen @PORT_HTTP_HGIT@
     </FilesMatch>
     <Location /hgit>
         SSLOptions +StdEnvVars
-        Options ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
+        Options +ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
         #AllowOverride All
         order allow,deny
         Allow from all
         AuthName "LDAP authentication for ITSVC Smart HTTP Git repositories"
         AuthType Basic
         AuthBasicProvider myldap companyldap
-        AuthzLDAPAuthoritative Off
+        # AuthzLDAPAuthoritative Off
         Require valid-user
         AddHandler cgi-script cgi
     </Location>
@@ -149,7 +151,7 @@ Listen @PORT_HTTP_CGIT@
     </FilesMatch>
     <Directory @H@/cgit>
         SSLOptions +StdEnvVars
-        Options ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
+        Options +ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
         AllowOverride All
         order allow,deny
         Allow from all
@@ -164,7 +166,7 @@ Listen @PORT_HTTP_CGIT@
         AuthName "LDAP authentication for ITSVC CGit repositories"
         AuthType Basic
         AuthBasicProvider myldap companyldap
-        AuthzLDAPAuthoritative Off
+        # AuthzLDAPAuthoritative Off
         Require valid-user
 
         #RewriteCond %{REQUEST_FILENAME} !-f
@@ -187,6 +189,6 @@ Listen @PORT_HTTP_CGIT@
     LogLevel info
 </VirtualHost>
 
-Include @H@/gitlab/apache*.cnf
+IncludeOptional @H@/gitlab/apache*.cnf
 
-Include @H@/gitlist/apache*.cnf
+IncludeOptional @H@/gitlist/apache*.cnf

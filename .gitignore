@@ -163,3 +163,4 @@ gitolite/post-receive-gitolite-admin
 /sbin/ldap_name
 /openldap/ldap/
 /.gnupg/projextrdr*
+/apache/ssl_mutex/
