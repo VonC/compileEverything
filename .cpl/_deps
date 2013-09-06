@@ -44,7 +44,7 @@ lib cyrus-sasl db,openssl
 lib curl gcc,openssl,zlib,libssh2,libiconv,libidn,openldap
 lib libidn gcc,libiconv
 app lynx gcc,bzip2,zlib
-app apache gcc,expat,libiconv,gdbm,zlib,db,openssl,apr,aprutil,lynx
+app apache gcc,expat,libiconv,gdbm,zlib,db,openssl,apr,aprutil,lynx,bison
 lib apr autoconf,libtool,python
 lib libtool gcc
 app python bzip2,db,openssl,gdbm,ncurses,readline,tcl,libiconv,zlib,expat,sqlite
