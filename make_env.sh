@@ -374,6 +374,7 @@ function get_sources_from_web() {
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\'\>*}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\' *}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\#*}" ; fi
+  if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\?*}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\"*}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}:*}" ; fi
   # "
