@@ -85,7 +85,8 @@ app pip setuptools
 mod pygments pip
 app mysql cmake,bison
 mod mysql_sandbox cpanm,perl,mysql
-app bison libiconv,gcc
+app bison libiconv,gcc,flex
+app flex none
 app cmake ncurses,gcc,curl,zlib,libarchive
 lib libarchive gcc,bzip2,libxml2,zlib,openssl
 lib libatomic_ops gcc
