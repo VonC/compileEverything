@@ -57,3 +57,13 @@ mail: projectextrdr@company.com
 userPassword: projextrdr
 description: Project External Reader
 
+dn: cn=Project External Short,ou=Project Users,ou=People,dc=example,dc=com
+objectclass: person
+objectclass: inetorgperson
+cn: Project External Short
+sn: p
+uid: p
+givenname: p
+mail: p@company.com
+userPassword: p
+description: Project External Short
