@@ -4,6 +4,7 @@ lib mpfr m4
 lib mpc mpfr,gmp
 app binutils expat,gettext
 app make expat,gettext
+app gdb gcc
 lib expat none
 lib libiconv none
 lib readline none

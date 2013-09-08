@@ -1,0 +1,3 @@
+page=http://ftp.gnu.org/pub/gnu/gdb/?O=D;C=M
+url=http://ftp.gnu.org/pub/gnu/gdb/
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-libiconv-prefix=${HUL} --with-libintl-prefix=${HUL} @@WITHOUT_GNU_LD@@
