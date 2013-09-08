@@ -1,0 +1,68 @@
+ctld stop
+mv httpd-2.4.6/ httpd-2.4.6.ori
+git clone https://VonC@github.com/VonC/httpd httpd-2.4.6
+cd httpd-2.4.6
+./buildconf --with-apr=$H/.cpl/src/apr --with-apr-util=$H/.cpl/src/aprutil
+./configure --prefix=${HULA}/httpd-2.4.6 --enable-ssl=shared --enable-ssl --with-ssl=${HUL}/ssl --enable-proxy --enable-proxy-connect --enable-proxy-ftp --enable-proxy-http --with-ldap --enable-ldap --enable-authnz-ldap --enable-authn-alias --with-apr=${HUL} --with-apr-util=${HUL} --enable-mods-shared=all --with-z=${HUL}
+make
+make install
+l $H/usr/$(readlink $(which httpd))
+
+make clean
+CFLAGS=$CFLAGS" -g -O3" ./configure  --prefix=${HULA}/httpd-2.4.6 --enable-ssl=shared --enable-ssl --with-ssl=${HUL}/ssl --enable-proxy --enable-proxy-connect --enable-proxy-ftp --enable-proxy-http --with-ldap --enable-ldap --enable-authnz-ldap --enable-authn-alias --with-apr=${HUL} --with-apr-util=${HUL} --enable-mods-shared=all --with-z=${HUL}
+make
+make install
+http://stackoverflow.com/questions/7493947/whats-the-best-g-optimization-level-when-building-a-debug-target
+CFLAGS=$CFLAGS" -g -O0"
+
+vonc@voncu:~/.cpl/src/httpd-2.4.6$ grep -nRH "Server"  | grep -i header|grep -v manual
+os/os2/core_header.def:2:DESCRIPTION "Apache Server Core"
+include/ap_release.h:29: * The below defines the base string of the Server: header. Additional
+
+
+http://httpd.apache.org/dev/debugging.html
+https://sourceware.org/gdb/current/onlinedocs/gdb/
+
+curl -o git-credential-netrc https://raw.github.com/git/git/master/contrib/credential/netrc/git-credential-netrc
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 10152  100 10152    0     0  35799      0 --:--:-- --:--:-- --:--:-- 42476
+vonc@voncu:~$ diff git-credential-netrc sbin/git-credential-netrc 
+179c179
+< 	my $gpgmode = $file =~ m/\.gpg$/;
+---
+> 	my $gpgmode = $file =~ m/\.(gpg|asc)$/;
+236c236
+< 		my @cmd = (qw(gpg --decrypt), $file);
+---
+> 		my @cmd = (qw(gpg2 --batch -q --decrypt), $file);
+
+vonc@voncu:~$ cp sbin/git-credential-netrc ${HULA}/git/libexec/git-core
+vonc@voncu:~$ rm sbin/git-credential-netrc 
+
+
+vonc@voncu:~/apache$ gdb --quiet --args /home/vonc/gitpoc/ce1/usr/local/apps/httpd-2.4.6/bin/httpd -X
+Reading symbols from /home/vonc/gitpoc/ce1/usr/local/apps/httpd-2.4.6/bin/httpd...done.
+
+break authn_alias_check_password
+break authaliassection
+break apr_hash_set
+
+273	        apr_hash_set(authcfg->alias_rec, provider_alias, APR_HASH_KEY_STRING, prvdraliasrec);
+4: provider = (const authn_provider *) 0x7fffef8604f0 <authn_ldap_provider>
+3: prvdraliasrec->sec_auth = (ap_conf_vector_t *) 0x73b360
+2: provider_alias = 0x73b4d8 "myldap"
+1: provider_name = 0x73b4d0 "ldap"
+(gdb) display authcfg->alias_rec
+5: authcfg->alias_rec = (apr_hash_t *) 0x6da430
+
+(gdb) n
+invoke_cmd (cmd=0x7ffff5411070 <authn_cmds+80>, parms=parms@entry=0x7fffffffcef0, mconfig=0x6da500, args=0x70de58 "ldap myldap>")
+    at config.c:1032
+1032	}
+
+
+slapdd start
+vonc@voncu:~/openldap$ ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p 9011 'uid=p' uid
+dn: cn=Project External Short,ou=Project Users,ou=People,dc=example,dc=com
+uid: p
