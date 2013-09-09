@@ -4624,3 +4624,13 @@ Invalid command 'RackAutoDetect', perhaps misspelled or defined by a module not 
 
 ==== RailsAutoDetect, RackAutoDetect and WsgiAutoDetect ====
 These options have been removed in version 4.0.0 as part of an optimization. You should use <<PassengerEnabled,PassengerEnabled>>      instead.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+configure gdb ubuntu
+checking for library containing tgetent... no
+configure: error: no termcap library found
+make[1]: *** [configure-gdb] Error 1
+
+make[1]: Leaving directory `/home/vonc/gitpoc/apache24/.cpl/src/gdb-7.6.1'
+make: *** [all] Error 2
+
+gdb depends on ncurses!
