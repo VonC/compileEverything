@@ -377,13 +377,17 @@ function get_sources_from_web() {
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\?*}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\"*}" ; fi
   if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}:*}" ; fi
+  if [[ "${source}" == "${asrcline}" ]] ; then source="${asrcline%%${exturl}\</a\>*}" ; fi
   # "
   source="${source}${exturl}"
   if [[ ${mgsd} == 1 ]] ; then echo "D: sour0 ${source}" ; fi
   local source0="${source}"
   source="${source0##*\"}"
   # "
-  if [[ "${source}" == "${source0}" ]] ; then source="${source0##*\'}" ; fi
+  if [[ "${source}" == "${source0}" ]] ; then 
+    source="${source0##*\'}"
+    source="${source0##*\>}"
+  fi
   if [[ ${mgsd} == 1 ]] ; then echo "D: source1 ${source}" ; fi
   get_param ${name} url ""
   if [[ "${url}" != "" && "${url#http}" == "${url}" ]] ; then url=$("${H}/.cpl/scripts/${url}" ${name} ${verexclude}) ; fi
