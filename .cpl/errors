@@ -4634,3 +4634,13 @@ make[1]: Leaving directory `/home/vonc/gitpoc/apache24/.cpl/src/gdb-7.6.1'
 make: *** [all] Error 2
 
 gdb depends on ncurses!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+apr configure ubuntu
+
+hecking for gcc... gcc
+checking whether the C compiler works... no
+configure: error: in `/home/vonc/gitpoc/apache24/.cpl/src/apr-1.4.8':
+configure: error: C compiler cannot create executables
+See `config.log' for more details
+
+gcc: error: O0: No such file or directory => because of incorrect config O0 instead of -O0
