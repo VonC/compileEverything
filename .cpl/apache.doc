@@ -37,9 +37,32 @@ vonc@voncu:~$ diff git-credential-netrc sbin/git-credential-netrc
 ---
 > 		my @cmd = (qw(gpg2 --batch -q --decrypt), $file);
 
+vonc@voncvb:~/git$ sed -i "s;\\\.gpg;\\\.(asc|gpg);g" git-credential-netrc
+vonc@voncvb:~/git$ sed -i "s;gpg --decrypt;gpg --batch -q --decrypt;g" git-credential-netrc
+
+
 vonc@voncu:~$ cp sbin/git-credential-netrc ${HULA}/git/libexec/git-core
 vonc@voncu:~$ rm sbin/git-credential-netrc 
 
+machine github.com
+login VonC
+password xxx
+protocol https
+
+machine gist.github.com
+login VonC
+password xxx
+protocol https
+
+machine bitbucket.org
+login vonc
+password yyy
+protocol https
+
+git config --local credential.helper "netrc -f C:/path/to/_netrc.gpg -v"
+vonc@voncvb:~/.gnupg$ gpg --batch --yes -q -ea -r VonC1 f
+
+~~~~~~~~~~~~~~~~~~
 
 vonc@voncu:~/apache$ gdb --quiet --args /home/vonc/gitpoc/ce1/usr/local/apps/httpd-2.4.6/bin/httpd -X
 Reading symbols from /home/vonc/gitpoc/ce1/usr/local/apps/httpd-2.4.6/bin/httpd...done.
@@ -66,3 +89,5 @@ slapdd start
 vonc@voncu:~/openldap$ ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h localhost -p 9011 'uid=p' uid
 dn: cn=Project External Short,ou=Project Users,ou=People,dc=example,dc=com
 uid: p
+
+
