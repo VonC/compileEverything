@@ -63,7 +63,11 @@ if [[ -d "${H}/../src" && ! -e "${_src}/.keep_local" ]] ; then
   _hsrc="../src"
   ln -fs ../../src "${_cpl}"
 fi
-if [[ -d "${H}/../_pkgs" ]] ; then
+if [[ ! -e "${_pkgs}/.keep_local_pkgs" && -e "${H}/../.keep_local_pkgs.${homed}" ]]; then
+  echo "set keep_local_pkgs for ${homed} packages"
+  ln -fs "../../../../.keep_local_pkgs.${homed}" "${_pkgs}/.keep_local_pkgs"
+fi
+if [[ -d "${H}/../_pkgs" && ! -e "${_pkgs}/.keep_local_pkgs" ]] ; then
   if [[ -d "${H}/.cpl/src/_pkgs" ]] ; then 
     if [[ ! -h "${H}/.cpl/src/_pkgs" ]] ; then
       rm -Rf "${H}/.cpl/src/_pkgs" ; 
@@ -72,6 +76,7 @@ if [[ -d "${H}/../_pkgs" ]] ; then
   else
     ln -fs ../_pkgs "${_src}"  
   fi
+  echo "ln .cpl/src/_pkgs to ../_pkgs"
   _pkgs="${H}/../_pkgs"
   _hpkgs="../_pkgs"
 fi
