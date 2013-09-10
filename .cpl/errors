@@ -4644,3 +4644,16 @@ configure: error: C compiler cannot create executables
 See `config.log' for more details
 
 gcc: error: O0: No such file or directory => because of incorrect config O0 instead of -O0
+~~~~~~~~~~~~~~~~~~~~~~~~
+nodejs make SUSE Linux Enterprise Server 10 (x86_64) 10.4
+
+../deps/v8/src/api.h:129:3: note: in expansion of macro ¿STATIC_ASSERT¿
+   STATIC_ASSERT(sizeof(T) == sizeof(v8::internal::Address));
+   ^
+  flock /home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out/Release/linker.lock g++ -pthread -rdynamic -m64 -lintl -L/home/vonc/gitpoc/a24/usr/local/lib -L/home/vonc/gitpoc/a24/usr/local/ssl/lib -L/home/vonc/gitpoc/a24/usr/local/apps/python/lib -Wl,-rpath=/home/vonc/gitpoc/a24/usr/local/lib:/home/vonc/gitpoc/a24/usr/local/ssl/lib:/home/vonc/gitpoc/a24/usr/local/apps/svn/lib:/home/vonc/gitpoc/a24/usr/local/apps/python/lib:/home/vonc/gitpoc/a24/usr/local/apps/gcc/lib:/usr/lib64:/lib64 -o /home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out/Release/mksnapshot -Wl,--start-group /home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out/Release/obj.target/mksnapshot/deps/v8/src/mksnapshot.o /home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out/Release/obj.target/deps/v8/tools/gyp/libv8_base.a /home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out/Release/obj.target/deps/v8/tools/gyp/libv8_nosnapshot.a -Wl,--end-group
+/home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out/Release/linker.lock: No such file or directory
+make[1]: *** [/home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out/Release/mksnapshot] Error 3
+make[1]: Leaving directory `/home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out'
+=> touch /home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out/Release/linker.lock and resume the make...
+~~~~~~~~~~~~~~~~~~~~~~~
+
