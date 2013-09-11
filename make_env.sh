@@ -126,7 +126,7 @@ function getJDK {
        if [[ ! -z "${ajvv}" ]] && [[ "${ajvv#*1.7.}" != "${ajvv}" ]] ; then donelist="${donelist}@${name}@" ; return 0;  fi
     fi
     if [[ ! -e "${_pkgs}/${name}" ]] ; then
-      wget -q -O "${_pkgs}/${name}" http://www.oracle.com/technetwork/java/javase/downloads/index.html
+      wget --no-check-certificate -q -O "${_pkgs}/${name}" http://www.oracle.com/technetwork/java/javase/downloads/index.html
     fi
     local ajdk=$(cat "${_pkgs}/${name}" | grep "technetwork/java/javase/downloads/jdk7")
     # echo "j1 ${ajdk}"
@@ -139,7 +139,7 @@ function getJDK {
     if [[ "${longbit}" == "64" ]]; then ajdkgrep="linux-x64.tar.gz" ; fi
     # echo "D: longbit = ${longbit}, ajdkgrep = ${ajdkgrep}"
     if [[ ! -e "${_pkgs}/${name}2" ]] ; then
-      wget -q -O "${_pkgs}/${name}2" ${ajdk}
+      wget --no-check-certificate -q -O "${_pkgs}/${name}2" ${ajdk}
     fi
      echo "cat \"${_pkgs}/${name}2\" | grep \"http://download.oracle.com/otn-pub/java/jdk\" | grep \"${ajdkgrep}\""
     local ajdk2=$(cat "${_pkgs}/${name}2" | grep "http://download.oracle.com/otn-pub/java/jdk" | \
@@ -320,12 +320,11 @@ function get_sources_from_web() {
   local name=$1
   local _namever=$2
   local _ver=$3
-  echo "get_sources_from_web ${name}, _namever ${_namever}, _ver ${_ver}"
   local mgsd=0
   set +o nounset
   if [[ "${MGS}" == "${name}" ]]; then mgsd=1 ; fi
   set -o nounset
-  echo "mgsd='${mgsd}'"
+  echo "get_sources_from_web ${name}, _namever ${_namever}, _ver ${_ver}, mgsd='${mgsd}'"
   get_param ${name} nameurl "${name}"
   get_param ${name} nameact "${nameurl}"
   get_param ${name} page ""
@@ -333,6 +332,7 @@ function get_sources_from_web() {
   get_param ${name} verinclude ""
   if [[ "${globalverinclude}" != "" ]] ; then verinclude="${globalverinclude}" ; fi
 
+  # echo "=== page='${page}'"
   if [[ "${page}" == "none" ]] ; then eval ${_namever}="'${name}'" ; return 0 ; fi
   if [[ -e "${_pkgs}/${name}" && ! -s "${_pkgs}/${name}" ]] ; then rm "${_pkgs}/${name}" ; fi
   if [[ -e "${_pkgs}/${name}" ]] ; then
@@ -342,6 +342,7 @@ function get_sources_from_web() {
       page=$("${H}/.cpl/scripts/${page}" ${name} ${verexclude})
     fi
   fi
+  # echo "=== page='${page}'"
   get_param ${name} ext "tar.gz"
   if [[ "${nameurl}" == "none" ]] ; then nameurl="" ; fi
   if [[ "${ext}" == "none" ]] ; then ext="" ; fi
@@ -356,10 +357,11 @@ function get_sources_from_web() {
     asrcline=${asrcline%${ext}}
     if [[ ${mgsd} == 1 ]] ; then echo "D: l asrcline ${asrcline} from ext ${ext}" ; fi
   else
-    if [[ ${mgsd} == 1 ]] ; then echo "D: local asrcline wget -q -O - ${page} grep -e ${nameurl} grep ${ext}" ; fi
+    if [[ ${mgsd} == 1 ]] ; then echo "D: local asrcline wget --no-check-certificate -q -O - ${page} grep -e ${nameurl} grep ${ext}" ; fi
     local asrcline=""
     if [[ ! -e "${_pkgs}/${name}" ]] ; then
-      wget -q -O "${_pkgs}/${name}" "${page}" 
+      # echo " wget --no-check-certificate -q -O '${_pkgs}/${name}' '${page}'"
+      wget --no-check-certificate -q -O "${_pkgs}/${name}" "${page}" 
     fi
     if [[ ${mgsd} == 1 ]] ; then  echo "D: local page: $(cat "${_pkgs}/${name}")" ; fi
     asrcline=$(cat "${_pkgs}/${name}"  | grep -e "${nameurl}" | grep -e "${ext}")
@@ -450,7 +452,7 @@ function get_sources_from_web() {
   if [[ ${mgsd} == 1 ]] ; then echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}" ; fi
   if [[ ! -e "${_pkgs}/${targz}" ]] && [[ ! -e "${HUL}/._linked/${anamever}" ]]; then
     echolog "get sources for ${name} in ${_hpkgs}/${targz}"
-    loge "wget ${source} -O ${_pkgs}/${targz}" "wget_sources_${targz}"
+    loge "wget ${source} --no-check-certificate -O ${_pkgs}/${targz}" "wget_sources_${targz}"
   fi
   update_cache "${name}" "${anamever}" "${aver}"
   echo "get_sources_from_web RES ${name}, anamever ${anamever}, aver ${aver}"

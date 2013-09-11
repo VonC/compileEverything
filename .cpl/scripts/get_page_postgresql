@@ -1,5 +1,5 @@
 #! /bin/bash
-asrcline=$(wget -q -O - "http://www.postgresql.org/" | grep -e "release-")
+asrcline=$(wget --no-check-certificate -q -O - "http://www.postgresql.org/" | grep -e "release-")
 #echo "asrcline='${asrcline}'"
 pgsver="${asrcline%%</b*}"
 #echo "pgsver: ${pgsver}"

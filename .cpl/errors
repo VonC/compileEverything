@@ -4654,6 +4654,18 @@ nodejs make SUSE Linux Enterprise Server 10 (x86_64) 10.4
 /home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out/Release/linker.lock: No such file or directory
 make[1]: *** [/home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out/Release/mksnapshot] Error 3
 make[1]: Leaving directory `/home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out'
+
 => touch /home/vonc/gitpoc/a24/.cpl/src/node-v0.10.18/out/Release/linker.lock and resume the make...
 ~~~~~~~~~~~~~~~~~~~~~~~
+setuptools install SUSE Linux Enterprise Server 10 (x86_64) 10.4
+ wget  'https://pypi.python.org/pypi/setuptools/1.1.4'
+--16:49:58--  https://pypi.python.org/pypi/setuptools/1.1.4
+           => `1.1.4'
+ERROR: Certificate verification error for pypi.python.org: unable to get local issuer certificate
+ERROR: certificate common name `*.a.ssl.fastly.net' doesn't match requested host name `pypi.python.org'.
+To connect to pypi.python.org insecurely, use `--no-check-certificate'.
+Unable to establish SSL connection.
+
+=> now always use wget --no-check-certificate
+~~~~~~~~~~~~~~~~~~
 

@@ -1,5 +1,5 @@
 #! /bin/bash
-asrcline=$(wget -q -O - "http://ftp.gnome.org/pub/gnome/sources/$1/?O=D;C=M" | grep "folder\.gif")
+asrcline=$(wget --no-check-certificate -q -O - "http://ftp.gnome.org/pub/gnome/sources/$1/?O=D;C=M" | grep "folder\.gif")
 # echo "asrcline='${asrcline}'"
 if [[ "$#" -eq 2 ]] ; then
   asrcline=$(echo "${asrcline}" | grep -m 1 -v "$2")

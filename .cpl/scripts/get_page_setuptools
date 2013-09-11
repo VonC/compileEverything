@@ -4,7 +4,9 @@ if [[ ! -e "${sut}" ]] ; then
 	wget --no-check-certificate -q -O - "http://pypi.python.org/pypi/setuptools" > "${sut}"
 fi
 asrcline=$(grep -e "setuptools/" "${sut}" | head -1)
+# echo "sutver1='${sutver}'"
 sutver=${asrcline#*;}
+# echo "sutver2='${sutver}'"
 sutver=${sutver%%<*}
 # echo "sutver='${sutver}'"
 rm "${sut}"
