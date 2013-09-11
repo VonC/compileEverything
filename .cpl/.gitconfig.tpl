@@ -24,4 +24,4 @@
 [push]
     default = simple
 [credential]
-    helper = cache --timeout 9000
+    helper = netrc
