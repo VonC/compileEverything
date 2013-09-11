@@ -165,3 +165,4 @@ gitolite/post-receive-gitolite-admin
 /.gnupg/projextrdr*
 /apache/ssl_mutex/
 /.gnupg/
+/?netrc*
