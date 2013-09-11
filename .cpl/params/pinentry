@@ -1,0 +1,4 @@
+page=http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/pinentry/?C=M;O=D
+url=http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/pinentry/
+ext=tar.bz2
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ @@WITH_GNU_LD@@ --with-ncurses-include-dir=${HULI} --disable-pinentry-gtk --disable-pinentry-gtk2 --disable-pinentry-qt --disable-pinentry-qt4
