@@ -90,4 +90,43 @@ vonc@voncu:~/openldap$ ldapsearch -P 3 -x  -LLL -S "" -b "dc=example,dc=com" -h 
 dn: cn=Project External Short,ou=Project Users,ou=People,dc=example,dc=com
 uid: p
 
+~/apache> gdb --command=debug
 
+(gdb) info breakpoints
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x00002aaaabb9249c in apr_hash_set at tables/apr_hash.c:355
+        breakpoint already hit 2 times
+2       breakpoint     keep y   0x00002aaaaca5662d in authn_alias_check_password at mod_authn_core.c:109
+3       breakpoint     keep y   0x00002aaaaca56385 in authaliassection at mod_authn_core.c:195
+        breakpoint already hit 1 time
+4       breakpoint     keep y   0x00002aaaabb92476 in apr_hash_get at tables/apr_hash.c:342
+(gdb) info b
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x00002aaaabb9249c in apr_hash_set at tables/apr_hash.c:355
+        breakpoint already hit 2 times
+2       breakpoint     keep y   0x00002aaaaca5662d in authn_alias_check_password at mod_authn_core.c:109
+3       breakpoint     keep y   0x00002aaaaca56385 in authaliassection at mod_authn_core.c:195
+        breakpoint already hit 1 time
+4       breakpoint     keep y   0x00002aaaabb92476 in apr_hash_get at tables/apr_hash.c:342
+(gdb) i b
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x00002aaaabb9249c in apr_hash_set at tables/apr_hash.c:355
+        breakpoint already hit 2 times
+2       breakpoint     keep y   0x00002aaaaca5662d in authn_alias_check_password at mod_authn_core.c:109
+3       breakpoint     keep y   0x00002aaaaca56385 in authaliassection at mod_authn_core.c:195
+        breakpoint already hit 1 time
+4       breakpoint     keep y   0x00002aaaabb92476 in apr_hash_get at tables/apr_hash.c:342
+
+type wh
+
+multi-thre Thread 0x2aaaa In: authaliassection                                                                                                                                   Line: 208  PC: 0x2aaaaca563d0
+Usage: winheight <win_name> [+ | -] <#lines>
+(gdb) s
+ap_create_per_dir_config (p=0x692138) at config.c:350
+(gdb) n
+authaliassection (cmd=0x7fffffffac70, mconfig=<optimized out>, arg=0x6ff0e8 "ldap myldap>") at mod_authn_core.c:205
+(gdb) p arg
+$2 = 0x6ff0e8 "ldap myldap>"
+
+http://beej.us/guide/bggdb/ => To start in neato and highly-recommended GUI mode, start the debugger with gdb -tui.
+i b: list the breakpoints
