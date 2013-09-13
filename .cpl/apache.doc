@@ -134,3 +134,20 @@ i b: list the breakpoints
 
 x272             prvdraliasrec->provider = provider;
 x273             apr_hash_set(authcfg->alias_rec, provider_alias, APR_HASH_KEY_STRING, prvdraliasrec);        
+
+~~~~~~~~~~~~~~
+~/.cpl/src/apache> vi server/util_debug.c
+
+#if defined(ap_get_module_config)
+#undef ap_get_module_config
+AP_DECLARE(void *) ap_get_module_config(const ap_conf_vector_t *cv,
+                                        const module *m);
+#endif
+
+AP_DECLARE(void *) ap_get_module_config(const ap_conf_vector_t *cv,
+                                        const module *m)
+{
+    return ((void **)cv)[m->module_index];
+}
+~~~~~~~~~~~~~~~~~~~~
+
