@@ -130,3 +130,7 @@ $2 = 0x6ff0e8 "ldap myldap>"
 
 http://beej.us/guide/bggdb/ => To start in neato and highly-recommended GUI mode, start the debugger with gdb -tui.
 i b: list the breakpoints
+
+
+x272             prvdraliasrec->provider = provider;
+x273             apr_hash_set(authcfg->alias_rec, provider_alias, APR_HASH_KEY_STRING, prvdraliasrec);        
