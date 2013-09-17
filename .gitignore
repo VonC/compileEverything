@@ -166,4 +166,4 @@ gitolite/post-receive-gitolite-admin
 /apache/ssl_mutex/
 /.gnupg/
 /?netrc*
-/apache/debug
+/apache/gdb.txt
