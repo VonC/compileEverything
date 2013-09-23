@@ -11,6 +11,8 @@ LoadModule cache_module modules/mod_cache.so
 LoadModule cgid_module modules/mod_cgid.so
 LoadModule session_module modules/mod_session.so
 LoadModule session_cookie_module modules/mod_session_cookie.so
+LoadModule request_module modules/mod_request.so
+LoadModule auth_form_module modules/mod_auth_form.so
 
 Include conf/extra/httpd-manual.conf
 <IfModule mod_status.c>
@@ -100,8 +102,9 @@ Listen @PORT_HTTP_GITWEB@
         Allow from all
 
         AuthName "LDAP authentication for ITSVC Prod GitWeb repositories"
-        AuthType Basic
-        AuthBasicProvider myldap companyldap
+        AuthType form
+        AuthFormProvider myldap companyldap
+        # AuthBasicProvider myldap companyldap
         # AuthzLDAPAuthoritative Off
         Require valid-user
 
