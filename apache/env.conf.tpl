@@ -108,7 +108,8 @@ Listen @PORT_HTTP_GITWEB@
     BrowserMatch ".*MSIE.*" \
          nokeepalive ssl-unclean-shutdown \
          downgrade-1.0 force-response-1.0
-    LogLevel Debug ssl:info
+    # LogLevel trace8 ssl_module:info core_module:trace5
+    LogLevel debug ssl_module:error
     CustomLog "@H@/apache/gitweb_ssl_request_log" \
           "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
     ErrorLog "@H@/apache/gitweb_error_log"
