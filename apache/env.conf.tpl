@@ -8,6 +8,7 @@ LoadModule authnz_ldap_module modules/mod_authnz_ldap.so
 LoadModule rewrite_module modules/mod_rewrite.so
 LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
 LoadModule cache_module modules/mod_cache.so
+LoadModule cgid_module modules/mod_cgid.so
 Include conf/extra/httpd-manual.conf
 <IfModule mod_status.c>
 #
