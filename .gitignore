@@ -167,3 +167,4 @@ gitolite/post-receive-gitolite-admin
 /.gnupg/
 /?netrc*
 /apache/gdb.txt
+/apache/debug
