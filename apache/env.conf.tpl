@@ -9,6 +9,9 @@ LoadModule rewrite_module modules/mod_rewrite.so
 LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
 LoadModule cache_module modules/mod_cache.so
 LoadModule cgid_module modules/mod_cgid.so
+LoadModule session_module modules/mod_session.so
+LoadModule session_cookie_module modules/mod_session_cookie.so
+
 Include conf/extra/httpd-manual.conf
 <IfModule mod_status.c>
 #
@@ -27,6 +30,10 @@ ExtendedStatus On
 </Location>
 
 </IfModule>
+
+Session On
+SessionCookieName session path=/
+SessionMaxAge 20
 
 SSLCACertificateFile "@H@/apache/global_ca.crt"
 LDAPTrustedGlobalCert CA_BASE64 "@H@/openldap/global_ca.crt"
