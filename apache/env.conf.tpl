@@ -7,6 +7,7 @@ LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
 LoadModule authnz_ldap_module modules/mod_authnz_ldap.so
 LoadModule rewrite_module modules/mod_rewrite.so
 LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
+LoadModule cache_module modules/mod_cache.so
 Include conf/extra/httpd-manual.conf
 <IfModule mod_status.c>
 #
@@ -54,6 +55,19 @@ Mutex sysvsem default
   AuthLDAPURL @LDAP_URL@
 </AuthnProviderAlias>
 # LDAP_END
+
+Options -Indexes
+
+ServerTokens Prod
+CacheIgnoreHeaders Set-Cookie
+SetEnv no-cache
+SetEnv no-store
+SetEnv must-revalidate
+Header merge Cache-Control no-cache
+Header add Pragma no-cache
+Header merge Cache-Control no-store
+Header merge Cache-Control must-revalidate
+MaxKeepAliveRequests 5
 
 # GitWeb on @PORT_HTTP_GITWEB@
 Listen @PORT_HTTP_GITWEB@
