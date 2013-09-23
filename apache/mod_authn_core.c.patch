@@ -1,0 +1,31 @@
+--- m.ori	2013-09-23 10:35:45.711228000 +0100
++++ m.c	2013-09-23 11:36:22.210125000 +0100
+@@ -67,8 +67,8 @@
+ typedef struct authn_alias_srv_conf {
+     apr_hash_t *alias_rec;
+ } authn_alias_srv_conf;
+-
+-
++provider_alias_rec *prvdraliasrec_myldap;
++provider_alias_rec *prvdraliasrec_companyldap;
+ module AP_MODULE_DECLARE_DATA authn_core_module;
+
+ static void *create_authn_core_dir_config(apr_pool_t *p, char *dummy)
+@@ -122,7 +122,7 @@
+         provider_alias_rec *prvdraliasrec = apr_hash_get(authcfg->alias_rec,
+                                                          provider_name, APR_HASH_KEY_STRING);
+         ap_conf_vector_t *orig_dir_config = r->per_dir_config;
+-
++        if (!prvdraliasrec && strcmp(provider_name,"myldap")==0) { prvdraliasrec=prvdraliasrec_myldap; } ; if (!prvdraliasrec && strcmp(provider_name,"companyldap")==0) { prvdraliasrec=prvdraliasrec_companyldap; }
+         /* If we found the alias provider in the list, then merge the directory
+            configurations and call the real provider */
+         if (prvdraliasrec) {
+@@ -263,7 +263,7 @@
+                                 "Unknown Authn provider: %s",
+                                 provider_name);
+         }
+-
++        if ( strcmp(provider_alias,"myldap") == 0 ) { prvdraliasrec_myldap = prvdraliasrec; } ; if ( strcmp(provider_alias,"companyldap") == 0 ) { prvdraliasrec_companyldap = prvdraliasrec; }
+         /* Save off the new directory config along with the original provider name
+            and function pointer data */
+         prvdraliasrec->sec_auth = new_auth_config;
