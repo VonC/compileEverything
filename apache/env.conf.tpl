@@ -91,10 +91,10 @@ Listen @PORT_HTTP_GITWEB@
         order allow,deny
         Allow from all
 
-        AuthBasicProvider myldap companyldap
-
-        AuthType Basic
         AuthName "LDAP authentication for ITSVC Prod GitWeb repositories"
+        AuthType Basic
+        AuthBasicProvider myldap companyldap
+        # AuthzLDAPAuthoritative Off
         Require valid-user
 
         AddHandler cgi-script cgi
