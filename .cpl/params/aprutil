@@ -3,4 +3,4 @@ url=http://mirror.ibcp.fr/pub/apache/apr/
 nameurl=apr-util-
 nameact=aprutil
 pre=anos=$(uname -o) ; if [[ "${anos#*Cygwin}" != "${anos}" ]] ; then gen_sed -i '\''s/extralib=\"/extralib=\"-llber -lssl -lsasl2 -ldb -lcrypto /g'\'' ${H}/.cpl/src/@@NAMEVER@@/configure ; gen_sed -i '\''s/extralib=$/extralib=\"-llber -lssl -lsasl2 -ldb -lcrypto\"/g'\'' ${H}/.cpl/src/@@NAMEVER@@/configure ; fi
-configcmd=@@CFLAGS="${CFLAGS} -g -O0" ./configure --prefix=${HULS}/@@NAMEVER@@ --with-apr=${HUL} --with-ldap --with-ldap-lib=${HULL} --with-ldap-include=${HULI} --with-dbm=db --with-gdbm=${HUL} --with-expat=${HUL} --with-berkeley-db=${HUL} --with-sqlite3=@@HULifnotCygwin@@ --with-iconv=${HUL}
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --with-apr=${HUL} --with-ldap --with-ldap-lib=${HULL} --with-ldap-include=${HULI} --with-dbm=db --with-gdbm=${HUL} --with-expat=${HUL} --with-berkeley-db=${HUL} --with-sqlite3=@@HULifnotCygwin@@ --with-iconv=${HUL}
