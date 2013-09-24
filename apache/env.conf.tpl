@@ -101,11 +101,12 @@ Listen @PORT_HTTP_GITWEB@
         order allow,deny
         Allow from all
 
-        AuthName "LDAP authentication for ITSVC Prod GitWeb repositories"
-        AuthType form
         AuthFormProvider myldap companyldap
-        # AuthBasicProvider myldap companyldap
-        # AuthzLDAPAuthoritative Off
+        ErrorDocument 401 /login.html
+        AuthType form
+        AuthName "LDAP authentication for ITSVC Prod GitWeb repositories"
+        AuthFormAuthoritative On
+        #AuthBasicProvider myldap companyldap
         Require valid-user
 
         AddHandler cgi-script cgi
