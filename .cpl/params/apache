@@ -2,6 +2,6 @@ page=http://apache.opensourcemirror.com/httpd/?C=M;O=D
 url=http://apache.opensourcemirror.com/httpd/
 nameurl=httpd
 verinclude=-2.4
-configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-ssl=shared --enable-ssl --with-ssl=${HUL}/ssl --enable-proxy --enable-proxy-connect --enable-proxy-ftp --enable-proxy-http --with-ldap --enable-ldap --enable-authnz-ldap --enable-authn-alias --with-apr=${HUL} --with-apr-util=${HUL} --enable-mods-shared=all --with-z=${HUL} @@WITHOUT_GNU_LD@@
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-ssl=shared --enable-ssl --with-ssl=${HUL}/ssl --enable-proxy --enable-proxy-connect --enable-proxy-ftp --enable-proxy-http --with-ldap --enable-ldap --enable-authnz-ldap --enable-authn-alias --with-apr=${HUL} --with-apr-util=${HUL} --enable-mods-shared=all --with-z=${HUL} @@WITHOUT_GNU_LD@@ --enable-session-crypto
 pre=set +e; patch -r - -N ${H}/.cpl/src/@@NAMEVER@@/modules/aaa/mod_authn_core.c < ${H}/apache/mod_authn_core.c.patch ; set -e
 post=rm -f "${HUL}/apache2" ; ln -fs apps/@@NAMEVER@@ ${HUL}/apache2 ; cp_tpl "${H}/apache/env.conf.tpl" "${H}/apache" ; cp_tpl "${H}/apache/openssl.cnf.tpl" "${H}/apache" ; cp_tpl "${H}/apache/o.cnf.tpl" "${H}/apache" ; "${H}/apache/gen_ssl_key_and_crt.sh" ; "${H}/apache/update_cnf.sh" ; cp_tpl "${H}/apache/ctld.tpl" "${H}/apache" ; cp_tpl "${H}/apache/debug.tpl" "${H}/apache"

@@ -10,6 +10,7 @@ LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
 LoadModule cache_module modules/mod_cache.so
 LoadModule cgid_module modules/mod_cgid.so
 LoadModule session_module modules/mod_session.so
+LoadModule session_module modules/mod_session_crypto.so
 LoadModule session_cookie_module modules/mod_session_cookie.so
 LoadModule request_module modules/mod_request.so
 LoadModule auth_form_module modules/mod_auth_form.so
@@ -34,7 +35,8 @@ ExtendedStatus On
 </IfModule>
 
 Session On
-SessionCookieName session path=/
+SessionCryptoPassphrase secretgit
+SessionCookieName session path=/;httponly;secure;
 SessionMaxAge 20
 
 SSLCACertificateFile "@H@/apache/global_ca.crt"
