@@ -10,7 +10,7 @@ LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
 LoadModule cache_module modules/mod_cache.so
 LoadModule cgid_module modules/mod_cgid.so
 LoadModule session_module modules/mod_session.so
-LoadModule session_module modules/mod_session_crypto.so
+LoadModule session_crypto_module modules/mod_session_crypto.so
 LoadModule session_cookie_module modules/mod_session_cookie.so
 LoadModule request_module modules/mod_request.so
 LoadModule auth_form_module modules/mod_auth_form.so
@@ -122,7 +122,7 @@ Listen @PORT_HTTP_GITWEB@
     BrowserMatch ".*MSIE.*" \
          nokeepalive ssl-unclean-shutdown \
          downgrade-1.0 force-response-1.0
-    LogLevel debug ssl_module:error core_module:trace5 socache_shmcb_module:error ssl:error
+    LogLevel debug ssl_module:error core_module:trace5 socache_shmcb_module:error ssl:error auth_form_module:trace8
     CustomLog "@H@/apache/gitweb_ssl_request_log" \
           "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
     ErrorLog "@H@/apache/gitweb_error_log"
