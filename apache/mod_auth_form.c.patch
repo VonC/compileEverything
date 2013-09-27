@@ -1,6 +1,14 @@
---- mod_auth_form.c.ori	2013-09-26 08:05:37.105803000 +0100
-+++ mod_auth_form.c	2013-09-27 16:12:19.170869000 +0100
-@@ -101,6 +101,8 @@
+--- modules/aaa/mod_auth_form.c.ori	2013-09-27 23:48:54.399922201 +0200
++++ modules/aaa/mod_auth_form.c	2013-09-27 23:33:52.855927036 +0200
+@@ -79,6 +79,7 @@
+     int loginrequired_set;
+     ap_expr_info_t *logout;
+     int logout_set;
++    apr_table_t *entries;         /* key value pairs */
+ } auth_form_config_rec;
+ 
+ static void *create_auth_form_dir_config(apr_pool_t * p, char *d)
+@@ -100,6 +101,8 @@
      conf->mimetype = "httpd_mimetype";
      conf->body = "httpd_body";
  
@@ -9,8 +17,8 @@
      return conf;
  }
  
-@@ -749,6 +751,30 @@
-
+@@ -748,6 +751,30 @@
+ 
  }
  
 +APR_DECLARE(char *) apr_lltoa(apr_pool_t *p, long long n)
@@ -40,10 +48,10 @@
  /**
   * Given a username and password (extracted externally from a cookie), run
   * the authnz hooks to determine whether this request is authorized.
-@@ -762,6 +788,31 @@
+@@ -761,6 +788,31 @@
      auth_form_config_rec *conf = ap_get_module_config(r->per_dir_config,
                                                        &auth_form_module);
-
+ 
 +    const char *failedlogin = apr_table_get(conf->entries, sent_user);
 +    const apr_uint64_t data = apr_atoi64(failedlogin);
 +    ap_log_rerror(APLOG_MARK, APLOG_TRACE3, 0, r,
@@ -72,7 +80,7 @@
      current_provider = conf->providers;
      do {
          const authn_provider *provider;
-@@ -933,6 +984,7 @@
+@@ -932,6 +984,7 @@
      if (APR_SUCCESS == res && sent_user && sent_hash && sent_pw) {
          rv = check_site(r, conf->site, sent_user, sent_hash);
          if (OK == rv) {
@@ -80,7 +88,7 @@
              fake_basic_authentication(r, conf, sent_user, sent_pw);
              return OK;
          }
-@@ -940,6 +992,31 @@
+@@ -939,6 +992,31 @@
  
      /* otherwise test for a normal password match */
      if (APR_SUCCESS == res && sent_user && sent_pw) {
