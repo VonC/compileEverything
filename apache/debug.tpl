@@ -4,11 +4,7 @@ set logging on
 set args -X
 show args
 set breakpoint pending on
-# authn_alias_check_password
-b mod_authn_core.c:115
-# authaliassection
-b mod_authn_core.c:255
 # modform
-b mod_auth_form.c:785
+b mod_auth_form.c:786
 run 
 fs cmd
