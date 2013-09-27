@@ -2,6 +2,7 @@ page=http://download.icu-project.org/files/icu4c/?O=D&C=M
 url=http://download.icu-project.org/files/icu4c/@@VER@@/icu4c-@@VER_@@-src.tgz
 nameurl=\"[0-9][0-9][^rcm/]*/
 nameact=icu4c-@@VER_@@-src.tgz
+verexclude=52.1
 ext=none
 exturl=/
 extact=tgz
