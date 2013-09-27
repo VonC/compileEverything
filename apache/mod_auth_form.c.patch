@@ -1,5 +1,5 @@
 --- mod_auth_form.c.ori	2013-09-26 08:05:37.105803000 +0100
-+++ mod_auth_form.c	2013-09-27 14:52:15.277205000 +0100
++++ mod_auth_form.c	2013-09-27 16:12:19.170869000 +0100
 @@ -101,6 +101,8 @@
      conf->mimetype = "httpd_mimetype";
      conf->body = "httpd_body";
@@ -9,8 +9,8 @@
      return conf;
  }
  
-@@ -870,6 +872,30 @@
-     }
+@@ -749,6 +751,30 @@
+
  }
  
 +APR_DECLARE(char *) apr_lltoa(apr_pool_t *p, long long n)
@@ -38,9 +38,49 @@
 +}
 +
  /**
-  * Must we use form authentication? If so, extract the cookie and run
-  * the authnz hooks to determine if the login is valid.
-@@ -940,6 +966,31 @@
+  * Given a username and password (extracted externally from a cookie), run
+  * the authnz hooks to determine whether this request is authorized.
+@@ -762,6 +788,31 @@
+     auth_form_config_rec *conf = ap_get_module_config(r->per_dir_config,
+                                                       &auth_form_module);
+
++    const char *failedlogin = apr_table_get(conf->entries, sent_user);
++    const apr_uint64_t data = apr_atoi64(failedlogin);
++    ap_log_rerror(APLOG_MARK, APLOG_TRACE3, 0, r,
++                  "Current password for login '%s' gave attempts number %llu", sent_user, data);
++    const apr_time_t now = apr_time_now();
++    if (data < 5) {
++        apr_table_set(conf->entries, sent_user, apr_lltoa(r->pool, (long long)(data+1) ) );
++    }
++    apr_time_t expiry = (apr_time_t)data;
++    if (data == 5) {
++        expiry = now + ( 60 * APR_USEC_PER_SEC);
++        apr_table_set(conf->entries, conf->username, apr_lltoa(r->pool, (apr_uint64_t)expiry ) );
++        ap_log_rerror(APLOG_MARK, APLOG_TRACE3, 0, r,
++                      "Set timeout for login '%s' up to %llu", sent_user, expiry);
++    }
++    if (data >= 5) {
++        if (now < expiry) {
++            ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(03340)
++                          "Account Still Locked out: %s for %llu", sent_user, (expiry-now));
++            apr_table_set(r->headers_out, "Location", "lockedout");
++            return HTTP_MOVED_TEMPORARILY;
++        }
++        apr_table_set(conf->entries, sent_user, apr_itoa(r->pool,0));
++    }
++
+     current_provider = conf->providers;
+     do {
+         const authn_provider *provider;
+@@ -933,6 +984,7 @@
+     if (APR_SUCCESS == res && sent_user && sent_hash && sent_pw) {
+         rv = check_site(r, conf->site, sent_user, sent_hash);
+         if (OK == rv) {
++            ap_log_rerror(APLOG_MARK, APLOG_TRACE3, 0, r, "fake_basic_authentication");
+             fake_basic_authentication(r, conf, sent_user, sent_pw);
+             return OK;
+         }
+@@ -940,6 +992,31 @@
  
      /* otherwise test for a normal password match */
      if (APR_SUCCESS == res && sent_user && sent_pw) {

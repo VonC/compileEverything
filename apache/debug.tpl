@@ -8,5 +8,7 @@ set breakpoint pending on
 b mod_authn_core.c:115
 # authaliassection
 b mod_authn_core.c:255
+# modform
+b mod_auth_form.c:785
 run 
 fs cmd
