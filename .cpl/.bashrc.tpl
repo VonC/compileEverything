@@ -201,3 +201,6 @@ fi
 	      
 alias gpg="${H}/sbin/gpg"
 alias gpgs="${H}/sbin/gpg --batch -q"
+
+# http://superuser.com/a/450630/141
+export GPG_TTY=$(tty)
