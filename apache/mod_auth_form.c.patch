@@ -1,11 +1,11 @@
---- mod_auth_form.c.ori	2013-09-27 06:21:13.000000000 +0100
-+++ mod_auth_form.c	2013-09-30 09:39:21.179758000 +0100
+--- mod_auth_form.c.ori	2013-10-04 09:40:37.037017000 +0100
++++ mod_auth_form.c	2013-10-04 09:06:04.683376000 +0100
 @@ -81,6 +81,9 @@
      int logout_set;
  } auth_form_config_rec;
  
-+apr_pool_t *login_pool;
-+apr_table_t *login_entries;
++static apr_pool_t *login_pool;
++static apr_table_t *login_entries;
 +
  static void *create_auth_form_dir_config(apr_pool_t * p, char *d)
  {
@@ -41,17 +41,47 @@
  /**
   * Given a username and password (extracted externally from a cookie), run
   * the authnz hooks to determine whether this request is authorized.
-@@ -1024,6 +1051,16 @@
+@@ -1024,6 +1051,46 @@
              r->handler = FORM_REDIRECT_HANDLER;
          }
  
 +        if (sent_user) {
++            const int login_limit=1;
++            const int login_timeout=40;
 +            if ( !login_pool && apr_pool_create(&login_pool, NULL) != APR_SUCCESS) {
 +                ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01285)
 +                              "mod_auth_form: Failed to create memory pool");
 +            }
 +            if ( ! login_entries ) {
 +                login_entries = apr_table_make(login_pool, 100);
++            }
++            const char *login_failed = apr_table_get(login_entries, sent_user);
++            const apr_uint64_t login_number = ( login_failed ) ? apr_atoi64(login_failed) : 0;
++            ap_log_rerror(APLOG_MARK, APLOG_TRACE1, 0, r,
++                          "Current password for login '%s' gave attempts number %lu", sent_user, login_number);
++            const apr_time_t login_now = apr_time_now();
++            if (login_number < login_limit) {
++                apr_table_set(login_entries, sent_user, apr_lltoa(login_pool, (long long)(login_number+1) ) );
++                ap_log_rerror(APLOG_MARK, APLOG_TRACE1, 0, r,
++                              "Current password for login '%s' update attempts number to %lu", sent_user, login_number+1);
++            }
++            apr_time_t login_expiry = (apr_time_t)login_number;
++            if (login_number == login_limit) {
++                login_expiry = login_now + ( login_timeout * APR_USEC_PER_SEC);
++                apr_table_set(login_entries, sent_user, apr_lltoa(login_pool, (apr_uint64_t)login_expiry ) );
++                ap_log_rerror(APLOG_MARK, APLOG_TRACE1, 0, r,
++                              "Set timeout for login '%s' up to %lu", sent_user, login_expiry);
++            }
++            if (login_number >= login_limit) {
++                if (login_now < login_expiry) {
++                    ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(03340)
++                                  "Account Still Locked out: %s for %lu seconds", sent_user, ((login_expiry-login_now)/APR_USEC_PER_SEC));
++                    apr_table_set(r->headers_out, "Location", "/lockedout");
++                    return HTTP_MOVED_TEMPORARILY;
++                }
++                apr_table_set(login_entries, sent_user, apr_itoa(login_pool,0));
++                ap_log_rerror(APLOG_MARK, APLOG_TRACE1, 0, r,
++                              "RESET attempt for login '%s' to %lu", sent_user, 0);
 +            }
 +        }
 +
