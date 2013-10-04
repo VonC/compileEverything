@@ -100,8 +100,8 @@ Listen @PORT_HTTP_GITWEB@
         SSLOptions +StdEnvVars
         Options +ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
         AllowOverride All
-        order allow,deny
-        Allow from all
+
+        SetEnvIf Request_URI "^/lockedout$" NOPASSWD=true
 
         AuthFormProvider myldap companyldap
         ErrorDocument 401 /login.html
@@ -109,7 +109,18 @@ Listen @PORT_HTTP_GITWEB@
         AuthName "LDAP authentication for ITSVC Prod GitWeb repositories"
         AuthFormAuthoritative On
         #AuthBasicProvider myldap companyldap
+
+        # http://stackoverflow.com/questions/11438764/can-an-htpasswd-apply-to-all-urls-except-one
+
+        Order Deny,Allow
+        # Any requirment satisfies
+        Satisfy any
+        # Deny all requests
+        Deny from all
+        # except if user is authenticated
         Require valid-user
+        # or if NOPASSWD is set
+        Allow from env=NOPASSWD
 
         AddHandler cgi-script cgi
         DirectoryIndex gitweb.cgi
@@ -122,7 +133,8 @@ Listen @PORT_HTTP_GITWEB@
     BrowserMatch ".*MSIE.*" \
          nokeepalive ssl-unclean-shutdown \
          downgrade-1.0 force-response-1.0
-    LogLevel debug ssl_module:error core_module:trace5 socache_shmcb_module:error ssl:error auth_form_module:trace8
+    LogLevel error auth_form_module:trace1
+    #LogLevel debug ssl_module:error core_module:trace5 socache_shmcb_module:error ssl:error auth_form_module:trace1
     CustomLog "@H@/apache/gitweb_ssl_request_log" \
           "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
     ErrorLog "@H@/apache/gitweb_error_log"

@@ -1,0 +1,7 @@
+<html>
+Locked out!
+
+<script type="text/javascript">
+    document.write('<a href="' + document.referrer + '">Go Back</a>');
+</script>
+</html>
