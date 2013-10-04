@@ -5,8 +5,6 @@ set args -X
 show args
 set breakpoint pending on
 # modform
-#b mod_auth_form.c:786
-#b mod_auth_form.c:916
-b mod_auth_form.c:1054
+b mod_auth_form.c:1057
 run 
 fs cmd
