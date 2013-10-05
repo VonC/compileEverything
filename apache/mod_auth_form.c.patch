@@ -1,5 +1,5 @@
---- mod_auth_form.c.ori	2013-10-04 09:40:37.037017000 +0100
-+++ mod_auth_form.c	2013-10-04 16:44:33.149573000 +0100
+--- mod_auth_form.c.ori	2013-10-05 10:27:47.735441063 +0200
++++ mod_auth_form.c	2013-10-05 10:55:27.418576020 +0200
 @@ -19,7 +19,9 @@
  #include "apr_base64.h"             /* for apr_base64_decode et al */
  #define APR_WANT_STRFUNC            /* for strcasecmp */
@@ -63,7 +63,7 @@
  /**
   * Given a username and password (extracted externally from a cookie), run
   * the authnz hooks to determine whether this request is authorized.
-@@ -1024,6 +1055,151 @@
+@@ -1024,6 +1055,148 @@
              r->handler = FORM_REDIRECT_HANDLER;
          }
  
@@ -194,12 +194,9 @@
 +                    return HTTP_MOVED_TEMPORARILY;
 +                }
 +                int login_reset = 0;
-+                if ( ((login_expiry-login_now)/APR_USEC_PER_SEC) > login_timeout ) {
-+                    login_reset = 1;
-+                }
 +                strcpy( login_newnumber, apr_lltoa(login_pool, (long long)(login_reset) ) );
 +                ap_log_rerror(APLOG_MARK, APLOG_TRACE1, 0, r,
-+                              "RESET attempt for login '%s' to %lu", sent_user, 0);
++                              "RESET attempt for login '%s' to %lu", sent_user, (long long)(login_reset));
 +                bytes = strlen(login_newnumber);
 +                rv = apr_file_write(login_file, login_newnumber, &bytes);
 +                if ( rv != APR_SUCCESS) {
