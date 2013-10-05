@@ -109,6 +109,8 @@ Listen @PORT_HTTP_GITWEB@
         AuthName "LDAP authentication for ITSVC Prod GitWeb repositories"
         AuthFormAuthoritative On
         #AuthBasicProvider myldap companyldap
+        AuthFormAttempts 1
+        AuthFormLockout 20
 
         # http://stackoverflow.com/questions/11438764/can-an-htpasswd-apply-to-all-urls-except-one
 
