@@ -6,22 +6,50 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Form</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="/Semantic-UI/build/packaged/css/semantic.css">
+  <script src="/Semantic-UI/build/packaged/javascript/semantic.js"></script>
   <!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
 <body>
-  <section class="container">
-    <div class="login">
-      <h1>Login to Web App</h1>
-      <form method="POST" action="">
-        <p><input type="text" name="httpd_username" value="" placeholder="Username PeopleSoft"></p>
-        <p><input type="password" name="httpd_password" value="" placeholder="Password Windows"></p>
-        <p class="submit"><input type="submit" name="login" value="Login"></p>
-      </form>
+  <div class="login">
+    <!-- http://semantic-ui.com/elements/header.html -->
+    <h1 class="ui header red inverted block top attached">
+      <i class="sign in icon"></i>
+      <div class="content">
+        Login
+        <div class="sub header">(Peoplesoft ID and Windows password)</div>
+      </div>
+    </h1>
+    <div class="ui form segment attached">
+   <!-- http://semantic-ui.com/collections/form.html -->
+    <form method="POST" action="">
+      <div class="field">
+        <label>Username</label>
+        <div class="ui left labeled icon input">
+          <input type="text" name="httpd_username" value="" placeholder="Username PeopleSoft">
+          <i class="user icon"></i>
+          <div class="ui corner label">
+            <i class="icon asterisk"></i>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="ui left labeled icon input">
+          <input type="password" name="httpd_password" value="" placeholder="Password Windows">
+          <i class="lock icon"></i>
+          <div class="ui corner label">
+            <i class="icon asterisk"></i>
+          </div>
+        </div>
+      </div>
+        <input type="submit" name="login" value="Login">
+    </form>
     </div>
 
-  </section>
-
+    <h1 class="ui bottom attached header">GitWeb</h1>
+  </div> <!-- login -->
 </body>
 </html>

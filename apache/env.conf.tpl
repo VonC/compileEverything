@@ -102,6 +102,7 @@ Listen @PORT_HTTP_GITWEB@
         AllowOverride All
 
         SetEnvIf Request_URI "^/lockedout$" NOPASSWD=true
+        SetEnvIf Request_URI "^/Semantic-UI/.*$" NOPASSWD=true
 
         AuthFormProvider myldap companyldap
         ErrorDocument 401 /login.html

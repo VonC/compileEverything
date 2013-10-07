@@ -7,3 +7,7 @@
 [submodule "gitolite"]
 	path = gitolite/github
 	url = https://github.com/sitaramc/gitolite
+[submodule "Semantic-UI"]
+	path = Semantic-UI
+	url = https://github.com/jlukic/Semantic-UI
+	branch = master
