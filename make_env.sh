@@ -606,7 +606,7 @@ function untar() {
     fi
     # echo "D: ln -fs '${namever} ${_src}/${name}'"
     # mkdir -p "${_src}/${namever}" # TOCOMMENT
-    ln -fs "${namever}" "${_src}/${name}"
+    # ln -fs "${namever}" "${_src}/${name}"
     # echo "D: ${H} > ${_src}/${namever}/.cmp"
     echo "${H}" > "${_src}/${namever}/.cmp"
     echo "${H}" > "${_src}/${namever}/.lck"
