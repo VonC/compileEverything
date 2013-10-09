@@ -1,3 +1,3 @@
 #!/bin/bash
 
-gen_sed -e "s;#!/usr/bin/env \([a-zA-Z\-\_0-9]*\)$;#!/usr/bin/\1;" "$1"
+gen_sed -e "s;#!/usr/bin/env \([a-zA-Z\-\_0-9]*\) $;#!/usr/bin/\1;" "$1"
