@@ -1,5 +1,7 @@
 page=http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/gnupg/?C=M;O=D
 url=http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/gnupg/
 ext=tar.bz2
+verexclude=-1.
+verinclude=-2.
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ @@WITH_GNU_LD@@ --with-zlib=${HUL} --with-bzip2=${HUL} --with-readline=${HUL} --with-libiconv-prefix=${HUL} --with-libintl-prefix=${HUL} --with-ldap=${HUL}
 postcheck=ln -fs gpg2 "${H}/bin/gpg" ; cp_tpl "${H}/.gnupg/gpg-agent.conf.tpl" "${H}/.gnupg"
