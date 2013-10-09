@@ -52,7 +52,7 @@ else
   rm -f "${H}/projects.list"
 fi
 
-glc=$(grep "LOCAL_CODE" "${H}/.gitolite.rc")
+glc=$(grep "  LOCAL_CODE" "${H}/.gitolite.rc")
 if [[ "${glc}" == "" ]] ; then
   a=$(grep -n ");" "${H}/.gitolite.rc")
   a=${a%%:*}
