@@ -1,0 +1,13 @@
+#! /bin/bash
+gcc="${H}/.cpl/src/_pkgs/gcc"
+if [[ ! -e "${gcc}" ]] ; then
+	wget --no-check-certificate -q -O - "http://ftp.gnu.org/gnu/gcc/?C=M;O=D" > "${gcc}"
+fi
+asrcline=$(grep -e "gcc-" "${gcc}" | head -1)
+# echo "gccver1='${asrcline}'"
+gccver=${asrcline##*=\"}
+# echo "gccver2='${gccver}'"
+gccver=${gccver%%/*}
+# echo "gccver='${gccver}'"
+rm "${gcc}"
+echo "http://ftp.gnu.org/gnu/gcc/${gccver}/"

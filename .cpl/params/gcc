@@ -1,5 +1,6 @@
-page=http://ftp.gnu.org/gnu/gcc/gcc-4.8.1/
-url=http://ftp.gnu.org/gnu/gcc/gcc-4.8.1/
+page=get_page_gcc
+url=get_page_gcc
+verexclude=diff
 precond=set +e ; mkdir -p ${H}/.cpl/src/@@NAMEVER@@/objdir ; mkdir -p "${H}/.cpl/src/@@NAMEVER@@/objdir/lib/gcc/i686-pc-linux-gnu" ; set -e
 cdpath=${H}/.cpl/src/@@NAMEVER@@/objdir
 makefile=objdir/Makefile

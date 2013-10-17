@@ -342,7 +342,7 @@ function get_sources_from_web() {
       page=$("${H}/.cpl/scripts/${page}" ${name} ${verexclude})
     fi
   fi
-  # echo "=== page='${page}'"
+   echo "=== page='${page}'"
   get_param ${name} ext "tar.gz"
   if [[ "${nameurl}" == "none" ]] ; then nameurl="" ; fi
   if [[ "${ext}" == "none" ]] ; then ext="" ; fi
