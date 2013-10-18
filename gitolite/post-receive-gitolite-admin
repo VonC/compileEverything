@@ -1,14 +1,15 @@
 #!/bin/bash
 echo "Display refs in post-receive of gitolite-adm"
 
+fenv="${H}/.envs.private"
 source "${H}/sbin/usrcmd/get_tpl_value"
-get_tpl_value "${H}/.envs.private" "@LOCAL_GA_BRANCH@" local_ga_branch
+get_tpl_value "${fenv}" "@LOCAL_GA_BRANCH@" local_ga_branch
 echo "local_ga_branch='${local_ga_branch}'"
-get_tpl_value "${H}/.envs.private" "@UPSTREAM_NAME@" upstream_name
+get_tpl_value "${fenv}" "@UPSTREAM_NAME@" upstream_name
 echo "upstream_name='${upstream_name}'"
 
 if [[ "${local_ga_branch}" == "" || "${upstream_name}" == "" ]] ; then
-  echo "No '.envs.private' variables, meaning nothing to push to upstream/gitolite-admin.git"
+  echo "No '${fenv}' variables, meaning nothing to push to upstream gitolite-admin.git repo"
   exit 0
 fi
 
@@ -21,7 +22,7 @@ fi
 while read oldrev newrev ref
 do
   branchname=${ref#refs/heads/}
-  echo "Gitolite-admin received commit on: '${ref}' => '${branchname}'"
+  echo "Gitolite-admin received commit on: '${ref}' => '${branchname}', vs local_ga_branch='${local_ga_branch}'"
   if [[ "${branchname}" == "${local_ga_branch}" ]] ; then
     if [[ -e "${fenv}" ]] ; then
       echo "Commits on '${local_ga_branch} detected => pushing to ${upstream_name}".
