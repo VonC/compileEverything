@@ -1,5 +1,5 @@
 page=get_page_gcc
-url=get_page_gcc
+url=http://ftp.gnu.org/gnu/gcc/gcc-@@VER@@/
 verexclude=diff
 precond=set +e ; mkdir -p ${H}/.cpl/src/@@NAMEVER@@/objdir ; mkdir -p "${H}/.cpl/src/@@NAMEVER@@/objdir/lib/gcc/i686-pc-linux-gnu" ; set -e
 cdpath=${H}/.cpl/src/@@NAMEVER@@/objdir
