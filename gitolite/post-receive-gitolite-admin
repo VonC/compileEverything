@@ -1,6 +1,10 @@
 #!/bin/bash
 echo "Display refs in post-receive of gitolite-adm"
 
+if [[ "${H}" == "" ]] ; then
+  H="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../.."
+fi
+
 fenv="${H}/.envs.private"
 source "${H}/sbin/usrcmd/get_tpl_value"
 get_tpl_value "${fenv}" "@LOCAL_GA_BRANCH@" local_ga_branch
