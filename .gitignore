@@ -151,7 +151,6 @@ composer/
 /gitlab/puma.rb
 /.cpl/fixed_versions
 .*.old
-gitolite/post-receive-gitolite-admin
 /.gnupg/*.pub
 /.gnupg/*.gpg
 /.gnupg/*.sec

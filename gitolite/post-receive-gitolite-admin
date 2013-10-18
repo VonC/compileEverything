@@ -1,0 +1,33 @@
+#!/bin/bash
+echo "Display refs in post-receive of gitolite-adm"
+
+source "${H}/sbin/usrcmd/get_tpl_value"
+get_tpl_value "${H}/.envs.private" "@LOCAL_GA_BRANCH@" local_ga_branch
+echo "local_ga_branch='${local_ga_branch}'"
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_NAME@" upstream_name
+echo "upstream_name='${upstream_name}'"
+
+if [[ "${local_ga_branch}" == "" || "${upstream_name}" == "" ]] ; then
+  echo "No '.envs.private' variables, meaning nothing to push to upstream/gitolite-admin.git"
+  exit 0
+fi
+
+remote=$(xxgit=1 git remote -v|grep "${upstream_name}")
+if [[ "${remote}" == "" ]] ; then
+  echo "Remote '${upstream_name}' not set, so no push."
+  exit 0
+fi
+
+while read oldrev newrev ref
+do
+  branchname=${ref#refs/heads/}
+  echo "Gitolite-admin received commit on: '${ref}' => '${branchname}'"
+  if [[ "${branchname}" == "${local_ga_branch}" ]] ; then
+    if [[ -e "${fenv}" ]] ; then
+      echo "Commits on '${local_ga_branch} detected => pushing to ${upstream_name}".
+      cp "${fenv}" "${H}/.netrc"
+      git push -f ${upstream_name} ${local_ga_branch}:master
+      rm "${H}/.netrc"
+    fi
+  fi
+done
