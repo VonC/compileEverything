@@ -5,7 +5,7 @@ if [[ ! -e "${sut}" ]] ; then
 fi
 asrcline=$(grep -e "setuptools/" "${sut}" | head -1)
 # echo "sutver1='${sutver}'"
-sutver=${asrcline#*;}
+sutver=${asrcline#*>}
 # echo "sutver2='${sutver}'"
 sutver=${sutver%%<*}
 # echo "sutver='${sutver}'"
