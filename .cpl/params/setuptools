@@ -1,5 +1,6 @@
 page=get_page_setuptools
 url=http://pypi.python.org/packages/source/s/setuptools/
+verexclude=default
 configcmd=none
 makefile=none
 makecmd=python setup.py build
