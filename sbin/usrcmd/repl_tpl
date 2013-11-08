@@ -65,6 +65,7 @@ if [[ "${cptpl_uname#CYGWIN}" != "${cptpl_uname}" ]] ; then
   "${H}/sbin/gen_sed" -i 's/ -fPIC//g' "${fullFilePathDst}" ;
 else
   fqn=$(/usr/bin/host -TtA $(hostname -s)|grep "has address"|/usr/bin/awk '{print $1}') ; if [[ "${fqn}" == "" ]] ; then fqn=$(hostname -s) ; fi
+  fqnp=$(ping ${fqn}); if [[ "${fqnp#}" == "${fqnp}" ]]; then fqn=$(hostname) ; fi
   "${H}/sbin/gen_sed" -i 's/ @@CYGWIN@@//g' "${fullFilePathDst}"
 fi
 "${H}/sbin/gen_sed" -i "s/@FQN@/${fqn}/g" "${fullFilePathDst}"
