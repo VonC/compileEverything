@@ -36,7 +36,7 @@ do
   if [[ "${lfile}" != "${lfile#*bin*}"  || "${lfile}" != "${lfile#*lib*}" ]] ; then
     #echo "${lfile} (${file})"
     #echo -e "$(ldd "${file}" 2>/dev/null)"
-    ldd=$(ldd "${file}" 2>/dev/null|grep "=>")
+    ldd=$(ldd "${file}" 2>/dev/null|grep " (0x")
     #IFS=$'\n'; for line in "$(echo -e "${ldd}" | grep "=>")"; do
     allok="true"
     # echo "msg_root line before '${msg_root}'"
@@ -46,8 +46,10 @@ do
     #echo -ne "${msg_root}" ; exit 0
     while read line; do
       name="${line% =>*}"
+      name="${name% (*}"
       value="${line#*=> }"
       value="${value% (*}"
+      # echo "name='${name}', value='${value}'"
       ok="false"
       if [[ "${name}" == "" ]] ; then ok="true" ; fi
       if [[ "${ok}" == "false" && "${value#${HUL}/}" != "${value}" ]] ; then ok="true" ; fi
@@ -72,6 +74,7 @@ do
       if [[ "${ok}" == "false" && "${name#KERNELBASE.dll}" != "${name}" ]]; then ok="true"; fi
       if [[ "${ok}" == "false" && "${name#cygwin1.dll}" != "${name}" ]]; then ok="true"; fi
       if [[ "${ok}" == "false" && "${name#???}" != "${name}" ]]; then ok="true"; fi
+      if [[ "${value#/usr/*}" != "${value}" ]]; then ok="false"; fi
 
       if [[ "${ok}" == "false" || "${debug#*all}" != "${debug}" ]] ; then
         #echo "${debug#*all} != ${debug}"
