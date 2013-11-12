@@ -68,13 +68,14 @@ do
       if [[ "${ok}" == "false" && "${name#libnsl.so}" != "${name}" ]] ; then ok="true" ; fi
       if [[ "${ok}" == "false" && "${name#libgomp.so}" != "${name}" ]] ; then ok="true" ; fi
       if [[ "${ok}" == "false" && "${name#libaio.so}" != "${name}" ]] ; then ok="true" ; fi
+      if [[ "${ok}" == "false" && "${name#libgomp.so}" != "${name}" ]] ; then ok="true" ; fi
 
       if [[ "${ok}" == "false" && "${name#ntdll.dll}" != "${name}" ]]; then ok="true"; fi
       if [[ "${ok}" == "false" && "${name#kernel32.dll}" != "${name}" ]]; then ok="true"; fi
       if [[ "${ok}" == "false" && "${name#KERNELBASE.dll}" != "${name}" ]]; then ok="true"; fi
       if [[ "${ok}" == "false" && "${name#cygwin1.dll}" != "${name}" ]]; then ok="true"; fi
       if [[ "${ok}" == "false" && "${name#???}" != "${name}" ]]; then ok="true"; fi
-      if [[ "${value#/usr/*}" != "${value}" ]]; then ok="false"; fi
+      if [[ "${ok}" == "false" && "${value#/usr/*}" != "${value}" ]]; then ok="false"; fi
 
       if [[ "${ok}" == "false" || "${debug#*all}" != "${debug}" ]] ; then
         #echo "${debug#*all} != ${debug}"
