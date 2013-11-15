@@ -1,0 +1,16 @@
+#!/bin/sh
+
+paths=$(grep path "${H}/.gitmodules")
+
+while read -r path; do
+    path=${path#*= }
+    echo "$path"
+    name=${path##*/}
+    if [[ "${name}" == "github" ]]; then
+      name="${path%/*}"
+      name="${name##*/}"
+    fi
+    cd "${H}/${path}"
+    git bundle create "$1/${name}.bundle" --all
+# :http://superuser.com/questions/284187/bash-iterating-over-lines-in-a-variable
+done <<< "$paths"
