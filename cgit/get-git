@@ -1,0 +1,21 @@
+#!/bin/sh
+
+GIT_VER="${1}"
+
+if [[ "${GIT_VER}" == "" ]]; then
+  echo "Missing version for get-git";
+  exit 1;
+fi;
+
+homed=${H##*/};
+if [[ ! -e "${H}/../.offline.${homed}" ]]; then
+  curl -L $(GIT_URL) | tar -xzf - && rm -rf "${H}/.cpl/src/cgit/git" && mv git-${GIT_VER} "${H}/.cpl/src/cgit/git"
+  exit 0
+fi
+
+file=$(ls -rt1 "${H}/.cpl/src/_pkgs/repos/"|grep -i git|grep "${GIT_VER}"|tail -1);
+if [[ "${file}" == "" ]]; then
+  echo "no git archive for 'git-${GIT_VER}'" ; exit 1 ;
+fi;
+
+tar -xzf "${H}/.cpl/src/_pkgs/repos/${file}" && rm -rf "${H}/.cpl/src/cgit/git" && mv git-${GIT_VER} "${H}/.cpl/src/cgit/git"
