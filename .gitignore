@@ -8,7 +8,6 @@ src/
 .bashrc
 usr/
 bin/
-/git
 /.m
 /.cpl/_*
 /_lastlog
