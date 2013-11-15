@@ -1,0 +1,28 @@
+#! /bin/bash
+
+if [[ ! -e "${HB}/gem" ]]; then "${HSU}/cmd" gem "$@" ; exit 0 ; fi
+
+homed=${H##*/}
+if [[ ! -e "${H}/../.offline.${homed}" ]] ; then "${HSU}/cmd" gem "$@" ; exit 0 ; fi
+
+# http://www.cyberciti.biz/faq/bash-iterate-array/arg
+args=( "$@" )
+# for arg in "${args[@]}"
+nargs=${#args[*]}
+inst=""
+for (( i=0; i<=$(( $nargs -1 )); i++ ))
+do
+  arg=${args[$i]}
+  #echo "i:'${i}', inst='${inst}'"
+  # http://stackoverflow.com/questions/6261126/modifying-a-parameter-pass-to-a-script-bash
+  if [[ "${inst}" != "" ]] ; then
+    name="${arg}"
+    file=$(ls -rt1 "${H}/.cpl/src/_pkgs/gems/"|grep ${name}|tail -1)
+    if [[ "${file}" == "" ]]; then echo "no offline tgz for '${arg}'"; exit 1; fi
+    args[$i]="${H}/.cpl/src/_pkgs/gems/${file}"
+    inst=""
+  fi
+  if [[ "${arg}" == "install" ]] ; then inst="ok"; fi
+  #echo "${args[$i]}=>'${arg}', inst='${inst}'"
+done
+"${HSU}/cmd" gem "${args[@]}"
