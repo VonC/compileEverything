@@ -1,6 +1,6 @@
 page=get_page_gnome
 url=get_url_gnome
-pre=cpanm XML::Parser
+pre=@@homed=${H##*/}; if [[ ! -e "${H}/../.offline.${homed}" ]] ; then cpanm XML::Parser; else set +o errexit ; initdir="$(pwd)" ; cpanm --look XML::Parser ;  cpanmwork="$HOME/.cpanm/work/"$(ls -t1 "$HOME/.cpanm/work/" | head -n1) ; echo "  XML::Parser: cpanmwork ${cpanmwork}" ; ls -1 "$cpanmwork"/. ; cpanmbuild=$(ls -1d "$cpanmwork"/*/ | head -1) ; echo "  XML::Parser: cpanmbuild ${cpanmbuild}" ; cd "${cpanmbuild}" ; pwd ; ls -alrt ; gen_sed -i "s/LWP/#LWP/g" Makefile.PL ; set -o errexit ; cpanm -v . ; cd "${initdir}" ; fi
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
 #configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@ -with-libiconv=gnu
 #premake=gen_sed -i "s;^ICONV_LIBS =.*$;ICONV_LIBS = -liconv;g" Makefile ; gen_sed -i "s;^/\* #undef USE_LIBICONV_NATIVE \*/;#define USE_LIBICONV_GNU 1;g" config.h ; gen_sed -i "s;_14) tests;_14);g" gio/Makefile.in ; gen_sed -i "s;gdbus-2.0/codegen ;;g" gio/Makefile.in ; gen_sed -i "s;_14) tests;_14);g" gio/Makefile ; gen_sed -i "s;gdbus-2.0/codegen ;;g" gio/Makefile ; gen_sed -i "s;^bin_SCRIPTS += gdbus-codegen;bin_SCRIPTS = ;g" gio/gdbus-2.0/codegen/Makefile.am ; gen_sed -i "s;^bin_SCRIPTS = .*$;bin_SCRIPTS = ;g" gio/gdbus-2.0/codegen/Makefile.in
