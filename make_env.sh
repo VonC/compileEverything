@@ -32,6 +32,10 @@ refresh="false"
 homed=${H##*/}
 echo "homed='${homed}'"
 
+# http://stackoverflow.com/questions/307503/whats-the-best-way-to-check-that-environment-variables-are-set-in-unix-shellscr
+updt=${updt:=no}
+#echo "updt='${updt}'"
+
 _cpl="${H}/.cpl"
 _hcpl=".cpl"
 _deps="${_cpl}/_deps"
@@ -776,31 +780,33 @@ function build_item() {
     if [[ -h "${HULA}/${name}" && ! -e "${HULA}/${namever}" ]] ; then rm -f "${HULA}/${name}" ; fi
   else
     local asrc="${_src}/${namever}"
-    if [[ "${type}" == "MOD" ]] ; then mkdir -p "${asrc}" ; fi
+    if [[ "${type}" == "MOD" && "${updt}" == "no" ]] ; then mkdir -p "${asrc}" ; fi
     sc
-    if [[ "${type}" != "MOD" ]] ; then untar ${name} ${namever} ; else
+    if [[ "${type}" != "MOD" && "${updt}" == "no" ]] ; then untar ${name} ${namever} ; else
       # echo "D: MOD namever='${namever}'"
       rmIfNeeded
     fi
-    action ${name} ${namever} precond "${asrc}" precond "none"
-    gocd ${name} ${namever}
-    action ${name} ${namever} pre "${asrc}" pre "none"
-    configure ${name} ${namever}
-    action ${name} ${namever} premake "${asrc}" premake "none"
-    action ${name} ${namever} makecmd "${asrc}" build "make"
-    action ${name} ${namever} makeinstcmd "${asrc}" installed  "make install"
-    action ${name} ${namever} post "${asrc}" post "none"
+    if [[ "${updt}" == "no" ]]; then
+      action ${name} ${namever} precond "${asrc}" precond "none"
+      gocd ${name} ${namever}
+      action ${name} ${namever} pre "${asrc}" pre "none"
+      configure ${name} ${namever}
+      action ${name} ${namever} premake "${asrc}" premake "none"
+      action ${name} ${namever} makecmd "${asrc}" build "make"
+      action ${name} ${namever} makeinstcmd "${asrc}" installed  "make install"
+      action ${name} ${namever} post "${asrc}" post "none"
+    fi
     if [[ "${type}" != "MOD" ]] ; then
-      if [[ "${type}" == "APP" ]] ; then linksrcdef="${HULA}/${namever}/bin" ; linkdstdef="${H}/bin" ; fi
-      if [[ "${type}" == "LIB" ]] ; then linksrcdef="${HULS}/${namever}" ; linkdstdef="${HUL}" ; fi
+      if [[ "${type}" == "APP" && "${updt}" == "no" ]] ; then linksrcdef="${HULA}/${namever}/bin" ; linkdstdef="${H}/bin" ; fi
+      if [[ "${type}" == "LIB" && "${updt}" == "no" ]] ; then linksrcdef="${HULS}/${namever}" ; linkdstdef="${HUL}" ; fi
       get_param ${name} linksrc ${linksrcdef}; linksrc=$(echo "${linksrc}") ; # echo "linksrc ${linksrc}"
       get_param ${name} linkdst ${linkdstdef}; linkdst=$(echo "${linkdst}") ; # echo "linkdst ${linkdst}"
     fi
-    if [[ "${type}" == "APP" && ! -e "${HULA}/${name}" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
-    if [[ "${type}" == "LIB" && ! -e "${HULS}/${name}" ]] ; then  ln -fs "${namever}" "${HULS}/${name}" ; fi
+    if [[ "${type}" == "APP" && ! -e "${HULA}/${name}" && "${updt}" == "no" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
+    if [[ "${type}" == "LIB" && ! -e "${HULS}/${name}" && "${updt}" == "no" ]] ; then  ln -fs "${namever}" "${HULS}/${name}" ; fi
     if [[ ! -e "${HUL}"/._linked/${namever} ]] ; then
       if [[ "${type}" != "MOD" ]] ; then 
-        if [[ ! -e "${asrc}/._links" ]] ; then
+        if [[ ! -e "${asrc}/._links" && "${updt}" == "no" ]] ; then
           echolog "checking links of ${type} ${namever}"; links "${linkdst}" "${linksrc}" true; 
           if [[ "${type}" == "APP" ]] ; then 
             local l=$(ls "${HULA}/${namever}"/lib/*.so 2>/dev/null)
@@ -818,13 +824,13 @@ function build_item() {
           fi
           echo "done" > "${asrc}/._links"
         fi
-        action ${name} ${namever} postcheck "${asrc}" postcheck "none"
+        if [[ "${updt}" == "no" ]] ; then action ${name} ${namever} postcheck "${asrc}" postcheck "none" ; fi
       fi
       echo done > "${HUL}"/._linked/${namever} ;
     fi
     rm -f "${_src}/${namever}/.lck"
-    if [[ "${type}" == "LIB" && ! -e "${HULS}/${namever}" ]] ; then  rm -f "${HULS}/${name}" ; fi
-    if [[ "${type}" == "APP" || "${type}" == "LIB" ]] ; then
+    if [[ "${type}" == "LIB" && ! -e "${HULS}/${namever}" && "${updt}" == "no" ]] ; then  rm -f "${HULS}/${name}" ; fi
+    if [[ ( "${type}" == "APP" || "${type}" == "LIB" ) && "${updt}" == "no" ]] ; then
       set +e
       tldd "${name}"
       local atlddres="$?"
