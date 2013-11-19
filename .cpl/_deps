@@ -10,8 +10,8 @@ lib libiconv none
 lib readline none
 lib libxml2 zlib,libiconv,readline
 lib gettext libiconv,expat,zlib,libxml2
-app git gcc,man-db,openssl,libssh2,curl,libiconv,expat,libidn,zlib,nginx,perl,apache,python,subversion,openssh,autoconf,libsecret,mcron,gnupg
-app mcron guile
+app git gcc,man-db,openssl,libssh2,curl,libiconv,expat,libidn,zlib,nginx,perl,apache,python,subversion,openssh,autoconf,libsecret,gnupg,mcron
+app mcron guile,gnupg
 app guile libunistring,bdwgc
 lib bdwgc libatomic_ops
 lib libunistring none
