@@ -314,7 +314,7 @@ function get_sources() {
     get_sources_from_web ${name} asnamever asver
     echo "cache no cache: get_sources ${name}, awebnamever ${asnamever}, awebver ${asver}"
   fi
-  update_cache "${name}" "${asnamever}" "${asver}"
+  if [[ "${updt}" == "no" ]]; then update_cache "${name}" "${asnamever}" "${asver}" ; fi
   eval ${_namever}="'${asnamever}'"
   eval ${_ver}="'${asver}'"
 
@@ -458,7 +458,7 @@ function get_sources_from_web() {
     echolog "get sources for ${name} in ${_hpkgs}/${targz}"
     loge "wget ${source} --no-check-certificate -O ${_pkgs}/${targz}" "wget_sources_${targz}"
   fi
-  update_cache "${name}" "${anamever}" "${aver}"
+  if [[ "${updt}" == "no" ]]; then update_cache "${name}" "${anamever}" "${aver}" ; fi
   echo "get_sources_from_web RES ${name}, anamever ${anamever}, aver ${aver}"
   eval ${_namever}="'${anamever}'"
   eval ${_ver}="'${aver}'"
@@ -757,7 +757,7 @@ function build_item() {
   local isdone="false" ; isItDone "${name}" isdone ${afrom}
   if [[ "${isdone}" == "false" ]] ; then echo -ne "\e[1;34m" ; echolog "##### Building ${type} ${name} ####" ; echo -ne "\e[m" ; fi
   if [[ "${type}" != "MOD" ]] ; then
-    if [[ "${refresh}" == "true" ]] ; then
+    if [[ "${refresh}" == "true" || "${updt}" != "no" ]] ; then
       get_sources ${name} namever ver
       # echo "get_sources ${name}, namever ${namever}, ver ${ver}"
     else
@@ -799,8 +799,10 @@ function build_item() {
     if [[ "${type}" != "MOD" ]] ; then
       if [[ "${type}" == "APP" && "${updt}" == "no" ]] ; then linksrcdef="${HULA}/${namever}/bin" ; linkdstdef="${H}/bin" ; fi
       if [[ "${type}" == "LIB" && "${updt}" == "no" ]] ; then linksrcdef="${HULS}/${namever}" ; linkdstdef="${HUL}" ; fi
-      get_param ${name} linksrc ${linksrcdef}; linksrc=$(echo "${linksrc}") ; # echo "linksrc ${linksrc}"
-      get_param ${name} linkdst ${linkdstdef}; linkdst=$(echo "${linkdst}") ; # echo "linkdst ${linkdst}"
+      if [[ "${updt}" == "no" ]] ; then
+        get_param ${name} linksrc ${linksrcdef}; linksrc=$(echo "${linksrc}") ; # echo "linksrc ${linksrc}"
+        get_param ${name} linkdst ${linkdstdef}; linkdst=$(echo "${linkdst}") ; # echo "linkdst ${linkdst}"
+      fi
     fi
     if [[ "${type}" == "APP" && ! -e "${HULA}/${name}" && "${updt}" == "no" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
     if [[ "${type}" == "LIB" && ! -e "${HULS}/${name}" && "${updt}" == "no" ]] ; then  ln -fs "${namever}" "${HULS}/${name}" ; fi
