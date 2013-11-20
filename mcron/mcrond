@@ -6,7 +6,7 @@ CD_TO_APP_ROOT="cd ${APP_ROOT}"
 
 check_pid(){
 
-  if [ -f $MCRON_PID ]; then
+  if [[ -f $MCRON_PID && -s $MCRON_PID ]]; then
     PID=`cat ${MCRON_PID}`
     STATUS=`ps aux | grep $PID | grep -v grep | wc -l`
   else
@@ -27,7 +27,12 @@ start() {
     "${H}/bin/mcron" -d
     read -t2 -n1 -r -p "Waiting for mcron daemon to start: "
     ps aux | grep "${H}/bin/mcron" | grep -v grep | awk '{print $2}' > "${MCRON_PID}"
-    echo "mcron started"
+    if [[ -s "${MCRON_PID}" ]]; then
+      echo "mcron started"
+    else
+      echo "mcron NOT started"
+      exit 1
+    fi
   fi
 }
 
@@ -50,7 +55,7 @@ stop() {
 status() {
   cd $APP_ROOT
   check_pid
-  if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
+  if [[ "${PID}" != "0" && "${STATUS}" != "0" ]]; then
     echo "mcron with PID $PID is running."
     echo "Next mcron job is:"
     mcron -s1
