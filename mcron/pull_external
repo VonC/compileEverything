@@ -53,7 +53,7 @@ while read arepo; do
     if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
       aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
     fi
-    aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
+    # aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
     fh=$(cat "${H}/repositories/${arepo}.git/FETCH_HEAD")
     # echo "FETCH_HEAD='${fh}', refs/heads/master_ext='${aref}' => '${aref2}"
     if [[ "${aref}" != "${aref2}" && "${fh#${aref2}}" != "${fh}" ]] ; then
