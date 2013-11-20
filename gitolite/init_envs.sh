@@ -10,7 +10,6 @@ get_tpl_value "${H}/.envs.private" "@UPSTREAM_NAME@" upstream_name
 if [[ "${upstream_url}" == "" || "${upstream_name}" == "" ]] ; then exit 0 ; fi
 
 gtl="${H}/gitolite"
-cp_tpl "${gtl}/post-receive-gitolite-admin.tpl" "${gtl}"
 ln -fs "../../../gitolite/post-receive-gitolite-admin" "${H}/repositories/gitolite-admin.git/hooks/post-receive"
 
 r=$(GIT_DIR="${H}/repositories/gitolite-admin.git" xxgit=1 git remote show -n ${upstream_name}|grep "https")
