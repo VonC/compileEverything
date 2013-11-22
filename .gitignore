@@ -166,3 +166,4 @@ composer/
 /?netrc*
 /apache/gdb.txt
 /apache/debug
+/.ssh/g1
