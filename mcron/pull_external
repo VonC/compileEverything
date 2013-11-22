@@ -17,6 +17,7 @@ if [[ "${upstream_url}" == "" ]] ; then
   exit 0
 fi
 
+git config --global --unset credential.helper
 
 #echo "Check if anything new comes from upstream '${downstream_url}', before pushing it back to downstream"
 repos=$(git --git-dir=${H}/repositories/gitolite-admin.git show master:conf/gitolite.conf | grep "repo " | grep -v "testing" | grep -v "gitolite-admin")
@@ -70,3 +71,4 @@ while read arepo; do
   fi
 done < <(echo "${repos}")
 
+git config --global credential.helper netrc
