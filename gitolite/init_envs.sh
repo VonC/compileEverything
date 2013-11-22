@@ -16,6 +16,8 @@ if [[ "${user_ga_push}" == "" ]] ; then
   exit 0
 fi
 
+upstream_url="${upstream_url#https://}"
+upstream_url="${upstream_url#*@}"
 upstream_url="https://${user_ga_push}@${upstream_url#https://}"
 
 GIT_DIR="${H}/repositories/gitolite-admin.git"
