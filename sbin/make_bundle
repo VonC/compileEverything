@@ -1,0 +1,28 @@
+#!/bin/sh
+
+export GIT_DIR="${H}/.git"
+export GIT_WORK_TREE="${H}"
+export xxgit=1
+
+b="${H}/../bundles"
+describe=$(git describe)
+ce="compileEverything-${describe}.bundle"
+n="${b}/${ce}"
+echo "n='${n}'"
+
+if [[ -e "${n}" ]]; then
+  echo "${ce} already exists"
+  exit 0
+fi
+
+remote=$(git remote | grep bundle)
+if [[ "${remote}" == "" ]]; then
+  git bundle create "${n}" --all
+  echo "Full bundle '${ce}' created"
+  exit 0
+fi
+
+git fetch bundle
+git bundle create "${n}" bundle/master..master
+echo "Incremental bundle '${ce}' created"
+ln -fs "${ce}" "${b}/compileEverything.bundle"
