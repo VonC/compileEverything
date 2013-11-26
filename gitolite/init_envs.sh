@@ -20,8 +20,8 @@ upstream_url="${upstream_url#https://}"
 upstream_url="${upstream_url#*@}"
 upstream_url="https://${user_ga_push}@${upstream_url#https://}"
 
-GIT_DIR="${H}/repositories/gitolite-admin.git"
-xxgit=1
+export GIT_DIR="${H}/repositories/gitolite-admin.git"
+export xxgit=1
 
 r=$(git remote show -n ${upstream_name}|grep "https")
 
@@ -39,10 +39,13 @@ fi
 
 if [[ -e "${H}/.gnupg/users.netrc.asc" ]]; then
   chelper=$(git config --local --get credential.helper)
-  if [[ "${chelper#netrc }" == "${chelper}" ]] ; then
-    git config --local credential.helper 'netrc -f ${H}/.gnupg/users.netrc.asc -v -d'
+  if [[ "${chelper}" == "" || "${chelper#netrc -}" == "${chelper}" ]] ; then
+    git config --local credential.helper 'netrc -f ${H}/.gnupg/users.netrc.asc'
   fi
 fi
 
 gtl="${H}/gitolite"
 ln -fs "../../../gitolite/post-receive-gitolite-admin" "${H}/repositories/gitolite-admin.git/hooks/post-receive"
+
+unset xxgit
+unset GIT_DIR
