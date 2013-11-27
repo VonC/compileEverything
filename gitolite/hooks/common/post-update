@@ -62,7 +62,9 @@ if [[ "${user_push}" == "" ]] ; then
   exit 0
 fi
 
-upstream_url="https://${user_push}@${upstream_url#https://}"
+upstream_url="${upstream_url#https://}"
+upstream_url="${upstream_url#*@}"
+upstream_url="https://${user_push}@${upstream_url}"
 
 r=$(xxgit=1 git remote show -n ${upstream_name}|grep "https")
 
@@ -73,15 +75,17 @@ fi
 
 ggit="git --git-dir=${H}/repositories/${reponame}"
 
-if [[ -e "${H}/.gnupg/projextrdr.netrc.gpg" ]]; then
+if [[ -e "${H}/.gnupg/users.netrc.asc" ]]; then
   chelper=$(${ggit} config --local --get credential.helper)
-  if [[ "${chelper#netrc }" == "${chelper}" ]] ; then
-    $(${ggit} config --local credential.helper 'netrc -f ${H}/.gnupg/projextrdr.netrc.gpg -v -d')
+  if [[ "${chelper}" == "" || "${chelper#netrc -}" == "${chelper}" ]] ; then
+    $(${ggit} config --local credential.helper 'netrc -f ${H}/.gnupg/users.netrc.asc')
   fi
 fi
 
 echo "Pushing public repo '${branch_local}' branch to '${upstream_name}'/'${branch_upstream}'"
+git config --global --unset credential.helper
 
 cp "${H}/.envs.private" "${H}/.netrc"
 git push -f ${upstream_name} ${branch_local}:${branch_upstream}
 rm -f "${H}/.netrc"
+git config --global credential.helper netrc
