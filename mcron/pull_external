@@ -42,8 +42,8 @@ while read arepo; do
     fi
 
     chelper=$(${ggit} config --local --get credential.helper)
-    if [[ "${chelper#netrc }" == "${chelper}" ]] ; then
-      $(${ggit} config --local credential.helper 'netrc -f ${H}/mcron/projextrdr.netrc.asc -v -d')
+    if [[ "${cchelper}" == "" || "${chelper#netrc -}" == "${chelper}" ]] ; then
+      $(${ggit} config --local credential.helper 'netrc -f ${H}/mcron/projextrdr.netrc.asc')
     fi
     aref=""
     if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
