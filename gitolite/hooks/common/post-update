@@ -19,16 +19,17 @@ fi
 
 echo "Update on local '${branch_local}, checking on external branch presence"
 
-# if there is an external branch then it is a repo public
+# if there is an external branch or a downstream site, then it is a repo public
+get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_NAME@" downstream_name
 get_tpl_value "${H}/.envs.private" "@EXT_BRANCH_NAME@" branch_ext
-if [[ "${branch_ext}" == "" ]] ; then
+if [[ "${downstream_name}" == "" && "${branch_ext}" == "" ]] ; then
   echo "No external branch registered, nothing to push to upstream"
   exit 0
 fi
 
 a_branch_ext=$(git branch|grep "${branch_ext}")
-if [[ "${a_branch_ext}" == "" ]] ; then
-  echo "No external branch '${branch_ext}' detected in the local repo, must be an internal repo only."
+if [[ "${downstream_name}" == "" && "${a_branch_ext}" == "" ]] ; then
+  echo "No external branch '${branch_ext}' or downstream repo detected in the local repo, must be an internal repo only."
   exit 0
 fi
 
