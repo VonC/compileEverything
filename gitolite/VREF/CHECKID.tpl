@@ -17,6 +17,7 @@ if [[ "${aparamfile}" != "" ]] ; then
     # echo "user: '${nci_user}' - '${nci_repo}', for line '${line}'"
     if [[ "${nci_user}" == "${GL_USER}" ]] ; then
       if [[ "${nci_repo}" == "all" || "${nci_repo}" == "${GL_REPO}" ]] ; then
+        echo "push to '${GL_REPO}' with authorized user '${GL_USER}', no checkid needed."
         exit 0
       fi
     fi
