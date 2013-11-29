@@ -67,11 +67,18 @@ upstream_url="${upstream_url#https://}"
 upstream_url="${upstream_url#*@}"
 upstream_url="https://${user_push}@${upstream_url}"
 
-r=$(xxgit=1 git remote show -n ${upstream_name}|grep "https")
+r=$(xxgit=1 git remote show -n ${upstream_name}|grep "https"|tail -1)
 
 if [[ "${r}" == "" ]] ; then
   echo "register '${upstream_url}${reponame}' as '${upstream_name}'"
   git remote add ${upstream_name} ${upstream_url}${reponame}
+else
+  r="https${r#*https}"
+fi
+
+if [[ "${r}" != "" && "${r#${upstream_url}}" == "${r}" ]] ; then
+  echo "update '${upstream_url}${reponame}' as '${upstream_name}'"
+  git remote set-url ${upstream_name} ${upstream_url}${reponame}
 fi
 
 ggit="git --git-dir=${H}/repositories/${reponame}"
