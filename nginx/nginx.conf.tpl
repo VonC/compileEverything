@@ -45,8 +45,10 @@ http {
         ssl_certificate_key  @H@/nginx/itsvc.world.company.key;
         ssl_session_timeout  5m;
         #ssl_protocols SSLv2 SSLv3 TLSv1; # NO: SSLv2 prohibited
-        ssl_protocols  SSLv3 TLSv1;
-        ssl_ciphers  ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+        #ssl_protocols  SSLv3 TLSv1;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        #ssl_ciphers  ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+        ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA RC4 !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";
         ssl_prefer_server_ciphers   on;
 
         location /git/ {
