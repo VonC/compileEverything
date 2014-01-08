@@ -81,6 +81,10 @@ Header merge Cache-Control no-store
 Header merge Cache-Control must-revalidate
 MaxKeepAliveRequests 5
 
+SSLProtocol all -SSLv2 -SSLv3
+SSLHonorCipherOrder on
+SSLCipherSuite "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA RC4 !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS"
+
 # GitWeb on @PORT_HTTP_GITWEB@
 Listen @PORT_HTTP_GITWEB@
 <VirtualHost @FQN@:@PORT_HTTP_GITWEB@>
@@ -89,7 +93,6 @@ Listen @PORT_HTTP_GITWEB@
     SSLCertificateFile "@H@/apache/crt"
     SSLCertificateKeyFile "@H@/apache/key"
     SSLEngine on
-    SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
     SetEnv GIT_HTTP_BACKEND "@H@/usr/local/apps/git/libexec/git-core/git-http-backend"
     DocumentRoot @H@/gitweb
     Alias /git @H@/gitweb
@@ -151,7 +154,6 @@ Listen @PORT_HTTP_HGIT@
     SSLCertificateFile "@H@/apache/crt"
     SSLCertificateKeyFile "@H@/apache/key"
     SSLEngine on
-    SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
     SetEnv GIT_PROJECT_ROOT @H@/repositories
     SetEnv GIT_HTTP_EXPORT_ALL
     SetEnv GITOLITE_HTTP_HOME @H@
@@ -191,7 +193,6 @@ Listen @PORT_HTTP_CGIT@
     SSLCertificateFile "@H@/apache/crt"
     SSLCertificateKeyFile "@H@/apache/key"
     SSLEngine on
-    SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
     SetEnv GIT_HTTP_BACKEND "@H@/usr/local/apps/git/libexec/git-core/git-http-backend"
     DocumentRoot @H@/cgit
     Alias /cgit @H@/cgit
