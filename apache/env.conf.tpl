@@ -109,7 +109,6 @@ Listen @PORT_HTTP_GITWEB@
         AuthType form
         AuthName "LDAP authentication for ITSVC Prod GitWeb repositories"
         AuthFormAuthoritative On
-        #AuthBasicProvider myldap companyldap
         AuthFormAttempts 4
         AuthFormLockout 180
 
