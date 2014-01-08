@@ -64,6 +64,14 @@ http {
           proxy_pass https://@FQN@:@PORT_HTTPS_GITLAB@/gitlab/;
         }
 
+        location /Semantic-UI/ {
+          proxy_pass https://@FQN@:@PORT_HTTP_GITWEB@/Semantic-UI/;
+        }
+
+        location /lockedout {
+          proxy_pass https://@FQN@:@PORT_HTTP_GITWEB@/lockedout;
+        }
+
         root @H@/nginx/html;
         location = / {
             index  index.html index.htm;
