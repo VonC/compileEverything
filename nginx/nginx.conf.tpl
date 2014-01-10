@@ -37,7 +37,7 @@ http {
         server_name  @FQN@ @HOSTNAME@;
         # default max client body size was 1m! => Error code is 413
         # here: max 10Go
-        client_max_body_size 10000m;
+        client_max_body_size 10m;
         proxy_read_timeout 90s;
 
         ssl                  on;
@@ -82,7 +82,7 @@ http {
         server_name  @FQN@ @HOSTNAME@;
         # default max client body size was 1m! => Error code is 413
         # here: max 10Go
-        client_max_body_size 10000m;
+        client_max_body_size 10m;
 
         root @H@/nginx/html;        
         location = / {
