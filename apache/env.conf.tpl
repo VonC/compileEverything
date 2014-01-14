@@ -37,7 +37,7 @@ ExtendedStatus On
 Session On
 SessionCryptoPassphrase secretgit
 SessionCookieName session path=/;httponly;secure;
-SessionMaxAge 300
+SessionMaxAge 900
 
 SSLCACertificateFile "@H@/apache/global_ca.crt"
 LDAPTrustedGlobalCert CA_BASE64 "@H@/openldap/global_ca.crt"
