@@ -31,6 +31,7 @@ http {
     proxy_set_header   X-Real-IP        $remote_addr;
     proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
     #proxy_redirect     http://itsvc/git/  /git/;
+    server_tokens off;
 
     server {
         listen       @PORT_NGINX_HTTPS@;
