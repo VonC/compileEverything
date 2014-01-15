@@ -1,5 +1,5 @@
---- mod_auth_form.c.ori	2013-10-05 10:27:47.735441063 +0200
-+++ mod_auth_form.c	2013-10-05 22:56:39.158576577 +0200
+--- mod_auth_form.c.ori	2013-10-07 16:47:54.000000000 +0100
++++ mod_auth_form.c	2014-01-15 16:32:08.117374000 +0000
 @@ -19,7 +19,9 @@
  #include "apr_base64.h"             /* for apr_base64_decode et al */
  #define APR_WANT_STRFUNC            /* for strcasecmp */
@@ -95,7 +95,7 @@
      {NULL}
  };
  
-@@ -748,6 +795,180 @@
+@@ -748,6 +795,230 @@
  
  }
  
@@ -123,6 +123,94 @@
 +    return start;
 +}
 +
++
++typedef struct {
++    apr_file_t *login_file;
++    char *login_filename;
++    apr_status_t rv;
++} auth_form_lockout;
++
++static int init_login_pool(request_rec * r) {
++    if ( !login_pool && apr_pool_create(&login_pool, NULL) != APR_SUCCESS) {
++        ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01384)
++                      "mod_auth_form: Failed to create memory pool");
++        return HTTP_INTERNAL_SERVER_ERROR;
++    }
++    return APR_SUCCESS;
++}
++
++static auth_form_lockout *get_lockout_file(const char *sent_user, request_rec * r, int read) {
++
++    auth_form_lockout *res = apr_pcalloc(login_pool, sizeof(*res));
++    res->login_file = NULL;
++
++    apr_status_t rv;
++
++    char *login_home;
++    rv = apr_env_get(&login_home, "HOME", login_pool);
++    if ( rv != APR_SUCCESS) {
++        ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01385)
++                      "mod_auth_form: Failed to get HOME for account running httpd process");
++        res->rv = HTTP_INTERNAL_SERVER_ERROR;
++        return res;
++    }
++
++    res->login_filename = apr_psprintf(login_pool, "%s%s%s", login_home, LOGIN_PATH, sent_user);
++
++    apr_file_t *login_file = NULL;
++
++    if ( read == 1 ) {
++        rv = apr_file_open(&login_file, res->login_filename, APR_FOPEN_READ | APR_FOPEN_CREATE, APR_UREAD | APR_UWRITE | APR_GREAD, login_pool);
++        if ( rv != APR_SUCCESS) {
++            ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01388)
++                          "mod_auth_form: Failed to open in READ filename named '%s' for sent_user '%s'", res->login_filename, sent_user);
++            res->rv = HTTP_INTERNAL_SERVER_ERROR;
++            return res;
++        }
++        res->rv = APR_SUCCESS;
++        res->login_file = login_file;
++    } else {
++        rv = apr_file_open(&login_file, res->login_filename, APR_FOPEN_CREATE | APR_FOPEN_WRITE | APR_FOPEN_TRUNCATE, APR_UREAD | APR_UWRITE | APR_GREAD, login_pool);
++        if ( rv != APR_SUCCESS) {
++            ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01390)
++                          "mod_auth_form: Failed to open in WRITE filename named '%s' for sent_user '%s'", res->login_filename, sent_user);
++            apr_file_close(login_file);
++            res->rv = HTTP_INTERNAL_SERVER_ERROR;
++            return res;
++        }
++        res->rv = APR_SUCCESS;
++        res->login_file = login_file;
++    }
++
++    return res;
++}
++
++static int write_lockout(const char *sent_user, request_rec * r, const apr_uint64_t login_number1, apr_file_t *login_file, char *login_filename, char *cause) {
++    //ap_log_rerror(APLOG_MARK, APLOG_TRACE4, 0, r, "write_lockout");
++    ap_log_rerror(APLOG_MARK, APLOG_TRACE1, 0, r, "write_lockout login_number1 '%lu' for user '%s' in '%s' (%lu) because '%s'", login_number1, sent_user, login_filename, login_file, cause);
++
++    if ( init_login_pool(r) != APR_SUCCESS) {
++        return HTTP_INTERNAL_SERVER_ERROR;
++    }
++
++    apr_status_t rv;
++    apr_size_t nbytes = 256;
++    char *login_newnumber =  apr_pcalloc(login_pool, nbytes + 1);
++    memset(login_newnumber, 0, nbytes + 1);
++    apr_size_t bytes;
++    strcpy(login_newnumber,apr_lltoa(login_pool, (long long)(login_number1) ) );
++    //ap_log_rerror(APLOG_MARK, APLOG_TRACE1, 0, r,
++    //              "Current password for login '%s' update attempts number to %lu ('%s') <=", sent_user, login_number1, login_newnumber);
++    bytes = strlen(login_newnumber);
++    rv = apr_file_write(login_file, login_newnumber, &bytes);
++    if ( rv != APR_SUCCESS) {
++        ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01391)
++                      "mod_auth_form: Failed to WRITE newnumber '%s' (%lu) in filename named '%s' for sent_user '%s': %s", login_newnumber, (login_number1), login_filename, sent_user, cause);
++        return HTTP_INTERNAL_SERVER_ERROR;
++    }
++    return rv;
++}
++
 +static int check_lockout(const char *sent_user, request_rec * r, auth_form_config_rec *conf){
 +    if (!sent_user) {
 +        return APR_SUCCESS;
@@ -134,52 +222,33 @@
 +    const int login_limit=conf->attempts;
 +    const int login_timeout=conf->lockout;
 +
-+    if ( !login_pool && apr_pool_create(&login_pool, NULL) != APR_SUCCESS) {
-+        ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01284)
-+                      "mod_auth_form: Failed to create memory pool");
-+        return HTTP_INTERNAL_SERVER_ERROR;
-+    }
-+
 +    apr_status_t rv;
 +
-+    char *login_home;
-+    rv = apr_env_get(&login_home, "HOME", login_pool);
-+    if ( rv != APR_SUCCESS) {
-+        ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01285)
-+                      "mod_auth_form: Failed to get HOME for account running httpd process");
++    if ( init_login_pool(r) != APR_SUCCESS) {
 +        return HTTP_INTERNAL_SERVER_ERROR;
 +    }
 +
-+    char *login_filename;
-+    login_filename = apr_psprintf(login_pool, "%s%s%s", login_home, LOGIN_PATH, sent_user);
++    auth_form_lockout *res = get_lockout_file(sent_user, r, 1);
 +
-+    apr_file_t *login_file = NULL;
-+    rv = apr_file_open(&login_file, login_filename, APR_FOPEN_READ | APR_FOPEN_CREATE, APR_UREAD | APR_UWRITE | APR_GREAD, login_pool);
-+    if ( rv != APR_SUCCESS) {
-+        ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01288)
-+                      "mod_auth_form: Failed to open in READ filename named '%s' for sent_user '%s'", login_filename, sent_user);
-+        return HTTP_INTERNAL_SERVER_ERROR;
++    if ( res->rv != APR_SUCCESS) {
++        return res->rv;
 +    }
 +
 +    apr_size_t nbytes = 256;
 +    char *login_failed = apr_pcalloc(login_pool, nbytes + 1);
 +    memset(login_failed, 0, nbytes + 1);
-+    rv = apr_file_read(login_file, login_failed, &nbytes);
++    rv = apr_file_read(res->login_file, login_failed, &nbytes);
 +    if ( rv != APR_SUCCESS && rv != APR_EOF ) {
 +        ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01289)
-+                      "mod_auth_form: Failed to read filename named '%s' for sent_user '%s'", login_filename, sent_user);
-+        apr_file_close(login_file);
++                      "mod_auth_form: Failed to read filename named '%s' for sent_user '%s'", res->login_filename, sent_user);
++        apr_file_close(res->login_file);
 +        return HTTP_INTERNAL_SERVER_ERROR;
 +    }
-+    apr_file_close(login_file);
++    apr_file_close(res->login_file);
 +
-+
-+    rv = apr_file_open(&login_file, login_filename, APR_FOPEN_CREATE | APR_FOPEN_WRITE | APR_FOPEN_TRUNCATE, APR_UREAD | APR_UWRITE | APR_GREAD, login_pool);
-+    if ( rv != APR_SUCCESS) {
-+        ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01290)
-+                      "mod_auth_form: Failed to open in WRITE filename named '%s' for sent_user '%s'", login_filename, sent_user);
-+        apr_file_close(login_file);
-+        return HTTP_INTERNAL_SERVER_ERROR;
++    res = get_lockout_file(sent_user, r, 0);
++    if ( res->rv != APR_SUCCESS) {
++        return res->rv;
 +    }
 +
 +    const apr_uint64_t login_number = ( login_failed ) ? apr_atoi64(login_failed) : 1;
@@ -192,7 +261,7 @@
 +        if ( rv != APR_SUCCESS) {
 +            ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01288)
 +                          "mod_auth_form: Failed to translate date '%s' for sent_user '%s'", login_number, sent_user);
-+            apr_file_close(login_file);
++            apr_file_close(res->login_file);
 +            return HTTP_INTERNAL_SERVER_ERROR;
 +        }
 +        ap_log_rerror(APLOG_MARK, APLOG_TRACE1, 0, r,
@@ -200,36 +269,24 @@
 +    }
 +
 +    const apr_time_t login_now = apr_time_now();
-+    char *login_newnumber =  apr_pcalloc(login_pool, nbytes + 1);
-+    memset(login_newnumber, 0, nbytes + 1);
 +    apr_size_t bytes;
 +    if (login_number < login_limit) {
 +        const apr_uint64_t login_number1 = login_number + 1;
-+        strcpy(login_newnumber,apr_lltoa(login_pool, (long long)(login_number1) ) );
-+        ap_log_rerror(APLOG_MARK, APLOG_TRACE1, 0, r,
-+                      "Current password for login '%s' update attempts number to %lu", sent_user, login_number1);
-+        bytes = strlen(login_newnumber);
-+        rv = apr_file_write(login_file, login_newnumber, &bytes);
++        rv = write_lockout(sent_user, r, login_number1, res->login_file, res->login_filename,"01291 login_number < login_limit");
 +        if ( rv != APR_SUCCESS) {
-+            ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01291)
-+                          "mod_auth_form: Failed to WRITE newnumber '%s' (%lu) in filename named '%s' for sent_user '%s'", login_newnumber, (login_number+1), login_filename, sent_user);
-+            apr_file_close(login_file);
++            apr_file_close(res->login_file);
 +            return HTTP_INTERNAL_SERVER_ERROR;
 +        }
 +    }
 +    apr_time_t login_expiry = (apr_time_t)login_number;
 +    if (login_number == login_limit) {
 +        login_expiry = login_now + ( login_timeout * APR_USEC_PER_SEC);
-+        strcpy( login_newnumber, apr_lltoa(login_pool, (long long)(login_expiry) ) );
 +        ap_log_rerror(APLOG_MARK, APLOG_TRACE1, 0, r,
 +                      "Set timeout for login '%s' up to %lu, compare to now %lu", sent_user, login_expiry, login_now);
 +        apr_table_set(r->headers_out, "Location", "/lockedout");
-+        bytes = strlen(login_newnumber);
-+        rv = apr_file_write(login_file, login_newnumber, &bytes);
++        rv = write_lockout(sent_user, r, login_expiry, res->login_file, res->login_filename,"01291 login_number == login_limit => login_expiry");
 +        if ( rv != APR_SUCCESS) {
-+            ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01292)
-+                          "mod_auth_form: Failed to WRITE newnumber '%s' (expiry '%lu') in filename named '%s' for sent_user '%s'", login_newnumber, login_expiry, login_filename, sent_user);
-+            apr_file_close(login_file);
++            apr_file_close(res->login_file);
 +            return HTTP_INTERNAL_SERVER_ERROR;
 +        }
 +    }
@@ -240,43 +297,36 @@
 +                    ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(03340)
 +                                  "Account Still Locked out: %s for %lu seconds", sent_user, ((login_expiry-login_now)/APR_USEC_PER_SEC));
 +                    apr_table_set(r->headers_out, "Location", "/lockedout");
-+                    strcpy( login_newnumber, login_failed) ;
-+                    bytes = strlen(login_newnumber);
 +                    ap_log_rerror(APLOG_MARK, APLOG_TRACE1, 0, r,
-+                                  "Set again timeout for login '%s' up to %lu ('%s'), compare to now %lu", sent_user, login_expiry, login_newnumber, login_now);
-+                    rv = apr_file_write(login_file, login_newnumber, &bytes);
++                                  "Set again timeout for login '%s' up to %lu, compare to now %lu", sent_user, login_expiry, login_now);
++                    rv = write_lockout(sent_user, r, login_number, res->login_file, res->login_filename,"01291 login_expiry-login_now <= login_timeout && login_number > login_limit => login_number");
 +                    if ( rv != APR_SUCCESS) {
-+                        ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01291)
-+                                      "mod_auth_form: Failed to WRITE newnumber '%s' (%lu) in filename named '%s' for sent_user '%s'", login_newnumber, (login_number+1), login_filename, sent_user);
-+                        apr_file_close(login_file);
++                        apr_file_close(res->login_file);
 +                        return HTTP_INTERNAL_SERVER_ERROR;
 +                    }
 +                }
 +            }
-+            apr_file_close(login_file);
++            apr_file_close(res->login_file);
 +            return HTTP_MOVED_TEMPORARILY;
 +        }
 +        int login_reset = 1;
-+        strcpy( login_newnumber, apr_lltoa(login_pool, (long long)(login_reset) ) );
 +        ap_log_rerror(APLOG_MARK, APLOG_TRACE1, 0, r,
 +                      "RESET attempt for login '%s' to %lu", sent_user, (long long)(login_reset));
-+        bytes = strlen(login_newnumber);
-+        rv = apr_file_write(login_file, login_newnumber, &bytes);
++        rv = write_lockout(sent_user, r, login_reset, res->login_file, res->login_filename,"01293 login_reset");
++
 +        if ( rv != APR_SUCCESS) {
-+            ap_log_rerror(APLOG_MARK, APLOG_CRIT, 0, r, APLOGNO(01293)
-+                          "mod_auth_form: Failed to WRITE newnumber '%s' (reset '%lu%') in filename named '%s' for sent_user '%s'", login_newnumber, 0, login_filename, sent_user);
-+            apr_file_close(login_file);
++            apr_file_close(res->login_file);
 +            return HTTP_INTERNAL_SERVER_ERROR;
 +        }
 +    }
-+    apr_file_close(login_file);
++    apr_file_close(res->login_file);
 +    return APR_SUCCESS;
 +}
 +
  /**
   * Given a username and password (extracted externally from a cookie), run
   * the authnz hooks to determine whether this request is authorized.
-@@ -1024,6 +1245,13 @@
+@@ -1024,10 +1295,21 @@
              r->handler = FORM_REDIRECT_HANDLER;
          }
  
@@ -290,3 +340,11 @@
          /* check the authn in the main request, based on the username found */
          if (OK == rv) {
              rv = check_authn(r, sent_user, sent_pw);
+             if (OK == rv) {
++                auth_form_lockout *res = get_lockout_file(sent_user, r, 0);
++                rv = write_lockout(sent_user, r, 1, res->login_file, res->login_filename,"01299 login_reset");
++            }
++            if (OK == rv) {
+                 fake_basic_authentication(r, conf, sent_user, sent_pw);
+                 set_session_auth(r, sent_user, sent_pw, conf->site);
+                 if (sent_loc) {
