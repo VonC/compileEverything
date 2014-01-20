@@ -14,4 +14,4 @@ premake=gen_sed -i "s/^EXTLIBS =/EXTLIBS = -lintl /g" "${H}/.cpl/src/@@NAMEVER@@
 makecmd=gmake
 makeinstcmd=gmake install
 post=cp_tpl "${H}/gitweb/gitweb.conf.pl.tpl" "${H}/gitweb" ; gen_sed -e "s#print \"</body>#print \"<script src=\\\\\"jquery.min.js\\\\\"></script>\\\\n<script src=\\\\\"document_ready.js\\\\\"></script>\\\\n</body>#" "${H}/gitweb/gitweb.cgi"
-postcheck="${H}/git/update-repo-git.sh" ; "${H}/git/update-repos-bundle.sh" ; 
+postcheck="${H}/git/update-repo-git.sh" ; "${H}/git/update-repos-bundle.sh" ; "${H}/git/install-man.sh"
