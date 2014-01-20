@@ -19,7 +19,7 @@ else
 fi
 cd "${H}/.cpl/src/git-manpages"
 ver=$(cat "${H}/.cpl/src/git/GIT-VERSION-FILE"|grep GIT_VERSION|awk '{print $3}')
-sha1=$(git log --pretty=format:"%H %s"|grep "${ver}-"|head -1|awk '{print $1}')
+sha1=$(git log --all --pretty=format:"%H %s"|grep "${ver}-"|head -1|awk '{print $1}')
 git checkout ${sha1}
 
 if [[ ! -e "${H}/.cpl/src/_pkgs/git-manpages.bundle-${sha1}" ]]; then
