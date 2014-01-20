@@ -778,6 +778,7 @@ function build_item() {
     if [[ ! -e "${HULA}/${name}" && -e "${HULA}/${namever}" ]] ; then ln -fs "${namever}" "${HULA}/${name}" ; fi
     if [[ -h "${HULA}/${name}/${namever}" ]] ; then rm -f "${HULA}/${name}/${namever}" ; fi
     if [[ -h "${HULA}/${name}" && ! -e "${HULA}/${namever}" ]] ; then rm -f "${HULA}/${name}" ; fi
+    if [[ -e "${HULA}/${namever}" ]] ; then ln -fs "${namever}" "${HULA}/${name}" ; fi
   else
     local asrc="${_src}/${namever}"
     if [[ "${type}" == "MOD" && "${updt}" == "no" ]] ; then mkdir -p "${asrc}" ; fi
@@ -804,8 +805,8 @@ function build_item() {
         get_param ${name} linkdst ${linkdstdef}; linkdst=$(echo "${linkdst}") ; # echo "linkdst ${linkdst}"
       fi
     fi
-    if [[ "${type}" == "APP" && ! -e "${HULA}/${name}" && "${updt}" == "no" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
-    if [[ "${type}" == "LIB" && ! -e "${HULS}/${name}" && "${updt}" == "no" ]] ; then  ln -fs "${namever}" "${HULS}/${name}" ; fi
+    if [[ "${type}" == "APP" && "${updt}" == "no" ]] ; then  ln -fs "${namever}" "${HULA}/${name}" ; fi
+    if [[ "${type}" == "LIB" && "${updt}" == "no" ]] ; then  ln -fs "${namever}" "${HULS}/${name}" ; fi
     if [[ ! -e "${HUL}"/._linked/${namever} ]] ; then
       if [[ "${type}" != "MOD" ]] ; then 
         if [[ ! -e "${asrc}/._links" && "${updt}" == "no" ]] ; then
