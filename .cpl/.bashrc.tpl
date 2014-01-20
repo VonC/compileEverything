@@ -204,3 +204,6 @@ alias gpgs="${H}/sbin/gpg --batch -q"
 
 # http://superuser.com/a/450630/141
 export GPG_TTY=$(tty)
+
+if [[ "${MANPATH}" == "" ]] ; then export MANPATH="${HUL}/share/man"; fi
+if [[ "${MANPATH#*$H}" == "${MANPATH}" ]] ; then export MANPATH="${HUL}/share/man:${MANPATH}"; fi
