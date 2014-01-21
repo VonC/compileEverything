@@ -26,3 +26,4 @@ git fetch bundle
 git bundle create "${n}" bundle/master..master
 echo "Incremental bundle '${ce}' created"
 ln -fs "${ce}" "${b}/compileEverything.bundle"
+git branch -f bundle/master master
