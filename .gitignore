@@ -167,3 +167,4 @@ composer/
 /apache/gdb.txt
 /apache/debug
 /.ssh/g1
+*.old
