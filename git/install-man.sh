@@ -20,12 +20,13 @@ fi
 cd "${H}/.cpl/src/git-manpages"
 ver=$(cat "${H}/.cpl/src/git/GIT-VERSION-FILE"|grep GIT_VERSION|awk '{print $3}')
 sha1=$(git log --all --pretty=format:"%H %s"|grep "${ver}-"|head -1|awk '{print $1}')
+echo "ver='${ver}' => sha1='${sha1}'"
 git checkout ${sha1}
 
 if [[ ! -e "${H}/.cpl/src/_pkgs/git-manpages.bundle-${sha1}" ]]; then
   git bundle create "${H}/.cpl/src/_pkgs/git-manpages.bundle-${sha1}" --all
 fi
-ln -fs "${H}/.cpl/src/_pkgs/git-manpages.bundle-${sha1}" "${H}/.cpl/src/_pkgs/git-manpages.bundle"
+ln -fs "git-manpages.bundle-${sha1}" "${H}/.cpl/src/_pkgs/git-manpages.bundle"
 
 
 if [[ ! -e "${HUL}/share/man/man1/git.1" ]]; then
