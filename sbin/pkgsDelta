@@ -1,0 +1,41 @@
+#!/bin/sh
+
+file="${1}"
+pkgs="${2}"
+dest="${3}"
+
+list=""
+while read -r line; do
+  # echo "${line}"
+  if [[ "${line#*-}" != "${line}" ]]; then
+    prefix="${line}"
+    if [[ "${line#*.}" != "${line}" ]]; then
+      prefix="${line%%-*}"
+    fi
+    if [[ "${list#*~${prefix}~}" == "${list}" ]]; then
+      #echo "${prefix} (${list})"
+      if [[ -e "${2}/${prefix}" ]]; then
+        #echo "${prefix}"
+        list="${list}~${prefix}~"
+        archive=$(ls -1rt "${prefix}"-*|grep -v bundle|tail -1)
+        exist=$(grep "${archive}" "${file}")
+        if [[ "${exist}" != "" ]]; then
+          echo "${prefix} exists"
+        else
+          echo "${prefix} (${archive}) DOES NOT EXIST"
+          cp -af "${prefix}" "${dest}"
+          cp -f "${archive}" "${dest}"
+          if [[ -h "${prefix}" ]]; then
+            cp -f "$(readlink -f "${prefix}")" "${dest}"
+          fi
+        fi
+      fi
+    fi
+  fi
+done <<< "$(cat ${file})"
+cp -af "${pkgs}/git-manpages.bundle" "${dest}"
+rm -f "${dest}/git-manpages.bundle-*"
+cp -f "$(readlink -f "${pkgs}/git-manpages.bundle")" "${dest}"
+tarfile="pkgs$(date +%Y%m%d -d "today").tar"
+tar cpvf "${tarfile}" "${dest}"
+gzip -f "${tarfile}"
