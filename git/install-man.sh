@@ -11,7 +11,7 @@ if [[ ! -e "${H}/.cpl/src/git-manpages" ]]; then
     if [[ ! -e "${H}/.cpl/src/_pkgs/git-manpages.bundle" ]]; then
       echo "${H}/.cpl/src/_pkgs/git-manpages.bundle unavailable"  > /dev/stderr ; exit 1
     fi
-    xxgit=1 git clone "${H}/.cpl/src/_pkgs/git-manpages.bundle unavailable" "${H}/.cpl/src/git-manpages"
+    xxgit=1 git clone "${H}/.cpl/src/_pkgs/git-manpages.bundle" "${H}/.cpl/src/git-manpages"
   fi
 else
   cd "${H}/.cpl/src/git-manpages"
