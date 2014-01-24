@@ -37,7 +37,7 @@ http {
         listen       @PORT_NGINX_HTTPS@;
         server_name  @FQN@ @HOSTNAME@;
         # default max client body size was 1m! => Error code is 413
-        # here: max 10Go
+        # here: max 10Mo
         client_max_body_size 10m;
         proxy_read_timeout 90s;
 
@@ -82,7 +82,7 @@ http {
         listen       @PORT_NGINX_HTTP@;
         server_name  @FQN@ @HOSTNAME@;
         # default max client body size was 1m! => Error code is 413
-        # here: max 10Go
+        # here: max 10Mo
         client_max_body_size 10m;
 
         root @H@/nginx/html;        
