@@ -90,7 +90,7 @@ apache/openssl.cnf
 /jdk/.cookies
 /repositories
 /repositories.ori/
-*.ori
+*.ori*
 .ldap
 tomcat/key*
 *.p12*
