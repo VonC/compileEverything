@@ -2,6 +2,9 @@ dep*
 *~
 *.*~
 log*
+!/logstash/
+/logstash/data/
+gbl*
 .*log
 *.log
 src/
@@ -168,3 +171,4 @@ composer/
 /apache/debug
 /.ssh/g1
 *.old
+.sincedb_*
