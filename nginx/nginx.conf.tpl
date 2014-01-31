@@ -58,6 +58,9 @@ http {
         location /hgit/ {
           proxy_pass https://@FQN@:@PORT_HTTP_HGIT@/hgit/;
         }
+        location /h2git/ {
+          proxy_pass https://@FQN@:@PORT_HTTP_HGIT@/h2git/;
+        }
         location /cgit/ {
           proxy_pass https://@FQN@:@PORT_HTTP_CGIT@/cgit/;
         }
