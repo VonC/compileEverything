@@ -77,6 +77,7 @@ else
 fi
 
 if [[ "${r}" != "" && "${r#${upstream_url}}" == "${r}" ]] ; then
+  r="${upstream_url}${reponame}"
   echo "update '${upstream_url}${reponame}' as '${upstream_name}'"
   git remote set-url ${upstream_name} ${upstream_url}${reponame}
 fi
@@ -90,10 +91,29 @@ if [[ -e "${H}/.gnupg/users.netrc.asc" ]]; then
   fi
 fi
 
+#echo $r
+pr=${r%//*}
+r=${r#*//}
+user=${r%@*}
+r=${r#*@}
+u=${r#*/}
+r=${r%%/*}
+p=$(${H}/.gnupg/git-credential-netrc -f ${H}/mcron/projextrdr.netrc.asc get <<EOF host=$r
+username=$user
+EOF | grep password)
+if [[ "${p}" == "${p#*password=}" ]] ; then
+  echo "No password found for pushing to '${upstream_url}'"
+  exit 0
+fi
+p="${p#*password=}"
+p="${p%%?protocol=*}"
+#echo $user $r "password='"$p"'"
+#echo "${pr}//${user}:${p}@${r}/${u}"
+
 echo "Pushing public repo '${branch_local}' branch to '${upstream_name}'/'${branch_upstream}'"
 git config --global --unset credential.helper
 
 cp "${H}/.envs.private" "${H}/.netrc"
-git push -f ${upstream_name} ${branch_local}:${branch_upstream}
+git push -f "${pr}//${user}:${p}@${r}/${u}" ${branch_local}:${branch_upstream}
 rm -f "${H}/.netrc"
 git config --global credential.helper netrc

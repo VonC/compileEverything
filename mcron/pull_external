@@ -30,13 +30,13 @@ while read arepo; do
     exturl=$(${ggit} config --local --get remote.external.url)
     # echo "exturl='${exturl}'"
     if [[ "${exturl#*@}" != "${exturl}" ]] ; then
-      exturl="https://projextrdr@${exturl#*@}"
+      exturl="https://projextrdr:projextrdr@${exturl#*@}"
     else
-      exturl="https://projextrdr@${exturl#*//}"
+      exturl="https://projextrdr:projextrdr@${exturl#*//}"
     fi
     # echo "exturl for repo '${arepo}': external='${exturl}'"
-    if [[ "${exturl}" == "https://projextrdr@" ]] ; then
-      exturl="https://projextrdr@${upstream_url#*//}${arepo}.git"
+    if [[ "${exturl}" == "https://projextrdr:projextrdr@" ]] ; then
+      exturl="https://projextrdr:projextrdr@${upstream_url#*//}${arepo}.git"
       # echo "set exturl for external: '${exturl}'"
       ${ggit} remote add external ${exturl}
     fi
@@ -49,6 +49,13 @@ while read arepo; do
     if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
       aref=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
     fi
+
+
+    if [[ ${exturl#*/hgit/}" != "${exturl} ]] ; then
+      r="${exturl#*/hgit/}"
+      exturl="${exturl%/hgit/*}/h2git/${r}"
+    fi
+    echo ${ggit} fetch ${exturl} master:master_ext
     ${ggit} fetch ${exturl} master:master_ext
     aref2=""
     if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
@@ -60,9 +67,14 @@ while read arepo; do
     if [[ "${aref}" != "${aref2}" && "${fh#${aref2}}" != "${fh}" ]] ; then
       dwnurl="${downstream_url}${arepo}.git"
       if [[ "${dwnurl#*@}" != "${dwnurl}" ]] ; then
-        dwnurl="https://projextrdr@${dwnurl#*@}"
+        dwnurl="https://projextrdr:projextrdr@${dwnurl#*@}"
       else
-        dwnurl="https://projextrdr@${dwnurl#*//}"
+        dwnurl="https://projextrdr:projextrdr@${dwnurl#*//}"
+      fi
+
+      if [[ ${dwnurl#*/hgit/}" != "${dwnurl} ]] ; then
+        r="${dwnurl#*/hgit/}"
+        dwnurl="${dwnurl%/hgit/*}/h2git/${r}"
       fi
 
       echo "${ggit} push --force ${dwnurl} master_ext:master_ext"
