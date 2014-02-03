@@ -174,7 +174,7 @@ Listen @PORT_HTTP_HGIT@
         Require valid-user
         AddHandler cgi-script cgi
     </Location>
-    ScriptAlias /h2git/ /sg_01/scmuat/gitpoc/blessed/sbin/gitolite-shell/
+    ScriptAlias /h2git/ @H@/sbin/gitolite-shell/
     <Location /h2git>
         SSLOptions +StdEnvVars
         Options +ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
