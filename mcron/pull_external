@@ -18,6 +18,10 @@ if [[ "${upstream_url}" == "" ]] ; then
 fi
 
 git config --global --unset credential.helper
+logfn=log_"$(date +%Y%m%d -d "today")"
+logf="${H}/mcron/logs/${logfn}"
+mkdir -p "${H}/mcron/logs"
+ln -fs "logs/${logfn}" "${H}/mcron/log"
 
 #echo "Check if anything new comes from upstream '${downstream_url}', before pushing it back to downstream"
 repos=$(git --git-dir=${H}/repositories/gitolite-admin.git show master:conf/gitolite.conf | grep "repo " | grep -v "testing" | grep -v "gitolite-admin")
@@ -55,8 +59,13 @@ while read arepo; do
       r="${exturl#*/hgit/}"
       exturl="${exturl%/hgit/*}/h2git/${r}"
     fi
-    echo ${ggit} fetch ${exturl} master:master_ext
-    ${ggit} fetch ${exturl} master:master_ext
+    fetch="${ggit} fetch ${exturl} master:master_ext"
+    echo ${fetch}
+    fetchres=$(${ggit} fetch ${exturl} master:master_ext 2>&1)
+    if [[ ${fetchres} != "" ]]; then
+      echo ${fetch} >> ${logf}
+      echo ${fetchres} >> ${logf}
+    fi
     aref2=""
     if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
       aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
@@ -77,8 +86,13 @@ while read arepo; do
         dwnurl="${dwnurl%/hgit/*}/h2git/${r}"
       fi
 
-      echo "${ggit} push --force ${dwnurl} master_ext:master_ext"
-      ${ggit} push --force ${dwnurl} master_ext:master_ext
+      push="${ggit} push --force ${dwnurl} master_ext:master_ext"
+      echo "${push}"
+      pushres=$(${ggit} push --force ${dwnurl} master_ext:master_ext 2>&1)
+      if [[ ${pushres} != "" ]]; then
+        echo ${push} >> ${logf}
+        echo ${pushres} >> ${logf}
+      fi
     fi
   fi
 done < <(echo "${repos}")
