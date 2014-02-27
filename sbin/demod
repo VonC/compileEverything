@@ -11,6 +11,7 @@ case "$1" in
   fi
   "${H}/sbin/redisd" start
   "${H}/sbin/gitlabd" start
+  if [[ -e "${H}/sbin/mcrond" ]] ; then "${H}/sbin/mcrond" start ; fi
   ;;
 'stop')
   "${H}/sbin/sshd" stop
@@ -22,6 +23,8 @@ case "$1" in
   if [[ -e "${H}/mysql/sandboxes/gitlab/stop" ]] ; then
     "${H}/mysql/sandboxes/gitlab/stop"
   fi
+  if [[ -e "${H}/sbin/mcrond" ]] ; then "${H}/sbin/mcrond" stop ; fi
+
   ;;
 'restart')
   "${H}/sbin/sshd" restart
@@ -43,6 +46,7 @@ case "$1" in
   if [[ -e "${H}/mysql/sandboxes/gitlab/status" ]] ; then
     "${H}/mysql/sandboxes/gitlab/status"
   fi
+  if [[ -e "${H}/sbin/mcrond" ]] ; then "${H}/sbin/mcrond" status ; fi
   ;;
 'test')
   if [[ -e "${H}/sbin/ctld" ]] ; then "${H}/sbin/ctld" test ; fi

@@ -17,6 +17,10 @@ check_pid(){
 
 start() {
   cd $APP_ROOT
+  if [[ ! -f *.netrc.asc ]]; then
+    echo "no netrc.asc file in mcron: no start"
+    exit 1
+  fi
   check_pid
   if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
     # Program is running, exit with error code 1.
