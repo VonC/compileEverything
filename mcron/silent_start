@@ -1,0 +1,2 @@
+#!/bin/sh
+hup  mcrond start  >/dev/null 2>&1
