@@ -17,8 +17,8 @@ check_pid(){
 
 start() {
   cd $APP_ROOT
-  if [[ ! -e "${APP_ROOT}/projextrdr.netrc.asc" ]]; then
-    echo "no netrc.asc file in mcron: no start"
+  if [[ ! -e "${APP_ROOT}/mcron" ]]; then
+    echo "no mcron file in mcron: no start"
     exit 1
   fi
   check_pid
