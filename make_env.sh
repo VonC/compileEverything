@@ -93,6 +93,7 @@ if [[ -d "${H}/../_pkgs" && ! -e "${_pkgs}/.keep_local_pkgs" ]] ; then
   _hpkgs="../_pkgs"
 fi
 # echo ${H}
+_pkgs="${H}/../_pkgs$(date +"%y%m%d")"
 mkdir -p "${_logs}"
 mkdir -p "${_pkgs}"
 mkdir -p "${H}/bin"
@@ -354,7 +355,7 @@ function get_sources_from_web() {
       page=$("${H}/.cpl/scripts/${page}" ${name} ${verexclude})
     fi
   fi
-   echo "=== page='${page}'"
+   echo "=== page='${page}' in '${_pkgs}"
   get_param ${name} ext "tar.gz"
   if [[ "${nameurl}" == "none" ]] ; then nameurl="" ; fi
   if [[ "${ext}" == "none" ]] ; then ext="" ; fi
