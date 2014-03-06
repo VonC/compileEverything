@@ -463,9 +463,27 @@ function get_sources_from_web() {
 	aver="master"
   fi
   if [[ ${mgsd} == 1 ]] ; then echo "D: get sources final2: anamever ${anamever}, aver ${aver} for source ${source}" ; fi
-  if [[ ! -e "${_pkgs}/${targz}" ]] && [[ ! -e "${HUL}/._linked/${anamever}" ]]; then
-    echolog "get sources for ${name} in ${_hpkgs}/${targz}"
-    loge "wget ${source} --no-check-certificate -O ${_pkgs}/${targz}" "wget_sources_${targz}"
+  if [[ ! -e "${HUL}/._linked/${anamever}" || ${refreshpkgs} == 1 ]] ; then
+    if [[ ${refreshpkgs} == 1 && -f "${_src}/_pkgs/${targz}" && ! -h "${_src}/_pkgs/${targz}" ]] ; then
+      echo "copy over ${targz} to $_pkgs"
+      if [[ -f "${_pkgs}/${targz}" ]] ; then
+        rm -f "${_pkgs}/${targz}"
+      fi
+      ln -fs "${_src}/_pkgs/${targz}" "${_pkgs}/${targz}"
+    elif [[ ${refreshpkgs} == 1 && -f "${_pkgs}/${targz}" && ! -e "${_src}/_pkgs/${targz}" ]] ; then
+      ln -fs "${_pkgs}/${targz}" "${_src}/_pkgs/${targz}"
+    elif [[ ! -e "${_pkgs}/${targz}" ]] ; then
+      echolog "get sources for ${name} in ${_hpkgs}/${targz}"
+      rm -f "${_pkgs}/${targz}"
+      if [[ ${refreshpkgs} == 1 && -e "${_src}/_pkgs/${targz}" ]] ; then
+        ln -fs "${_src}/_pkgs/${targz}"  "${_pkgs}/${targz}"
+      else
+        loge "wget ${source} --no-check-certificate -O ${_pkgs}/${targz}" "wget_sources_${targz}"
+        if [[ ${refreshpkgs} == 1 && ! -e "${_src}/_pkgs/${targz}" ]] ; then
+          ln -fs "${_pkgs}/${targz}" "${_src}/_pkgs/${targz}"
+        fi
+      fi
+    fi
   fi
   if [[ "${updt}" == "no" ]]; then update_cache "${name}" "${anamever}" "${aver}" ; fi
   echo "get_sources_from_web RES ${name}, anamever ${anamever}, aver ${aver}"
