@@ -36,6 +36,14 @@ echo "homed='${homed}'"
 updt=${updt:=no}
 #echo "updt='${updt}'"
 
+if [[ ! -z ${refreshpkgs} ]] ; then
+  echo "Refreshing pkgs"
+  refreshpkgs=1
+  refresh="true"
+else
+  refreshpkgs=0
+fi
+
 _cpl="${H}/.cpl"
 _hcpl=".cpl"
 _deps="${_cpl}/_deps"
@@ -240,7 +248,7 @@ function read_param {
          echo "----"
          exit 0
     ;;
-    -refresh ) refresh="true" ;;
+    -refresh ) refresh="true" ; refreshpkgs=1 ;;
     * ) echolog "unknwon option ${akey} with value ${avalue}" ; unknown_option ;;
   esac
 }
