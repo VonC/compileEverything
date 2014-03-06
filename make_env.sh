@@ -779,7 +779,7 @@ function build_item() {
   fi
   # ver=${${namever}#${name}-}
   #echo "XXX ver ${ver}, namever ${namever} name ${name}"
-  if [[ -e "${HUL}/._linked/${namever}" ]]; then
+  if [[ ${refreshpkgs} == 0 && -e "${HUL}/._linked/${namever}" ]]; then
     if [[ "${isdone}" == "false" ]] ; then
       echo -ne "\e[1;32m" ; echolog "${type} ${namever} already installed" ; echo -ne "\e[m" ;
       donelist="${donelist}@${name}@" ;
@@ -788,7 +788,7 @@ function build_item() {
     if [[ -h "${HULA}/${name}/${namever}" ]] ; then rm -f "${HULA}/${name}/${namever}" ; fi
     if [[ -h "${HULA}/${name}" && ! -e "${HULA}/${namever}" ]] ; then rm -f "${HULA}/${name}" ; fi
     if [[ -e "${HULA}/${namever}" ]] ; then ln -fs "${namever}" "${HULA}/${name}" ; fi
-  else
+  elif [[ ${refreshpkgs} == 0 ]] ; then
     local asrc="${_src}/${namever}"
     if [[ "${type}" == "MOD" && "${updt}" == "no" ]] ; then mkdir -p "${asrc}" ; fi
     sc
@@ -849,9 +849,9 @@ function build_item() {
       set -e
       if [[ "${atlddres}" != "0" ]] ; then  echolog "${namever} has improper libs" ; reset_compil "${name}" ; tldd_failed ; fi
     fi
-    donelist="${donelist}@${name}@"
     # echo "D: build_tem: donelist: '${donelist}'"
   fi
+  donelist="${donelist}@${name}@"
 }
 
 function build_line() {
