@@ -131,7 +131,7 @@ function getJDK {
   local isdone="false" ; isItDone "${name}" isdone ${afrom}
   if [[ "${isdone}" == "false" ]] ; then
     echolog "##### Getting JDK7 latest ####" ; echo -ne "\e[m"
-    if [[ ! -z "${JAVA_HOME}" ]] && [[ -e "${JAVA_HOME}" ]]; then
+    if [[ ! -z "${JAVA_HOME}" ]] && [[ -e "${JAVA_HOME}" ]] && [[ ${refreshpkgs} == 0 ]] ; then
        ajvv=$(${JAVA_HOME}/bin/java -version 2>&1) ;
        echo -ne "\e[1;32m" ; echolog "JDK (local) already installed" ; echo -ne "\e[m" ;
        echo "Java detected, version: ${ajvv}"
@@ -162,9 +162,17 @@ function getJDK {
     local ajdkn=${ajdk2##*/}
     echo "ajdk2: '$ajdk2', ajdkn '${ajdkn}'"
     if [[ ! -e "${_pkgs}/${ajdkn}" ]]; then
-      cp_tpl "${H}/jdk/.cookies.tpl" "${H}/jdk"
-      loge "wget --no-check-certificate --cookies=on --load-cookies=${H}/jdk/.cookies --keep-session-cookies $ajdk2 -O ${_pkgs}/${ajdkn}" "wget_sources_${ajdkn}"
+      if [[ ${refreshpkgs} == 1 && -e "${_src}/_pkgs/${ajdkn}" ]] ; then
+        ln -fs "${_src}/_pkgs/${ajdkn}" "${_pkgs}/${ajdkn}" 
+      else
+        cp_tpl "${H}/jdk/.cookies.tpl" "${H}/jdk"
+        loge "wget --no-check-certificate --cookies=on --load-cookies=${H}/jdk/.cookies --keep-session-cookies $ajdk2 -O ${_pkgs}/${ajdkn}" "wget_sources_${ajdkn}"
+      fi
+      if [[ ${refreshpkgs} == 1 && -f "${_pkgs}/${ajdkn}" && ! -h "${_pkgs}/${ajdkn}" && ! -e "${_src}/_pkgs/${ajdkn}" ]] ; then
+        ln -fs "${_pkgs}/${ajdkn}" "${_src}/_pkgs/${ajdkn}"
+      fi  
     fi
+    if [[ ${refreshpkgs} == 1 ]] ; then donelist="${donelist}@${name}@" ; return 0;  fi
     chmod 755 "${_pkgs}/${ajdkn}"
     cd "${H}/usr/local"
     if [[ ! -e jdk7 ]]; then
