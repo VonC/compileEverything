@@ -499,6 +499,7 @@ function get_sources_from_cache() {
 }
 
 function update_cache() {
+  if [[ ${refreshpkgs} == 1 ]]; then return 0; fi
   local name=$1
   local anamever=$2
   local aver=$3
