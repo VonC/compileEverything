@@ -5,8 +5,8 @@ function get_hostname() {
   local _value="$1"
   local avalue=""
 
-  if [[ -e "${H}/../_fqn" ]]; then
-    avalue=$(cat "${H}/../_fqn")
+  if [[ -e "${H}/../_hostname" ]]; then
+    avalue=$(cat "${H}/../_hostname")
   else
     local a_cptpl_uname=$(uname)
     local a_hostnames="hostname -s"
