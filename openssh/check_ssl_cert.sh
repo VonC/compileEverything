@@ -1,7 +1,11 @@
 #!/bin/sh
 
+source "${H}/sbin/usrcmd/get_hostname"
+
+get_hostname a_hostname
+
 priv="${H}/../.cert.private"
-crt="${H}/../$(hostname).crt"
+crt="${H}/../${a_hostname}.crt"
 if [[ ! -e "${priv}" ]] ; then exit 0 ; fi 
 if [[ ! -e "${crt}" ]] ; then exit 0 ; fi
 
@@ -21,18 +25,18 @@ jksalias=${jksalias##*=}
 # http://stackoverflow.com/a/5596842/6309
 # Extract private key from keystore
 
-p12="${H}/../$(hostname).p12"
+p12="${H}/../${a_hostname}.p12"
 
 if [[ ! -e "${p12}" ]] ; then
   keytool -importkeystore -srckeystore "${jks}" -srcstoretype jks -srcstorepass "${jkspwd}" -destkeystore "${p12}" -deststoretype pkcs12 -deststorepass "${jkspwd}" -alias "${jksalias}" 
 fi
 
-key="${H}/../$(hostname).key"
+key="${H}/../${a_hostname}.key"
 
 if [[ ! -e "${key}" ]] ; then
   openssl pkcs12 -in "${p12}" -out "${key}" -nodes -passin pass:${jkspwd}
 fi
-if [[ ! -e "${H}/openssh/$(hostname).key" && -e "${key}" ]] ; then
+if [[ ! -e "${H}/openssh/${a_hostname}.key" && -e "${key}" ]] ; then
   cat "${key}" >> "${H}/.ssh/curl-ca-bundle.crt"
   cp "${key}" "${H}/openssh"
 fi

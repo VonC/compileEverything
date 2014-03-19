@@ -3,8 +3,14 @@
 apache="${H}/apache"
 if [[ -e "${apache}/key" && -e "${apache}/crt" ]] ; then exit 0 ; fi
 
-hkey="${H}/../$(hostname).key"
-hcrt="${H}/../$(hostname).crt"
+source "${H}/sbin/usrcmd/get_hostname"
+source "${H}/sbin/usrcmd/get_fqn"
+
+get_hostname a_hostname
+get_fqn ${a_hostname} a_fqn
+
+hkey="${H}/../${a_hostname}.key"
+hcrt="${H}/../${a_hostname}.crt"
 
 if [[ -e "${hkey}" && -e "${hcrt}" ]] ; then
   ln -fs "${hkey}" "${apache}/key"
@@ -14,11 +20,10 @@ fi
 
 # if no private certificate was given, generate self-signed one locally
 
-fqn=$(host -TtA $(hostname -s)|grep "has address"|awk '{print $1}') ; if [[ "${fqn}" == "" ]] ; then fqn=$(hostname -s) ; fi
-fqnpassword="${fqn}1";
-passphrasekey="${apache}/${fqn}.passphrase.key"
-key="${apache}/${fqn}.key"
-cert="${apache}/${fqn}.crt"
+fqnpassword="${a_fqn}1";
+passphrasekey="${apache}/${a_fqn}.passphrase.key"
+key="${apache}/${a_fqn}.key"
+cert="${apache}/${a_fqn}.crt"
 cnf="${apache}/o.cnf"
 #cnf="${apache}/openssl.cnf"
 ext="v3_ca"
@@ -29,6 +34,6 @@ if [[ ! -e "${passphrasekey}" ]]; then
   openssl req -new -config "${cnf}" -extensions "${ext}" -x509 -days 730 -key "${key}" -out "${cert}"
   cat "${cert}" >> "${H}/.ssh/curl-ca-bundle.crt"
 fi
-ln -fs "${fqn}.key" "${apache}/key"
-ln -fs "${fqn}.crt" "${apache}/crt"
+ln -fs "${a_fqn}.key" "${apache}/key"
+ln -fs "${a_fqn}.crt" "${apache}/crt"
 
