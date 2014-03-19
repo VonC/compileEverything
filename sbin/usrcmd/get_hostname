@@ -1,0 +1,22 @@
+#!/bin/bash
+  
+function get_hostname() {
+ 
+  local _value="$1"
+  local avalue=""
+
+  if [[ -e "${H}/../_fqn" ]]; then
+    avalue=$(cat "${H}/../_fqn")
+  else
+    local a_cptpl_uname=$(uname)
+    local a_hostnames="hostname -s"
+    if [[ "${a_cptpl_uname#CYGWIN}" != "${a_cptpl_uname}" ]] ; then
+      echo "CYGWIN"
+      a_hostnames="hostname"
+      # echo $(${a_hostnames})
+    fi
+    avalue=$(${a_hostnames})
+  fi
+  # echo "avalueF='${avalue}' for '${_value}'"
+  eval ${_value}="'${avalue}'"
+}

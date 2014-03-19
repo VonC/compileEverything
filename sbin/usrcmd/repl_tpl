@@ -3,6 +3,9 @@
 fullFilePathOri="$1"
 fullFilePathDst="$2"
 
+source "${H}/sbin/usrcmd/get_hostname"
+source "${H}/sbin/usrcmd/get_fqn"
+
 function get_param_file() {
   local _filename=$2
   local filename="$1"
@@ -31,15 +34,11 @@ echo cp -f "${fullFilePathOri}" "${fullFilePathDst}"
 cp -f "${fullFilePathOri}" "${fullFilePathDst}"
 
 cptpl_uname=$(uname)
-hostnames="hostname -s"
-if [[ "${cptpl_uname#CYGWIN}" != "${cptpl_uname}" ]] ; then
-  echo "CYGWIN"
-  hostnames="hostname"
-  # echo $(${hostnames})
-fi
+get_hostname hostnames
+# echo "hostnames='${hostnames}'"
 
 "${H}/sbin/gen_sed" -i "s;@H@;${H};g" "${fullFilePathDst}"
-"${H}/sbin/gen_sed" -i "s/@HOSTNAME@/$(${hostnames})/g" "${fullFilePathDst}"
+"${H}/sbin/gen_sed" -i "s/@HOSTNAME@/${hostnames}/g" "${fullFilePathDst}"
 "${H}/sbin/gen_sed" -i "s/@USERNAME@/$(/usr/bin/id -un)/g" "${fullFilePathDst}"
 "${H}/sbin/gen_sed" -i "s/@USERGROUP@/$(/usr/bin/id -gn)/g" "${fullFilePathDst}"
 "${H}/sbin/gen_sed" -i "s;@@TITLE@@;${H};g" "${fullFilePathDst}"
@@ -58,14 +57,11 @@ else
   echolog "Unable to get LONG_BIT conf (32 or 64bits)" ; getconfrepl  
 fi
 
-#fqn=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*}
+get_fqn ${hostnames} fqn
 if [[ "${cptpl_uname#CYGWIN}" != "${cptpl_uname}" ]] ; then
-  fqn=$(${hostnames})
   "${H}/sbin/gen_sed" -i 's/ @@CYGWIN@@/ -DHAVE_STRSIGNAL/g' "${fullFilePathDst}" ;
   "${H}/sbin/gen_sed" -i 's/ -fPIC//g' "${fullFilePathDst}" ;
 else
-  fqn=$(/usr/bin/host -TtA $(hostname -s)|grep "has address"|/usr/bin/awk '{print $1}') ; if [[ "${fqn}" == "" ]] ; then fqn=$(hostname -s) ; fi
-  fqnp=$(ping -c 1 ${fqn} 2>/dev/null); if [[ "${fqnp#*1 received}" == "${fqnp}" ]]; then fqn=$(hostname) ; fi
   "${H}/sbin/gen_sed" -i 's/ @@CYGWIN@@//g' "${fullFilePathDst}"
 fi
 "${H}/sbin/gen_sed" -i "s/@FQN@/${fqn}/g" "${fullFilePathDst}"

@@ -1,0 +1,26 @@
+#!/bin/bash
+  
+function get_fqn() {
+ 
+  local a_hostname="$1"
+  local _value="$2"
+  local avalue=""
+
+  if [[ -e "${H}/../_fqn" ]]; then
+    avalue=$(cat "${H}/../_fqn")
+  else
+    local a_cptpl_uname=$(uname)
+    local a_fqn=""
+    local a_fqnp=""
+    #fqn=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*}
+    if [[ "${a_cptpl_uname#CYGWIN}" != "${a_cptpl_uname}" ]] ; then
+      a_fqn=${a_hostname}
+    else
+      a_fqn=$(/usr/bin/host -TtA ${a_hostname}|grep "has address"|/usr/bin/awk '{print $1}') ; if [[ "${a_fqn}" == "" ]] ; then a_fqn=${a_hostname} ; fi
+      a_fqnp=$(ping -c 1 ${a_fqn} 2>/dev/null); if [[ "${a_fqnp#*1 received}" == "${fqnp}" ]]; then a_fqn=${a_hostname} ; fi
+    fi
+    avalue=${a_fqn}
+  fi
+  # echo "avalueF='${avalue}' for '${_value}'"
+  eval ${_value}="'${avalue}'"
+}
