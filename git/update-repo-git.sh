@@ -14,11 +14,11 @@ if [[ ! -e "${H}/.git" ]] ; then
   fi
 
   xxgit=1 git config --local --bool core.bare false
-  xxgit=1 git reset HEAD -- .
+  xxgit=1 git reset HEAD -- "${H}"
   xxgit=1 git config --local remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
   xxgit=1 git fetch origin
   xxgit=1 git branch -u origin/master master
-  xxgit=1 git reset HEAD -- .
+  xxgit=1 git reset HEAD -- "${H}"
 
 fi
 
