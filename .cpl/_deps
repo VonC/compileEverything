@@ -13,7 +13,7 @@ lib gettext libiconv,expat,zlib,libxml2
 app git gcc,man-db,openssl,libssh2,curl,libiconv,expat,libidn,zlib,nginx,perl,apache,python,subversion,openssh,autoconf,libsecret,gnupg,mcron
 app mcron guile,gnupg
 app guile libunistring,bdwgc
-lib bdwgc libatomic_ops
+lib bdwgc libatomic_ops,automake
 lib libunistring none
 lib libsecret intltool
 lib intltool cpanm 
@@ -27,6 +27,7 @@ app perl db
 lib db tcl
 lib tcl autoconf
 app autoconf pkgconfig,m4
+app automake autoconf
 lib glib gettext,pcre,libiconv,zlib,libffi,tar,libelf
 app tar libiconv,gettext,bzip2,xz
 app xz gettext,libiconv
@@ -90,7 +91,7 @@ app bison libiconv,gcc,flex
 app flex none
 app cmake ncurses,gcc,curl,zlib,libarchive
 lib libarchive gcc,bzip2,libxml2,zlib,openssl
-lib libatomic_ops gcc
+lib libatomic_ops gcc,automake
 app redis gcc
 mod gitlist php,composer
 mod composer php

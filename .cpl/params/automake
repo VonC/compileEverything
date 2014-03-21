@@ -1,3 +1,5 @@
 page=http://ftp.gnu.org/pub/gnu/automake/?O=D;C=M
 url=http://ftp.gnu.org/pub/gnu/automake/
-configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ 
+verexclude=latest|sig|xz|bz2
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@
+post=for file in $(ls -1 "${HULA}/@@NAMEVER@@/bin/"*); do gen_sed -i "s;/usr/bin//perl;${HB}/perl;g" "${file}" ; gen_sed -i "s;/usr/bin/perl;${HB}/perl;g" "${file}" ; done
