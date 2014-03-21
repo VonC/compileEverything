@@ -21,7 +21,12 @@ cd "${H}/.cpl/src/git-manpages"
 ver=$(cat "${H}/.cpl/src/git/GIT-VERSION-FILE"|grep GIT_VERSION|awk '{print $3}')
 sha1=$(git log --all --pretty=format:"%H %s"|grep "${ver}-"|head -1|awk '{print $1}')
 echo "ver='${ver}' => sha1='${sha1}'"
-git checkout ${sha1}
+if [[ "${sha1}" == "" ]]; then
+  echo "Ver '${ver}' not found in ${H}/.cpl/src/git-manpages"  > /dev/stderr ; exit 1
+fi
+git checkout "${sha1}"
+git branch -f master "${sha1}"
+git checkout master
 
 if [[ ! -e "${H}/.cpl/src/_pkgs/git-manpages.bundle-${sha1}" ]]; then
   git bundle create "${H}/.cpl/src/_pkgs/git-manpages.bundle-${sha1}" --all
