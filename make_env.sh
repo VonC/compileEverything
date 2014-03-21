@@ -93,7 +93,8 @@ if [[ -d "${H}/../_pkgs" && ! -e "${_pkgs}/.keep_local_pkgs" ]] ; then
   _hpkgs="../_pkgs"
 fi
 # echo ${H}
-_pkgs="${H}/../_pkgs$(date +"%y%m%d")"
+if [[ "${refresh}" == "true" ]]; then _pkgs="${H}/../_pkgs$(date +"%y%m%d")" ;
+else _pkgs="${H}/../_pkgs" ; fi
 mkdir -p "${_logs}"
 mkdir -p "${_pkgs}"
 mkdir -p "${H}/bin"
@@ -356,7 +357,9 @@ function get_sources_from_web() {
   # echo "=== page='${page}'"
   if [[ "${page}" == "none" ]] ; then eval ${_namever}="'${name}'" ; return 0 ; fi
   if [[ -e "${_pkgs}/${name}" && ! -s "${_pkgs}/${name}" ]] ; then rm "${_pkgs}/${name}" ; fi
+  echo "_pkgs/name: '${_pkgs}/${name}'"
   if [[ -e "${_pkgs}/${name}" ]] ; then
+    #echo "ok"
     page="${name}"
   else
     if [[ "${page#http}" == "${page}" && "${page#/}" == "${page}" && "${page}" != "l" ]] ; then 
