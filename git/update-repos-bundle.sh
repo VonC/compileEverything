@@ -5,6 +5,7 @@ if [[ ! -e "${H}/../.offline.${homed}" ]]; then
   exit 0
 fi
 
+git update-index --assume-unchanged -- "${H}/.gitmodules"
 gen_sed -i "s;https://github.com/.*/\(.*\);${H}/.cpl/src/_pkgs/repos/\1.bundle;g" "${H}/.gitmodules"
 
 bundles=$(grep "path = " "${H}/.gitmodules")
