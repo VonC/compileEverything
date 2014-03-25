@@ -175,6 +175,9 @@ export SANDBOX_BINARY="${H}/usr/local/apps/mysql"
 if [[ -e "${HULA}/pkgconfig" ]] ; then
   export PKG_CONFIG_PATH="${HULL}/pkgconfig:${HUL}/ssl/lib/pkgconfig"
 fi
+if [[ -e "${HULB}/libtool" ]] ; then
+  export LIBTOOL="${HULB}/libtool"
+fi
 
 export CMAKE_PREFIX_PATH="${HUL}:${HUL}/ssl"
 export CMAKE_LIBRARY_PATH="${HULL}:${HUL}/ssl/lib"
