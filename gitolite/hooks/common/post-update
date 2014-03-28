@@ -98,7 +98,7 @@ user=${r%@*}
 r=${r#*@}
 u=${r#*/}
 r=${r%%/*}
-p=$(${H}/.gnupg/git-credential-netrc -f ${H}/mcron/projextrdr.netrc.asc get <<EOF host=$r
+p=$(${H}/.gnupg/git-credential-netrc -f ${H}/.gnupg/users.netrc.asc get <<EOF host=$r
 username=$user
 EOF | grep password)
 if [[ "${p}" == "${p#*password=}" ]] ; then
