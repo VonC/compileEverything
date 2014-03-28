@@ -6,7 +6,7 @@ if [[ "${aluser}" == "" ]] ; then exit 0 ; fi
 afuser="${H}/gitolite/ldap/${aluser}"
 afuserl="${afuser}.log"
 if [[ "${aluser}" =~ ^[0-9]+$  && ! -e "${afuser}" ]] ; then
-  echo "Potential HSBC user, checking group..." >> "${afuserl}"
+  echo "Potential COMPANY user, checking group..." >> "${afuserl}"
   lport="@LDAP_PORT@"
   if [[ "${lport#@}" == "${lport}" && ! -e "${afluser}" ]] ; then
     l=$(ldapsearch -H ldaps://@LDAP_HOSTNAME@:@LDAP_PORT@ -x -D "@LDAP_BINDDN@" -w @LDAP_PASSWORD@ -b "@LDAP_BASE@" -s sub -a always -z 1000 "(cn~=${aluser})" "memberof" | grep -i "memberof")
