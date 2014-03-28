@@ -114,6 +114,8 @@ echo "Pushing public repo '${branch_local}' branch to '${upstream_name}'/'${bran
 git config --global --unset credential.helper
 
 cp "${H}/.envs.private" "${H}/.netrc"
-git push -f "${pr}//${user}:${p}@${r}/${u}" ${branch_local}:${branch_upstream}
+res=$(git push -f "${pr}//${user}:${p}@${r}/${u}" ${branch_local}:${branch_upstream} 2>&1)
+res=${res//:[a-zA-Z0-9]*?@/:xxx@}
+echo "$res"
 rm -f "${H}/.netrc"
 git config --global credential.helper netrc
