@@ -159,6 +159,7 @@ composer/
 /.gnupg/random_seed
 *.asc
 /mcron/projextrdr*
+/mcron/mcron
 /gitolite/ldap/
 /sbin/gitolite-ldap
 /sbin/ldap_name

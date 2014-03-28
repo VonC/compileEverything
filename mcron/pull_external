@@ -60,11 +60,11 @@ while read arepo; do
       exturl="${exturl%/hgit/*}/h2git/${r}"
     fi
     fetch="${ggit} fetch ${exturl} master:master_ext"
-    echo ${fetch}
+    #echo ${fetch}
     fetchres=$(${ggit} fetch ${exturl} master:master_ext 2>&1)
     if [[ ${fetchres} != "" ]]; then
-      echo ${fetch} >> ${logf}
-      echo ${fetchres} >> ${logf}
+      echo "${fetch}" >> ${logf}
+      echo "${fetchres}" >> ${logf}
     fi
     aref2=""
     if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
@@ -87,11 +87,12 @@ while read arepo; do
       fi
 
       push="${ggit} push --force ${dwnurl} master_ext:master_ext"
-      echo "${push}"
+      #echo "${push}"
+      #pushres=""
       pushres=$(${ggit} push --force ${dwnurl} master_ext:master_ext 2>&1)
       if [[ ${pushres} != "" ]]; then
-        echo ${push} >> ${logf}
-        echo ${pushres} >> ${logf}
+        echo "${push}" >> ${logf}
+        echo "${pushres}" >> ${logf}
       fi
     fi
   fi
