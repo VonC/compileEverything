@@ -72,6 +72,7 @@ r=$(xxgit=1 git remote show -n ${upstream_name}|grep "https"|tail -1)
 if [[ "${r}" == "" ]] ; then
   echo "register '${upstream_url}${reponame}' as '${upstream_name}'"
   git remote add ${upstream_name} ${upstream_url}${reponame}
+  r=$(xxgit=1 git remote show -n ${upstream_name}|grep "https"|tail -1)
 else
   r="https${r#*https}"
 fi
@@ -108,7 +109,7 @@ fi
 p="${p#*password=}"
 p="${p%%?protocol=*}"
 #echo $user $r "password='"$p"'"
-#echo "${pr}//${user}:${p}@${r}/${u}"
+#echo "pr // user:p@r/u: ${pr}//${user}:${p}@${r}/${u}"
 
 echo "Pushing public repo '${branch_local}' branch to '${upstream_name}'/'${branch_upstream}'"
 git config --global --unset credential.helper
