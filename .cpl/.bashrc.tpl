@@ -22,7 +22,10 @@ function bashscriptpath() {
       #echo "D: bb asp '$asp', b1 ascript '$ascript'"
     fi
     #echo "D: b2 asp '$asp', b2 ascript '$ascript'"
-    if [[ "${ascript#/}" != "$ascript" ]]; then asp=$asp ;
+    if [[ "${ascript#/}" != "$ascript" ]]; then
+      while [[ ! -e "${asp}/.bashrc" && "${asp}" != "${asp%/*}"  ]]; do # */
+        asp=${asp%/*}
+      done
     elif [[ "${ascript#../}" != "$ascript" ]]; then
       asp=$(pwd)
       while [[ "${ascript#../}" != "$ascript" ]]; do
