@@ -1,5 +1,12 @@
 #! /bin/bash
-
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR=${DIR%/*}
+# echo DIR=$DIR
+cd "${DIR}"
+H="${DIR}"
+source "${DIR}/.bashrc" --force
+echo HOME=$HOME $H
+# exit 0
 case "$1" in
 'start')
   "${H}/sbin/sshd" start
