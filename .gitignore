@@ -173,3 +173,5 @@ composer/
 /.ssh/g1
 *.old
 .sincedb_*
+/sbin/a
+/nginx/html/*.zip
