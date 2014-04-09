@@ -175,3 +175,5 @@ composer/
 .sincedb_*
 /sbin/a
 /nginx/html/*.zip
+.ssh/old/
+rs-ssl/
