@@ -47,9 +47,21 @@ if ($demod =~ /Next mcron job is/) {
    printf "%-15s : %-15s\n", "mcrond", "N/A (not staging)";
 }
 
-# my $gitdir = "$h/repositories/gitolite-admin.git";
-# my $r = Git::Repository->new( git_dir => $gitdir );
-
-# git_cmd_try { Git::command_noisy('update-server-info') }
-#              '%s failed w/ code %d';
+my $gitdir = "$h/repositories/gitolite-admin.git";
+my $repo = Git->repository (Directory => $gitdir);
+my @remotes = $repo->command('remote', '-v');
+foreach(@remotes) {
+  my $remoteline = $_;
+  my ($remote, $value) = split /\s+/, $remoteline, 2;
+  if ($value =~ /\(fetch\)/) { next; }
+  printf "remote: $remote, for remoteline '$remoteline'";
+  my @revs = $repo->command('ls-remote', $remote);
+  # printf scalar @revs;
+  foreach(@revs)
+  {
+    my $rev = $_;
+    # printf "[$remote]: $rev\n";
+  }
+  printf ": OK\n"
+}
 exit $status;
