@@ -51,6 +51,7 @@ if ($demod =~ /Next mcron job is/) {
 my $gitdir = "$h/repositories/gitolite-admin.git";
 my $repo = Git->repository (Directory => $gitdir);
 my @remotes = $repo->command('remote', '-v');
+@remotes = reverse @remotes;
 my $st = 32;
 foreach(@remotes) {
   my $remoteline = $_;
