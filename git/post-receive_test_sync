@@ -1,0 +1,21 @@
+#!/bin/bash
+
+echo "Test post-receive"
+
+source "${H}/sbin/usrcmd/get_tpl_value"
+
+get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_BRANCH@" downstream_branch
+
+if [[ "${downstream_branch}" == "" ]]; then
+  echo "Test post-receive: no downstream branch, nothing to do"
+fi
+
+while read oldrev newrev ref
+do
+  echo "ref1=$ref"
+  branch=`echo $ref | cut -d/ -f3`
+  if [ "${downstream_branch}" == "${branch}" ]; then
+    echo "Test post-receive: ${downstream_branch} branch pushed, reset master to it"
+    git branch -f master ${downstream_branch}
+  fi
+done
