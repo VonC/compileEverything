@@ -177,3 +177,4 @@ composer/
 /nginx/html/*.zip
 .ssh/old/
 rs-ssl/
+/.ssh/*_root
