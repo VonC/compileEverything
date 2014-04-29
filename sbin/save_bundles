@@ -1,4 +1,10 @@
-#!/bin/sh
+#! /bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR=${DIR%/*}
+# echo DIR=$DIR
+cd "${DIR}"
+H="${DIR}"
+source "${DIR}/.bashrc" --force
 
 function date_unix() {
   local date1="${1}"
