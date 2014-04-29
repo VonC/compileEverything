@@ -60,6 +60,16 @@ function date_delta() {
   eval ${_delta}="'${adelta}'"
 }
 
+source "${H}/sbin/usrcmd/get_hostname"
+get_hostname hostnames
+source "${H}/sbin/usrcmd/get_fqn"
+get_fqn ${hostnames} fqn
+
+if [[ -e "${H}/../.nobackup" ]]; then
+  echo "No backup for '${fqn}'"
+  exit 0
+fi
+
 repos="${H}/repositories"
 bkp="${H}/../backups"
 paths=$(ls -1 "${repos}"|grep ".git")
