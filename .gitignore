@@ -3,6 +3,8 @@ dep*
 *.*~
 log*
 !/logstash/*
+/logstash/conf/
+!/logstash/conf/logstash.conf.tpl
 /logstash/data/
 gbl*
 .*log
