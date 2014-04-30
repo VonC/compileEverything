@@ -37,11 +37,14 @@ cptpl_uname=$(uname)
 get_hostname hostnames
 # echo "hostnames='${hostnames}'"
 
+homed=${H##*/}
+
 "${H}/sbin/gen_sed" -i "s;@H@;${H};g" "${fullFilePathDst}"
 "${H}/sbin/gen_sed" -i "s/@HOSTNAME@/${hostnames}/g" "${fullFilePathDst}"
 "${H}/sbin/gen_sed" -i "s/@USERNAME@/$(/usr/bin/id -un)/g" "${fullFilePathDst}"
 "${H}/sbin/gen_sed" -i "s/@USERGROUP@/$(/usr/bin/id -gn)/g" "${fullFilePathDst}"
 "${H}/sbin/gen_sed" -i "s;@@TITLE@@;${H};g" "${fullFilePathDst}"
+"${H}/sbin/gen_sed" -i "s;@HOMED@;${homed};g" "${fullFilePathDst}"
 
 unamem=$(uname -m)
 longbit="32"
