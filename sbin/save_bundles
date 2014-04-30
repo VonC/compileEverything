@@ -89,6 +89,7 @@ while read -r path; do
     name="${name%.git}"
     # echo "${name}"
     f=$(ls -t "${bkp}/${name}"* 2> /dev/null)
+    # echo $f
     if [[ "${f}" == "" ]] ; then 
 	  echo "${name} no backups found => Create FULL backup."
       d=`date +%Y%m%d%H%M%S`
@@ -104,11 +105,13 @@ while read -r path; do
       fi
       # exit 0
     else
-      fname=${f##*/${name}-}
-      # echo $fname
-      fname=${fname%% *}
+      fname=${f%%bundle*}
+      # echo 1 $fname
+      fname=${fname##*/${name}-}
+      # echo 2 $fname
       fname=${fname%-*}
-      # echo $fname
+      # echo 3 $fname
+      # exit 0
       d=${fname%%-*}
       _dd=${d:0:8}
       _dt=${d:8:6}
