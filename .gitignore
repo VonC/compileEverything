@@ -2,7 +2,7 @@ dep*
 *~
 *.*~
 log*
-!/logstash/
+!/logstash/*
 /logstash/data/
 gbl*
 .*log
