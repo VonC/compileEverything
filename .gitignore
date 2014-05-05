@@ -180,3 +180,4 @@ composer/
 .ssh/old/
 rs-ssl/
 /.ssh/*_root
+/gitweb/rlia
