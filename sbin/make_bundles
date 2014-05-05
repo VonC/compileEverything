@@ -11,6 +11,21 @@ while read -r path; do
       name="${name##*/}"
     fi
     cd "${H}/${path}"
-    git bundle create "$1/${name}.bundle" --all
+
+    b="${H}/../bundles"
+    describe=$(git describe 2>/dev/null)
+    if [[ "${describe}" == "" ]]; then
+      describe="$(git log --format=format:%H -1)"
+    fi
+    ce="${name}-all-${describe}.bundle"
+    n="${b}/${ce}"
+    echo "n='${n}'"
+
+    if [[ -e "${n}" ]]; then
+      echo "${ce} already exists"
+    else
+      git bundle create "${n}" --all
+      echo "Full bundle '${ce}' created"
+    fi
 # :http://superuser.com/questions/284187/bash-iterating-over-lines-in-a-variable
 done <<< "$paths"
