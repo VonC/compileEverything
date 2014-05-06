@@ -48,6 +48,7 @@ if ($demod =~ /Next mcron job is/) {
    printf "%-15s : %-15s\n", "mcrond", "N/A (not staging)";
 }
 
+system "git config --global --unset credential.helper";
 my $gitdir = "$h/repositories/gitolite-admin.git";
 my $repo = Git->repository (Directory => $gitdir);
 my @remotes = $repo->command('remote', '-v');
@@ -69,4 +70,5 @@ foreach(@remotes) {
   $st = $st * 2;
 }
 printf "------\nstatus: $status\n";
+system "git config --global credential.helper netrc";
 exit $status;
