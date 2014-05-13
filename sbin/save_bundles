@@ -176,6 +176,7 @@ while read -r path; do
     #cd "${H}/${path}"
     #git bundle create "$1/${name}.bundle" --all
     # :http://superuser.com/questions/284187/bash-iterating-over-lines-in-a-variable
+    lastfbd=$(ls -r1 "${bkp}/${name}-"*"-full.bundle" 2>/dev/null|head -1)
     bds=$(ls -r1 "${bkp}/${name}-"* 2>/dev/null)
     delbd=false
     while read -r abd; do
@@ -183,7 +184,7 @@ while read -r path; do
       if [[ "${delbd}" == "true" && "${abd}" == "${abd%-full.bundle}" ]]; then
         echo "deleting ${abd}"
         /bin/rm -f "${abd}"
-      elif [[ "${abd}" != "${abd%-full.bundle}" ]] ; then
+      elif [[ "${abd}" != "${abd%-full.bundle}" && "${abd}" == "${lastfbd}" ]] ; then
         echo "Start deleting after ${abd}"
         delbd=true
       fi
