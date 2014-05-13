@@ -179,8 +179,8 @@ while read -r path; do
     bds=$(ls -r1 "${bkp}/${name}-"* 2>/dev/null)
     delbd=false
     while read -r abd; do
-      echo $abd
-      if [[ "${delbd}" == "true" ]]; then
+      #echo $abd
+      if [[ "${delbd}" == "true" && "${abd}" == "${abd%-full.bundle}" ]]; then
         echo "deleting ${abd}"
         /bin/rm -f "${abd}"
       elif [[ "${abd}" != "${abd%-full.bundle}" ]] ; then
