@@ -99,6 +99,7 @@ while read -r path; do
       if [[ "${describe}" == "" ]]; then
         echo "${name} is an EMPTY repo => no backup to do."
       else
+        echo "FULL to ${bkp}/${name}-${d}-${describe}-full.bundle"
         git -C "${path}" bundle create "${bkp}/${name}-${d}-${describe}-full.bundle" --all
         status=$?
         if (( ${status} != 0 )); then stexit=${status}; fi
@@ -165,7 +166,8 @@ while read -r path; do
         if (( ${status} != 0 )); then stexit=${status}; fi
       else
         echo "Create FULL backup bundle for '${name}'."
-        git -C "${path}" bundle create "${bkp}/${name}-${d}-${describe}-full.bundle" --all
+        echo "FULL to ${bkp}/${name}-${nowd}-${describe}-full.bundle"
+        git -C "${path}" bundle create "${bkp}/${name}-${nowd}-${describe}-full.bundle" --all
         status=$?
         if (( ${status} != 0 )); then stexit=${status}; fi
       fi
