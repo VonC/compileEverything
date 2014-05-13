@@ -76,7 +76,11 @@ status() {
 #    exit 1
 #fi
 
-if [[ ! -e "${APP_ROOT}/cron" ]]; then exit 0 ; fi
+if [[ ! -e "${APP_ROOT}/mcron" ]]; then
+  homed=${H##*/}
+  echo "mcron not active here (no mcron_${homed} folder)"
+  exit 0
+fi
 
 case "$1" in
   start)
