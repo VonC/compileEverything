@@ -1,8 +1,19 @@
 #!/bin/bash
 
+homed=${H##*/}
 mc="${H}/mcron"
 
 cd "${H}"
 mkdir -p "${mc}/cron"
-ln -fs "mcron/cron" "${H}/.cron"
+rm -f "${H}/.cron"
+ln -fs "mcron/cron_${homed}" "${H}/.cron"
 rm -f mcron/cron/cron
+
+# http://stackoverflow.com/questions/8049132/how-can-i-detect-whether-a-symlink-is-broken-in-bash
+c="${H}/$(readlink -q "${H}/.cron" 2>/dev/null)"
+# echo ${c}
+if [[ -e "${c}" ]]; then
+  touch "${mc}/mcron"
+else
+  rm -f "${mc}/mcron"
+fi

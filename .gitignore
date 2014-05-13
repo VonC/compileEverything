@@ -160,6 +160,7 @@ composer/
 /.gnupg/*.sec
 /.gnupg/random_seed
 *.asc
+/.cron
 /mcron/projextrdr*
 /mcron/mcron
 /gitolite/ldap/
