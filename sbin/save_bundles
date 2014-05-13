@@ -189,6 +189,16 @@ while read -r path; do
         delbd=true
       fi
     done <<< "${bds}"
+    bds=$(ls -r1 "${bkp}/${name}-"*"-full.bundle" 2>/dev/null)
+    delbd=false
+    nb=1
+    while read -r abd; do
+      if (( ${nb} > 3 )); then
+        echo "Trimming FULL backup $abd"
+        /bin/rm -f "${abd}"
+      fi
+      nb=$((++nb))
+    done <<< "${bds}"
 done <<< "$paths"
 
 exit ${stexit}
