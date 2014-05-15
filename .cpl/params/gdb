@@ -1,3 +1,4 @@
 page=http://ftp.gnu.org/pub/gnu/gdb/?O=D;C=M
 url=http://ftp.gnu.org/pub/gnu/gdb/
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --with-libiconv-prefix=${HUL} --with-libintl-prefix=${HUL} @@WITHOUT_GNU_LD@@
+pre=set +e; cp -f ${H}/.cpl/src/@@NAMEVER@@/gdb/tui/tui-io.c ${H}/.cpl/src/@@NAMEVER@@/gdb/tui/tui-io.c.ori ; patch -r - -N ${H}/.cpl/src/@@NAMEVER@@/gdb/tui/tui-io.c < ${H}/.cpl/patches/tui-io.c.patch ; set -e

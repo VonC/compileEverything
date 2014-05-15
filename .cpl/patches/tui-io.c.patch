@@ -1,0 +1,14 @@
+--- .cpl/src/gdb/gdb/tui/tui-io.c	2014-01-08 09:23:36.000000000 +0000
++++ ../tui-io.c	2014-05-15 12:00:59.000000000 +0100
+@@ -40,7 +40,10 @@
+ #include "filestuff.h"
+ 
+ #include "gdb_curses.h"
+-
++typedef int Function ();
++typedef void VFunction ();
++typedef char *CPFunction ();
++typedef char **CPPFunction ();
+ /* This redefines CTRL if it is not already defined, so it must come
+    after terminal state releated include files like <term.h> and
+    "gdb_curses.h".  */
