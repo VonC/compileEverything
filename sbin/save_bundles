@@ -4,7 +4,7 @@ DIR=${DIR%/*}
 # echo DIR=$DIR
 cd "${DIR}"
 H="${DIR}"
-source "${DIR}/.bashrc" --force
+source "${DIR}/.bashrc" --force > /dev/null
 
 function date_unix() {
   local date1="${1}"
