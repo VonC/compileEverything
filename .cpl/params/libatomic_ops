@@ -2,4 +2,5 @@ page=https://github.com/ivmai/libatomic_ops/tags
 url=https://github.com/ivmai/libatomic_ops/archive/
 ext=zip
 verexclude=gc\.|b\.|alpha
+pre=set +e; cd ${H}/.cpl/src/@@NAMEVER@@/ ; libtoolize --force ; aclocal ; autoheader ; automake --force-missing --add-missing ; autoconf ; set -e
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@
