@@ -80,6 +80,12 @@ repos="${H}/repositories"
 bkp="${H}/../backups"
 paths=$(ls -1 "${repos}"|grep ".git")
 
+logfn=log_backups_"$(date +%Y%m%d -d "today")"
+logf="${H}/mcron/logs/${logfn}"
+mkdir -p "${H}/mcron/logs"
+ln -fs "logs/${logfn}" "${H}/mcron/log_backups"
+logfb="${H}/mcron/logs/logs_backups"
+
 status=0
 stexit=0
 while read -r path; do
