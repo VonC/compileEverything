@@ -2,4 +2,5 @@ nameact=gc
 nameurl=gc
 page=https://github.com/ivmai/bdwgc/releases
 url=https://github.com/ivmai/bdwgc/archive/
+pre=set +e; cd ${H}/.cpl/src/@@NAMEVER@@/ ; ln -fs "${HUL}/share/aclocal/pkg.m4" m4/pkg.m4 ; libtoolize --force ; ./autogen.sh ; gen_sed -i "s/pkg_failed=untried/#pkg_failed=untried/g" "${H}/.cpl/src/@@NAMEVER@@/configure" ; set -e
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
