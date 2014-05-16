@@ -62,7 +62,8 @@ while read arepo; do
       r="${exturl#*/hgit/}"
       exturl="${exturl%/hgit/*}/h2git/${r}"
     fi
-    fetch="${ggit} fetch --force ${exturl} master:master_ext"
+    nowd=`date +%Y%m%d%H%M%S`
+    fetch="${nowd} ${ggit} fetch --force ${exturl} master:master_ext"
     fetchres=""
     if [[ -e "${H}/mcron/.ignorepull" ]]; then
       fetchres="${fetch}"
@@ -96,7 +97,8 @@ while read arepo; do
         dwnurl="${dwnurl%/hgit/*}/h2git/${r}"
       fi
 
-      push="${ggit} push --force ${dwnurl} master_ext:master_ext"
+      nowd=`date +%Y%m%d%H%M%S`
+      push="${nowd} ${ggit} push --force ${dwnurl} master_ext:master_ext"
       pushres=""
       if [[ -e "${H}/mcron/.ignorepull" ]]; then
         pushres="${push}"
