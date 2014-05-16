@@ -82,7 +82,7 @@ while read arepo; do
       aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
     fi
     # aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
-    fh=$(cat "${H}/repositories/${arepo}.git/FETCH_HEAD")
+    fh=$(cat "${H}/repositories/${arepo}.git/FETCH_HEAD" 2> /dev/null)
     # echo "FETCH_HEAD='${fh}', refs/heads/master_ext='${aref}' => '${aref2}"
     if [[ "${aref}" != "${aref2}" && "${fh#${aref2}}" != "${fh}" ]] ; then
       dwnurl="${downstream_url}${arepo}.git"
