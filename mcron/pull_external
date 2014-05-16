@@ -2,11 +2,14 @@
 
 source "${H}/sbin/usrcmd/get_tpl_value"
 
-
 get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_URL_HGIT@" downstream_url
 
 if [[ "${downstream_url}" == "" ]] ; then 
   #echo "no downstream_url."
+  exit 0
+fi
+
+if [[ -e "${H}/mcron/.ignorepull" && "$#" -eq 0 ]]; then
   exit 0
 fi
 
@@ -60,11 +63,18 @@ while read arepo; do
       exturl="${exturl%/hgit/*}/h2git/${r}"
     fi
     fetch="${ggit} fetch --force ${exturl} master:master_ext"
-    #echo ${fetch}
-    fetchres=$(${ggit} fetch --force ${exturl} master:master_ext 2>&1)
-    if [[ ${fetchres} != "" ]]; then
+    fetchres=""
+    if [[ -e "${H}/mcron/.ignorepull" ]]; then
+      fetchres="${fetch}"
+      echo ${fetch}
+    else
+      fetchres=$(${ggit} fetch --force ${exturl} master:master_ext 2>&1)
+    fi
+    if [[ "${fetchres}" != "" ]]; then
       echo "${fetch}" >> ${logf}
-      echo "${fetchres}" >> ${logf}
+      if [[ "${fetch}" != "${fetchres}" ]] ; then
+        echo "${fetchres}" >> ${logf}
+      fi
     fi
     aref2=""
     if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
@@ -87,12 +97,18 @@ while read arepo; do
       fi
 
       push="${ggit} push --force ${dwnurl} master_ext:master_ext"
-      #echo "${push}"
-      #pushres=""
-      pushres=$(${ggit} push --force ${dwnurl} master_ext:master_ext 2>&1)
-      if [[ ${pushres} != "" ]]; then
+      pushres=""
+      if [[ -e "${H}/mcron/.ignorepull" ]]; then
+        pushres="${push}"
+        echo "${push}"
+      else
+        pushres=$(${ggit} push --force ${dwnurl} master_ext:master_ext 2>&1)
+      fi
+      if [[ "${pushres}" != "" ]]; then
         echo "${push}" >> ${logf}
-        echo "${pushres}" >> ${logf}
+        if [[ "${push}" != "${pushres}" ]] ; then
+          echo "${pushres}" >> ${logf}
+        fi
       fi
     fi
   fi
