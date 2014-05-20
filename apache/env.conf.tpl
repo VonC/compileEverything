@@ -39,6 +39,8 @@ SessionCryptoPassphrase secretgit
 SessionCookieName session path=/;httponly;secure;
 SessionMaxAge 900
 
+TraceEnable off
+
 SSLCACertificateFile "@H@/apache/global_ca.crt"
 LDAPTrustedGlobalCert CA_BASE64 "@H@/openldap/global_ca.crt"
 #LDAPVerifyServerCert off
