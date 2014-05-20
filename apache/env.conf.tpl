@@ -189,6 +189,7 @@ Listen @PORT_HTTP_HGIT@
         Require valid-user
         AddHandler cgi-script cgi
     </Location>
+    LogLevel authnz_ldap:info
     BrowserMatch ".*MSIE.*" \
          nokeepalive ssl-unclean-shutdown \
          downgrade-1.0 force-response-1.0
