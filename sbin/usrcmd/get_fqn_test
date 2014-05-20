@@ -1,0 +1,10 @@
+#!/bin/bash
+
+source "${H}/sbin/usrcmd/get_hostname"
+source "${H}/sbin/usrcmd/get_fqn"
+
+get_hostname hostnames
+echo "hostnames='${hostnames}'"
+
+get_fqn ${hostnames} fqn
+echo "fqn='${fqn}'"
