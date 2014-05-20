@@ -43,7 +43,7 @@ TraceEnable off
 
 SSLCACertificateFile "@H@/apache/global_ca.crt"
 LDAPTrustedGlobalCert CA_BASE64 "@H@/openldap/global_ca.crt"
-#LDAPVerifyServerCert off
+LDAPVerifyServerCert off
 
 SSLRandomSeed startup file:/dev/urandom 512
 SSLRandomSeed connect file:/dev/urandom 512
