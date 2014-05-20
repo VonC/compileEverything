@@ -17,6 +17,7 @@ function get_fqn() {
       a_fqn=${a_hostname}
     else
       a_fqn=$(/usr/bin/host -TtA ${a_hostname}|grep "has address"|/usr/bin/awk '{print $1}') ; if [[ "${a_fqn}" == "" ]] ; then a_fqn=${a_hostname} ; fi
+      a_fqn1==$(/usr/bin/host -TtA ${a_hostname}|grep "not found: 3(NXDOMAIN)"); if [[ "${a_fqn1}" != "" ]] ; then a_fqn=$(hostname) ; fi
       a_fqnp=$(ping -c 1 ${a_fqn} 2>/dev/null); if [[ "${a_fqnp#*1 received}" == "${fqnp}" ]]; then a_fqn=${a_hostname} ; fi
     fi
     avalue=${a_fqn}
