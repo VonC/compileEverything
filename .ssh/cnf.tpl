@@ -109,7 +109,7 @@ UsePrivilegeSeparation no
 #ChrootDirectory none
 
 # no default banner path
-#Banner none
+Banner @H@/../.ssh.banner
 
 # override default of no subsystems
 Subsystem	sftp	@H@/usr/local/libs/openssh/libexec/sftp-server
