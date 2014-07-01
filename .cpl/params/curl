@@ -1,3 +1,5 @@
-page=http://curl.haxx.se/download.html
-url=http://curl.haxx.se/download/
+#page=http://curl.haxx.se/download.html
+page=http://fossies.org/linux/www/
+url=http://fossies.org/linux/www/
+#url=http://curl.haxx.se/download/
 configcmd=@@m=" -m64"; unamem=$(uname -m) ; if [[ "${unamem//64/}" == "${unamem}" ]] ; then m="" ; fi ; LDFLAGS="${LDFLAGS#-lintl }" CFLAGS="-fPIC -O${m}" ./configure --prefix=${HULS}/@@NAMEVER@@ --with-ssl=${HUL}/ssl --with-zlib=${HUL} --with-libssh2=${HUL} --with-libidn=${HUL} --enable-shared --enable-static @@WITHOUT_GNU_LD@@
