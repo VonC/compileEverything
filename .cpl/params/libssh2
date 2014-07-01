@@ -1,8 +1,8 @@
 #page=http://mirror.bjtu.edu.cn/freebsd/ports/local-distfiles/sbz/?sort=modtime&order=desc
 #url=http://mirror.bjtu.edu.cn/freebsd/ports/local-distfiles/sbz/
 
-page=http://ftp.lyx.org/pub/FreeBSD/ports/local-distfiles/sbz/?C=M;O=D
-url=http://ftp.lyx.org/pub/FreeBSD/ports/local-distfiles/sbz/
+page=http://www.libssh2.org/download/?C=M;O=D
+url=http://www.libssh2.org/download/
 
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static --with-openssl --with-libssl-prefix=${HUL}/ssl --with-libz --with-libz-prefix=${HUL} @@WITHOUT_GNU_LD@@
 pre=anos=$(uname -o) ; if [[ "${anos#*Cygwin}" != "${anos}" ]] ; then gen_sed -i "/int __cdecl _/ i #include <windows.h>" ${H}/.cpl/src/@@NAMEVER@@/src/misc.c ; fi
