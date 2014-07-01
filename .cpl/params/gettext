@@ -1,4 +1,5 @@
 page=http://ftp.gnu.org/pub/gnu/gettext/?C=M;O=D
 url=http://ftp.gnu.org/pub/gnu/gettext/
+verexclude=latest|sig|xz|bz2
 makefile=Makefile
 configcmd=./configure --prefix=${HUL}/libs/@@NAMEVER@@ --enable-shared --enable-static --with-libiconv-prefix=${HUL} --with-libexpat-prefix=${HUL} --with-libxml2-prefix=${HUL} --disable-libasprintf --with-included-gettext @@WITH_GNU_LD@@
