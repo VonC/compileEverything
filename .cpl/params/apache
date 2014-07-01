@@ -1,5 +1,5 @@
-page=http://apache.opensourcemirror.com/httpd/?C=M;O=D
-url=http://apache.opensourcemirror.com/httpd/
+page=http://httpd.apache.org/download.cgi
+url=http://www.apache.org/dist/httpd/
 nameurl=httpd
 verinclude=-2.4
 configcmd=@@CFLAGS="${CFLAGS} -g -O0" ./configure --prefix=${HULA}/@@NAMEVER@@ --enable-ssl=shared --enable-ssl --with-ssl=${HUL}/ssl --enable-proxy --enable-proxy-connect --enable-proxy-ftp --enable-proxy-http --with-ldap --enable-ldap --enable-authnz-ldap --enable-authn-alias --with-apr=${HUL} --with-apr-util=${HUL} --enable-mods-shared=all --with-z=${HUL} @@WITHOUT_GNU_LD@@
