@@ -1,6 +1,6 @@
-page=http://ftp.riken.go.jp/pub/FreeBSD/distfiles/python/?C=M;O=D
+page=https://www.python.org/download/releases/2.7.7/
+url=https://www.python.org/ftp/python/2.7.7/
 verexclude=-3.
-url=http://ftp.riken.go.jp/pub/FreeBSD/distfiles/python/
 nameurl=Python-
 nameact=python
 ext=tgz
