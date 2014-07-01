@@ -5,7 +5,7 @@ precond=set +e ; mkdir -p ${H}/.cpl/src/@@NAMEVER@@/objdir ; mkdir -p "${H}/.cpl
 cdpath=${H}/.cpl/src/@@NAMEVER@@/objdir
 makefile=objdir/Makefile
 #pre=gen_sed -i "16085 s/^.*$/LIBS=\" -lintl -liconv -L${EHULL} \$LIBS\"/" "${H}/.cpl/src/@@NAMEVER@@/libstdc++-v3/configure"
-configcmd=@@LIBS=" -Wl,--no-as-needed -L${HULL} -liconv -lintl " ../configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --disable-multilib --enable-languages=c,c++ --with-as=@@PATH_AS@@ --with-ld=@@PATH_LD@@ --disable-libstdcxx-pch --enable-linker-build-id --enable-threads=posix --disable-werror --disable-install-libiberty --enable-__cxa_atexit --enable-clocale=gnu --disable-bootstrap
+configcmd=@@LIBS=" -Wl,--no-as-needed -L${HULL} -liconv -lintl " ../configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --disable-multilib --enable-languages=c,c++ --with-as=@@PATH_AS@@ --with-ld=@@PATH_LD@@ --disable-libstdcxx-pch --enable-linker-build-id --enable-threads=posix --disable-werror --disable-install-libiberty --enable-__cxa_atexit --enable-clocale=gnu --disable-bootstrap --disable-libsanitizer
 makecmd=@@LIBS=" -Wl,--no-as-needed -L${HULL} -liconv -lintl " make
 #post=find "${H}/.cpl/src/@@NAMEVER@@" -name "libstdc++.so" -exec rm {} \;
 #postcheck=stopallgcc
