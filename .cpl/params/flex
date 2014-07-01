@@ -1,3 +1,3 @@
-page=http://flex.sourceforge.net
-url=http://prdownloads.sourceforge.net/flex/
+page=http://sourceforge.net/projects/flex/files/
+url=http://fossies.org/linux/misc/
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared @@ENABLE_64BIT@@
