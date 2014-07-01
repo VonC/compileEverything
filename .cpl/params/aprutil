@@ -1,5 +1,5 @@
 page=http://apr.apache.org/download.cgi
-url=http://mirror.ibcp.fr/pub/apache/apr/
+url=https://archive.apache.org/dist/apr/
 nameurl=apr-util-
 nameact=aprutil
 pre=anos=$(uname -o) ; if [[ "${anos#*Cygwin}" != "${anos}" ]] ; then gen_sed -i '\''s/extralib=\"/extralib=\"-llber -lssl -lsasl2 -ldb -lcrypto /g'\'' ${H}/.cpl/src/@@NAMEVER@@/configure ; gen_sed -i '\''s/extralib=$/extralib=\"-llber -lssl -lsasl2 -ldb -lcrypto\"/g'\'' ${H}/.cpl/src/@@NAMEVER@@/configure ; fi

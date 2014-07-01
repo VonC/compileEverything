@@ -1,4 +1,4 @@
 page=http://apr.apache.org/download.cgi
-url=http://mirror.ibcp.fr/pub/apache/apr/
+url=https://archive.apache.org/dist/apr/
 configcmd=@@CFLAGS="${CFLAGS} -g -O0" ./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
 post=ln -fs libapr-1.a ${HULL}/libapr.a
