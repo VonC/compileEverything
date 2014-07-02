@@ -4,7 +4,8 @@ url=http://ftp.jaist.ac.jp/pub/sourceforge/n/nx/nxlog-ce/
 #page=http://download2.polytechnic.edu.na/pub4/sourceforge/n/nx/nxlog-ce/older-releases/?C=M;O=D
 #url=http://download2.polytechnic.edu.na/pub4/sourceforge/n/nx/nxlog-ce/older-releases/
 nameurl=nxlog-ce
-verexclude=2\..\.
-configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ @@WITH_GNU_LD@@
+#verexclude=[2x]\..\.
+configcmd=@@CFLAGS="-fPIC" ./configure --prefix=${HULA}/@@NAMEVER@@ @@WITH_GNU_LD@@
+pre=for file in $(find "${H}/.cpl/src/@@NAMEVER@@/" -name "*.pl"); do gen_sed -i "s;/usr/bin//perl;${HB}/perl;g" "${file}" ; gen_sed -i "s;/usr/bin/perl;${HB}/perl;g" "${file}" ; done
 premake=gen_sed -i "s#print .*#print \"${EHUL}/share/perl5\";#g" ${H}/.cpl/src/@@NAMEVER@@/src/modules/extension/perl/findinstdir.pl
 post=mkdir -p ${HULA}/@@NAMEVER@@/etc/nxlog ; ln -fs ../../../../../../nxlog/nxlog.conf ${HULA}/@@NAMEVER@@/etc/nxlog/nxlog.conf ; cp_tpl "${H}/nxlog/nxlog.conf" "${H}/nxlog" ; mkdir -p ${HUL}/var/log/nxlog/ ; ln -fs ../../../../../nxlog/nxlog.log ${HUL}/var/log/nxlog/nxlog.log ; mkdir -p ${HULA}/@@NAMEVER@@/var/spool/nxlog
