@@ -15,7 +15,7 @@ app mcron guile,gnupg
 app guile libunistring,bdwgc
 lib bdwgc libatomic_ops,automake
 lib libunistring none
-lib libsecret intltool
+lib libsecret intltool,glib
 lib intltool cpanm 
 app man-db groff,libpipeline,pkgconfig,db,tcl,zlib,gettext,libiconv
 lib groff gcc,libiconv,gettext
