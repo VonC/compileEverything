@@ -144,7 +144,9 @@ function getJDK {
     fi
     local ajdk=$(cat "${_pkgs}/${name}" | grep "technetwork/java/javase/downloads/jdk7")
     # echo "j1 ${ajdk}"
-    ajdk=${ajdk#*archive-*href=\"}
+    ajdk=${ajdk#*javasejdk}
+    ajdk=${ajdk#*javasejdk}
+    ajdk=${ajdk#*href=\"}
     ajdk=${ajdk%%\"*}
     # echo "j2 ${ajdk}"
     ajdk="http://www.oracle.com${ajdk%%\"*}"
@@ -162,12 +164,14 @@ function getJDK {
     ajdk2=${ajdk2%%\"*}
     local ajdkn=${ajdk2##*/}
     echo "ajdk2: '$ajdk2', ajdkn '${ajdkn}'"
+    # http://stackoverflow.com/questions/10268583/how-to-automate-download-and-installation-of-java-jdk-on-linux/10959815#10959815
     if [[ ! -e "${_pkgs}/${ajdkn}" ]]; then
       if [[ ${refreshpkgs} == 1 && -e "${_src}/_pkgs/${ajdkn}" ]] ; then
         ln -fs "${_src}/_pkgs/${ajdkn}" "${_pkgs}/${ajdkn}" 
       else
         cp_tpl "${H}/jdk/.cookies.tpl" "${H}/jdk"
-        loge "wget --no-check-certificate --cookies=on --load-cookies=${H}/jdk/.cookies --keep-session-cookies $ajdk2 -O ${_pkgs}/${ajdkn}" "wget_sources_${ajdkn}"
+        # wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u60-b19/jdk-7u60-linux-x64.tar.gz
+        loge "wget --no-check-certificate --no-cookies --header \"Cookie: oraclelicense=accept-securebackup-cookie\" --keep-session-cookies $ajdk2 -O ${_pkgs}/${ajdkn}" "wget_sources_${ajdkn}"
       fi
       if [[ ${refreshpkgs} == 1 && -f "${_pkgs}/${ajdkn}" && ! -h "${_pkgs}/${ajdkn}" && ! -e "${_src}/_pkgs/${ajdkn}" ]] ; then
         ln -fs "${_pkgs}/${ajdkn}" "${_src}/_pkgs/${ajdkn}"
