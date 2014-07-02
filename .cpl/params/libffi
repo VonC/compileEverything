@@ -6,6 +6,6 @@ nameact=libffi
 ext=zip
 ;exturl=zip
 ;extact=tar.gz
-pre=gen_sed -i "s;^includesdir = .*$;includesdir = \$(includedir);g" include/Makefile.in
+pre=libtoolize --force ; aclocal ; gen_sed -i "s;^LT_SYS_SYMBOL_USCORE;#LT_SYS_SYMBOL_USCORE;g" configure.ac ; ./autogen.sh ; gen_sed -i "s;^includesdir = .*$;includesdir = \$(includedir);g" include/Makefile.in
 configcmd=./configure --prefix=${HULS}/@@NAMEVER@@
 postcheck=if [[ -e "${HULS}/@@NAMEVER@@/lib64" ]] ; then cd "${HULS}/@@NAMEVER@@/lib" ; ln -fs ../lib64/* . ; fi
