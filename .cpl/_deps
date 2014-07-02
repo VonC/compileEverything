@@ -32,7 +32,7 @@ lib glib gettext,pcre,libiconv,zlib,libffi,tar,libelf
 app tar libiconv,gettext,bzip2,xz
 app xz gettext,libiconv
 lib libelf none
-lib libffi gettext,libiconv
+lib libffi gettext,libiconv,autoconf,automake
 app automake none
 app patchelf automake
 app pkgconfig libiconv
