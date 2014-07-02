@@ -1,5 +1,8 @@
-page=http://download2.polytechnic.edu.na/pub4/sourceforge/n/nx/nxlog-ce/older-releases/?C=M;O=D
-url=http://download2.polytechnic.edu.na/pub4/sourceforge/n/nx/nxlog-ce/older-releases/
+page=http://sourceforge.net/projects/nxlog-ce/files/
+url=http://ftp.jaist.ac.jp/pub/sourceforge/n/nx/nxlog-ce/
+#url=http://sourceforge.net/projects/nxlog-ce/files/
+#page=http://download2.polytechnic.edu.na/pub4/sourceforge/n/nx/nxlog-ce/older-releases/?C=M;O=D
+#url=http://download2.polytechnic.edu.na/pub4/sourceforge/n/nx/nxlog-ce/older-releases/
 nameurl=nxlog-ce
 verexclude=2\..\.
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ @@WITH_GNU_LD@@
