@@ -1,5 +1,5 @@
-page=http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/gnupg/?C=M;O=D
-url=http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/gnupg/
+page=http://mirrors.dotsrc.org/gcrypt/gnupg/?C=M;O=D
+url=http://mirrors.dotsrc.org/gcrypt/gnupg/
 ext=tar.bz2
 verexclude=-1.
 verinclude=-2.
