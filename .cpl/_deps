@@ -35,7 +35,7 @@ lib libelf none
 lib libffi gettext,libiconv
 app automake none
 app patchelf automake
-app pkgconfig libiconv,glib
+app pkgconfig libiconv
 lib m4 none
 lib libsigsegv none
 lib gdbm texinfo
