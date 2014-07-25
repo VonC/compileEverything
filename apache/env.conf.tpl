@@ -40,6 +40,7 @@ SessionCookieName session path=/;httponly;secure;
 SessionMaxAge 900
 
 TraceEnable off
+Header always append X-Frame-Options DENY
 
 SSLCACertificateFile "@H@/apache/global_ca.crt"
 LDAPTrustedGlobalCert CA_BASE64 "@H@/openldap/global_ca.crt"
