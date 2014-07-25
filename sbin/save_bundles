@@ -95,7 +95,7 @@ while read -r path; do
     name="${path##*/}"
     name="${name%.git}"
     # echo "${name}"
-    f=$(ls -t "${bkp}/${name}"* 2> /dev/null)
+    f=$(ls -t "${bkp}/${name}-"*.bundle 2> /dev/null)
     # echo $f
     if [[ "${f}" == "" ]] ; then 
 	  echo "${name} no backups found => Create FULL backup." >> "${logf}"
