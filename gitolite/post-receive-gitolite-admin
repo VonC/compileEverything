@@ -30,7 +30,7 @@ do
   if [[ "${branchname}" == "${local_ga_branch}" ]] ; then
     if [[ -e "${fenv}" ]] ; then
       echo "Commits on '${local_ga_branch} detected => pushing to ${upstream_name}".
-      git config --global --unset credential.helper
+      git config --global --remove-section credential
       cp "${fenv}" "${H}/.netrc"
       git push -f ${upstream_name} ${local_ga_branch}:master
       rm "${H}/.netrc"
