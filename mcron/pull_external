@@ -20,7 +20,7 @@ if [[ "${upstream_url}" == "" ]] ; then
   exit 0
 fi
 
-git config --global --unset credential.helper
+git config --global --remove-section credential
 logfn=log_"$(date +%Y%m%d -d "today")"
 logf="${H}/mcron/logs/${logfn}"
 mkdir -p "${H}/mcron/logs"
