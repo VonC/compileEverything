@@ -4,7 +4,7 @@
 if [[ ! -e "${H}/.cpl/src/git-manpages" ]]; then
   homed=${H##*/}
   if [[ ! -e "${H}/../.offline.${homed}" ]] ; then
-    xxgit=1 git config --global --unset credential.helper
+    xxgit=1 git config --global --remove-section credential
     xxgit=1 git clone https://github.com/gitster/git-manpages "${H}/.cpl/src/git-manpages"
     xxgit=1 git config --global credential.helper netrc
   else

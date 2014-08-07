@@ -112,7 +112,7 @@ p="${p%%?protocol=*}"
 #echo "pr // user:p@r/u: ${pr}//${user}:${p}@${r}/${u}"
 
 echo "Pushing public repo '${branch_local}' branch to '${upstream_name}'/'${branch_upstream}'"
-git config --global --unset credential.helper
+git config --global --remove-section credential
 
 cp "${H}/.envs.private" "${H}/.netrc"
 res=$(git push -f "${pr}//${user}:${p}@${r}/${u}" ${branch_local}:${branch_upstream} 2>&1)

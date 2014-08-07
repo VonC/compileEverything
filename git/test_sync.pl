@@ -48,7 +48,7 @@ if ($demod =~ /Next mcron job is/) {
    printf "%-15s : %-15s\n", "mcrond", "N/A (not staging)";
 }
 
-system "git config --global --unset credential.helper";
+system "git config --global --remove-section credential";
 my $gitdir = "$h/repositories/gitolite-admin.git";
 my $repo = Git->repository (Directory => $gitdir);
 my @remotes = $repo->command('remote', '-v');
