@@ -110,7 +110,13 @@ Listen @PORT_HTTP_GITWEB@
         SetEnvIf Request_URI "^/lockedout$" NOPASSWD=true
         SetEnvIf Request_URI "^/Semantic-UI/.*$" NOPASSWD=true
 
-        AuthFormProvider myldap companyldap
+        AuthFormProvider ldap
+        AuthLDAPBindDN "@LDAP_BINDDN@"
+        AuthLDAPBindPassword @LDAP_PASSWORD@
+        AuthLDAPURL @LDAP_URL@
+        AuthLDAPGroupAttribute member
+        AuthLDAPGroupAttributeIsDN on
+
         ErrorDocument 401 /login.html
         AuthType form
         AuthName "LDAP authentication for ITSVC Prod GitWeb repositories"
@@ -126,9 +132,84 @@ Listen @PORT_HTTP_GITWEB@
         # Deny all requests
         Deny from all
         # except if user is authenticated
-        Require valid-user
-        # or if NOPASSWD is set
-        Allow from env=NOPASSWD
+        <RequireAny>
+          # or if NOPASSWD is set
+          Require env NOPASSWD
+          <RequireAll>
+            Require valid-user
+            # Require ldap-group @LDAP_GROUP@
+            # Require ldap-group @LDAP_NOGROUP@
+            # Require ldap-filter @LDAP_NOGROUP@
+          </RequireAll>
+        </RequireAny>
+
+        AddHandler cgi-script cgi
+        DirectoryIndex gitweb.cgi
+
+        RewriteEngine Off
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule ^[a-zA-Z0-9_\-]+\.git/?(\?.*)?$ /gitweb.cgi%{REQUEST_URI} [L,PT]
+    </Directory>
+    BrowserMatch ".*MSIE.*" \
+         nokeepalive ssl-unclean-shutdown \
+         downgrade-1.0 force-response-1.0
+    LogLevel error authnz_ldap_module:trace7 authz_core_module:trace7
+    # LogLevel error auth_form_module:trace1
+    # LogLevel debug ssl_module:error core_module:trace5 socache_shmcb_module:error ssl:error auth_form_module:trace1
+    CustomLog "@H@/apache/gitweb_ssl_request_log" \
+          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+    ErrorLog "@H@/apache/gitweb_error_log"
+    TransferLog "@H@/apache/gitweb_access_log"
+</VirtualHost>
+
+# GitWeb on @PORT_HTTP_GITWEB2@
+Listen @PORT_HTTP_GITWEB2@
+<VirtualHost @FQN@:@PORT_HTTP_GITWEB2@>
+    ServerName @FQN@
+    ServerAlias @HOSTNAME@
+    SSLCertificateFile "@H@/apache/crt"
+    SSLCertificateKeyFile "@H@/apache/key"
+    SSLEngine on
+    SetEnv GIT_HTTP_BACKEND "@H@/usr/local/apps/git/libexec/git-core/git-http-backend"
+    DocumentRoot @H@/gitweb
+    Alias /g2it @H@/gitweb
+    <FilesMatch "\.(cgi|shtml|phtml|php)$">
+      SSLOptions +StdEnvVars
+    </FilesMatch>
+    <Directory @H@/gitweb>
+        SSLOptions +StdEnvVars
+        Options +ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
+        AllowOverride All
+
+        SetEnvIf Request_URI "^/lockedout$" NOPASSWD=true
+        SetEnvIf Request_URI "^/Semantic-UI/.*$" NOPASSWD=true
+
+        AuthFormProvider ldap
+        AuthLDAPBindDN cn=Manager,dc=example,dc=com
+        AuthLDAPBindPassword secret
+        AuthLDAPURL ldap://localhost:@PORT_LDAP_TEST@/dc=example,dc=com?uid?sub?(objectClass=*)
+
+        ErrorDocument 401 /login.html
+        AuthType form
+        AuthName "LDAP dummy authentication for ITSVC Prod GitWeb repositories"
+        AuthFormAuthoritative On
+        AuthFormAttempts 4
+        AuthFormLockout 180
+
+        # http://stackoverflow.com/questions/11438764/can-an-htpasswd-apply-to-all-urls-except-one
+
+        Order Deny,Allow
+        # Any requirment satisfies
+        Satisfy any
+        # Deny all requests
+        Deny from all
+        # except if user is authenticated
+        <RequireAny>
+          # or if NOPASSWD is set
+          Require env NOPASSWD
+          Require valid-user
+        </RequireAny>
 
         AddHandler cgi-script cgi
         DirectoryIndex gitweb.cgi
@@ -141,8 +222,9 @@ Listen @PORT_HTTP_GITWEB@
     BrowserMatch ".*MSIE.*" \
          nokeepalive ssl-unclean-shutdown \
          downgrade-1.0 force-response-1.0
-    LogLevel error auth_form_module:trace1
-    #LogLevel debug ssl_module:error core_module:trace5 socache_shmcb_module:error ssl:error auth_form_module:trace1
+    LogLevel error authnz_ldap_module:trace7 authz_core_module:trace7
+    # LogLevel error auth_form_module:trace1
+    # LogLevel debug ssl_module:error core_module:trace5 socache_shmcb_module:error ssl:error auth_form_module:trace1
     CustomLog "@H@/apache/gitweb_ssl_request_log" \
           "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
     ErrorLog "@H@/apache/gitweb_error_log"
@@ -173,8 +255,17 @@ Listen @PORT_HTTP_HGIT@
         Allow from all
         AuthName "LDAP authentication for ITSVC Smart HTTP Git repositories"
         AuthType Basic
-        AuthBasicProvider companyldap
-        Require valid-user
+        AuthBasicProvider ldap
+        AuthLDAPBindDN "@LDAP_BINDDN@"
+        AuthLDAPBindPassword @LDAP_PASSWORD@
+        AuthLDAPURL @LDAP_URL@
+        AuthLDAPGroupAttribute member
+        AuthLDAPGroupAttributeIsDN on
+        <RequireAll>
+          Require valid-user
+          # Require ldap-group @LDAP_GROUP@
+          # Require ldap-group @LDAP_NOGROUP@
+        </RequireAll>
         AddHandler cgi-script cgi
     </Location>
     ScriptAlias /h2git/ @H@/sbin/gitolite-shell/
