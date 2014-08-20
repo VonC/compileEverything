@@ -56,6 +56,9 @@ http {
         location /git/ {
           proxy_pass https://@FQN@:@PORT_HTTP_GITWEB@/git/;
         }
+        location /g2it/ {
+          proxy_pass https://@FQN@:@PORT_HTTP_GITWEB2@/g2it/;
+        }
         location /hgit/ {
           proxy_pass https://@FQN@:@PORT_HTTP_HGIT@/hgit/;
         }
