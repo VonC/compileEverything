@@ -7,3 +7,5 @@
 @LDAP_UID@=anIDField
 @LDAP_METHOD@=:plain (or :ssl if using ldaps://)
 @LDAP_METHOD_NC@=plain (or ssl if using ldaps://)
+@LDAP_GROUP@=CN=GoodGroupName,OU=...,OU=Groups,DC=Prod,DC=company
+@LDAP_NOGROUP@=CN=BadGroupName,...,OU=Groups,DC=Prod,DC=company
