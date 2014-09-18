@@ -134,7 +134,7 @@ cp "${H}/.envs.private" "${H}/.netrc"
 res=$(git push -f "${pr}//${user}:${p}@${r}/${u}" ${branch_local}:${branch_upstream} 2>&1)
 # http://stackoverflow.com/questions/525592/find-and-replace-inside-a-text-file-from-a-bash-command
 # res=${res//:[^@ ]*?@/:xxx@}
-res=$(echo -e ${res} | perl -p -e 's/:[^@]*?@/:xxx@/g')
+res=$(echo ${res} | perl -p -ne 's/(:\/\/[^:]+?):[^@ ]*?@/\1:yyy@/g')
 if [[ "${downstream_name}" == "" ]]; then
   flog="push.log"
   if [[ "${GL_USER}" != "" ]]; then
@@ -145,7 +145,7 @@ if [[ "${downstream_name}" == "" ]]; then
   echo "$nowd (${GL_USER})" >> "${H}/git/logs/${flog}"
   echo "${res}" >> "${H}/git/logs/${flog}"
 else
-  echo -e "${res}"
+  echo "${res}"
 fi
 rm -f "${H}/.netrc"
 git config --global credential.helper netrc
