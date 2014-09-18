@@ -132,10 +132,11 @@ git config --global --remove-section credential
 
 cp "${H}/.envs.private" "${H}/.netrc"
 git config color.ui false
-res=$(git push -f "${pr}//${user}:${p}@${r}/${u}" ${branch_local}:${branch_upstream} 2>&1)
+res="$(git push -f "${pr}//${user}:${p}@${r}/${u}" ${branch_local}:${branch_upstream} 2>&1)"
 # http://stackoverflow.com/questions/525592/find-and-replace-inside-a-text-file-from-a-bash-command
 # res=${res//:[^@ ]*?@/:xxx@}
-res=$(echo ${res} | perl -p -ne 's/(:\/\/[^:]+?):[^@ ]*?@/\1:yyy@/g')
+# http://stackoverflow.com/questions/8713158/place-a-multi-line-output-inside-a-variable
+res="$(echo "${res}" | perl -p -ne 's/(:\/\/[^:]+?):[^@ ]*?@/\1:yyy@/g')"
 if [[ "${downstream_name}" == "" ]]; then
   flog="push.log"
   if [[ "${GL_USER}" != "" ]]; then
