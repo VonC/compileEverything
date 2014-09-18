@@ -1,5 +1,21 @@
 #!/bin/bash
 
+if [[ "${H}" == "" ]]; then
+  # echo "post-update1='${H}' vs HOME '$HOME'"
+  DIR=$(readlink -f ${BASH_SOURCE[0]})
+  # echo "DIR1='${H}' => DIR='${DIR}'"
+  DIR=${DIR%/*}
+  #DIR="$( cd "${DIR}" && pwd )"
+  DIR=${DIR%/*}
+  DIR=${DIR%/*}
+  DIR=${DIR%/*}
+  H="${DIR}"
+  export H="${H}"
+  echo "DIR2='${H}' => DIR='${DIR}' vs. HOME='${HOME}'"
+  source "${DIR}/.bashrc" --force
+fi
+#echo "post-update2='${H}'"
+
 source "${H}/sbin/usrcmd/get_tpl_value"
 
 # A local branch must be registered
