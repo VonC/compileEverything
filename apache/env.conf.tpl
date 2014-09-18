@@ -268,6 +268,28 @@ Listen @PORT_HTTP_HGIT@
         </RequireAll>
         AddHandler cgi-script cgi
     </Location>
+    ScriptAlias /hrgit/ @H@/git/reset_group
+    <Location /hrgit>
+        SSLOptions +StdEnvVars
+        Options +ExecCGI +FollowSymLinks +SymLinksIfOwnerMatch
+        #AllowOverride All
+        order allow,deny
+        Allow from all
+        AuthName "LDAP authentication for ITSVC LDAP reset"
+        AuthType Basic
+        AuthBasicProvider ldap
+        AuthLDAPBindDN "@LDAP_BINDDN@"
+        AuthLDAPBindPassword @LDAP_PASSWORD@
+        AuthLDAPURL @LDAP_URL@
+        AuthLDAPGroupAttribute member
+        AuthLDAPGroupAttributeIsDN on
+        <RequireAll>
+          Require valid-user
+          # Require ldap-group @LDAP_GROUP@
+          # Require ldap-group @LDAP_NOGROUP@
+        </RequireAll>
+        AddHandler cgi-script cgi
+    </Location>
     ScriptAlias /h2git/ @H@/sbin/gitolite-shell/
     <Location /h2git>
         SSLOptions +StdEnvVars
