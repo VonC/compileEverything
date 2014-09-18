@@ -1,5 +1,15 @@
 #!/bin/bash
 
+if [[ "${H}" != "" ]]; then
+  DIR=$(readlink -f ${BASH_SOURCE[0]})
+  DIR=${DIR%/*}
+  DIR="$( cd "${DIR}" && pwd )"
+  DIR=${DIR%/*}
+  H="${DIR}"
+  export H="${H}"
+  source "${DIR}/.bashrc" --force
+fi
+
 source "${H}/sbin/usrcmd/get_tpl_value"
 
 get_tpl_value "$1" "$2" value
