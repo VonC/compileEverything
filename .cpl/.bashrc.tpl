@@ -213,3 +213,9 @@ export GPG_TTY=$(tty)
 
 if [[ "${MANPATH}" == "" ]] ; then export MANPATH="${HUL}/share/man"; fi
 if [[ "${MANPATH#*$H}" == "${MANPATH}" ]] ; then export MANPATH="${HUL}/share/man:${MANPATH}"; fi
+
+if [[ -e "${H}/go/latest/bin/go" ]]; then
+  export GOROOT=${H}/go/latest
+  export PATH=$PATH:${GOROOT}/bin
+  export GOPATH=${H}/go/projects
+fi
