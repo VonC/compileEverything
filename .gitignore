@@ -183,3 +183,4 @@ rs-ssl/
 /.ssh/*_root
 /gitweb/rlia
 /mcron/.ignorepull
+/go/*src*
