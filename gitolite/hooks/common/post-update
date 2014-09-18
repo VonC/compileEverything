@@ -132,7 +132,20 @@ git config --global --remove-section credential
 
 cp "${H}/.envs.private" "${H}/.netrc"
 res=$(git push -f "${pr}//${user}:${p}@${r}/${u}" ${branch_local}:${branch_upstream} 2>&1)
-res=${res//:[a-zA-Z0-9]*?@/:xxx@}
-echo "$res"
+# http://stackoverflow.com/questions/525592/find-and-replace-inside-a-text-file-from-a-bash-command
+# res=${res//:[^@ ]*?@/:xxx@}
+res=$(echo -e ${res} | perl -p -e 's/:[^@]*?@/:xxx@/g')
+if [[ "${downstream_name}" == "" ]]; then
+  flog="push.log"
+  if [[ "${GL_USER}" != "" ]]; then
+    flog="push.${GL_USER}.log"
+  fi
+  nowd=`date +"%Y%m%d - %H:%M:%S"`
+  echo "~~~~~~~~~~~~~~~~~~~" >> "${H}/git/logs/${flog}"
+  echo "$nowd (${GL_USER})" >> "${H}/git/logs/${flog}"
+  echo "${res}" >> "${H}/git/logs/${flog}"
+else
+  echo -e "${res}"
+fi
 rm -f "${H}/.netrc"
 git config --global credential.helper netrc

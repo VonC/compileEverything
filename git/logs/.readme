@@ -1,0 +1,2 @@
+used by gitolite/hooks/common/post-update to keep
+track of all push operations
