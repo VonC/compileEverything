@@ -1,0 +1,14 @@
+#!/bin/bash
+echo -e "Content-Type: text/plain\n"
+nowd=`date +"%Y%m%d - %H:%M:%S"`
+if [[ "${REMOTE_USER}" != "" ]]; then
+  if [[ -e "../gitolite/ldap/${REMOTE_USER}" ]] ; then
+    rm -f "../gitolite/ldap/${REMOTE_USER}"
+    echo "Reset group on ${nowd}" >> "../gitolite/ldap/${REMOTE_USER}.log"
+    echo "group reset for user $REMOTE_USER"
+  else
+    echo "Ignore group reset for ${REMOTE_USER}: no ldap group file found (${nowd})"
+  fi
+else
+  echo "Ignore reset group: REMOTE_USER not set"
+fi
