@@ -39,7 +39,9 @@ function bashscriptpath() {
   eval $_sp="'$asp'"
 }
 
-bashscriptpath H
+if [[ "${H}" == "" ]]; then
+  bashscriptpath H
+fi
 export H=${H}
 export HOME=${H}
 echo "bashrc set local home to '${H}'"
