@@ -131,6 +131,7 @@ echo "Pushing public repo '${branch_local}' branch to '${upstream_name}'/'${bran
 git config --global --remove-section credential
 
 cp "${H}/.envs.private" "${H}/.netrc"
+git config color.ui false
 res=$(git push -f "${pr}//${user}:${p}@${r}/${u}" ${branch_local}:${branch_upstream} 2>&1)
 # http://stackoverflow.com/questions/525592/find-and-replace-inside-a-text-file-from-a-bash-command
 # res=${res//:[^@ ]*?@/:xxx@}
@@ -149,3 +150,4 @@ else
 fi
 rm -f "${H}/.netrc"
 git config --global credential.helper netrc
+git config color.ui true
