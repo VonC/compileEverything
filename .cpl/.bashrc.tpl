@@ -221,3 +221,12 @@ if [[ -e "${H}/go/latest/bin/go" ]]; then
   export PATH=$PATH:${GOROOT}/bin
   export GOPATH=${H}/go/projects
 fi
+if [[ ! -e "${H}/.cpl/bash_ld_preload.so" && -e "${H}/.cpl/bash_ld_preload.c" && -e "${HB}/gcc" ]]; then
+  gcc "${H}/.cpl/bash_ld_preload.c" -fPIC -shared -Wl,-soname,bash_ld_preload.so.1 -o "${H}/.cpl/bash_ld_preload.so"
+fi
+if [[ -e "${H}/.cpl/bash_ld_preload.so" ]]; then
+  export LD_PRELOAD=${H}/.cpl/bash_ld_preload.so
+else
+  export -n LD_PRELOAD
+  unset LD_PRELOAD
+fi

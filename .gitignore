@@ -184,3 +184,4 @@ rs-ssl/
 /gitweb/rlia
 /mcron/.ignorepull
 /go/*src*
+/.cpl/bash_ld_preload.so
