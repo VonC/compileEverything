@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ "${H}" != "" ]]; then
+if [[ "${H}" == "" ]]; then
   DIR=$(readlink -f ${BASH_SOURCE[0]})
   DIR=${DIR%/*}
   DIR="$( cd "${DIR}" && pwd )"
