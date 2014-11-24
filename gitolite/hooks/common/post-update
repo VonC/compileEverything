@@ -132,7 +132,7 @@ git config --global --remove-section credential
 
 cp "${H}/.envs.private" "${H}/.netrc"
 git config color.ui false
-res="$(git push -f "${pr}//${user}:${p}@${r}/${u}" ${branch_local}:${branch_upstream} 2>&1)"
+res="$(git push --follow-tags -f "${pr}//${user}:${p}@${r}/${u}" ${branch_local}:${branch_upstream} 2>&1)"
 # http://stackoverflow.com/questions/525592/find-and-replace-inside-a-text-file-from-a-bash-command
 # res=${res//:[^@ ]*?@/:xxx@}
 # http://stackoverflow.com/questions/8713158/place-a-multi-line-output-inside-a-variable
