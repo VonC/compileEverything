@@ -104,7 +104,7 @@ while read arepo; do
         pushres="${push}"
         echo "${push}"
       else
-        pushres=$(${ggit} push --force ${dwnurl} master_ext:master_ext 2>&1)
+        pushres=$(${ggit} push --follow-tags --force ${dwnurl} master_ext:master_ext 2>&1)
       fi
       if [[ "${pushres}" != "" ]]; then
         echo "${push}" >> ${logf}
