@@ -356,6 +356,7 @@ function get_sources_from_web() {
   get_param ${name} page ""
   get_param ${name} verexclude ""
   get_param ${name} verinclude ""
+  get_param ${name} revert "" 
   if [[ "${globalverinclude}" != "" ]] ; then verinclude="${globalverinclude}" ; fi
 
   # echo "=== page='${page}'"
@@ -392,7 +393,11 @@ function get_sources_from_web() {
       wget --no-check-certificate -q -O "${_pkgs}/${name}" "${page}" 
     fi
     if [[ ${mgsd} == 1 ]] ; then  echo "D: local page: $(cat "${_pkgs}/${name}")" ; fi
-    asrcline=$(cat "${_pkgs}/${name}"  | grep -e "${nameurl}" | grep -e "${ext}")
+    local catpage=$(cat "${_pkgs}/${name}")
+    if [[ "${revert}" != "" ]]; then
+      catpage=$(tac "${_pkgs}/${name}")
+    fi
+    asrcline=$(echo -e "${catpage}"  | grep -e "${nameurl}" | grep -e "${ext}")
   fi
   
   if [[ "${verexclude}" != "" ]]; then asrcline=$(echo "${asrcline}" | egrep -v -e "${verexclude}") ; fi
