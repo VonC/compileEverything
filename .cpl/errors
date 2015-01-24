@@ -4668,3 +4668,27 @@ Unable to establish SSL connection.
 
 => now always use wget --no-check-certificate
 ~~~~~~~~~~~~~~~~~~
+gcc XUbuntu make
+
+checking dependency style of g++... none
+configure: error: no usable dependency style found
+Makefile:3928: recipe for target 'configure-gcc' failed
+make[1]: *** [configure-gcc] Error 1
+make[1]: Leaving directory '/home/vonc/git/ce1/.cpl/src/gcc-4.9.2/objdir'
+Makefile:862: recipe for target 'all' failed
+make: *** [all] Error 2
+
+
+vonc@voncvb:~/.cpl/src/gcc/objdir/gcc$ vi config.log
+
+866 configure:8877: failure, diagnostics are:
+2867 | ./depcomp: line 561: g++: command not found
+2868 configure:8834: trying msvcmsys
+2869 | depmode=msvcmsys source=sub/conftest.c object=sub/conftest.o depfile=sub/conftest.Po tmpdepfile=sub/conftest.TPo /bin/bash ./depcomp g++ -c -o sub/conftest.o sub     /conftest.c
+2870 configure:8877: failure, diagnostics are:
+2871 | ./depcomp: line 561: g++: command not found
+2872 configure:8888: result: none
+2873 configure:8891: error: no usable dependency style found
+
+=> sudo apt-get install g++
+~~~~~~~~~~~~~~~~
