@@ -17,5 +17,5 @@ fi
 git checkout -b "$temp_branch" "$commit"
 GIT_COMMITTER_DATE="$date_timestamp" GIT_AUTHOR_DATE="$date_timestamp" git commit --amend --no-edit --date "$date_r"
 git checkout "$current_branch"
-git rebase --committer-date-is-author-date "$commit" --onto "$temp_branch"
+git rebase --autostash --committer-date-is-author-date "$commit" --onto "$temp_branch"
 git branch -d "$temp_branch"
