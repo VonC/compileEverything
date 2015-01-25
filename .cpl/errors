@@ -4692,3 +4692,34 @@ vonc@voncvb:~/.cpl/src/gcc/objdir/gcc$ vi config.log
 
 => sudo apt-get install g++
 ~~~~~~~~~~~~~~~~
+XUbuntu nginx make
+
+gcc -c -I/home/vonc/git/ce1/usr/local/include -I/home/vonc/git/ce1/usr/local/ssl/include -fPIC -O -U_FORTIFY_SOURCE -m64 -I/home/vonc/git/ce1/usr/local/include -I/h    ome/vonc/git/ce1/usr/local/ssl/include -I src/core -I src/event -I src/event/modules -I src/os/unix -I /home/vonc/git/ce1/usr/local/include/libxml2 -I objs \
+195     -o objs/src/event/ngx_event_openssl.o \
+196     src/event/ngx_event_openssl.c
+197 src/event/ngx_event_openssl.c: In function ¿ngx_ssl_check_host¿:
+198 src/event/ngx_event_openssl.c:2718:9: error: too few arguments to function ¿X509_check_host¿
+199      if (X509_check_host(cert, name->data, name->len, 0) != 1) {
+200          ^
+201 In file included from /home/vonc/git/ce1/usr/local/ssl/include/openssl/ocsp.h:72:0,
+202                  from src/event/ngx_event_openssl.h:20,
+203                  from src/core/ngx_core.h:73,
+204                  from src/event/ngx_event_openssl.c:9:
+205 /home/vonc/git/ce1/usr/local/ssl/include/openssl/x509v3.h:741:5: note: declared here
+206  int X509_check_host(X509 *x, const char *chk, size_t chklen,
+207      ^
+208 objs/Makefile:863: recipe for target 'objs/src/event/ngx_event_openssl.o' failed
+209 make[1]: *** [objs/src/event/ngx_event_openssl.o] Error 1
+210 make[1]: Leaving directory '/home/vonc/git/ce1/.cpl/src/nginx-1.7.3'
+211 Makefile:8: recipe for target 'build' failed
+
+Should have been fixed with a recent version of NGinx (>juill 2014): http://forum.nginx.org/read.php?29,251619,251645#msg-251645
+
+ X509_check_host() prototype changed recently:
+> - http://git.openssl.org/gitweb/?p=openssl.git;a=commitdiff;h=ced3d91
+> - http://git.openssl.org/gitweb/?p=openssl.git;a=commitdiff;h=297c67f
+>
+> Bump version requirement, so that OpenSSL-1.0.2-beta1 uses fallback code.
+
+2014-07-08	nginx-1.7.3 mainline version has been released. : a bit too old => take really latest 1.7.9 or more.
+~~~~~~~~~~~~~~~~ 

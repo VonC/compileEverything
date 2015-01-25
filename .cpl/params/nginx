@@ -1,4 +1,5 @@
-page=http://wiki.nginx.org/Install
+page=http://nginx.org/download/
+revert=true
 url=http://nginx.org/download/
 verinclude=1.7
 pre=gen_sed -i "s/\([\"'\'' IRL]\)\/usr\/local/\1\${EHUL}/g" "${H}/.cpl/src/@@NAMEVER@@/auto/lib/libxslt/conf" ; gen_sed -i "s/\([\"'\'' IRL]\)\/usr\/include/\1\${EHULI}/g" "${H}/.cpl/src/@@NAMEVER@@/auto/lib/libxslt/conf" ; gen_sed -i "s/\([\"'\'' IRL]\)\/usr\/local\/include/\1\${EHULI}/g" "${H}/.cpl/src/@@NAMEVER@@/auto/lib/libxslt/conf" ; gen_sed -i "s/-lexslt/-lexslt -lgcrypt -lgpg-error -lxml2 -lxslt -lintl -lgettextpo/g" "${H}/.cpl/src/@@NAMEVER@@/auto/lib/libxslt/conf"
