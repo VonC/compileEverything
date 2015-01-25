@@ -169,9 +169,11 @@ function getJDK {
       if [[ ${refreshpkgs} == 1 && -e "${_src}/_pkgs/${ajdkn}" ]] ; then
         ln -fs "${_src}/_pkgs/${ajdkn}" "${_pkgs}/${ajdkn}" 
       else
-        cp_tpl "${H}/jdk/.cookies.tpl" "${H}/jdk"
-        # wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u60-b19/jdk-7u60-linux-x64.tar.gz
-        loge "wget --no-check-certificate --no-cookies --header \"Cookie: oraclelicense=accept-securebackup-cookie\" --keep-session-cookies $ajdk2 -O ${_pkgs}/${ajdkn}" "wget_sources_${ajdkn}"
+        # wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u67-b01/jdk-7u67-linux-x64.tar.gz
+        export WGETRC="${H}/jdk/.wgetrc"
+        loge "wget --no-check-certificate --no-cookies $ajdk2 -O ${_pkgs}/${ajdkn}" "wget_sources_${ajdkn}"
+        export -n WGETRC
+        unset WGETRC
       fi
       if [[ ${refreshpkgs} == 1 && -f "${_pkgs}/${ajdkn}" && ! -h "${_pkgs}/${ajdkn}" && ! -e "${_src}/_pkgs/${ajdkn}" ]] ; then
         ln -fs "${_pkgs}/${ajdkn}" "${_src}/_pkgs/${ajdkn}"
