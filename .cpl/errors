@@ -4723,3 +4723,21 @@ Should have been fixed with a recent version of NGinx (>juill 2014): http://foru
 
 2014-07-08	nginx-1.7.3 mainline version has been released. : a bit too old => take really latest 1.7.9 or more.
 ~~~~~~~~~~~~~~~~ 
+XUbuntu guile make
+
+314   CC       libguile_2.0_la-vm.lo
+315
+316 Unable to coalesce ssa_names 48 and 3476 which are marked as MUST COALESCE.
+317 sp_48(ab) and  sp_3476(ab)
+318 vm-engine.c: In function 'vm_debug_engine':
+319 vm.c:673:19: internal compiler error: SSA corruption
+320  #define VM_NAME   vm_debug_engine
+321                    ^
+322 vm-engine.c:39:1: note: in expansion of macro 'VM_NAME'
+323  VM_NAME (SCM vm, SCM program, SCM *argv, int nargs)
+324  ^
+
+remove debug machine in vm.c:
+=> gen_sed -i "/#define VM_NAME\s\+vm_debug_engine/,+6s/^#/\/\/#/" $H/.cpl/src/@@NAMEVER@@/libguile/vm.c; gen_sed -i "s/e,\s\(vm_debug_engine\)/e\/*, \1*\//" $H/.cpl/src/@@NAMEVER@@/libguile/vm.c
+
+~~~~~~~~~~~~~~~~
