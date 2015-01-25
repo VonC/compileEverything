@@ -4741,3 +4741,17 @@ remove debug machine in vm.c:
 => gen_sed -i "/#define VM_NAME\s\+vm_debug_engine/,+6s/^#/\/\/#/" $H/.cpl/src/@@NAMEVER@@/libguile/vm.c; gen_sed -i "s/e,\s\(vm_debug_engine\)/e\/*, \1*\//" $H/.cpl/src/@@NAMEVER@@/libguile/vm.c
 
 ~~~~~~~~~~~~~~~~
+XUbuntu guile make
+
+429   SNARF  socket.doc
+430   SNARF  regex-posix.doc
+431   GEN      guile-procedures.texi
+432 /bin/bash: line 1: 19437 Broken pipe             cat alist.doc arbiters.doc array-handle.doc array-map.doc arrays.doc async.doc backtrace.doc boolean.doc bitvectors    .doc bytevectors.doc chars.doc control.doc continuations.doc debug.doc deprecated.doc deprecation.doc dynl.doc dynwind.doc eq.doc error.doc eval.doc evalext.doc exp    and.doc extensions.doc feature.doc filesys.doc fluids.doc foreign.doc fports.doc gc-malloc.doc gc.doc gettext.doc generalized-arrays.doc generalized-vectors.doc goo    ps.doc gsubr.doc guardians.doc hash.doc hashtab.doc hooks.doc i18n.doc init.doc ioext.doc keywords.doc list.doc load.doc macros.doc mallocs.doc memoize.doc modules.    doc numbers.doc objprop.doc options.doc pairs.doc ports.doc print.doc procprop.doc procs.doc promises.doc r6rs-ports.doc random.doc rdelim.doc read.doc root.doc rw.    doc scmsigs.doc script.doc simpos.doc smob.doc sort.doc srcprop.doc srfi-1.doc srfi-4.doc srfi-13.doc srfi-14.doc srfi-60.doc stackchk.doc stacks.doc stime.doc stri    ngs.doc strorder.doc strports.doc struct.doc symbols.doc threads.doc throw.doc trees.doc uniform.doc values.doc variable.doc vectors.doc version.doc vports.doc weak    s.doc dynl.doc posix.doc net_db.doc socket.doc regex-posix.doc
+433      19438 Segmentation fault      (core dumped) | GUILE_INSTALL_LOCALE=1 GUILE_AUTO_COMPILE=0 ../meta/uninstalled-env guild snarf-check-and-output-texi > guile-pro    cedures.texi
+434 Makefile:3732: recipe for target 'guile-procedures.texi' failed
+435 make[3]: *** [guile-procedures.texi] Error 1
+436 make[3]: Leaving directory '/home/vonc/git/ce1/.cpl/src/guile-2.0.11/libguile'
+437 Makefile:2162: recipe for target 'all' failed
+438 make[2]: *** [all] Error 2
+
+
