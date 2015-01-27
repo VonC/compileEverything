@@ -4754,4 +4754,48 @@ XUbuntu guile make
 437 Makefile:2162: recipe for target 'all' failed
 438 make[2]: *** [all] Error 2
 
+TOFIX
 
+~~~~~~~~~~~~~~
+XUbuntu curl configure
+
+711 checking whether to enforce SONAME bump... no
+712 checking that generated files are newer than configure... done
+713 configure: creating ./config.status
+714 config.status: creating Makefile
+715 gawk: symbol lookup error: /home/vonc/prog/git/ce1/usr/local/lib/libreadline.so.6: undefined symbol: UP
+716 config.status: error: could not create Makefile
+
+
+https://bugs.archlinux.org/task/39731
+
+$ ldd /usr/lib/libreadline.so
+linux-vdso.so.1 (0x00007fff4e3fe000)
+libc.so.6 => /usr/lib/libc.so.6 (0x00007feef97a7000)
+/usr/lib64/ld-linux-x86-64.so.2 (0x00007feef9dbb000)
+
+libcurses is what provides 'UP' symbol:
+
+$ readelf -s /usr/lib/libncursesw.so | grep -w UP
+363: 0000000000264588 8 OBJECT GLOBAL DEFAULT 24 UP
+
+
+
+And here is ldd for working version of readline:
+
+$ ldd /usr/lib/libreadline.so
+linux-vdso.so.1 (0x00007fffe89fe000)
+libncursesw.so.5 => /usr/lib/libncursesw.so.5 (0x00007f93a01f5000)
+libc.so.6 => /usr/lib/libc.so.6 (0x00007f939fe4d000)
+/usr/lib64/ld-linux-x86-64.so.2 (0x00007f93a06c6000)
+
+http://forum.segger.com/index.php?page=Thread&threadID=925
+Slackware requires interactive programs to be linked with ncurses. So just preload it.
+
+LD_PRELOAD=/usr/lib/libncurses.so ./JLinkExe
+
+So this works:
+
+vonc@voncm:~/.cpl/src/curl$ LD_PRELOAD=${HULL}/libncurses.so ./configure --prefix=/home/vonc/prog/git/ce1/usr/local/libs/curl-7.40.0 --with-ssl=/home/vonc/prog/git/ce1/usr/local/ssl --with-zlib=/home/vonc/prog/git/ce1/usr/local --with-libssh2=/home/vonc/prog/git/ce1/usr/local --with-libidn=/home/vonc/prog/git/ce1/usr/local --enable-shared --enable-static
+
+~~~~~~~~~~~~~~

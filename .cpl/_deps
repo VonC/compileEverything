@@ -43,7 +43,7 @@ lib texinfo libiconv,ncurses,gettext,perl
 lib ncurses gcc
 lib libssh2 openssl,zlib,cyrus-sasl
 lib cyrus-sasl db,openssl
-lib curl gcc,openssl,zlib,libssh2,libiconv,libidn,openldap
+lib curl gcc,openssl,zlib,libssh2,libiconv,libidn,openldap,ncurses
 lib libidn gcc,libiconv
 app lynx gcc,bzip2,zlib
 app apache gcc,expat,libiconv,gdbm,zlib,db,openssl,apr,aprutil,lynx,bison
