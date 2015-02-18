@@ -1,3 +1,4 @@
 page=http://www.mr511.de/software/
 url=http://www.mr511.de/software/
-configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared --enable-elf64
+configcmd=./configure --prefix=${HULS}/@@NAMEVER@@ --enable-shared 
+postcheck=cp -d "${HUL}/lib64/libffi"* "${HUL}/lib"

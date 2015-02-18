@@ -4799,3 +4799,28 @@ So this works:
 vonc@voncm:~/.cpl/src/curl$ LD_PRELOAD=${HULL}/libncurses.so ./configure --prefix=/home/vonc/prog/git/ce1/usr/local/libs/curl-7.40.0 --with-ssl=/home/vonc/prog/git/ce1/usr/local/ssl --with-zlib=/home/vonc/prog/git/ce1/usr/local --with-libssh2=/home/vonc/prog/git/ce1/usr/local --with-libidn=/home/vonc/prog/git/ce1/usr/local --enable-shared --enable-static
 
 ~~~~~~~~~~~~~~
+Redhat glib configure
+checking for suffix of executables...
+checking whether we are cross compiling... configure: error: in `/../blessed_ssi2/.cpl/src/glib-2.42.1':
+configure: error: cannot run C compiled programs.
+If you meant to cross compile, use `--host'.
+
+
+configure:4281: checking whether we are cross compiling
+configure:4293: $? = 0
+configure:4300: ./conftest
+./conftest: error while loading shared libraries: libffi.so.6: cannot open shared object file: No such file or directory
+configure:4304: $? = 127
+configure:4311: error: in `/../blessed_ssi2/.cpl/src/glib-2.42.1':
+configure:4313: error: cannot run C compiled programs.
+If you meant to cross compile, use `--host'.
+
+=> put libffi.so* in HUL/lib, not just in HUL/lib64
+=> modify params/libelf
+~~~~~~~~~~~~~~~~~~~~~
+
+Redhat glib makecmd
+In file included from gresource-tool.c:33:0:
+////blessed_ssi2/usr/local/libs/libelf-0.8.13/include/libelf/gelf.h:51:2: error: #error "GElf is not supported on this system."
+   #error "GElf is not supported on this system."
+
