@@ -50,6 +50,9 @@ else
     set background=dark        " adapt colors for background
 endif
 set viminfo='10,\"100,:20,%,n~/.viminfo
+set title
+set titleold=""
+set titlestring=VIM:\%F
 
 function! ResCur()
   if line("'\"") <= line("$")
