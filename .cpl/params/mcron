@@ -1,5 +1,5 @@
 page=http://ftp.gnu.org/gnu/mcron/?C=M;O=D
 url=http://ftp.gnu.org/gnu/mcron/
 configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
-premake=gen_sed -i "s;\"SHELL\".*$;\"SHELL\"   . \"bash\");g" "${H}/.cpl/src/@@NAMEVER@@/environment.scm" ; gen_sed -i "s;\"HOME\".*$;\"HOME\"   . ,(getenv \"HOME\"));g" "${H}/.cpl/src/@@NAMEVER@@/environment.scm" ; gen_sed -i "s;\"CWD\".*$;\"CWD\"   . ,(getenv \"HOME\"));g" "${H}/.cpl/src/@@NAMEVER@@/environment.scm" ; gen_sed -i "s;passwd:dir .*$;getenv \"HOME\");g" "${H}/.cpl/src/@@NAMEVER@@/main.scm"
+premake=gen_sed -i "s;\"SHELL\".*$;\"SHELL\"   . \"bash\");g" "${H}/.cpl/src/@@NAMEVER@@/scm/mcron/environment.scm" ; gen_sed -i "s;\"HOME\".*$;\"HOME\"   . ,(getenv \"HOME\"));g" "${H}/.cpl/src/@@NAMEVER@@/scm/mcron/environment.scm" ; gen_sed -i "s;\"CWD\".*$;\"CWD\"   . ,(getenv \"HOME\"));g" "${H}/.cpl/src/@@NAMEVER@@/scm/mcron/environment.scm" ; gen_sed -i "s;passwd:dir .*$;getenv \"HOME\")));g" "${H}/.cpl/src/@@NAMEVER@@/scm/mcron/main.scm"
 postcheck="${H}/mcron/ini_cron" ; ${H}/.gnupg/ini_users_gpg
