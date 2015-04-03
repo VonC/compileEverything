@@ -4,6 +4,7 @@ DIR=${DIR%/*}
 # echo DIR=$DIR
 cd "${DIR}"
 H="${DIR}"
+homed=${H##*/}
 source "${DIR}/.bashrc" --force > /dev/null
 
 function date_unix() {
@@ -77,7 +78,7 @@ if [[ -e "${H}/../.nobackup" ]]; then
 fi
 
 repos="${H}/repositories"
-bkp="${H}/../backups"
+bkp="${H}/../backups_${homed}"
 paths=$(ls -1 "${repos}"|grep ".git")
 
 logfn=log_backups_"$(date +%Y%m%d -d "today")"
