@@ -157,10 +157,10 @@ Listen @PORT_HTTP_GITWEB@
     LogLevel error authnz_ldap_module:trace7 authz_core_module:trace7
     # LogLevel error auth_form_module:trace1
     # LogLevel debug ssl_module:error core_module:trace5 socache_shmcb_module:error ssl:error auth_form_module:trace1
-    CustomLog "@H@/apache/gitweb_ssl_request_log" \
-          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
-    ErrorLog "@H@/apache/gitweb_error_log"
-    TransferLog "@H@/apache/gitweb_access_log"
+    LogFormat "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b" custom_gitweb
+    CustomLog "|@H@/bin/rotatelogs @H@/apache/log/gitweb_ssl_request_log_%Y%m%d 86400" custom_gitweb
+    ErrorLog "|@H@/bin/rotatelogs @H@/apache/log/gitweb_error_log_%Y%m%d 86400"
+    TransferLog "|@H@/bin/rotatelogs @H@/apache/log/gitweb_access_log_%Y%m%d 86400"
 </VirtualHost>
 
 # GitWeb on @PORT_HTTP_GITWEB2@
@@ -225,10 +225,10 @@ Listen @PORT_HTTP_GITWEB2@
     LogLevel error authnz_ldap_module:trace7 authz_core_module:trace7
     # LogLevel error auth_form_module:trace1
     # LogLevel debug ssl_module:error core_module:trace5 socache_shmcb_module:error ssl:error auth_form_module:trace1
-    CustomLog "@H@/apache/gitweb_ssl_request_log" \
-          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
-    ErrorLog "@H@/apache/gitweb_error_log"
-    TransferLog "@H@/apache/gitweb_access_log"
+    LogFormat "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b" custom_gitweb
+    CustomLog "|@H@/bin/rotatelogs @H@/apache/log/gitweb_ssl_request_log_%Y%m%d 86400" custom_gitweb
+    ErrorLog "|@H@/bin/rotatelogs @H@/apache/log/gitweb_error_log_%Y%m%d 86400"
+    TransferLog "|@H@/bin/rotatelogs @H@/apache/log/gitweb_access_log_%Y%m%d 86400"
 </VirtualHost>
 
 # GitHttp on @PORT_HTTP_HGIT@
@@ -307,10 +307,10 @@ Listen @PORT_HTTP_HGIT@
     BrowserMatch ".*MSIE.*" \
          nokeepalive ssl-unclean-shutdown \
          downgrade-1.0 force-response-1.0
-    CustomLog "@H@/apache/githttp_ssl_request_log" \
-          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
-    ErrorLog "@H@/apache/githttp_error_log"
-    TransferLog "@H@/apache/githttp_access_log"
+    LogFormat "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b" custom_githttp
+    CustomLog "|@H@/bin/rotatelogs @H@/apache/log/githttp_ssl_request_log_%Y%m%d 86400" custom_githttp
+    ErrorLog "|@H@/bin/rotatelogs @H@/apache/log/githttp_error_log_%Y%m%d 86400"
+    TransferLog "|@H@/bin/rotatelogs @H@/apache/log/githttp_access_log_%Y%m%d 86400"
 </VirtualHost>
 
 
@@ -361,10 +361,10 @@ Listen @PORT_HTTP_CGIT@
     BrowserMatch ".*MSIE.*" \
          nokeepalive ssl-unclean-shutdown \
          downgrade-1.0 force-response-1.0
-    CustomLog "@H@/apache/gitcgit_ssl_request_log" \
-          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
-    ErrorLog "@H@/apache/gitcgit_error_log"
-    TransferLog "@H@/apache/gitcgit_access_log"
+    LogFormat "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b" custom_cgit
+    CustomLog "|@H@/bin/rotatelogs @H@/apache/log/gitcgit_ssl_request_log_%Y%m%d 86400" custom_cgit
+    ErrorLog "|@H@/bin/rotatelogs @H@/apache/log/gitcgit_error_log_%Y%m%d 86400"
+    TransferLog "|@H@/bin/rotatelogs @H@/apache/log/gitcgit_access_log_%Y%m%d 86400"
     LogLevel info
 </VirtualHost>
 
