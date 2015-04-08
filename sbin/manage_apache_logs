@@ -1,0 +1,121 @@
+#! /bin/bash
+function usage() {
+   echo "Usage : "
+   echo "  <command> --dryrun|--run"
+}
+
+if [ $# -lt 1 ]
+then 
+   usage
+   exit 0
+fi
+OPTION=$1
+if [ $OPTION != "--dryrun" ] && [ $OPTION != "--run" ] 
+then
+   usage
+   exit 0
+fi
+if [ $OPTION == "--dryrun" ]
+then 
+   echo "dryrun only"
+   script_mkdir="echo mkdir"
+   script_gzip="echo gzip"
+   script_mv="echo mv"
+   script_touch="echo touch"
+else
+  # echo "running for real"
+   script_mkdir="mkdir"
+   script_gzip="/bin/gzip"
+   script_mv="mv"
+   script_touch="touch"
+fi
+#exit 0
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR=${DIR%/*}
+# echo DIR=$DIR
+cd "${DIR}"
+H="${DIR}"
+source "${DIR}/.bashrc" --force > /dev/null
+
+
+
+source "${H}/sbin/usrcmd/get_hostname"
+get_hostname hostnames
+source "${H}/sbin/usrcmd/get_fqn"
+get_fqn ${hostnames} fqn
+
+if [[ -e "${H}/../.nologmanagement" ]]; then
+  echo "No log management for '${fqn}'"
+  exit 0
+fi
+
+base=$(basename ${H})
+archive_dir="${H}/../log_archive_${base}"
+if [ ! -d ${archive_dir} ]
+then
+  eval $script_mkdir ${archive_dir}
+fi
+# Find list of logfiles in  ${H}/apache older than 7 days
+# -maxdepth 1 in order to restrict search to that directory
+list_logfiles=$(find ${H}/apache/log -maxdepth 1  -type f -name "*_log_*" -mtime +7)
+logfn=log_move_apachelogs_"$(date +%Y%m%d)"
+logf="${H}/mcron/logs/${logfn}"
+if [[ ! -d "${H}/mcron/logs" ]]
+then
+   eval $script_mkdir -p "${H}/mcron/logs"
+fi
+ln -fs "logs/${logfn}" "${H}/mcron/log_move_apachelogs"
+logfb="${H}/mcron/logs/logs_move_apachelogs"
+date=`date +%Y%m%d-%H%M%S`
+if [ ! -f ${logf} ]
+then 
+   eval  $script_touch  ${logf}
+fi
+if [ ! -f ${logfb} ] 
+then
+   eval $script_touch ${logfb}
+fi
+echo "--------- ${date} managing apache log " >>  ${logfb}
+echo "${date} managing apache log" >> ${logf}
+echo "list_log_file:"   >> ${logfb}
+echo "list_log_file:"   >> ${logf}
+echo "${list_logfiles}"  >> ${logfb}
+echo "${list_logfiles}"  >> ${logf}
+status=0
+stexit=0
+
+for logfile in ${list_logfiles}
+do
+ echo "" >> ${logf}
+ echo "------- file $logfile" >> ${logf}
+ echo "gzipping file $logfile" >> ${logf}
+# Careful: year and month are the year and the month 
+# of the file
+ datefile=$(echo ${logfile} | awk -F\log_ '{print $2}')
+ yearmonth=${datefile::6}
+ if [ ! -d ${archive_dir}/apache_${yearmonth} ]
+ then
+     echo "creating directory ${archive_dir}/apache_${yearmonth} " >> ${logf}
+     eval ${script_mkdir} -p ${archive_dir}/apache_${yearmonth}
+ fi
+ eval ${script_gzip} ${logfile} 
+ status=$?
+ if (( ${status} != 0 )) 
+ then  
+     echo "error gzipping ${logfile}" >> ${logf}
+     echo "error gzipping ${logfile}" >> ${logfb}
+     stexit=${status}
+ fi
+ echo "moving ${logfile}.gz to ${archive_dir}/apache_${yearmonth}" >> ${logf}
+ eval ${script_mv} ${logfile}.gz ${archive_dir}/apache_${yearmonth} 
+ status=$?
+ if (( ${status} != 0 ))
+ then 
+     echo "error moving ${logfile}.gz" >> ${logf}
+     echo "error moving ${logfile}.gz" >> ${logfb}
+     stexit=${status} i
+ fi
+
+
+done 
+exit ${stexit}
