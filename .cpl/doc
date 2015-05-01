@@ -805,7 +805,12 @@ How to remove vi or vim line numbers
 Sequence of keys: esc followed by: 
  :set nonumber
 ~~~~~~~~~~~~~~~~
+Undefined symbol:
 Undefined reference: search with error redirection:  /usr/lib #nm -Ap *.so 2>/dev/null | grep libintl_textdomain
+vonc@voncm:/$ find . -name "*.*" 2>/dev/null| grep ".*s\?o$"|xargs nm -Ap 2>/dev/null|grep pipe2
+vonc@voncm:/$ find . -name "*.*" 2>/dev/null| grep ".*s\?o$"|xargs nm -Ap 2>/dev/null|grep pipe2 | grep -v " U "
+vonc@voncm:/$ find / -name "*.*" 2>/dev/null| grep ".*so*$"|xargs nm -Ap 2>/dev/null|grep pipe2 | grep -v " U "
+
 ~~~~~~~~~~~~~~~~
 List all keys from a JKS keystore used by tomcat:
 ahostname /home/git/apache #keytool -keystore /path/to/jks/keystore -storepass ajksPassword -list              
