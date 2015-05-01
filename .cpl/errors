@@ -4754,7 +4754,168 @@ XUbuntu guile make
 437 Makefile:2162: recipe for target 'all' failed
 438 make[2]: *** [all] Error 2
 
-TOFIX
+configcmd=@@CFLAGS="${CFLAGS} -ggdb" ./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
+
+vonc@voncm:~/.cpl/src/guile/libguile$ h|grep gdb
+   16  2015-01-29 18:47:49 - LD_LIBRARY_PATH=.libs/ gdb .libs/guile
+
+vonc@voncm:~/.cpl/src/guile/libguile$ LD_LIBRARY_PATH=.libs/ gdb .libs/guile
+GNU gdb (GDB) 7.8.2
+Copyright (C) 2014 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-unknown-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from .libs/guile...done.
+(gdb) run
+Starting program: /home/vonc/prog/git/ce1/.cpl/src/guile-2.0.11/libguile/.libs/guile 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+[New Thread 0x7ffff5c2a700 (LWP 8424)]
+
+Program received signal SIGSEGV, Segmentation fault.
+0x00007ffff7b4ec86 in pipe2 (fd=fd@entry=0x7fffffffcacc, flags=flags@entry=524288) at pipe2.c:41
+41  {
+(gdb) bt
+#0  0x00007ffff7b4ec86 in pipe2 (fd=fd@entry=0x7fffffffcacc, flags=flags@entry=524288) at pipe2.c:41
+#1  0x00007ffff7b4eca6 in pipe2 (fd=fd@entry=0x7fffffffcacc, flags=flags@entry=524288) at pipe2.c:58
+#2  0x00007ffff7b4eca6 in pipe2 (fd=fd@entry=0x7fffffffcacc, flags=flags@entry=524288) at pipe2.c:58
+#3  0x00007ffff7b4eca6 in pipe2 (fd=fd@entry=0x7fffffffcacc, flags=flags@entry=524288) at pipe2.c:58
+#4  0x00007ffff7b4eca6 in pipe2 (fd=fd@entry=0x7fffffffcacc, flags=flags@entry=524288) at pipe2.c:58
+#5  0x00007ffff7b4eca6 in pipe2 (fd=fd@entry=0x7fffffffcacc, flags=flags@entry=524288) at pipe2.c:58
+#6  0x00007ffff7b4eca6 in pipe2 (fd=fd@entry=0x7fffffffcacc, flags=flags@entry=524288) at pipe2.c:58
+#7  0x00007ffff7b4eca6 in pipe2 (fd=fd@entry=0x7fffffffcacc, flags=flags@entry=524288) at pipe2.c:58
+#8  0x00007ffff7b4eca6 in pipe2 (fd=fd@entry=0x7fffffffcacc, flags=flags@entry=524288) at pipe2.c:58
+
+
+
+vonc@voncm:~/.cpl/src/guile/libguile/.libs$ find / -name "*.*" 2>/dev/null| grep ".*s\?o$"|xargs nm -Ap 2>/dev/null|grep pipe2 | grep -v " U "
+/usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so:00000000000ec890 t __GI_pipe2
+/usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so:00000000000ec890 t __pipe2
+/usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so:00000000000ec890 t __GI___pipe2
+/usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so:00000000000ec890 W pipe2
+
+
+vonc@voncm:~/.cpl/src/guile/libguile/.libs$ find / -name "*.*" 2>/dev/null| grep ".*so*$"|xargs nm -Ap 2>/dev/null|grep pipe2 | grep -v " U "
+/usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so:00000000000ec890 t __GI_pipe2
+/usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so:00000000000ec890 t __pipe2
+/usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so:00000000000ec890 t __GI___pipe2
+/usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so:00000000000ec890 W pipe2
+/home/vonc/prog/git/ce1/.cpl/src/gettext-0.19.4/gettext-tools/gnulib-lib/.libs/libgettextlib-0.19.4.so:00000000002cf148 b have_pipe2_really.3362
+/home/vonc/prog/git/ce1/.cpl/src/gettext-0.19.4/gettext-tools/gnulib-lib/.libs/libgettextlib-0.19.4.so:000000000002551b T pipe2_safer
+/home/vonc/prog/git/ce1/.cpl/src/gettext-0.19.4/gettext-tools/gnulib-lib/.libs/libgettextlib-0.19.4.so:0000000000025361 T pipe2
+/home/vonc/prog/git/ce1/.cpl/src/gettext-0.19.4/gettext-tools/gnulib-lib/.libs/libgettextlib.so:00000000002cf148 b have_pipe2_really.3362
+/home/vonc/prog/git/ce1/.cpl/src/gettext-0.19.4/gettext-tools/gnulib-lib/.libs/libgettextlib.so:000000000002551b T pipe2_safer
+/home/vonc/prog/git/ce1/.cpl/src/gettext-0.19.4/gettext-tools/gnulib-lib/.libs/libgettextlib.so:0000000000025361 T pipe2
+
+/home/vonc/prog/git/ce1/.cpl/src/guile-2.0.11/libguile/.libs/libguile-2.0.so:000000000036e648 b have_pipe2_really.3351
+/home/vonc/prog/git/ce1/.cpl/src/guile-2.0.11/libguile/.libs/libguile-2.0.so:00000000000e9c84 t pipe2
+
+/home/vonc/prog/git/ce1/usr/local/lib/libgettextlib-0.19.4.so:00000000002cf148 b have_pipe2_really.3362
+/home/vonc/prog/git/ce1/usr/local/lib/libgettextlib-0.19.4.so:00000000000254cb T pipe2_safer
+/home/vonc/prog/git/ce1/usr/local/lib/libgettextlib-0.19.4.so:0000000000025311 T pipe2
+/home/vonc/prog/git/ce1/usr/local/lib/libgettextlib.so:00000000002cf148 b have_pipe2_really.3362
+/home/vonc/prog/git/ce1/usr/local/lib/libgettextlib.so:00000000000254cb T pipe2_safer
+/home/vonc/prog/git/ce1/usr/local/lib/libgettextlib.so:0000000000025311 T pipe2
+/home/vonc/prog/git/ce1/usr/local/libs/gettext-0.19.4/lib/libgettextlib-0.19.4.so:00000000002cf148 b have_pipe2_really.3362
+/home/vonc/prog/git/ce1/usr/local/libs/gettext-0.19.4/lib/libgettextlib-0.19.4.so:00000000000254cb T pipe2_safer
+/home/vonc/prog/git/ce1/usr/local/libs/gettext-0.19.4/lib/libgettextlib-0.19.4.so:0000000000025311 T pipe2
+/home/vonc/prog/git/ce1/usr/local/libs/gettext-0.19.4/lib/libgettextlib.so:00000000002cf148 b have_pipe2_really.3362
+/home/vonc/prog/git/ce1/usr/local/libs/gettext-0.19.4/lib/libgettextlib.so:00000000000254cb T pipe2_safer
+/home/vonc/prog/git/ce1/usr/local/libs/gettext-0.19.4/lib/libgettextlib.so:0000000000025311 T pipe2
+
+
+vonc@voncm:~/.cpl/src/guile/libguile/.libs$ nm -Ap * 2>/dev/null | grep pipe2 | grep -v " U "
+libguile-2.0.a:pipe2.o:0000000000000000 b have_pipe2_really.3351
+libguile-2.0.a:pipe2.o:0000000000000000 T pipe2
+libguile-2.0.so:000000000036e648 b have_pipe2_really.3351
+libguile-2.0.so:00000000000e9c84 t pipe2
+libguile-2.0.so.22:000000000036e648 b have_pipe2_really.3351
+libguile-2.0.so.22:00000000000e9c84 t pipe2
+libguile-2.0.so.22.7.2:000000000036e648 b have_pipe2_really.3351
+libguile-2.0.so.22.7.2:00000000000e9c84 t pipe2
+
+vonc@voncm:/usr$ ldd ./lib/debug/lib/x86_64-linux-gnu/libc-2.19.so
+    statically linked
+
+vonc@voncm:/$ find . 2>/dev/null| grep ".*s\?o$"|xargs nm -Ap 2>/dev/null|grep pipe2
+./usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so:00000000000ec890 t __GI_pipe2
+./usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so:00000000000ec890 t __pipe2
+./usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so:00000000000ec890 t __GI___pipe2
+./usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so:00000000000ec890 W pipe2
+
+
+vonc@voncm:~/.cpl/params$ grep lgett *
+libxslt:premake=gen_sed -i "s/^VERSION_SCRIPT_FLAGS.*/VERSION_SCRIPT_FLAGS = /g" "${H}/.cpl/src/@@NAMEVER@@/libxslt/Makefile" ; gen_sed -i "s/^LIBS = $/LIBS = -lgcrypt -lgpg-error -lintl -lgettextlib -lgettextpo /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile" ; gen_sed -i '\''s/\"\/usr\/lib /\"${EHULL} \/usr\/lib /g'\'' ${H}/.cpl/src/@@NAMEVER@@/libtool ; gen_sed -i '\''s/\"\/lib /\"${EHULL} \/lib /g'\'' ${H}/.cpl/src/@@NAMEVER@@/libtool ; gen_sed -i "s/eval \"\$my_cmd\"/if test \"\${my_cmd#gcc\*}\" \!= \"\$my_cmd\" ; then eval \"\$my_cmd -lintl -lgettextlib -lgettextpo\" ; else eval \"\$my_cmd\" ; fi/g" ${H}/.cpl/src/@@NAMEVER@@/libtool ; 
+nginx:pre=gen_sed -i "s/\([\"'\'' IRL]\)\/usr\/local/\1\${EHUL}/g" "${H}/.cpl/src/@@NAMEVER@@/auto/lib/libxslt/conf" ; gen_sed -i "s/\([\"'\'' IRL]\)\/usr\/include/\1\${EHULI}/g" "${H}/.cpl/src/@@NAMEVER@@/auto/lib/libxslt/conf" ; gen_sed -i "s/\([\"'\'' IRL]\)\/usr\/local\/include/\1\${EHULI}/g" "${H}/.cpl/src/@@NAMEVER@@/auto/lib/libxslt/conf" ; gen_sed -i "s/-lexslt/-lexslt -lgcrypt -lgpg-error -lxml2 -lxslt -lintl -lgettextpo/g" "${H}/.cpl/src/@@NAMEVER@@/auto/lib/libxslt/conf"
+vonc@voncm:~/.cpl/params$ grep lgettextlib *
+libxslt:premake=gen_sed -i "s/^VERSION_SCRIPT_FLAGS.*/VERSION_SCRIPT_FLAGS = /g" "${H}/.cpl/src/@@NAMEVER@@/libxslt/Makefile" ; gen_sed -i "s/^LIBS = $/LIBS = -lgcrypt -lgpg-error -lintl -lgettextlib -lgettextpo /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile" ; gen_sed -i '\''s/\"\/usr\/lib /\"${EHULL} \/usr\/lib /g'\'' ${H}/.cpl/src/@@NAMEVER@@/libtool ; gen_sed -i '\''s/\"\/lib /\"${EHULL} \/lib /g'\'' ${H}/.cpl/src/@@NAMEVER@@/libtool ; gen_sed -i "s/eval \"\$my_cmd\"/if test \"\${my_cmd#gcc\*}\" \!= \"\$my_cmd\" ; then eval \"\$my_cmd -lintl -lgettextlib -lgettextpo\" ; else eval \"\$my_cmd\" ; fi/g" ${H}/.cpl/src/@@NAMEVER@@/libtool ; 
+vonc@voncm:~/.cpl/params$ cd ..
+vonc@voncm:~/.cpl$ cd logs
+vonc@voncm:~/.cpl/logs$ grep lgettextlib *|grep guile
+
+=> maybe add lgettextlib?
+
+vonc@voncm:~/.cpl/logs$ cd ../params/
+vonc@voncm:~/.cpl/params$ grep lgettextlib *
+libxslt:premake=gen_sed -i "s/^VERSION_SCRIPT_FLAGS.*/VERSION_SCRIPT_FLAGS = /g" "${H}/.cpl/src/@@NAMEVER@@/libxslt/Makefile" ; gen_sed -i "s/^LIBS = $/LIBS = -lgcrypt -lgpg-error -lintl -lgettextlib -lgettextpo /g" "${H}/.cpl/src/@@NAMEVER@@/Makefile" ; gen_sed -i '\''s/\"\/usr\/lib /\"${EHULL} \/usr\/lib /g'\'' ${H}/.cpl/src/@@NAMEVER@@/libtool ; gen_sed -i '\''s/\"\/lib /\"${EHULL} \/lib /g'\'' ${H}/.cpl/src/@@NAMEVER@@/libtool ; gen_sed -i "s/eval \"\$my_cmd\"/if test \"\${my_cmd#gcc\*}\" \!= \"\$my_cmd\" ; then eval \"\$my_cmd -lintl -lgettextlib -lgettextpo\" ; else eval \"\$my_cmd\" ; fi/g" ${H}/.cpl/src/@@NAMEVER@@/libtool ; 
+
+vonc@voncm:~/.cpl/src/guile/libguile/.libs$ ldd guile
+    linux-vdso.so.1 =>  (0x00007fff4c5ed000)
+    libguile-2.0.so.22 => not found
+    libgc.so.1 => /home/vonc/prog/git/ce1/usr/local/lib/libgc.so.1 (0x00007f616e0df000)
+    libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f616dec0000)
+    libunistring.so.2 => /home/vonc/prog/git/ce1/usr/local/lib/libunistring.so.2 (0x00007f616db8c000)
+    libgettextlib-0.19.4.so => /home/vonc/prog/git/ce1/usr/local/lib/libgettextlib-0.19.4.so (0x00007f616d8bc000)
+    libxml2.so.2 => /home/vonc/prog/git/ce1/usr/local/lib/libxml2.so.2 (0x00007f616d561000)
+    libz.so.1 => /home/vonc/prog/git/ce1/usr/local/lib/libz.so.1 (0x00007f616d34c000)
+    libffi.so.6 => /home/vonc/prog/git/ce1/usr/local/libs/libffi-3.2.1/lib/../lib64/libffi.so.6 (0x00007f616d144000)
+    libgmp.so.10 => /home/vonc/prog/git/ce1/usr/local/lib/libgmp.so.10 (0x00007f616ced2000)
+    libltdl.so.7 => /home/vonc/prog/git/ce1/usr/local/lib/libltdl.so.7 (0x00007f616ccc9000)
+    libintl.so.8 => /home/vonc/prog/git/ce1/usr/local/lib/libintl.so.8 (0x00007f616cabe000)
+    libiconv.so.2 => /home/vonc/prog/git/ce1/usr/local/lib/libiconv.so.2 (0x00007f616c7d7000)
+    libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f616c412000)
+    libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f616c20e000)
+    libcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x00007f616bfd4000)
+    libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f616bcce000)
+    libgomp.so.1 => /home/vonc/prog/git/ce1/usr/local/lib/libgomp.so.1 (0x00007f616baba000)
+    /lib64/ld-linux-x86-64.so.2 (0x00007f616e362000)
+
+
+=> modify guile
+
+configcmd=./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@ CFLAGS="${CFLAGS} -ggdb" LDFLAGS="-lgettextlib ${LDFLAGS}"
+
+
+vonc@voncm:~/.cpl/src/guile/libguile$ LD_LIBRARY_PATH=.libs/ ldd .libs/guile |more
+    linux-vdso.so.1 =>  (0x00007fffe25fc000)
+    libguile-2.0.so.22 => .libs/libguile-2.0.so.22 (0x00007fa4c54f1000)
+    libgc.so.1 => /home/vonc/prog/git/ce1/usr/local/lib/libgc.so.1 (0x00007fa4c5284000)
+    libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fa4c5065000)
+    libunistring.so.2 => /home/vonc/prog/git/ce1/usr/local/lib/libunistring.so.2 (0x00007fa4c4d31000)
+    libgettextlib-0.19.4.so => /home/vonc/prog/git/ce1/usr/local/lib/libgettextlib-0.19.4.so (0x00007fa4c4a61000)
+    libxml2.so.2 => /home/vonc/prog/git/ce1/usr/local/lib/libxml2.so.2 (0x00007fa4c4706000)
+    libz.so.1 => /home/vonc/prog/git/ce1/usr/local/lib/libz.so.1 (0x00007fa4c44f1000)
+    libffi.so.6 => /home/vonc/prog/git/ce1/usr/local/libs/libffi-3.2.1/lib/../lib64/libffi.so.6 (0x00007fa4c42e9000)
+    libgmp.so.10 => /home/vonc/prog/git/ce1/usr/local/lib/libgmp.so.10 (0x00007fa4c4077000)
+    libltdl.so.7 => /home/vonc/prog/git/ce1/usr/local/lib/libltdl.so.7 (0x00007fa4c3e6e000)
+    libintl.so.8 => /home/vonc/prog/git/ce1/usr/local/lib/libintl.so.8 (0x00007fa4c3c63000)
+    libiconv.so.2 => /home/vonc/prog/git/ce1/usr/local/lib/libiconv.so.2 (0x00007fa4c397c000)
+    libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fa4c35b7000)
+    libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fa4c33b3000)
+    libcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x00007fa4c3179000)
+    libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fa4c2e73000)
+    libgomp.so.1 => /home/vonc/prog/git/ce1/usr/local/lib/libgomp.so.1 (0x00007fa4c2c5f000)
+    /lib64/ld-linux-x86-64.so.2 (0x00007fa4c5866000)
+
 
 ~~~~~~~~~~~~~~
 XUbuntu curl configure
