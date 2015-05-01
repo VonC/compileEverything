@@ -1,4 +1,4 @@
 page=http://ftp.gnu.org/gnu/guile/?C=M;O=D
 url=http://ftp.gnu.org/gnu/guile/
 pre=gen_sed -i "s; -Werror;;g" $H/.cpl/src/@@NAMEVER@@/configure ; gen_sed -i "s;-Werror ;;g" $H/.cpl/src/@@NAMEVER@@/configure; gen_sed -i "/#define VM_NAME\s\+vm_debug_engine/,+6s/^#/\/\/#/" $H/.cpl/src/@@NAMEVER@@/libguile/vm.c; gen_sed -i "s/e,\s\(vm_debug_engine\)/e\/*, \1*\//" $H/.cpl/src/@@NAMEVER@@/libguile/vm.c
-configcmd=@@CFLAGS="${CFLAGS} -ggdb" ./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@
+configcmd=@@CFLAGS="${CFLAGS} -ggdb" LDFLAGS="-lc -lgettextlib ${LDFLAGS}" ./configure --prefix=${HULA}/@@NAMEVER@@ --enable-shared --enable-static @@WITH_GNU_LD@@ CFLAGS="${CFLAGS} -ggdb" LDFLAGS="-lgettextlib ${LDFLAGS}"
