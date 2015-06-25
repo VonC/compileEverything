@@ -99,8 +99,10 @@ while read -r path; do
     reponame=${pathtorepohash##*\#/}    #we take what follows the "hash" as the name of the repo
     reponamehash=${reponame/\//#}   #we replace "/" by "#"
                                     # The character "#" must be forbidden for a repo name
-    name=${reponamehash%.git}
-
+#    name=${reponamehash%.git}
+    name=${reponamehash}  # we need to keep .git
+                          # this will help to distinguish 
+                          # repo1.git from repo1-2.git
 #    name="${path##*/}"
 #    name="${name%.git}"
     # echo "${name}"
