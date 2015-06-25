@@ -79,7 +79,9 @@ fi
 
 repos="${H}/repositories"
 bkp="${H}/../backups_${homed}"
-paths=$(ls -1 "${repos}"|grep ".git")
+# Allow backup of repo located in subfolder
+#paths=$(ls -1 "${repos}"|grep ".git")
+paths=$(find ${repos} -maxdepth 2 -name "*.git")
 
 logfn=log_backups_"$(date +%Y%m%d -d "today")"
 logf="${H}/mcron/logs/${logfn}"
@@ -91,10 +93,16 @@ status=0
 stexit=0
 while read -r path; do
     d=`date +%Y%m%d%H%M%S`
-    path="${H}/repositories/${path}"
+   # path="${H}/repositories/${path}"
     echo "--------- (${d}) $path" >> ${logf}
-    name="${path##*/}"
-    name="${name%.git}"
+    pathtorepohash=${path/repositories/#}  #we replace "repositories" by "#"
+    reponame=${pathtorepohash##*\#/}    #we take what follows the "hash" as the name of the repo
+    reponamehash=${reponame/\//#}   #we replace "/" by "#"
+                                    # The character "#" must be forbidden for a repo name
+    name=${reponamehash%.git}
+
+#    name="${path##*/}"
+#    name="${name%.git}"
     # echo "${name}"
     f=$(ls -t "${bkp}/${name}-"*.bundle 2> /dev/null)
     # echo $f
