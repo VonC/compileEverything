@@ -1,0 +1,112 @@
+#! /bin/bash
+function usage() {
+   echo "Usage : "
+   echo "  <command> --dryrun|--run"
+}
+
+if [ $# -lt 1 ]
+then
+   usage
+   exit 0
+fi
+OPTION=$1
+if [ $OPTION != "--dryrun" ] && [ $OPTION != "--run" ]
+then
+   usage
+   exit 0
+fi
+if [ $OPTION == "--dryrun" ]
+then
+   echo "dryrun only"
+   script_mkdir="echo mkdir"
+   script_gzip="echo gzip"
+   script_mv="echo mv"
+   script_touch="echo touch"
+   script_kill="echo kill"
+   script_sleep="echo sleep"
+else
+  # echo "running for real"
+   script_mkdir="mkdir"
+   script_gzip="/bin/gzip"
+   script_mv="mv"
+   script_touch="touch"
+   script_kill="kill"
+   script_sleep="sleep"
+fi
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR=${DIR%/*}
+# echo DIR=$DIR
+cd "${DIR}"
+H="${DIR}"
+PIDFILE=${H}/nginx/ng/logs/nginx.pid
+source "${DIR}/.bashrc" --force > /dev/null
+
+
+
+source "${H}/sbin/usrcmd/get_hostname"
+get_hostname hostnames
+source "${H}/sbin/usrcmd/get_fqn"
+get_fqn ${hostnames} fqn
+
+if [[ -e "${H}/../.nologmanagement" ]]; then
+  echo "No log management for '${fqn}'"
+  exit 0
+fi
+date=`date +%Y%m%d-%H%M%S`
+logfb="${H}/mcron/logs/logs_rotate_nginx"
+if [ ! -f ${logfb} ]
+then
+   eval $script_touch ${logfb}
+fi
+base=$(basename ${H})
+archive_dir="${H}/../log_archive_${base}"
+if [ ! -d ${archive_dir} ]
+then
+  eval $script_mkdir ${archive_dir}
+fi
+yearmonth=`date +%Y%m`
+if [ ! -d ${archive_dir}/nginx_${yearmonth} ]
+then 
+   echo "creating directory ${archive_dir}/nginx_${yearmonth}" >> ${logfb}
+   eval  ${script_mkdir} -p  ${archive_dir}/nginx_${yearmonth}
+fi
+
+echo "--------- ${date}" >>  ${logfb}
+#echo "moving  ${H}/nginx/ng/logs/error.log into ${H}/nginx/ng/logs/error_log_`date +%Y%m%d`" >>  ${logfb}
+#eval $script_mv ${H}/nginx/ng/logs/error.log  ${H}/nginx/ng/logs/error_log_`date +%Y%m%d`
+echo "moving  ${H}/nginx/ng/logs/error.log into  ${archive_dir}/nginx_${yearmonth}/error_log_`date +%Y%m%d`" >>  ${logfb}
+eval $script_mv ${H}/nginx/ng/logs/error.log  ${archive_dir}/nginx_${yearmonth}/error_log_`date +%Y%m%d`
+stexit=0
+status=$?
+if  (( ${status} != 0 ))
+then
+      echo "***error in moving ${H}/nginx/ng/logs/error.log"  >>  ${logfb}
+      stexit=${status}
+fi
+#echo "moving ${H}/nginx/ng/logs/access.log into ${H}/nginx/ng/logs/access_log_`date +%Y%m%d`" >> ${logfb}
+#eval $script_mv  ${H}/nginx/ng/logs/access.log ${H}/nginx/ng/logs/access_log_`date +%Y%m%d`
+echo "moving ${H}/nginx/ng/logs/access.log into  ${archive_dir}/nginx_${yearmonth}/access_log_`date +%Y%m%d`" >> ${logfb}
+eval $script_mv  ${H}/nginx/ng/logs/access.log  ${archive_dir}/nginx_${yearmonth}/access_log_`date +%Y%m%d`
+status=$?
+if  (( ${status} != 0 ))
+then
+       echo "***error in moving ${H}/nginx/ng/logs/access.log" >>  ${logfb}
+       stexit=${status}
+fi
+eval $script_kill -USR1 `cat ${PIDFILE}`
+status=$?
+if  (( ${status} != 0 ))
+then
+        echo "***error in killing the nginx pid "  >>  ${logfb}
+         stexit=${status}
+fi
+
+eval $script_sleep 1
+if  (( ${status} != 0 ))
+then
+        echo "***error in sleep  "  >>  ${logfb}
+        stexit=${status}
+fi
+
+exit ${stexit}
+

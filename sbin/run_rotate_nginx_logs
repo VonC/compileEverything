@@ -1,0 +1,2 @@
+${H}/sbin/rotate_nginx_logs --run
+
