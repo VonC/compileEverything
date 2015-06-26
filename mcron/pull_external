@@ -1,8 +1,22 @@
 #!/bin/bash
-
+# Script used on staging in order to 
+# pull the changes from external
+# This script uses SSH to analyze the content of an "outgoing" folder on the external server
+# It then fetches the changes from the external server and pushes the changes to the blessed server
+# The name of the branch can contain a "/"
 source "${H}/sbin/usrcmd/get_tpl_value"
 
+
 get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_URL_HGIT@" downstream_url
+# Envs required for in order to read in shipping bay in upstream serverv
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_KEY@" upstream_key
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_USER@" upstream_user
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_SERVER@" upstream_server
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_PORT@" upstream_port
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_SHIPPINGBAY@" upstream_shippingbay
+upstream_outgoing=${upstream_shippingbay}/outgoing
+upstream_incoming=${upstream_shippingbay}/incoming
+
 
 if [[ "${downstream_url}" == "" ]] ; then 
   #echo "no downstream_url."
@@ -23,39 +37,50 @@ fi
 git config --global --remove-section credential
 logfn=log_"$(date +%Y%m%d -d "today")"
 logf="${H}/mcron/logs/${logfn}"
+current_time=`date +%H%M%S`
 mkdir -p "${H}/mcron/logs"
 ln -fs "logs/${logfn}" "${H}/mcron/log"
-
+touch ${logf}
+echo "---- ${current_time} : checking shipping_bay" >> ${logf}
 #echo "Check if anything new comes from upstream '${downstream_url}', before pushing it back to downstream"
-repos=$(git --git-dir=${H}/repositories/gitolite-admin.git show master:conf/gitolite.conf | grep "repo " | grep -v "testing" | grep -v "gitolite-admin")
-while read arepo; do
-  arepo=${arepo#* }
-  if [[ "${arepo#@}" == "${arepo}" ]] ; then
-    # echo "arepo='${arepo}'"
-    ggit="git --git-dir=${H}/repositories/${arepo}.git"
-    #  echo "${ggit} fetch external"
-    exturl=$(${ggit} config --local --get remote.external.url)
-    # echo "exturl='${exturl}'"
-    if [[ "${exturl#*@}" != "${exturl}" ]] ; then
+#repos=$(git --git-dir=${H}/repositories/gitolite-admin.git show master:conf/gitolite.conf | grep "repo " | grep -v "testing" | grep -v "gitolite-admin")
+list_remotefiles=$(ssh -i ${H}/.ssh/${upstream_key} -p ${upstream_port} ${upstream_user}@${upstream_server} "ls ${upstream_outgoing}")
+for aremotefile in ${list_remotefiles}
+do
+   # replace the hash "#" by a slash "/"
+   # this is to deal with the fact that repo name may contain a slash
+   # therefore, if a push is done on a repo with slash in its name
+   # the file created has a name with the slash replaced by a hash
+   # The variable arepo is therefore the real name of the repo with potentially a slash
+   # A remotefile has the following format 
+   #   [foldername#]<reponame>.git#<branch>.br#<SHA1>
+   #    <reponame>.git#<branch>.br#<SHA1>
+
+   arepo=`echo ${aremotefile} | awk -F\.git# '{print $1}' | sed "s/#/\//"`
+   branch_imported=`echo ${aremotefile} | awk -F\.git# '{print $2}'| awk -F\.br# '{print $1}' | sed "s/#/\//" ` 
+   echo arepo ${arepo}
+   echo branch ${branch_imported}
+   ggit="git --git-dir=${H}/repositories/${arepo}.git"
+   exturl=$(${ggit} config --local --get remote.external.url)
+   if [[ "${exturl#*@}" != "${exturl}" ]] ; then
       exturl="https://projextrdr:projextrdr@${exturl#*@}"
-    else
+   else
       exturl="https://projextrdr:projextrdr@${exturl#*//}"
-    fi
-    # echo "exturl for repo '${arepo}': external='${exturl}'"
-    if [[ "${exturl}" == "https://projextrdr:projextrdr@" ]] ; then
+   fi
+   if [[ "${exturl}" == "https://projextrdr:projextrdr@" ]] ; then
       exturl="https://projextrdr:projextrdr@${upstream_url#*//}${arepo}.git"
       # echo "set exturl for external: '${exturl}'"
       ${ggit} remote add external ${exturl}
-    fi
+   fi
 
     chelper=$(${ggit} config --local --get credential.helper)
     if [[ "${cchelper}" == "" || "${chelper#netrc -}" == "${chelper}" ]] ; then
       $(${ggit} config --local credential.helper 'netrc -f ${H}/mcron/projextrdr.netrc.asc')
     fi
     aref=""
-    if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
-      aref=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
-    fi
+  #  if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
+  #    aref=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
+  #  fi
 
 
     if [[ ${exturl#*/hgit/}" != "${exturl} ]] ; then
@@ -63,13 +88,34 @@ while read arepo; do
       exturl="${exturl%/hgit/*}/h2git/${r}"
     fi
     nowd=`date +%Y%m%d%H%M%S`
-    fetch="${nowd} ${ggit} fetch --force ${exturl} master:master_ext"
+    if [[ ${branch_imported} != master ]]
+    # that means that a file with a branch other than master 
+    # was created. That means the repo is a sync_mode Partial or full
+    # we do not need to worry about branch sync_mode 
+    # because post_update is designed not to create any file in shipping bay
+    # if a change is pushed to sync_mode on external
+    then
+       branch_converted=${branch_imported}_external
+    else    
+       branch_converted=${branch_imported}_ext
+    fi
+    if [[ -e "${H}/repositories/${arepo}.git/refs/heads/${branch_converted}" ]]; then
+       aref=$(cat "${H}/repositories/${arepo}.git/refs/heads/${branch_converted}") 
+    fi
+    fetch="${nowd} ${ggit} fetch --force ${exturl} ${branch_imported}:${branch_converted}"     
     fetchres=""
     if [[ -e "${H}/mcron/.ignorepull" ]]; then
       fetchres="${fetch}"
       echo ${fetch}
     else
-      fetchres=$(${ggit} fetch --force ${exturl} master:master_ext 2>&1)
+      fetchres=$(${ggit} fetch --force ${exturl} ${branch_imported}:${branch_converted} 2>&1)
+      if [[ $? == 0 ]] 
+      then
+         echo "Creating file ${upstream_incoming}/${aremotefile}" 
+         createres=$(ssh -i ${H}/.ssh/${upstream_key} -p ${upstream_port} ${upstream_user}@${upstream_server} "touch ${upstream_incoming}/${aremotefile} ")  
+      else
+         echo "Error in fetching from  ${exturl}"
+      fi
     fi
     if [[ "${fetchres}" != "" ]]; then
       echo "${fetch}" >> ${logf}
@@ -78,12 +124,15 @@ while read arepo; do
       fi
     fi
     aref2=""
-    if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
-      aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
+    if [[ -e "${H}/repositories/${arepo}.git/refs/heads/${branch_converted}" ]]; then
+       aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/${branch_converted}")
     fi
+   # if [[ -e "${H}/repositories/${arepo}.git/refs/heads/master_ext" ]] ; then
+   #   aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
+   # fi
     # aref2=$(cat "${H}/repositories/${arepo}.git/refs/heads/master_ext")
     fh=$(cat "${H}/repositories/${arepo}.git/FETCH_HEAD" 2> /dev/null)
-    # echo "FETCH_HEAD='${fh}', refs/heads/master_ext='${aref}' => '${aref2}"
+     echo "FETCH_HEAD='${fh}', refs/heads/master_ext='${aref}' => '${aref2}"
     if [[ "${aref}" != "${aref2}" && "${fh#${aref2}}" != "${fh}" ]] ; then
       dwnurl="${downstream_url}${arepo}.git"
       if [[ "${dwnurl#*@}" != "${dwnurl}" ]] ; then
@@ -98,13 +147,13 @@ while read arepo; do
       fi
 
       nowd=`date +%Y%m%d%H%M%S`
-      push="${nowd} ${ggit} push --force ${dwnurl} master_ext:master_ext"
+      push="${nowd} ${ggit} push --force ${dwnurl} ${branch_converted}:${branch_converted}"
       pushres=""
       if [[ -e "${H}/mcron/.ignorepull" ]]; then
         pushres="${push}"
         echo "${push}"
       else
-        pushres=$(${ggit} push --follow-tags --force ${dwnurl} master_ext:master_ext 2>&1)
+        pushres=$(${ggit} push --follow-tags --force ${dwnurl} ${branch_converted}:${branch_converted} 2>&1)
       fi
       if [[ "${pushres}" != "" ]]; then
         echo "${push}" >> ${logf}
@@ -113,7 +162,7 @@ while read arepo; do
         fi
       fi
     fi
-  fi
-done < <(echo "${repos}")
+done
+
 
 git config --global credential.helper netrc

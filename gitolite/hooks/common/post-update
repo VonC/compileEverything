@@ -1,5 +1,6 @@
 #!/bin/bash
-
+read oldrev newrev refname
+echo $oldrev $newrev $refname $1
 if [[ "${H}" == "" ]]; then
   # echo "post-update1='${H}' vs HOME '$HOME'"
   DIR=$(readlink -f ${BASH_SOURCE[0]})
@@ -17,47 +18,246 @@ fi
 #echo "post-update2='${H}'"
 
 source "${H}/sbin/usrcmd/get_tpl_value"
+homed=${H##*/}
+
+
+# SSI test creation of file
+# a file must be created if DOWNSTREAM_BRANCH=master_hs*
+# external server is the only one that has this config in .envs.private
+ get_tpl_value "${H}/.envs.private" "@LOCAL_BRANCH@" branch_local
+ get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_BRANCH@" downstream_branch
+ get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_NAME@" downstream_name
+ 
+pathtorepohash=${PWD/repositories/#}  #we replace "repositories" by "#"
+#echo pathtorepohash $pathtorepohash
+reponame=${pathtorepohash##*\#/}    #we take what follows the "hash" as the name of the repo
+                                    # this is a better option than basename PWD
+#echo "reponame: $reponame"          # As it allows us to have a repo in a subfolder of repositories
+                                     #the character "#" must be forbidden in the name of the repositories
+reponamehash=${reponame/\//#}
+
+branch=$(git rev-parse --symbolic --abbrev-ref $1)
+echo "Post Update for branch '${branch}'"
+ggit="git --git-dir=${H}/repositories/${reponame}"
+#syncmode=$($ggit notes show sync_mode 2>/dev/null)
+syncmode=$($ggit branch | grep sync_mode | tr -d " ")
+get_tpl_value "${H}/.envs.private" "@UPSTREAM_NAME@" upstream_name
+
+echo "branch local ${branch_local} downstream_branch: ${downstream_branch}"
+if [[ ${branch_local} == "" && ${downstream_branch} == master_hs* ]]; then
+# We are for sure on external
+   echo "We are for sure on external"
+   if [[ ${branch} ==  sync_mode_* ]]
+   then
+      echo "Change in sync_mode. No post_update for this branch on external"
+      exit 0
+   fi
+   if [[ "${syncmode}" == "sync_mode_PARTIAL" ]]
+   then
+       if [[ ${branch} != *_sync && ${branch} != master ]]
+       # We do not create any file unless it is on a branch master or *_sync
+       then 
+          echo "No need to create sync file for change in ${branch}"
+          exit 0
+       fi 
+       echo "Partial syncmode"
+    elif [[ "${syncmode}" == "sync_mode_FULL" ]]
+    then
+       echo "Full syncmode"
+       if [[ ${branch} = *_blessed ||  ${branch} = master_hs* ]]
+       #  We do not want any loop back if some changes are pushed from staging
+       then
+          echo "No need to create sync file for change imported in ${branch}" 
+          exit 0
+       fi
+ 
+    else
+     # No syncmode defined. It is the default syncmode (only master)
+       if [[ ${branch} != master ]]
+       then
+          echo "No need to create sync file for change in ${branch}" 
+          exit 0
+       fi
+
+   fi
+   echo "Creation of a sync file: "
+   last_commit=`cat $1`
+   branchhash=${branch/\//#}  
+   repofile=${H}/../shippingbay_${homed}/outgoing/${reponamehash}#${branchhash}.br#${last_commit}  
+   echo ".... created $repofile"
+   touch $repofile
+   exit 0
+fi
+
 
 # A local branch must be registered
-get_tpl_value "${H}/.envs.private" "@LOCAL_BRANCH@" branch_local
+#get_tpl_value "${H}/.envs.private" "@LOCAL_BRANCH@" branch_local
 if [[ "${branch_local}" == "" ]] ; then
   echo "No local branch registered, nothing to push to upstream"
   exit 0
 fi
 
-branch=$(git rev-parse --symbolic --abbrev-ref $1)
-echo "Post Update for branch '${branch}'"
+# We are either on staging or blessed
+if [[ "${syncmode}" == "sync_mode_PARTIAL" ]] 
+then
+    echo "Partial Sync Mode"
+   
+   # An upstream branch must be registered
+    get_tpl_value "${H}/.envs.private" "@UPSTREAM_BRANCH@" branch_upstream
+    if [[ "${branch_upstream}" == "" ]] ; then
+      echo "No upstream branch registered, nothing to push to upstream"
+      exit 0
+    fi
+    get_tpl_value "${H}/.envs.private" "@EXT_BRANCH_NAME@" branch_ext
+    if [[ "${downstream_name}" == "" && "${branch_ext}" == "" ]] ; then
+        echo "No external branch registered, nothing to push to upstream"
+        exit 0
+    fi
+  if [[ "${branch}" == sync_mode_* ]] 
+  then
+    # branch_ext=sync_mode
+     branch_local=${branch}
+     branch_upstream=${branch}
+     echo "Branch delivered is ${branch}, upstream branch is ${branch_upstream}"
+  else
+     if [[ ${branch_local} == master ]]; then
+       # We are on blessed
+        if [[ "${branch}" != *_sync  && "${branch}" != "${branch_local}" ]]; then
+        # we manage only changes in _sync  or master
+        # no risk that any change on master_ext or _sync_ext induced by pull_external is sent back to external
+           echo "Update on a branch other than *_sync or local branch, nothing to push to upstream."
+           exit 0 
+         fi
+    
 
-if [[ "${branch}" != "${branch_local}" ]] ; then
-  echo "Update on different branch than '${branch_local}', nothing to push to upstream."
-  exit 0
-fi
+        if [[ $branch != "${branch_local}" ]]
+        # i.e. if we are not dealing with master branch, so we should be dealing with a _sync branch
+        # that branch needs then to be renamed to sync_blessed on staging and external
+        then  
+        #   branch_ext=${branch}_blessed
+           branch_local=$branch
+           branch_upstream=${branch}_blessed
+           echo "Branch delivered is ${branch}, upstream branch is ${branch_upstream}"
+        fi
+     elif [[ ${branch_local} == master_hs* ]]; then
+       # We are on staging
+          if [[ "${branch}" != *_sync_blessed && "${branch}" != "${branch_local}" ]]; then
+           # we manage only changes in _sync_blessed or master_hs*
+           # no risk that any change on master_ext or _sync_ext induced by pull_external is sent back to external
+            echo "Update on a branch other than *_sync or local branch, nothing to push to upstream."
+            exit 0
+          fi
+          if [[ $branch != "${branch_local}" ]]
+           # i.e. we are not dealing with master_hs* branch, so should be a _sync_blessed branch
+           # no need to rename the branch in that case
+          then
+        #   branch_ext=${branch}
+           branch_local=${branch} 
+           branch_upstream=${branch}
+           echo "Branch delivered is $branch, upstream branch is $branch_upstream"
+          fi
+       else
+         echo "branch_local $branch_local not correctly set. Contact Git admin"
+         exit 0
+       fi 
+   fi  # end if branch = sync_mode
+elif [[ "${syncmode}" == "sync_mode_FULL" ]] 
+then
+   echo "FULL sync mode" 
+   # An upstream branch must be registered
+    get_tpl_value "${H}/.envs.private" "@UPSTREAM_BRANCH@" branch_upstream
+    if [[ "${branch_upstream}" == "" ]] ; then
+      echo "No upstream branch registered, nothing to push to upstream"
+      exit 0
+    fi
+    get_tpl_value "${H}/.envs.private" "@EXT_BRANCH_NAME@" branch_ext
+    if [[ "${downstream_name}" == "" && "${branch_ext}" == "" ]] ; then
+        echo "No external branch registered, nothing to push to upstream"
+        exit 0
+    fi
+    if [[ ${branch} = *_external || ${branch} = master_ext ]]
+     # In FULL sync mode, we need to make sure any change coming from pull_external
+     # is not managed by post-update hook
+     # We do not have to worry about sync_mode in this case because no file 
+     # is generated for sync_mode branch on external. 
+     # So pull_external will never update branch sync_mode
+    then
+        echo "Update on an external branch ${branch}, nothing to push upstream"
+        exit 0
+    fi
+    if [[ ${branch} == sync_mode_* ]] 
+    then
+       #branch_ext="sync_mode"
+       branch_local=${branch}
+       branch_upstream=${branch}
+       echo "Branch delivered is ${branch}, upstream branch is ${branch_upstream}"
+    else
+      if [[ ${branch_local} == master ]]; then
+       # We are on blessed
+          if [[ $branch != "${branch_local}" ]]
+          then
+           #   branch_ext=${branch}_blessed
+              branch_local=$branch
+              branch_upstream=${branch}_blessed
+              echo "Branch delivered is ${branch}, upstream branch is ${branch_upstream}"
+          fi
+       elif [[ ${branch_local} == master_hs* ]]; then
+       # We are on staging
+          if [[ $branch != "${branch_local}" ]]
+          then
+           # branch_ext=${branch}
+            branch_local=${branch}
+            branch_upstream=${branch}
+            echo "Branch delivered is $branch, upstream branch is $branch_upstream"
+          fi
+       else
+         echo "branch_local $branch_local not correctly set. Contact Git admin"
+         exit 0
+       fi    
+    fi # end if  ${branch} = sync_mode_*
+    echo "Pushing branch $branch "
+else
+  echo "Sync_mode : default"
+  # No syncmode defined. We sync only the master branches
+   if [[ "${branch}" != "${branch_local}" && "${branch}" != sync_mode_* ]] ; then
+      echo "Update on different branch than '${branch_local}', nothing to push to upstream."
+      exit 0
+   fi
+    echo "Update on local '${branch_local}, checking on external branch presence"
+   #if there is an external branch or a downstream site, then it is a repo public
+   #get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_NAME@" downstream_name
+   get_tpl_value "${H}/.envs.private" "@EXT_BRANCH_NAME@" branch_ext
+   if [[ "${downstream_name}" == "" && "${branch_ext}" == "" ]] ; then
+        echo "No external branch registered, nothing to push to upstream"
+        exit 0
+   fi
+   a_branch_ext=$(git branch|grep "${branch_ext}")
+   
+   if [[ "${downstream_name}" == "" && "${a_branch_ext}" == "" ]] ; then
+       echo "No external branch '${branch_ext}' or downstream repo detected in the local repo, must be an internal repo only."
+       exit 0
+   fi
 
-echo "Update on local '${branch_local}, checking on external branch presence"
+   # An upstream branch must be registered
+    get_tpl_value "${H}/.envs.private" "@UPSTREAM_BRANCH@" branch_upstream
+   if [[ "${branch_upstream}" == "" ]] ; then
+      echo "No upstream branch registered, nothing to push to upstream"
+      exit 0
+   fi
+   if [[ ${branch} == sync_mode_* ]]
+   then
+       # branch_ext="sync_mode"
+        branch_local=${branch}
+        branch_upstream=${branch}
+        echo "Update on branch sync_mode ${branch}" 
+   fi
 
-# if there is an external branch or a downstream site, then it is a repo public
-get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_NAME@" downstream_name
-get_tpl_value "${H}/.envs.private" "@EXT_BRANCH_NAME@" branch_ext
-if [[ "${downstream_name}" == "" && "${branch_ext}" == "" ]] ; then
-  echo "No external branch registered, nothing to push to upstream"
-  exit 0
-fi
+fi 
 
-a_branch_ext=$(git branch|grep "${branch_ext}")
-if [[ "${downstream_name}" == "" && "${a_branch_ext}" == "" ]] ; then
-  echo "No external branch '${branch_ext}' or downstream repo detected in the local repo, must be an internal repo only."
-  exit 0
-fi
 
-# An upstream branch must be registered
-get_tpl_value "${H}/.envs.private" "@UPSTREAM_BRANCH@" branch_upstream
-if [[ "${branch_upstream}" == "" ]] ; then
-  echo "No upstream branch registered, nothing to push to upstream"
-  exit 0
-fi
 
 # An upstream name must be registered
-get_tpl_value "${H}/.envs.private" "@UPSTREAM_NAME@" upstream_name
+#get_tpl_value "${H}/.envs.private" "@UPSTREAM_NAME@" upstream_name
 if [[ "${upstream_name}" == "" ]] ; then
   echo "No upstream name registered, nothing to push to upstream"
   exit 0
@@ -70,7 +270,7 @@ if [[ "${upstream_url}" == "" ]] ; then
   exit 0
 fi
 
-reponame=$(basename "$PWD")
+#reponame=$(basename "$PWD")
 
 # A login must be defined for that public repo
 get_tpl_value "${H}/.envs.private" "@USER_PUSH@" user_push
@@ -82,7 +282,6 @@ fi
 upstream_url="${upstream_url#https://}"
 upstream_url="${upstream_url#*@}"
 upstream_url="https://${user_push}@${upstream_url}"
-
 r=$(xxgit=1 git remote show -n ${upstream_name}|grep "https"|tail -1)
 
 if [[ "${r}" == "" ]] ; then
@@ -99,7 +298,6 @@ if [[ "${r}" != "" && "${r#${upstream_url}}" == "${r}" ]] ; then
   git remote set-url ${upstream_name} ${upstream_url}${reponame}
 fi
 
-ggit="git --git-dir=${H}/repositories/${reponame}"
 
 if [[ -e "${H}/.gnupg/users.netrc.asc" ]]; then
   chelper=$(${ggit} config --local --get credential.helper)
@@ -126,6 +324,7 @@ p="${p#*password=}"
 p="${p%%?protocol=*}"
 #echo $user $r "password='"$p"'"
 #echo "pr // user:p@r/u: ${pr}//${user}:${p}@${r}/${u}"
+
 
 echo "Pushing public repo '${branch_local}' branch to '${upstream_name}'/'${branch_upstream}'"
 git config --global --remove-section credential

@@ -1,0 +1,102 @@
+#! /bin/bash
+# this script should be launched only on external
+# The purpose is to clean the "shipping bays" i.e. ../outgoing_external and ../incoming_external
+# Files in ../outgoing_external are used by the staging to identify which repo should be fetched
+# Files in ../incoming_external are created by the staging to acknowledge that the repo has been fetched
+# Basically, if a file is in ../incoming_external, it should be removed from both ../incoming_external
+# and ../outgoing_external
+# If a file exists only in ../incoming_external, it can be removed (the repo has been fetched anyway)
+# If a file exists only in ../outgoing_external, it must be kept.
+
+
+function usage() {
+   echo "Usage : "
+   echo "  <command> --dryrun|--run"
+}
+
+if [ $# -lt 1 ]
+then 
+   usage
+   exit 0
+fi
+OPTION=$1
+if [ $OPTION != "--dryrun" ] && [ $OPTION != "--run" ] 
+then
+   usage
+   exit 0
+fi
+if [ $OPTION == "--dryrun" ]
+then 
+   echo "dryrun only"
+   script_mkdir="echo mkdir"
+   script_gzip="echo gzip"
+   script_mv="echo mv"
+   script_touch="echo touch"
+   script_rm="echo rm"
+else
+  # echo "running for real"
+   script_mkdir="mkdir"
+   script_gzip="/bin/gzip"
+   script_mv="mv"
+   script_touch="touch"
+   script_rm="rm" 
+fi
+#exit 0
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR=${DIR%/*}
+# echo DIR=$DIR
+cd "${DIR}"
+H="${DIR}"
+source "${DIR}/.bashrc" --force > /dev/null
+source "${H}/sbin/usrcmd/get_tpl_value"
+homed=${H##*/}
+get_tpl_value "${H}/.envs.private" "@LOCAL_BRANCH@" branch_local
+get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_BRANCH@" downstream_name
+if [[ ${branch_local} != "" || ${downstream_name} != master_hs* ]]; then
+  # we are for sure not on external
+  echo "branch local ${branch_local} downstream_name: ${downstream_name}"
+  echo "This script must be launched only on external"
+  echo "Exiting ..."
+  exit 0
+fi
+shippingbay=${H}/../shippingbay_${homed}
+incoming_bay=${shippingbay}/incoming
+outgoing_bay=${shippingbay}/outgoing
+
+day=`date +%d`
+month=`date +%m`
+year=`date +%Y`
+exectime=`date +%H%M%S`
+logdir=${H}/../log_archive_${homed}/clean_shippingbay_logs
+logfile=${logdir}/clean_shippingbay_${year}${month}.log
+if [[ ! -d ${logdir}  ]]
+then
+   eval ${script_mkdir} -p   ${logdir} 
+fi
+list_incoming=$(cd ${incoming_bay};ls)
+for filename in ${list_incoming}
+do
+  eval ${script_touch} ${logfile}
+
+  if [[ -f ${outgoing_bay}/${filename} ]]
+  then
+     echo "${year}${month}${day}:${exectime}: removing ${outgoing_bay}/${filename}" >> ${logfile}
+     eval $script_rm -f ${outgoing_bay}/${filename}
+     if [[ $? == "0" ]]
+     then
+        echo "${year}${month}${day}:${exectime}: removing ${incoming_bay}/${filename}" >> ${logfile}
+        eval $script_rm -f ${incoming_bay}/${filename}
+     else
+        echo "${year}${month}${day}:${exectime}: error removing ${outgoing_bay}/${filename}" >> ${logfile}
+        echo "   => keeping ${incoming_bay}/${filename}" >> ${logfile}
+     fi 
+  else
+  # we remove the file in incoming no matter what as the file cannot be found in  outgoing bay
+     echo "${year}${month}${day}:${exectime}: ${filename} not found in ${outgoing_bay}. Removing ${incoming_bay}/${filename}" >> ${logfile}
+     eval $script_rm -f ${incoming_bay}/${filename}
+  fi
+done
+
+exit 0
+
+
