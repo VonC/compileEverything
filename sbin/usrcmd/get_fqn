@@ -5,9 +5,9 @@ function get_fqn() {
   local a_hostname="$1"
   local _value="$2"
   local avalue=""
-
-  if [[ -e "${H}/../_fqn" ]]; then
-    avalue=$(cat "${H}/../_fqn")
+  local homed=${H##*/}
+  if [[ -e "${H}/../_fqn_${homed}" ]]; then
+    avalue=$(cat "${H}/../_fqn_${homed}")
   else
     local a_cptpl_uname=$(uname)
     local a_fqn=""

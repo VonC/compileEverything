@@ -21,3 +21,10 @@ password xxxx
 
 # url to push back commits detected from external
 @DOWNSTREAM_URL_HGIT@=https://downstream.fully.qualified.name:yy443/hgit/
+
+# infos required on staging in order to pull from external
+@UPSTREAM_KEY@=private-key-store-in-.ssh-folder
+@UPSTREAM_USER@=login-for-upstream-ssh-connection
+@UPSTREAM_SERVER@=upstream.fully.qualified.name
+@UPSTREAM_PORT@=ssh_port_number
+@UPSTREAM_SHIPPINGBAY@=upstream_shipping_bay. Should be upstream_home/../shippingbay_external

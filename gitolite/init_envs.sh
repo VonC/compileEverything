@@ -1,12 +1,16 @@
 #!/bin/bash
 
 if [[ ! -e "${H}/.envs.private" ]] ; then exit 0 ; fi
-
 source "${H}/sbin/usrcmd/get_tpl_value"
-
+homed=${H##*/}
 get_tpl_value "${H}/.envs.private" "@UPSTREAM_URL_HGIT@" upstream_url
 get_tpl_value "${H}/.envs.private" "@UPSTREAM_NAME@" upstream_name
-
+get_tpl_value "${H}/.envs.private" "@DOWNSTREAM_BRANCH@" downstream_name
+if [[ "${upstream_url}" == "" && "${upstream_name}" == "" && "${downstream_name}" != "" ]]
+then
+   mkdir -p ${H}/../shippingbay_${homed}/outgoing
+   mkdir -p ${H}/../shippingbay_${homed}/incoming
+fi
 if [[ "${upstream_url}" == "" || "${upstream_name}" == "" ]] ; then exit 0 ; fi
 
 # A login must be defined for pushing gitolite admin repo
