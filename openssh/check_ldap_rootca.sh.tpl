@@ -26,7 +26,7 @@ if [[ "${e}" != "" ]] ; then
     if [[ "${i}" == "" ]] ; then cat "${ossh}/ldapRootCA.pem" >> "${CAs}" ; fi
     e=$(openssl s_client -connect ${ldapserver} -CAfile "${CAs}" 2>/dev/null < /dev/null | grep "unable to get local issuer certificate")
     if [[ "${e}" != "" ]] ; then
-      echo  -e "\e[1;31mNo valid Root CA for glue.systems.uk.hsbc:3269\e[0m" 1>&2
+      echo  -e "\e[1;31mNo valid Root CA for ${ldapserver}\e[0m" 1>&2
       echo "e='${e}'"
       exit 1
     else
