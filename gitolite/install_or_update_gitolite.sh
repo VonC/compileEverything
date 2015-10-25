@@ -24,6 +24,9 @@ if [[ "$1" == "--upg" ]]; then
   xxgit=1 git --work-tree="${github}" --git-dir="${githubdir}" pull origin master
   xxgit=1 git checkout -B master origin/master
 fi
+# required since gitolite 3.6.2
+gen_sed -i "s,/usr/bin/perl,${H}/bin/perl" "${gtl}/github/src/commands/access"
+
 mkdir -p "${gtl}/bin"
 "${github}/install" -to "${gtl}/bin"
 gen_sed -i "s,\$ENV{HOME} = \$ENV,\$ENV{HOME} = '${H}' ; } # \$ENV{HOME} = \$ENV,g" "${gtl}/bin/gitolite-shell"
